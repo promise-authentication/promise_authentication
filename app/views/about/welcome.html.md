@@ -1,43 +1,17 @@
-Let's talk about authentication. I know, I know&mdash;you'd rather not. But hear me out. You won't regret. I promise.
+Let's talk about authentication. I know, I know&mdash;you'd rather not. But you want to hear this. I promise.
 
 Authentication isn't actually a bad thing. It's just that we haven't found an elegant solution to it. Yet.
 
-How many passwords do you have?
+Think about how many passwords you have? Now, think about how many you forgot. _That_'s the feeling of password fatigue (yes, it's a thing [<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>](https://en.wikipedia.org/wiki/Password_fatigue "Read about password fatigue on Wikipedia")).
 
-<%= name %> is a centralized authentication service with both the ambition and potential to be this solution.
+<%= name %> is a centralized authentication service with both the commitment and potential to be the solution we all want. One password for everything. Secure and with respect for your privacy.
 
-The ambition comes from a personal frustration and embarrassment with the [the current state of authentication](<%= about_current_state_of_authentication_path %>). We can do better!
+The commitment comes from a personal frustration and embarrassment with the [the current state of authentication](<%= about_current_state_of_authentication_path %>). We can do better!
 
-The potential comes from 1) a unique [approach to identity](<%= about_approach_to_identity_path %>) and 2) the fact that there are [no commercial interests](<%= about_non_profit_path %>) involved.
+The potential comes from 1) a unique [approach to identity and privacy](<%= about_approach_to_identity_path %> "Read about the") and 2) the fact that there are [no commercial interests](<%= about_non_profit_path %>) involved.
 
-This sets <%= name %> apart from Google, Facebook, Twitter and all other providers of authentication services.
+This sets <%= name %> apart from Google, Facebook, Twitter and all other providers of authentication services. <%= name %> is free to be a service for you. The human being using digital devices. And just that.
 
+If you think this sounds like something you would like to have in our world, please send me an [email](mailto:anders@promiseauthentication.org "anders@promiseauthentication.org") where you tell me a bit about yourself and why you want it.
 
-
-Why isn't this solved already? What's wrong with Google, Facebook and Twitter? Why haven't they succeeded in providing this service globally?
-
-There are two problems at the core of the current landscape of SSO
-
-The first problem is commercial interest.
-
-The second problem is mixing personal identity with the identity required in authentication. They are not the same. And should be treated differently.
-
-
-But isn't this solved already with Google, Facebook, Twitter and all the others? Well, no. And let me explain why. The problem with the current SSO solutions out there, is that they all have at least one of the following problems within.
-
-
-But what about security? 
-
-And how do you feel when you forget one of those passwords? Or even worse, when you forget if you signed up to a specific service using Google, Facebook or Twitter?
-
-
-
-Wouldn't it be nice if signing in to digital services wasn't such a hassle? No more "Forgot you password?".
-
-What if I told you, that technically you only need one password. That you have so many passwords because we, the people that develops software, haven't managed to coordinate our efforts to handle authentication. Yet.
-
-The reasons for this are many, and <%= name %> is yet another attempt at solving this. But the approach is very different and addresses all the challenges with the current state.
-
-So we ask you to come up with new passwords every time you want to use our services the first time.
-
-Sometimes, though, we offer you to sign up using one of your social accounts. Google, Facebook, Twitter or what have you.
+If you want to read more, please do so. Here you can read about the [security](), [implementation](), [financing](), [how to integrate]().

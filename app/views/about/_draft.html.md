@@ -1,5 +1,7 @@
 I promise, you'll want to hear this about authentication.
 
+Embrace the single point of failure and make that as secure, accessible and user friendly as possible.
+
 I know, I know &mdash; you'd rather not.
 I understand.
 I forget my passwords all the time too.
@@ -55,3 +57,29 @@ A world where you do not feel helpless everytime you are presented with a login 
 
 We can create that world togehter. But it's not easy. It requires all of us to pull together. In the same direction.
 
+
+There are two problems at the core of the current landscape of SSO
+
+The first problem is commercial interest.
+
+The second problem is mixing personal identity with the identity required in authentication. They are not the same. And should be treated differently.
+
+
+But isn't this solved already with Google, Facebook, Twitter and all the others? Well, no. And let me explain why. The problem with the current SSO solutions out there, is that they all have at least one of the following problems within.
+
+
+But what about security? 
+
+And how do you feel when you forget one of those passwords? Or even worse, when you forget if you signed up to a specific service using Google, Facebook or Twitter?
+
+
+
+Wouldn't it be nice if signing in to digital services wasn't such a hassle? No more "Forgot you password?".
+
+What if I told you, that technically you only need one password. That you have so many passwords because we, the people that develops software, haven't managed to coordinate our efforts to handle authentication. Yet.
+
+The reasons for this are many, and <%= name %> is yet another attempt at solving this. But the approach is very different and addresses all the challenges with the current state.
+
+So we ask you to come up with new passwords every time you want to use our services the first time.
+
+Sometimes, though, we offer you to sign up using one of your social accounts. Google, Facebook, Twitter or what have you.

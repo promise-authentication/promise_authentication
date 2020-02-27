@@ -1,13 +1,23 @@
 .markdown {
-  @apply text-lg leading-normal;
+  @apply leading-normal;
   & > * + *,  & li + li, & li > p + p {
     @apply mt-6;
+  }
+  & p a img, & p a svg {
+    height: 1em;
+    display: inline-block;
+    color: inherit;
+    padding-bottom: 3px;
   }
   & strong {
     @apply text-black font-bold;
   }
   & a {
-    @apply text-black font-semibold;
+    color: #104C8D;
+    text-decoration: underline;
+  }
+  & a:visited {
+    color: inherit;
   }
   & strong a {
     @apply font-bold;
