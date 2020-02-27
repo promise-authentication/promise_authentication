@@ -3,11 +3,11 @@
   & > * + *,  & li + li, & li > p + p {
     @apply mt-6;
   }
-  & p a img, & p a svg {
-    height: 1em;
+  & p a svg {
+    height: 0.92em;
     display: inline-block;
     color: inherit;
-    padding-bottom: 3px;
+    padding-bottom: 0.09em;
   }
   & strong {
     @apply text-black font-bold;

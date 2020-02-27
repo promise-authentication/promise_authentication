@@ -2,7 +2,7 @@ Let's talk about authentication. I know, I know&mdash;you'd rather not. But you 
 
 Authentication isn't actually a bad thing. It's just that we haven't found an elegant solution to it. Yet.
 
-Think about how many passwords you have? Now, think about how many you forgot. _That_'s the feeling of password fatigue (yes, it's a thing [<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>](https://en.wikipedia.org/wiki/Password_fatigue "Read about password fatigue on Wikipedia")).
+Think about how many passwords you have? Now, think about how many you forgot. _That_'s the feeling of password fatigue[<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>](https://en.wikipedia.org/wiki/Password_fatigue "Read about password fatigue on Wikipedia").
 
 <%= name %> is a centralized authentication service with both the commitment and potential to be the solution we all want. One password for everything. Secure and with respect for your privacy.
 
