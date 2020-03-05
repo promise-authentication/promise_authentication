@@ -22,6 +22,9 @@
   & strong a {
     @apply font-bold;
   }
+  & h1 {
+    @apply leading-tight text-2xl font-bold text-black text-center mb-2 mt-10;
+  }
   & h2 {
     @apply leading-tight text-xl font-bold text-black mb-2 mt-10;
   }

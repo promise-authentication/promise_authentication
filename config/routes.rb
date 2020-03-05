@@ -5,7 +5,11 @@ Rails.application.routes.draw do
     get 'welcome'
     get 'current_state_of_authentication'
     get 'non_profit'
-    get 'approach_to_identity'
+    get 'identity'
+    get 'privacy'
+    get 'security'
+    get 'trust'
+    get 'integration'
   end
 
   resources :relying_parties, :id => /.*/ do

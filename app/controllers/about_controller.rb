@@ -1,3 +1,5 @@
 class AboutController < ApplicationController
-  # layout :about
+  def welcome
+    render layout: 'welcome'
+  end
 end

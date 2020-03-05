@@ -1,0 +1,12 @@
+<%= content_for :content do %>
+  <div class="px-5 md:px-8 text-base sm:text-lg m-auto max-w-lg">
+    <div class="w-16 m-auto my-24">
+      <%= link_to image_tag('logo'), root_path %>
+    </div>
+    <div class="markdown mb-24">
+      <%= yield %>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>
