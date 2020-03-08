@@ -2,11 +2,6 @@ I promise, you'll want to hear this about authentication.
 
 Embrace the single point of failure and make that as secure, accessible and user friendly as possible.
 
-I know, I know &mdash; you'd rather not.
-I understand.
-I forget my passwords all the time too.
-But authentication is unavoidable.
-
 When signing up to a new digital service, you currently have two choices:
 
 Make up a new password ___or___ sign up using Facebook, Google or the like. That is: Use the same password you use everywhere, even though you know you shouldn't and feel guilty about it ___or___ share your personal data between more or less trustworthy organisations.

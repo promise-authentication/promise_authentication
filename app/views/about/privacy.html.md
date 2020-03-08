@@ -1,4 +1,3 @@
-
 # Privacy
 
 In order for <%= name %> to be a success, privacy must be front and center in the requirements.

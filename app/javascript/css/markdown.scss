@@ -1,7 +1,13 @@
 .markdown {
-  @apply leading-normal;
-  & > * + *,  & li + li, & li > p + p {
-    @apply mt-6;
+  @apply leading-normal px-4 text-base;
+  @screen sm {
+    @apply px-8 text-lg;
+  }
+  & > * + *, & li > p + p {
+    @apply mt-3;
+  }
+  & li + li {
+    @apply mt-1;
   }
   & p a svg {
     height: 0.92em;
@@ -19,11 +25,15 @@
   & a:visited {
     color: inherit;
   }
+  & a[name] {
+    text-decoration: none;
+    color: inherit;
+  }
   & strong a {
     @apply font-bold;
   }
   & h1 {
-    @apply leading-tight text-2xl font-bold text-black text-center mb-2 mt-10;
+    @apply leading-tight text-2xl font-bold text-black text-center mb-6;
   }
   & h2 {
     @apply leading-tight text-xl font-bold text-black mb-2 mt-10;
@@ -38,12 +48,18 @@
     @apply block bg-black p-4 rounded;
   }
   & blockquote {
-    @apply border-l-4 pl-4 italic;
+    @apply border-l-4 my-4 pl-4 italic text-gray-700;
   }
   & ul, & ol {
     @apply pl-5;
     @screen sm {
       @apply pl-10;
     }
+  }
+  & ul {
+    @apply list-disc;
+  }
+  & ol {
+    @apply list-decimal;
   }
 }

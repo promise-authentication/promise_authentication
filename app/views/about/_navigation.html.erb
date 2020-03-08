@@ -1,13 +1,13 @@
-<div class="my-4 flex items-center">
-  <ul class="font-medium text-sm tracking-wider leading-loose text-gray-600 flex justify-center w-full flex-wrap align-center">
+<div class="px-4 flex items-center">
+  <ul class="font-medium text-sm sm:text-base tracking-wide text-gray-600 flex justify-center w-full flex-wrap align-center">
     <div class="flex">
-      <%= navigation_link 'Security', about_security_path %>
       <%= navigation_link 'Trust', about_trust_path %>
-      <%= navigation_link 'Integration', about_integration_path %>
-    </div>
-    <div class="flex">
+      <%= navigation_link 'Security', about_security_path %>
       <%= navigation_link 'Identity', about_identity_path %>
       <%= navigation_link 'Privacy', about_privacy_path %>
+    </div>
+    <div class="flex">
+      <%= navigation_link 'Integration', about_integration_path %>
       <%= navigation_link 'Non-profit', about_non_profit_path %>
     </div>
   </ul>
