@@ -1,12 +1,17 @@
-# Security
+# Let's talk about security.
 
-One password for everything. Is that a good idea?
+Is it secure if each of us has one password for all our digital services, as promised?
 
-The thing is, that it's not that different from the current state of authentication.
+The short answer: "Yes".
 
-The security in <%= name %> will be provided by open standards for encryption and authentication.
+The long answer (as always): "It depends".
 
-All data on the servers will be either hashed or encrypted, such that a breach of the database would not expose any information about you.
+We cope with password fatigue in many different ways. Some of which reduce security substantially.
 
-Information shared with relying parties will be protected by the JWT standard. In that way, relying parties can be sure that a users information is in fact authenticated by <%= name %>.
+<%= name %> wishes to tackle password fatigue, hoping that each of us will choose better passwords as a result. This will increase security.
 
+But what about security of servers and infrastructure?
+
+Yes, <%= name %> will be a big target. We have to secure your online identifiers. But rest assured. This will be all we do. This will be all we care about. Nothing else.
+
+You can [trust](<%= about_trust_path %>) us.

@@ -9,7 +9,13 @@ Rails.application.routes.draw do
     get 'privacy'
     get 'security'
     get 'trust'
-    get 'integration'
+    get 'technology'
+  end
+
+  namespace 'documentation' do
+    get 'get_started'
+    get 'well_known'
+    get 'configuration'
   end
 
   resources :relying_parties, :id => /.*/ do

@@ -22,7 +22,7 @@ One talks about your personal identity. Your name, eye color, address, religious
 
 The other is just a number or string that identifies **something**. And what that something is, is totally unrelated to the identify itself.
 
-Promise wants to provide authentication completely decoupled from personal identity. We will go out of our way to make sure that relying parties will receive no information from us that in any way can relate to your personal identity.
+<%= name %> wants to provide authentication completely decoupled from personal identity. We will go out of our way to make sure that relying parties will receive no information from us that in any way can relate to your personal identity.
 
-Also, we will make sure that no personal data will be stored on our servers. No employee of Promise or no hacker will ever be able to use data stored on our servers to personally identify you. Ever. 
+Also, we will make sure that no personal data will be stored on our servers. No employee of <%= name %> or no hacker will ever be able to use data stored on our servers to personally identify you. Ever. 
 

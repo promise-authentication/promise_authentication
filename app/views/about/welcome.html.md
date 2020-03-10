@@ -1,4 +1,6 @@
-Let's talk about authentication. I know, I know&mdash;you'd rather not. But you want to hear this. I promise.
+# Let's talk about authentication.
+
+I know, I know&mdash;you'd rather not. But you want to hear this. I promise.
 
 Authentication isn't actually a bad thing. It's just that we haven't found an elegant solution to it.
 
@@ -22,4 +24,4 @@ If you want to read more, please do so. Here you can read about the
 [identity](<%= about_identity_path %>),
 [trust](<%= about_trust_path %>),
 [pricing](<%= about_non_profit_path %>),
-[integration](<%= about_integration_path %>).
+[getting started](<%= documentation_get_started_path %>).

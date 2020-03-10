@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Promise</title>
+    <title><%= name %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -16,7 +16,7 @@
     <div id="content"><%= content_for?(:content) ? yield(:content) : yield %></div>
     <footer class="my-12 text-center text-sm text-gray-500">
       <span class="tracking-wide">
-        Promise Authentication - 2020
+        <%= name %> - 2020
       </span>
       <br />
       <span class="italic">

@@ -1,33 +1,10 @@
-I promise, you'll want to hear this about authentication.
 
-Embrace the single point of failure and make that as secure, accessible and user friendly as possible.
 
-When signing up to a new digital service, you currently have two choices:
 
-Make up a new password ___or___ sign up using Facebook, Google or the like. That is: Use the same password you use everywhere, even though you know you shouldn't and feel guilty about it ___or___ share your personal data between more or less trustworthy organisations.
 
-What an awful way to start a new relationship.
-
-When revisiting a digital service on a new device, you need to recall how you signed up in the first place to succesfully login. You can't. Cross your fingers and click "Forgot my password".
-
-What an awful way to resume a relationship.
-
-We can do better.
-
-<%= name %> is here to show you how.
-
-<%= name %> is an attempt to solve the underlying challenge. Not just treating the symptoms.
 
 There is a middleground, where you can have one password, and still share no personal data between the digital services you use.
 
-
-They all ask us to come up with new passwords. We won't though &mdash; even though we know we should. We feel guilty. Stupid.
-What an awful way to start a new relationship.
-
-We can do better!
-
-
-#{name} provides authentication as a service. Only that. No sharing of personal data. Just authentication.
 
 
 It will provide digital services with authentication as a service, and provide us all with an opportunity to stop the madness of having to make up countless passwords that we have no change of remembering.

@@ -10,10 +10,16 @@
     @apply mt-1;
   }
   & p a svg {
-    height: 0.92em;
     display: inline-block;
     color: inherit;
-    padding-bottom: 0.09em;
+
+    &.external_icon {
+      height: 0.92em;
+      padding-bottom: 0.09em;
+    }
+    &.internal_icon {
+      height: 0.92em;
+    }
   }
   & strong {
     @apply text-black font-bold;
@@ -42,10 +48,10 @@
     @apply leading-tight text-lg font-bold text-black mt-8 -mb-2;
   }
   & code {
-    @apply font-mono text-sm inline px-1;
+    @apply font-mono text-xs inline;
   }
   & pre code {
-    @apply block bg-black p-4 rounded;
+    @apply block bg-gray-800 p-4 rounded text-white overflow-x-scroll;
   }
   & blockquote {
     @apply border-l-4 my-4 pl-4 italic text-gray-700;

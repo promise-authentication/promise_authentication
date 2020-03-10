@@ -1,4 +1,4 @@
-# Trust
+# Let's talk about trust.
 
 Authentication is all about trust.
 
@@ -6,11 +6,11 @@ Trust is humbling. Trust should not be taken for granted.
 
 When using <%= name %> you show trust. A lot. We do not take that lightly.
 
-<%= name %> embraces that humans are fallible. The trust required to provide centralized global authentication is unfathomable by any human being.
+<%= name %> embraces that humans are fallible. The trust required to provide centralized global authentication is unfathomable by any human being. So we place as little as possible responsibility on any single human being, and try to make as many people as possible responsible to each other.
 
-In order to trust <%= name %>, you have to believe that the human beings behind can
+To trust <%= name %>, you have to believe that the human beings behind can
 
-- protect the [secret key](#secret_key) used for signatures
+- protect our [secrets](#secrets)
 - [write code](#oss) that will leak no data
 
 Besides that, you have to place trust in the infrastructure of the existing internet and mathematics. So you have to believe that
@@ -20,13 +20,13 @@ Besides that, you have to place trust in the infrastructure of the existing inte
 - [HTTPS](#https) is safe
 - [Hashing](#hash) is collision-free
 
-While that is plenty, I still want to emphasize what you do _not_ have to trust. You do not have to trust humans being able to control their greed or curiosity.
+While that is plenty, I still want to emphasize what you do _not_ have to trust humans being able to control their greed or curiosity. We can't.
 
 Even _if_ someone on the inside wanted to be evil, they wouldn't be able to steal or sell any data about you.
 
 Even _if_ someone managed to gain access to secured systems, they wouldn't be able to get access to any of your data.
 
-### <a name="secret_key">Secret key</a>
+### <a name="secrets">Secret key</a>
 
 The secret key used to sign JWT-tokens must be kept safe. It's the basis for the trust between <%= name %> and the relying parties.
 
