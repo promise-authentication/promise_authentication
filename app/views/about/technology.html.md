@@ -1,4 +1,4 @@
-# Let's talk about technology.
+# Let's talk about technology
 
 These are the proposed technologies that <%= name %> will rely on.
 

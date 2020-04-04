@@ -1,0 +1,33 @@
+<div class="sm:pt-2 sm:px-2 flex-grow flex flex-col justify-center">
+  <%= form_tag authenticate_path do %>
+    <div class="flex items-center">
+      <div class="m-auto py-8 px-4 sm:px-8 pt-6 w-64 flex items-center flex-col rounded shadow-md bg-gray-100">
+        <%= link_to image_tag('logo', class: 'h-6 sm:h-8 my-2'), root_path %>
+        <h1 class="text-lg font-bold whitespace-no-wrap">
+          <%= name %>
+        </h1>
+        <p class="text-center text-gray-500 text-sm mt-2">
+          This is where you login
+          <br />
+          to your dashboard on
+          <br />
+          <%= name %>.
+        </p>
+        <label class="w-full mt-3">
+          <p class="input-label">
+            E-mail:
+          </p>
+          <input type="email" id="email" name="email" placeholder="" class="login-input">
+        </label>
+        <label class="mt-3 w-full">
+          <p class="input-label">
+            Password:
+          </p>
+          <input type="password" id="password" name="password" placeholder="" class="login-input">
+        </label>
+        <%= submit_tag 'Login &rarr;'.html_safe, class: 'button primary mt-6' %>
+      </div>
+    </div>
+  <% end %>
+
+</div>

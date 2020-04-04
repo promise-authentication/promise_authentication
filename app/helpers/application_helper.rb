@@ -5,11 +5,11 @@ module ApplicationHelper
 
   def navigation_link(*args, &block)
     is_active = current_page?(args[0]) || current_page?(args[1])
-    classes = "#{ is_active ? 'text-black underline' : ''}"
+    classes = "#{ is_active ? 'text-blue-900 font-bold' : 'text-blue-800 font-normal'}"
 
 
     content_tag(:li, class: classes) do
-      link_to *args, class: 'py-1 px-1 inline-block', &block
+      link_to *args, class: 'py-1 px-2 inline-block', &block
     end
   end
 

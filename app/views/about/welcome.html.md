@@ -1,4 +1,4 @@
-# Let's talk about authentication.
+# Let's talk about authentication
 
 I know, I know&mdash;you'd rather not. But you want to hear this. I promise.
 
@@ -8,11 +8,13 @@ Yet.
 
 Think about how many passwords you have? Now, think about how many you forgot. _That_'s the feeling of password fatigue[<%= external_icon -%>](https://en.wikipedia.org/wiki/Password_fatigue "Read about password fatigue on Wikipedia") (yes, it's a thing).
 
-<%= name %> is a centralized authentication service with both the commitment and potential to be the solution we all want. One password for everything. Secure and with respect for you and your privacy.
+We can do better!
 
-The commitment comes from a personal frustration and embarrassment with the [the current state of authentication](<%= about_current_state_of_authentication_path %>). We can do better!
+<%= name %> is a centralized authentication service with both the commitment and potential to be the solution we all want. One password for everything. Secure and with respect for you and your [privacy](<%= about_privacy_path %>).
 
-The potential comes from 1) a unique [approach to identity and privacy](<%= about_identity_path %> "Read about the") and 2) the fact that there are [no commercial interests](<%= about_non_profit_path %>) involved.
+The commitment comes from a personal frustration and embarrassment with the [the current state of authentication](<%= about_current_state_of_authentication_path %>). 
+
+The potential comes from 1) a unique [approach to identity and privacy](<%= about_identity_path %> "Read about the") and 2) the fact that <%= name %> is a [not-for-profit](<%= about_non_profit_path %>) with no commercial interests.
 
 This sets <%= name %> apart from Google, Facebook, Twitter and all other providers of authentication services. <%= name %> is free to be a service for you. The human being using digital devices. And just that.
 

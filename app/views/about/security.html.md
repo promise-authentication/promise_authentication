@@ -1,4 +1,4 @@
-# Let's talk about security.
+# Let's talk about security
 
 Is it secure if each of us has one password for all our digital services, as promised?
 

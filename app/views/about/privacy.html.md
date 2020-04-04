@@ -1,4 +1,4 @@
-# Privacy
+# Let's talk about privacy
 
 No personal data persisted unencrypted.
 

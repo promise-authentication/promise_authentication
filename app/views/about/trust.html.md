@@ -1,4 +1,4 @@
-# Let's talk about trust.
+# Let's talk about trust
 
 Authentication is all about trust.
 
@@ -6,11 +6,11 @@ Trust is humbling. Trust should not be taken for granted.
 
 When using <%= name %> you show trust. A lot. We do not take that lightly.
 
-<%= name %> embraces that humans are fallible. The trust required to provide centralized global authentication is unfathomable by any human being. So we place as little as possible responsibility on any single human being, and try to make as many people as possible responsible to each other.
+<%= name %> embraces that humans are fallible. The trust required to provide centralized global authentication is unfathomable by any human being.
 
 To trust <%= name %>, you have to believe that the human beings behind can
 
-- protect our [secrets](#secrets)
+- protect the [cryptographic secrets](#secrets)
 - [write code](#oss) that will leak no data
 
 Besides that, you have to place trust in the infrastructure of the existing internet and mathematics. So you have to believe that
@@ -18,9 +18,8 @@ Besides that, you have to place trust in the infrastructure of the existing inte
 - [ES512](#es512) is safe
 - [Xsalsa20](#xsalsa20) is safe
 - [HTTPS](#https) is safe
-- [Hashing](#hash) is collision-free
 
-While that is plenty, I still want to emphasize what you do _not_ have to trust humans being able to control their greed or curiosity. We can't.
+While that is plenty, I still want to emphasize that you do _not_ have to trust any human being being able to control their greed or curiosity.
 
 Even _if_ someone on the inside wanted to be evil, they wouldn't be able to steal or sell any data about you.
 

@@ -2,7 +2,7 @@
   <ul class="font-medium text-sm sm:text-base text-gray-600 flex justify-center w-full flex-wrap items-center">
     <div class="flex justify-center items-center">
       <li class="h-100">
-        <%= link_to image_tag('logo', class: 'h-6 sm:h-8 pr-4 my-2'), root_path %>
+        <%= link_to image_tag('logo', class: 'h-6 sm:h-8 my-2'), root_path %>
       </li>
     </div>
     <div class="flex flex-wrap justify-center items-center">
@@ -10,11 +10,12 @@
       <%= navigation_link 'Security', about_security_path %>
       <%= navigation_link 'Privacy', about_privacy_path %>
       <%= navigation_link 'Trust', about_trust_path %>
+      <%= navigation_link 'Identity', about_identity_path %>
       </div>
-      <div class="flex justify-center items-center">
+      <div class="flex justify-center items-center flex-wrap">
         <%= navigation_link 'Technology', about_technology_path %>
         <%= navigation_link 'Non-profit', about_non_profit_path %>
-        <%= navigation_link 'Documentation', documentation_get_started_path %>
+        <%= navigation_link 'Get started', documentation_get_started_path %>
       </div>
     </div>
   </ul>

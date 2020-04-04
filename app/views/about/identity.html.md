@@ -1,6 +1,8 @@
-# Identity
+# Let's talk about identity
 
 Let’s get one thing straight: Authentication has _nothing_ to do with your personal identity.
+
+All current centralized authentication solutions 
 
 The definition of authentication reads
 

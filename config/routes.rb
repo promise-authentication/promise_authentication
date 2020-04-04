@@ -18,6 +18,9 @@ Rails.application.routes.draw do
     get 'configuration'
   end
 
+  get 'login', to: 'humans#login', as: 'login'
+  post 'authenticate', to: 'humans#authenticate', as: 'authenticate'
+
   resources :relying_parties, :id => /.*/ do
     member do
       post 'setup'
