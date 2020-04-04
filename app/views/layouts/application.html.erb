@@ -16,7 +16,7 @@
     <div id="content" class="flex-grow flex flex-col"><%= content_for?(:content) ? yield(:content) : yield %></div>
     <footer class="text-center text-xs text-gray-500 mt-6">
       <span class="tracking-wide">
-        <%= name %> - 2020
+        <%= link_to name, root_path %> - 2020
       </span>
       <br />
       <span class="italic">

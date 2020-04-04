@@ -1,6 +1,6 @@
 
 .login-input {
-  @apply px-2 py-1 shadow-sm w-full rounded border-gray-600 border-solid border;
+  @apply pl-2 py-1 shadow-sm w-full rounded border-gray-600 border-solid border;
 }
 
 .input-label {
@@ -8,7 +8,7 @@
 }
 
 .button {
-  @apply pt-1 pb-2 px-3 shadow-sm rounded cursor-pointer;
+  @apply pt-1 pb-2 px-3 font-bold shadow-sm rounded cursor-pointer;
 }
 
 .button.primary {
