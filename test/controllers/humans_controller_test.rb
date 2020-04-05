@@ -8,4 +8,9 @@ class HumansControllerTest < ActionDispatch::IntegrationTest
     assert_select 'input#email'
     assert_select 'input#password'
   end
+
+  test 'authenticating with nothing' do
+    post authenticate_url
+    assert_response :redirect
+  end
 end

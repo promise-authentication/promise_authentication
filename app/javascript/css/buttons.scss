@@ -1,0 +1,11 @@
+
+.button {
+  @apply pt-2 pb-3 px-6 font-medium shadow-sm rounded cursor-pointer;
+}
+
+.button.primary {
+  @apply bg-blue-500 text-white;
+  &:hover {
+    @apply bg-blue-600 shadow-lg;
+  }
+}
