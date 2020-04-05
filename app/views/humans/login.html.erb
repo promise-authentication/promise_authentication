@@ -4,44 +4,58 @@
       <div class="
 
 
-w-full px-6
+w-full
 flex items-center flex-col
 
-sm:m-auto sm:max-w-md sm:py-8 sm:px-10 sm:pt-6 sm:rounded sm:border
+sm:m-auto sm:max-w-md sm:rounded-lg sm:border
 sm:align-center
 
  
 
                   ">
-        <%= image_tag('logo', class: 'h-6 mb-2 mt-4') %>
-        <h1 class="text-lg font-bold whitespace-no-wrap">
-          <%= name %>
-        </h1>
-        <p class="text-gray-500 text-center mt-4">
-          This is where you login to your
-          <br />
-          dashboard on <%= name %>.
-        </p>
-        <label class="w-full mt-3">
-          <p class="input-label">
-            E-mail
+        <div class="flex w-full pl-4 py-2 border-b items-center">
+          <%= image_tag('logo', class: 'h-4 mr-3') %>
+          <h1 class="text-gray-700">
+            <%= name %>
+          </h1>
+        </div>
+        <div class="
+                    w-full
+                    flex items-center flex-col
+                    pb-10
+
+                    px-6
+                    sm:px-10 
+          ">
+          <h2 class="text-2xl pt-8">
+            Login
+          </h2>
+          <p class="text-gray-600 text-sm max-w-xs text-center mt-1">
+            This is where you login to your
+            dashboard on <%= name %>.
           </p>
-          <%= email_field_tag :email, @auth_request.email, class: 'login-input', autofocus: !flash[:password_message].present?, placeholder: flash[:email_message] %>
-        </label>
-        <label class="mt-3 w-full">
-          <% if flash[:password_message].present? %>
-            <p class="input-label font-bold">
-              <%= flash[:password_message] %>
-            </p>
-            <%= password_field_tag :password, nil, class: "login-input", autofocus: true %>
-          <% else %>
+          <label class="w-full mt-8">
             <p class="input-label">
-              Password
+              E-mail
             </p>
-            <%= password_field_tag :password, nil, class: "login-input" %>
-          <% end %>
-        </label>
-        <%= submit_tag 'Login &rarr;'.html_safe, class: 'button primary mt-6 self-end' %>
+            <%= email_field_tag :email, @auth_request.email, class: 'login-input', autofocus: !flash[:password_message].present?, placeholder: flash[:email_message] %>
+          </label>
+          <label class="mt-3 w-full">
+            <% if flash[:password_message].present? %>
+              <p class="input-label font-bold">
+                <%= flash[:password_message] %>
+              </p>
+              <%= password_field_tag :password, nil, class: "login-input", autofocus: true %>
+            <% else %>
+              <p class="input-label">
+                Password
+              </p>
+              <%= password_field_tag :password, nil, class: "login-input" %>
+            <% end %>
+          </label>
+          <%= submit_tag 'Login &rarr;'.html_safe, class: 'button primary mt-6 self-end' %>
+
+        </div>
       </div>
     </div>
   <% end %>
