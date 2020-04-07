@@ -1,14 +1,14 @@
 class HumansController < ApplicationController
 
   def login
-    @auth_request = ::Authentication::Request.new email: flash[:email]
+    @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
   end
 
   def authenticate
-    @auth_request = ::Authentication::Request.new params.permit(:email, :password)
+    @auth_request = ::Authentication::Services::Authenticate.new params.permit(:email, :password)
 
     if @auth_request.valid?
-      raise
+
 
     else
       if @auth_request.errors.include?(:email)
