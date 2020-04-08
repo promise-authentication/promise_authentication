@@ -1,31 +1,31 @@
 require 'test_helper'
 
-class Authentication::EncryptedEmailTest < ActiveSupport::TestCase
+class Authentication::HashedEmailTest < ActiveSupport::TestCase
 
   setup do
-    @described_class = Authentication::EncryptedEmail
+    @described_class = Authentication::HashedEmail
     @user_id = 'uid'
-    @encrypted_email = @described_class.new id: 'hello', user_id: @user_id
+    @hashed_email = @described_class.new id: 'hello', user_id: @user_id
   end
 
   test 'no key raises' do
-    @encrypted_email.id = nil
+    @hashed_email.id = nil
     assert_raises ActiveRecord::NotNullViolation do
-      @encrypted_email.save!
+      @hashed_email.save!
     end
   end
 
   test 'requires user_id' do
-    @encrypted_email.user_id = nil
+    @hashed_email.user_id = nil
     assert_raises ActiveRecord::RecordInvalid do
-      @encrypted_email.save!
+      @hashed_email.save!
     end
   end
 
   test 'duplicate key raises' do
-    @described_class.create @encrypted_email.attributes
+    @described_class.create @hashed_email.attributes
     assert_raises ActiveRecord::RecordNotUnique do
-      @encrypted_email.save!
+      @hashed_email.save!
     end
   end
 
@@ -34,9 +34,9 @@ class Authentication::EncryptedEmailTest < ActiveSupport::TestCase
   end
 
   test 'returns UTF-8 encoded string' do
-    string = @described_class.from_cleartext('hello')
+    string = @described_class.from_cleartext('hello@example.com')
     assert_equal Encoding::UTF_8, string.encoding
-    assert_equal ",\xF2M\xBA_\xB0\xA3\u000E&\xE8;*Ź\xE2\x9E\e\u0016\u001E\\\u001F\xA7B^s\u00043b\x93\x8B\x98$\xE4ϣ\x9A=7\xBE1Ŗ\t\xE8\a\x97\a\x99ʦ\x8A\u0019\xBF\xAA\u0015\u0013_\u0016P\x85\xE0\u001DA\xA6[\xA1\xE1\xB1F\xAE\xB6\xBD\u0000\x92\xB4\x9E\xAC!L\u0010<ϣ\xA3e\x95K\xBB\xE5/t\xA2\xB3b\f\x94", string
+    assert_equal "1753bdb368271a785887ddbfb926164f2f7c6a88f609c07ff0401c55729552069b9c8883951243963d4864839e203151ba3cb2a2c34f73d6708688bb5b344496c2a96205403c1ddeb34a8e9799d059137a2f42e70eb4385f0defe214875a5586", string
   end
 
   test 'from_cleartext' do
@@ -58,8 +58,8 @@ class Authentication::EncryptedEmailTest < ActiveSupport::TestCase
   test 'user_id_for_cleartext when present' do
     email = 'hello@example.com'
     id = @described_class.from_cleartext(email)
-    @encrypted_email.id = id
-    @encrypted_email.save
+    @hashed_email.id = id
+    @hashed_email.save
 
     assert_equal @user_id, @described_class.user_id_for_cleartext(email)
   end

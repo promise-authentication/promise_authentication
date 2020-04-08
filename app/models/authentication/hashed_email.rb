@@ -1,6 +1,4 @@
-require 'openssl'
-
-class Authentication::EncryptedEmail < ApplicationRecord
+class Authentication::HashedEmail < ApplicationRecord
   validates :user_id, presence: true
 
   def self.from_cleartext(email)
@@ -11,7 +9,12 @@ class Authentication::EncryptedEmail < ApplicationRecord
     # are unlucky enough to get a collision in one algorithm,
     # we should not be so unlucky that it also collides in the other...
     # I'm sure, though, that I will be proven wrong at some point.
-    (RbNaCl::Hash.sha256(email) + RbNaCl::Hash.blake2b(email)).force_encoding(Encoding::UTF_8)
+    sha = RbNaCl::Hash.sha256(email)
+    blake = RbNaCl::Hash.blake2b(email)
+    binary = sha + blake
+
+    # Now get the hexdigest of
+    binary.unpack('H*').first.encode('utf-8')
   end
 
   def self.user_id_for_cleartext(email)

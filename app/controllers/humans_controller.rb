@@ -9,6 +9,11 @@ class HumansController < ApplicationController
 
     if @auth_request.valid?
 
+      user_id, salt = @auth_request.user_id_and_salt
+
+      session[:user_id] = user_id
+      session[:vault_key] = Authentication::Vault.key_from(@auth_request.password, salt)
+      redirect_to root_path
 
     else
       if @auth_request.errors.include?(:email)

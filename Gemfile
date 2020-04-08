@@ -3,6 +3,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.5'
 
+# Event store
+gem "rails_event_store"
 # Cryptography
 gem 'rbnacl'
 

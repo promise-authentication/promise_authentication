@@ -1,0 +1,36 @@
+require 'test_helper'
+
+class Authentication::VaultTest < ActiveSupport::TestCase
+  setup do
+    @described_class = Authentication::Vault
+
+    @salt = "e434f15f-919d-47e0-8cf9-98c38a7b41bd"
+    @password = 'secret'
+    @key = Authentication::Vault.key_from(@password, @salt)
+
+    @wrong_key = Authentication::Vault.key_from('hello', 'world')
+    @vault = Authentication::Vault.new(
+      key: @key
+    )
+  end
+
+  test 'key' do
+    assert_equal Encoding::UTF_8, @key.encoding
+    assert_equal 'df44c75524c67eafa7f5c649da2a48ab', @key
+  end
+
+  test 'using wrong then right password' do
+    content = { hello: 'world' }
+
+    ec = @vault.encrypt(content)
+    assert_not_equal ec, content
+
+    wrong = @described_class.new key: @wrong_key
+    assert_raises RbNaCl::CryptoError do
+      wrong.decrypt(ec)
+    end
+
+    right = @described_class.new key: @key
+    assert_equal right.decrypt(ec), { 'hello' => 'world' }
+  end
+end

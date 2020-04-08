@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Authentication::Services::AuthenticationTest < ActiveSupport::TestCase
+class Authentication::Services::AuthenticateTest < ActiveSupport::TestCase
   setup do
     @request = Authentication::Services::Authenticate.new(
       email: 'hello@world.dk',
@@ -17,7 +17,21 @@ class Authentication::Services::AuthenticationTest < ActiveSupport::TestCase
     assert @request.valid?
   end
 
-  test 'it will try finding existing' do
+  test 'it will use existing' do
+    Authentication::Services::Authenticate::Existing.stub :call, 'hello' do
+      Authentication::Services::Authenticate::Register.stub :call, 'world' do
+        user_id, salt = @request.user_id_and_salt
+        assert_equal user_id, 'hello'
+      end
+    end
   end
 
+  test 'it will create a new if no existing' do
+    Authentication::Services::Authenticate::Existing.stub :call, nil do
+      Authentication::Services::Authenticate::Register.stub :call, 'world' do
+        user_id, salt = @request.user_id_and_salt
+        assert_equal user_id, 'world'
+      end
+    end
+  end
 end
