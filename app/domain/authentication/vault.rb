@@ -14,12 +14,7 @@ class Authentication::Vault
       end
     end.join
 
-    sha = RbNaCl::Hash.sha256(mixed)
-    blake = RbNaCl::Hash.blake2b(mixed)
-    binary = sha + blake
-
-    # Now get the hexdigest of
-    binary.unpack('H*').first.encode('utf-8').first(32)
+    Digest::SHA256.bubblebabble(mixed).first(32).encode('utf-8')
   end
 
   def encrypt(data)

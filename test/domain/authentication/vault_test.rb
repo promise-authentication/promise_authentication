@@ -16,7 +16,7 @@ class Authentication::VaultTest < ActiveSupport::TestCase
 
   test 'key' do
     assert_equal Encoding::UTF_8, @key.encoding
-    assert_equal 'df44c75524c67eafa7f5c649da2a48ab', @key
+    assert_equal 'xulog-gycyh-hanas-kezyp-zoniz-ha', @key
   end
 
   test 'using wrong then right password' do
