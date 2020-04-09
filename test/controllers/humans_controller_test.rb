@@ -10,7 +10,7 @@ class HumansControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'the login screen with relying party' do
-    get login_url, params: { relying_party: 'example.com' }
+    get login_url, params: { relying_party_id: 'example.com' }
     assert_response :success
 
     assert_select 'input#email'
@@ -51,7 +51,7 @@ class HumansControllerTest < ActionDispatch::IntegrationTest
     Authentication::Vault.stub :key_from, 'key' do
       Authentication::Services::Authenticate.stub :new, auth_service do
         Authentication::Services::GetIdToken.stub :new, token_service do
-          post authenticate_url, params: { email: 'hello@world.com', password: 'secret', relying_party: 'party.com' }
+          post authenticate_url, params: { email: 'hello@world.com', password: 'secret', relying_party_id: 'party.com' }
 
           assert_mock auth_service
           assert_mock token_service

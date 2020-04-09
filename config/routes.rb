@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   get 'login', to: 'humans#login', as: 'login'
   post 'authenticate', to: 'humans#authenticate', as: 'authenticate'
 
+  get 'me', to: 'humans#show', as: 'dashboard'
+
   get ':relying_party_id/login', to: 'humans#login', as: 'login_with_relying_party', :constraints => { :relying_party_id => /[^\/]+/ }
 
   resources :relying_parties, :id => /.*/ do

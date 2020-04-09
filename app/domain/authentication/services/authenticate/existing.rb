@@ -8,7 +8,7 @@ module Authentication::Services::Authenticate::Existing
 
     pw = Authentication::Password.find(current_user_id)
 
-    raise unless pw.match!(password)
+    pw.match!(password)
 
     return current_user_id, pw.vault_key_salt
   end

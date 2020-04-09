@@ -6,6 +6,5 @@ class Authentication::IdTokenTest < ActiveSupport::TestCase
       sub: 'hello'
     )
 
-    assert_equal token.to_s, 'hello'
   end
 end

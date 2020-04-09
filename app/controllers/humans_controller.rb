@@ -21,9 +21,13 @@ class HumansController < ApplicationController
           relying_party_id: relying_party.id,
           vault_key: vault_key
         ).id_token
-        redirect_to "https://jwt.io/?id_token=#{id_token}"
+        if Rails.env.development?
+          redirect_to "https://jwt.io/?id_token=#{id_token}"
+        else
+          redirect_to "https://#{relying_party.id}/authenticate?id_token=#{id_token}"
+        end
       else
-        redirect_to root_path
+        redirect_to dashboard_path
       end
 
     else
@@ -35,6 +39,10 @@ class HumansController < ApplicationController
       flash[:email] = @auth_request.email
       redirect_to login_path
     end
+  rescue Authentication::Password::NotMatching
+    flash[:email] = @auth_request.email
+    flash[:password_message] = 'Password not correct. Please try again'
+    redirect_to login_path
   end
 
   def relying_party
