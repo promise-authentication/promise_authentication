@@ -8,6 +8,10 @@ gem "rails_event_store"
 # Cryptography
 gem 'rbnacl'
 
+gem 'retries'
+
+gem 'jwt'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 # Use sqlite3 as the database for Active Record

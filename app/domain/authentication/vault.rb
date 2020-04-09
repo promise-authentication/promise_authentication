@@ -5,6 +5,18 @@ class Authentication::Vault
 
   attr_accessor :key
 
+  def self.personal_data(user_id, vault_key)
+    encrypted = Authentication::VaultContent.
+      find(user_id).
+      encrypted_personal_data
+
+    decrypted = Authentication::Vault.
+      new(key: vault_key).
+      decrypt encrypted
+
+    Authentication::PersonalData.new(decrypted)
+  end
+
   def self.key_from(password, salt)
     mixed = RbNaCl::SecretBox.key_bytes.times.map do |index|
       if index % 2 == 0

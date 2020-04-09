@@ -19,12 +19,13 @@ class Authentication::Services::Authenticate::RegisterTest < ActiveSupport::Test
     assert Authentication::Password.find(user_id)
     assert Authentication::HashedEmail.find_by_user_id(user_id)
 
-    content = Authentication::VaultContent.find(user_id)
-    assert content
-
     # Now make sure the vault content can be decrypted
     key = Authentication::Vault.key_from(@password, salt)
-    assert Authentication::Vault.new(key: key).decrypt(content.encrypted_personal_data)
+    personal_data = Authentication::Vault.personal_data(user_id, key)
+    assert personal_data
+
+    # And that is has email
+    assert_equal @email, personal_data.emails.first
   end
 end
 

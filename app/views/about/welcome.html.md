@@ -1,4 +1,4 @@
-# Let's talk about authentication <%= personal_data&.emails&.first %>
+# Let's talk about authentication, <%= personal_data.emails.first %>
 
 I know, I know&mdash;you'd rather not. But you want to hear this. I promise.
 
