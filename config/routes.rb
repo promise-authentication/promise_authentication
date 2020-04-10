@@ -30,4 +30,8 @@ Rails.application.routes.draw do
       post 'setup'
     end
   end
+
+  scope path: '.well-known' do
+    get 'jwks', to: 'well_knowns#jwks'
+  end
 end

@@ -1,0 +1,5 @@
+{
+  "keys": [
+    <%= Rails.configuration.jwt_public_key.to_jwk.to_json.html_safe %>
+  ]
+}

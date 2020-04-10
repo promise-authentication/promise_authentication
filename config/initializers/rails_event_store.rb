@@ -1,13 +1,5 @@
 require 'aggregate_root'
 
-module Subscriber
-  module_function
-
-  def call(event)
-    byebug 
-  end
-end
-
 Rails.configuration.to_prepare do
   Rails.configuration.event_store = event_store = RailsEventStore::Client.new
 

@@ -1,0 +1,4 @@
+class WellKnownsController < ApplicationController
+
+  
+end
