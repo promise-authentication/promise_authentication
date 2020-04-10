@@ -68,7 +68,7 @@ sm:align-center
             <% if personal_data %>
               <div class="mr-4 text-gray-500">
                 <% if relying_party %>
-                  <%= link_to 'Use #{personal_data.email}', go_to_path(relying_party_id: relying_party.id) %>
+                  <%= link_to "Use #{personal_data.email}", go_to_path(relying_party_id: relying_party.id) %>
                 <% else %>
                   <%= link_to "Use #{personal_data.email}", dashboard_path %>
                 <% end %>
