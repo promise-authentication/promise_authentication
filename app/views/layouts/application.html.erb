@@ -12,8 +12,8 @@
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
-  <body class="flex flex-col min-h-screen pb-4 justify-between">
-    <div id="content" class="flex-grow flex flex-col"><%= content_for?(:content) ? yield(:content) : yield %></div>
+  <body class="flex flex-col sm:min-h-screen pb-4 sm:justify-center">
+    <div id="content" class=""><%= content_for?(:content) ? yield(:content) : yield %></div>
     <footer class="text-center text-xs text-gray-500 mt-6">
       <span class="tracking-wide">
         <%= link_to name, root_path %> - 2020

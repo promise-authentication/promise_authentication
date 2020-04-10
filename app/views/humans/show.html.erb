@@ -1,1 +1,34 @@
-<%= personal_data.inspect %>
+<div class="max-w-2xl m-auto py-8 px-2">
+  <h1 class="text-center text-2xl font-black">
+    Dashboard of <%= personal_data.email %>
+  </h1>
+  <table class="table-auto min-w-full mt-10">
+    <thead>
+      <tr>
+        <th class="px-4 py-2">
+          Relying party
+        </th>
+        <th class="px-4 py-2">
+          Your identity
+        </th>
+        <th class="px-4 py-2">
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% personal_data.ids.each do |key, value| %>
+        <tr>
+          <td class="border px-4 py-2">
+            <%= key %>
+          </td>
+          <td class="border px-4 py-2 text-center">
+            <%= value %>
+          </td>
+          <td class="border px-4 py-2 text-center">
+            <%= link_to 'Login', go_to_path(relying_party_id: key), class: 'underline' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

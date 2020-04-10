@@ -4,6 +4,16 @@ class HumansController < ApplicationController
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
   end
 
+  def go_to
+    id_token = Authentication::Services::GetIdToken.new(
+      user_id: session[:user_id], 
+      relying_party_id: relying_party.id,
+      vault_key: session[:vault_key]
+    ).id_token
+
+    redirect_to "https://#{relying_party.id}/authenticate?id_token=#{id_token}"
+  end
+
   def authenticate
     @auth_request = ::Authentication::Services::Authenticate.new params.permit(:email, :password)
 

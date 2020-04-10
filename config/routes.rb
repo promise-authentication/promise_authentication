@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   get 'login', to: 'humans#login', as: 'login'
   post 'authenticate', to: 'humans#authenticate', as: 'authenticate'
+  get 'go_to', to: 'humans#go_to', as: 'go_to'
 
   get 'me', to: 'humans#show', as: 'dashboard'
 
