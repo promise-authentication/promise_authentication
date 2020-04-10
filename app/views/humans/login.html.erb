@@ -64,7 +64,18 @@ sm:align-center
               <%= password_field_tag :password, nil, class: "login-input" %>
             <% end %>
           </label>
-          <%= submit_tag 'Login &rarr;'.html_safe, class: 'button primary mt-6 self-end' %>
+          <div class="flex w-full justify-end items-center mt-6">
+            <% if personal_data %>
+              <div class="mr-4">
+                <% if relying_party %>
+                  <%= link_to 'Just go', go_to_path(relying_party_id: relying_party.id) %>
+                <% else %>
+                  <%= link_to 'Just go', dashboard_path %>
+                <% end %>
+              </div>
+            <% end %>
+            <%= submit_tag 'Login &rarr;'.html_safe, class: 'button primary self-end' %>
+          </div>
 
         </div>
       </div>

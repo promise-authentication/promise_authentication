@@ -57,7 +57,7 @@ class HumansController < ApplicationController
   rescue Authentication::Password::NotMatching
     flash[:email] = @auth_request.email
     flash[:password_message] = 'Password not correct. Please try again'
-    redirect_to login_path
+    redirect_to login_path(relying_party_id: params[:relying_party_id])
   end
 
   def relying_party
