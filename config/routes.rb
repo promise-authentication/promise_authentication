@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   end
 
   get 'login', to: 'humans#login', as: 'login'
+  get 'logout', to: 'humans#logout', as: 'logout'
   post 'authenticate', to: 'humans#authenticate', as: 'authenticate'
   get 'go_to', to: 'humans#go_to', as: 'go_to'
 

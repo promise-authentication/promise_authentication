@@ -13,11 +13,17 @@ sm:align-center
  
 
                   ">
-        <div class="flex w-full pl-4 py-2 border-b items-center">
-          <%= image_tag('logo.png', class: 'h-4 mr-3') %>
-          <h1 class="text-gray-500">
-            <%= name %>
-          </h1>
+        <div class="flex w-full border-b items-center">
+          <% if relying_party&.logo_url&.present? %>
+            <div class="flex-grow flex justify-center">
+              <%= image_tag(relying_party.logo_url, class: 'h-6 my-3 self-center') %>
+            </div>
+          <% else %>
+            <%= image_tag('logo.png', class: 'h-4 m-3') %>
+            <h1 class="text-gray-500">
+              <%= name %>
+            </h1>
+          <% end %>
         </div>
         <div class="
                     w-full
@@ -27,22 +33,17 @@ sm:align-center
                     px-6
                     sm:px-10 
           ">
-          <% if relying_party %>
-            <h2 class="text-2xl pt-8">
-              Login on <%= relying_party.id %>
-            </h2>
+          <h2 class="text-2xl pt-8">
+            Login
+          </h2>
             <p class="text-gray-600 text-sm max-w-xs text-center mt-1">
-              You will be redirected to <%= relying_party.id %> after authentication.
+              <% if relying_party %>
+                You will be redirected to <%= relying_party.name %>
+              <% else %>
+                This is where you login to your
+                dashboard on <%= name %>.
+              <% end %>
             </p>
-          <% else %>
-            <h2 class="text-2xl pt-8">
-              Login
-            </h2>
-            <p class="text-gray-600 text-sm max-w-xs text-center mt-1">
-              This is where you login to your
-              dashboard on <%= name %>.
-            </p>
-          <% end %>
           <label class="w-full mt-8">
             <p class="input-label">
               E-mail

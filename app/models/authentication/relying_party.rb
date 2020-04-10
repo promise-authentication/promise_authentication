@@ -8,4 +8,12 @@ class Authentication::RelyingParty
 
     new(id: id)
   end
+
+  def name
+    id
+  end
+
+  def logo_url
+  end
+
 end

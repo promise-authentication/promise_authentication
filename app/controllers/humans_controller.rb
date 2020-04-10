@@ -4,6 +4,11 @@ class HumansController < ApplicationController
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
   end
 
+  def logout
+    session.clear
+    redirect_to login_path
+  end
+
   def go_to
     id_token = Authentication::Services::GetIdToken.new(
       user_id: session[:user_id], 
@@ -47,7 +52,7 @@ class HumansController < ApplicationController
         flash[:password_message] = @auth_request.errors.full_messages_for(:password).first
       end
       flash[:email] = @auth_request.email
-      redirect_to login_path
+      redirect_to login_path(relying_party_id: params[:relying_party_id])
     end
   rescue Authentication::Password::NotMatching
     flash[:email] = @auth_request.email
