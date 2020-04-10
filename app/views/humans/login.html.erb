@@ -66,11 +66,11 @@ sm:align-center
           </label>
           <div class="flex w-full justify-end items-center mt-6">
             <% if personal_data %>
-              <div class="mr-4">
+              <div class="mr-4 text-gray-500">
                 <% if relying_party %>
-                  <%= link_to 'Just go', go_to_path(relying_party_id: relying_party.id) %>
+                  <%= link_to 'Use #{personal_data.email}', go_to_path(relying_party_id: relying_party.id) %>
                 <% else %>
-                  <%= link_to 'Just go', dashboard_path %>
+                  <%= link_to "Use #{personal_data.email}", dashboard_path %>
                 <% end %>
               </div>
             <% end %>
