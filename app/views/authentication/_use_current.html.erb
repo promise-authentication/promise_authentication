@@ -11,15 +11,19 @@
 
 <% if relying_party %>
   <% if personal_data.id_for(relying_party.id) %>
-    <%= link_to "#{personal_data.id_for(relying_party.id) || 'Create new identity'}", go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
+    <h3 class="mb-2 text-gray-600 text-black text-center">
+      Identities for <strong class="text-gray-700"><%= personal_data.email %></strong> on <strong class="text-gray-700"><%= relying_party.name %></strong>:
+    </h3>
 
-    <%= link_to "Create new identity", go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
+    <%= link_to "Use existing &rarr;".html_safe, go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
+
+    <%= link_to "&plus; Create new identity".html_safe, '#', class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100 text-gray-600 text-sm" %>
   <% else %>
-    <%= link_to "Create your new identity", go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
+    <%= link_to "Create new identity for <strong>#{personal_data.email}</strong> on <strong>#{ relying_party.name }</strong> &rarr;".html_safe, go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
   <% end %>
 <% else %>
   <%= link_to "Go to dashboard", dashboard_path, class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
 <% end %>
 
-<%= link_to "Use another account", login_path(login_configuration.merge({force: true})), class: "w-full text-center py-4 px-2 hover:text-gray-700 text-gray-500 mt-4 mb-4" %>
+<%= link_to "Not #{personal_data.email}?", login_path(login_configuration.merge({force: true})), class: "w-full text-center py-4 px-2 hover:text-gray-700 text-gray-500 mt-4 mb-4 text-sm" %>
 
