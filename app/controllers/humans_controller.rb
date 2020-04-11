@@ -1,19 +1,24 @@
 class HumansController < ApplicationController
 
+  def show
+    redirect_to root_path unless personal_data.present?
+  end
+
   def login
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
   end
 
   def logout
-    session.clear
+    cookies.delete :user_id
+    cookies.delete :vault_key
     redirect_to login_path
   end
 
   def go_to
     id_token = Authentication::Services::GetIdToken.new(
-      user_id: session[:user_id], 
+      user_id: current_user_id, 
       relying_party_id: relying_party.id,
-      vault_key: session[:vault_key]
+      vault_key: current_vault_key
     ).id_token
 
     redirect_to "https://#{relying_party.id}/authenticate?id_token=#{id_token}"
@@ -27,8 +32,8 @@ class HumansController < ApplicationController
       user_id, salt = @auth_request.user_id_and_salt
       vault_key = Authentication::Vault.key_from(@auth_request.password, salt)
 
-      session[:user_id] = user_id
-      session[:vault_key] = vault_key
+      cookies.encrypted.permanent[:user_id] = user_id
+      cookies.encrypted.permanent[:vault_key] = vault_key
 
       if relying_party.present?
         id_token = Authentication::Services::GetIdToken.new(

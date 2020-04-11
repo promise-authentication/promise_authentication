@@ -15,7 +15,7 @@ class HumansControllerTest < ActionDispatch::IntegrationTest
 
     assert_select 'input#email'
     assert_select 'input#password'
-    assert_select 'h2', 'Login on example.com'
+    assert_select 'h2', 'Login'
   end
 
   test 'authenticating with nothing' do
@@ -33,8 +33,8 @@ class HumansControllerTest < ActionDispatch::IntegrationTest
         post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
 
         assert_mock service
-        assert_equal session[:user_id], 'uid'
-        assert_equal session[:vault_key], 'key'
+        assert cookies[:user_id]
+        assert cookies[:vault_key]
       end
     end
   end
@@ -56,8 +56,8 @@ class HumansControllerTest < ActionDispatch::IntegrationTest
           assert_mock auth_service
           assert_mock token_service
 
-          assert_equal session[:user_id], 'uid'
-          assert_equal session[:vault_key], 'key'
+          assert cookies[:user_id]
+          assert cookies[:vault_key]
 
           assert_redirected_to "https://party.com/authenticate?id_token=foo"
         end
