@@ -1,0 +1,39 @@
+<div class="sm:pt-2 sm:px-2 sm:flex-grow flex flex-col justify-center">
+  <%= form_tag authenticate_path do %>
+    <div class="flex items-center">
+      <div class="
+w-full
+flex items-center flex-col
+
+sm:m-auto sm:max-w-md sm:rounded-lg sm:border
+sm:align-center
+                  ">
+        <div class="flex w-full border-b items-center">
+          <%= render partial: 'header' %>
+        </div>
+        <div class="
+                    w-full
+                    flex items-center flex-col
+                    pb-10
+
+                    px-6
+                    sm:px-10 
+          ">
+          <% if personal_data.nil? || params[:force] %>
+            <%= render partial: 'email_password' %>
+          <% else %>
+            <%= render partial: 'use_current' %>
+          <% end %>
+
+          <% if relying_party %>
+            <p class="mt-8 text-gray-600 text-sm">
+              <strong class="text-gray-700">No personal information will be shared</strong> with <%= relying_party&.name %>. Not even your email. All they will get is a unique string identifying you.
+            </p>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+</div>

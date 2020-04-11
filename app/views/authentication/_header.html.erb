@@ -1,0 +1,16 @@
+<% if relying_party.present? %>
+  <% if relying_party.logo_url.present? %>
+    <div class="flex-grow flex justify-center">
+      <%= image_tag(relying_party.logo_url, class: 'h-6 my-3 self-center') %>
+    </div>
+  <% else %>
+    <h1 class="text-gray-500 text-center my-3 flex-grow">
+      Sign in on <span class="text-black font-medium"><%= relying_party.name %></span>
+    </h1>
+  <% end %>
+<% else %>
+  <%= image_tag('logo.png', class: 'h-4 m-3') %>
+  <h1 class="text-gray-500">
+    <%= name %>
+  </h1>
+<% end %>

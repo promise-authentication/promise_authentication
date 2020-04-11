@@ -25,7 +25,7 @@
             <%= value %>
           </td>
           <td class="border px-4 py-2 text-center">
-            <%= link_to 'Login', go_to_path(relying_party_id: key), class: 'underline' %>
+            <%= link_to 'Login', go_to_path(aud: key), class: 'underline' %>
           </td>
         </tr>
       <% end %>
