@@ -4,10 +4,16 @@ class AuthenticationController < ApplicationController
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
   end
 
+  def relogin
+    cookies.delete :user_id
+    cookies.delete :vault_key
+    redirect_to login_path(login_configuration)
+  end
+
   def logout
     cookies.delete :user_id
     cookies.delete :vault_key
-    redirect_to login_path
+    redirect_to login_path(login_configuration)
   end
 
   def go_to
@@ -49,7 +55,7 @@ class AuthenticationController < ApplicationController
   helper_method :relying_party
 
   def login_configuration
-    params.permit(:aud, :force)
+    params.permit(:aud, :redirect_url, :mfa)
   end
   helper_method :login_configuration
 

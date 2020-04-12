@@ -3,6 +3,10 @@
   @apply pt-2 pb-3 px-6 font-medium rounded cursor-pointer;
 }
 
+.button.small {
+  @apply pt-1 pb-2 px-3;
+}
+
 .button.primary {
   @apply bg-blue-500 text-white;
   &:hover {

@@ -1,34 +1,27 @@
-<div class="max-w-2xl m-auto py-8 px-2">
-  <h1 class="text-center text-2xl font-black">
-    Dashboard of <%= personal_data.email %>
+<%= content_for :header do %>
+  <%= image_tag('logo.png', class: 'h-4 m-3') %>
+  <h1 class="text-gray-500">
+    <%= name %>
   </h1>
-  <table class="table-auto min-w-full mt-10">
-    <thead>
-      <tr>
-        <th class="px-4 py-2">
-          Relying party
-        </th>
-        <th class="px-4 py-2">
-          Your identity
-        </th>
-        <th class="px-4 py-2">
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <% personal_data.ids.each do |key, value| %>
-        <tr>
-          <td class="border px-4 py-2">
-            <%= key %>
-          </td>
-          <td class="border px-4 py-2 text-center">
-            <%= value %>
-          </td>
-          <td class="border px-4 py-2 text-center">
-            <%= link_to 'Login', go_to_path(aud: key), class: 'underline' %>
-          </td>
-        </tr>
+<% end  %>
+<%= content_for :body do %>
+  <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
+    <h1 class="mt-8 text-2xl">
+      Choose application
+    </h1>
+    <p class="text-gray-600 text-sm max-w-xs text-center mt-1">
+      Login to any of your connected applications.
+    </p>
+    <div class="w-full flex items-center flex-col pb-10 mt-8">
+      <% personal_data.ids.keys.sort.each do |key| %>
+        <a href="<%= login_path(aud: key) %>" class="border-b w-full py-3 text-center hover:bg-gray-200">
+          <%= key %> &rarr;
+        </a>
       <% end %>
-    </tbody>
-  </table>
-</div>
+    </div>
+    <p class="my-8 text-gray-600 text-sm">
+      <strong class="text-gray-700">No personal information will be shared</strong>. Not even your email. All they will get is a unique string identifying you.
+    </p>
+
+  </div>
+<% end  %>

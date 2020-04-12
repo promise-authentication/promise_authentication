@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   get 'login', to: 'authentication#login', as: 'login'
   get 'logout', to: 'authentication#logout', as: 'logout'
+  get 'relogin', to: 'authentication#relogin', as: 'relogin'
   post 'authenticate', to: 'authentication#authenticate', as: 'authenticate'
   get 'go_to', to: 'authentication#go_to', as: 'go_to'
 
