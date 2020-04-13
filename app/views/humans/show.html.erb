@@ -13,9 +13,14 @@
       Login to any of your connected applications.
     </p>
     <div class="w-full flex items-center flex-col pb-10 mt-8">
-      <% personal_data.ids.keys.sort.each do |key| %>
-        <a href="<%= confirm_path(aud: key) %>" class="border-b w-full py-3 text-center hover:bg-gray-200">
-          <%= key %> &rarr;
+      <% @relying_parties.each do |rp| %>
+        <a href="<%= confirm_path(aud: rp.id) %>" class="border-b w-full py-3 hover:bg-gray-200 flex justify-center items-center">
+          <% if rp.logo_url %>
+            <%= image_tag rp.logo_url, class: 'h-4 mr-2' %>
+          <% end %>
+          <span>
+            <%= rp.name %> &rarr;
+          </span>
         </a>
       <% end %>
     </div>
