@@ -14,7 +14,7 @@
     </p>
     <div class="w-full flex items-center flex-col pb-10 mt-8">
       <% personal_data.ids.keys.sort.each do |key| %>
-        <a href="<%= login_path(aud: key) %>" class="border-b w-full py-3 text-center hover:bg-gray-200">
+        <a href="<%= confirm_path(aud: key) %>" class="border-b w-full py-3 text-center hover:bg-gray-200">
           <%= key %> &rarr;
         </a>
       <% end %>

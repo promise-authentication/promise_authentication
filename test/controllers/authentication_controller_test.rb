@@ -45,22 +45,16 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     auth_service.expect :user_id_and_salt, ['uid', 'salt']
     auth_service.expect :password, 'secret'
 
-    token_service = Minitest::Mock.new
-    token_service.expect :id_token, 'foo'
-
     Authentication::Vault.stub :key_from, 'key' do
       Authentication::Services::Authenticate.stub :new, auth_service do
-        Authentication::Services::GetIdToken.stub :new, token_service do
           post authenticate_url, params: { email: 'hello@world.com', password: 'secret', aud: 'party.com' }
 
           assert_mock auth_service
-          assert_mock token_service
 
           assert cookies[:user_id]
           assert cookies[:vault_key]
 
-          assert_redirected_to "https://party.com/authenticate?id_token=foo"
-        end
+          assert_redirected_to confirm_path(aud: 'party.com')
       end
     end
   end

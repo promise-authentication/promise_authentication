@@ -2,6 +2,15 @@ class AuthenticationController < ApplicationController
 
   def login
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
+    if personal_data
+      redirect_to confirm_path(login_configuration)
+    end
+  end
+
+  def confirm
+    if relying_party.blank?
+      redirect_to dashboard_path
+    end
   end
 
   def relogin
@@ -17,8 +26,19 @@ class AuthenticationController < ApplicationController
   end
 
   def go_to
-    handle_post_authentication
+    if relying_party.present?
+      id_token = Authentication::Services::GetIdToken.new(
+        user_id: current_user_id, 
+        relying_party_id: relying_party.id,
+        vault_key: current_vault_key
+      ).id_token
+
+      redirect_to "https://#{relying_party.id}/authenticate?id_token=#{id_token}"
+    else
+      redirect_to dashboard_path
+    end
   end
+
 
   def authenticate
     @auth_request = ::Authentication::Services::Authenticate.new params.permit(:email, :password)
@@ -31,9 +51,7 @@ class AuthenticationController < ApplicationController
       cookies.encrypted.permanent[:user_id] = user_id
       cookies.encrypted.permanent[:vault_key] = vault_key
 
-      handle_post_authentication
-
-
+      redirect_to confirm_path(login_configuration)
     else
       if @auth_request.errors.include?(:email)
         flash[:email_message] = @auth_request.errors.full_messages_for(:email).first
@@ -60,19 +78,5 @@ class AuthenticationController < ApplicationController
   helper_method :login_configuration
 
   private
-
-  def handle_post_authentication
-    if relying_party.present?
-      id_token = Authentication::Services::GetIdToken.new(
-        user_id: current_user_id, 
-        relying_party_id: relying_party.id,
-        vault_key: current_vault_key
-      ).id_token
-
-      redirect_to "https://#{relying_party.id}/authenticate?id_token=#{id_token}"
-    else
-      redirect_to dashboard_path
-    end
-  end
 
 end

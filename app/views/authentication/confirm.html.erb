@@ -1,0 +1,14 @@
+<%= content_for :header do %>
+  <%= render partial: 'header' %>
+<% end %>
+<%= content_for :body do %>
+  <%= form_tag authenticate_path do %>
+    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
+      <%= render partial: 'use_current' %>
+
+      <p class="mt-8 text-gray-600 text-sm">
+        <strong class="text-gray-700">No personal information will be shared</strong> with <%= relying_party&.name %>. Not even your email. All they will get is a unique string identifying you.
+      </p>
+    </div>
+  <% end %>
+<% end %>
