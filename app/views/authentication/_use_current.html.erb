@@ -1,29 +1,11 @@
-<h2 class="text-2xl pt-8">
-  Choose identity
+<h2 class="text-2xl pt-8 text-center leading-tight">
+  Sign in on <strong><%= relying_party.name %></strong>
 </h2>
-<p class="text-gray-600 text-sm max-w-xs text-center mt-1 mb-8">
-  <% if relying_party %>
-    You will be redirected to <%= relying_party.name %>
-  <% else %>
-    This is where you login to your dashboard on <%= name %>.
-  <% end %>
+<p class="text-gray-600 text-sm max-w-xs text-center mt-3 mb-8">
+  You are logged in on <%= name %> as <strong><%= personal_data.email %></strong>.
 </p>
 
-<% if relying_party %>
-  <% if personal_data.id_for(relying_party.id) %>
-    <h3 class="mb-2 text-gray-600 text-black text-center">
-      Identities for <strong class="text-gray-700"><%= personal_data.email %></strong> on <strong class="text-gray-700"><%= relying_party.name %></strong>:
-    </h3>
+<%= link_to "Go to #{ relying_party.name } &rarr;".html_safe, go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
 
-    <%= link_to "Use existing &rarr;".html_safe, go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100", title: personal_data.id_for(relying_party.id) %>
-
-    <%= link_to "&plus; Create new identity".html_safe, '#', class: "w-full text-center py-4 px-2 hover:bg-gray-100 text-gray-600 text-sm" %>
-  <% else %>
-    <%= link_to "Create new identity for <strong>#{personal_data.email}</strong> on <strong>#{ relying_party.name }</strong> &rarr;".html_safe, go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
-  <% end %>
-<% else %>
-  <%= link_to "Go to dashboard", dashboard_path, class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
-<% end %>
-
-<%= link_to "Not <strong class='text-gray-700'>#{personal_data.email}</strong>? Logout".html_safe, relogin_path(login_configuration), class: "w-full text-center py-4 px-2 hover:bg-gray-200 text-gray-500 mt-4 mb-4 text-sm" %>
+<%= link_to "Not <strong class='text-gray-700'>#{personal_data.email}</strong>? Logout".html_safe, relogin_path(login_configuration), class: "w-full text-center py-4 px-2 hover:bg-gray-200 text-gray-500 mb-4 text-sm" %>
 
