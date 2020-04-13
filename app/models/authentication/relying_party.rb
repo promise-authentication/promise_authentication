@@ -1,19 +1,23 @@
 class Authentication::RelyingParty
   include ActiveModel::Model
 
-  attr_accessor :id
+  attr_accessor :id, :name, :logo_url
 
   def self.find(id)
     return nil if id.blank?
 
-    new(id: id)
+    url = "https://#{id}/.well-known/authentication.json"
+
+    well_knowns = begin
+                    JSON.parse(HTTParty.get(url).body)
+                  rescue JSON::ParserError
+                    {}
+                  end
+
+    new(well_knowns.merge({id: id}))
   end
 
   def name
-    id
+    @name || id
   end
-
-  def logo_url
-  end
-
 end

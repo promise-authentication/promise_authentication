@@ -12,6 +12,8 @@ gem 'retries'
 
 gem 'jwt'
 
+gem 'httparty'
+
 # To be able to .to_jwk on key
 gem 'json-jwt'
 
