@@ -5,7 +5,7 @@
   You are logged in on <%= name %> as <strong><%= personal_data.email %></strong>.
 </p>
 
-<%= link_to "Go to #{ relying_party.name } &rarr;".html_safe, go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
+<%= link_to "Go to <strong>#{ relying_party.name }</strong> &rarr;".html_safe, go_to_path(login_configuration), class: "w-full text-center py-4 px-2 border-b hover:bg-gray-100" %>
 
 <%= link_to "Not <strong class='text-gray-700'>#{personal_data.email}</strong>? Logout".html_safe, relogin_path(login_configuration), class: "w-full text-center py-4 px-2 hover:bg-gray-200 text-gray-500 mb-4 text-sm" %>
 
