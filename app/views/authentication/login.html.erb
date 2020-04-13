@@ -1,8 +1,15 @@
 <%= content_for :header do %>
   <%= image_tag('logo.png', class: 'h-4 m-3') %>
-  <h1 class="text-gray-500">
-    <%= name %>
-  </h1>
+  <% if relying_party&.logo_url %>
+    <div class="flex-grow flex justify-between items-center">
+      <span class="text-gray-600">Sign in with <%= name %></span>
+      <%= image_tag(relying_party.logo_url, class: 'h-6 my-3 mr-3') %>
+    </div>
+  <% else %>
+    <h1 class="text-gray-500">
+      <%= name %>
+    </h1>
+  <% end %>
 <% end %>
 <%= content_for :body do %>
   <%= form_tag authenticate_path do %>
