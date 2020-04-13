@@ -10,7 +10,7 @@ class Authentication::RelyingParty
 
     well_knowns = begin
                     JSON.parse(HTTParty.get(url).body)
-                  rescue JSON::ParserError, SocketError
+                  rescue JSON::ParserError, SocketError, URI::InvalidURIError
                     {}
                   end
 
