@@ -1,33 +1,23 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  locale_name: English
+  shared:
+    footer:
+      created_by: Created by Anders Lemke-Holstein
+  authentication:
+    confirm:
+      sign_in_with: Sign in with %{name}
+      sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
+      you_are_html: You are logged in on %{name} as <strong>%{email}</strong>.
+      go_to_html: "Go to <strong>%{relying_party_name}</strong> &rarr;"
+      not_you_html: Not <strong>%{email}</strong>?
+      logout: Logout
+      no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your email. All they will get is a unique string identifying you.
+    login:
+      sign_in_with_html: Sign in with %{name}
+      login: Login
+      enter_credentials_html: Enter the email and password you want to use or already use on <strong>%{name}</strong>.
+      you_will_be_redirected_html: You will be redirected to <strong>%{relying_party_name}</strong> after authentication.
+      redirect_to_dashboard: You will be redirected to your dashboard.
+      go_on: Login
+      no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your email. All they will get is a unique string identifying you.
+

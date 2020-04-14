@@ -1,9 +1,21 @@
+<div class="flex w-full justify-center items-center">
+  <% I18n.available_locales.each do |locale| %>
+    <% locale_name = I18n.with_locale(locale) { t('locale_name') } %>
+      <% if I18n.locale == locale %>
+        <span class="text-gray-700 block p-3">
+          <%= locale_name %>
+        </span>
+      <% else %>
+        <%= link_to locale_name, url_for( params.clone.permit!.merge(locale: locale, only_path: true )), class: "text-gray-500 block p-3" %>
+      <% end %>
+  <% end %>
+</div>
 <footer class="text-center text-xs text-gray-500 mt-6 mb-2">
   <span class="tracking-wide">
     <%= link_to name, root_path %> - 2020
   </span>
   <br />
   <span class="italic">
-    Created by Anders Lemke-Holstein
+    <%= t '.created_by' %>
   </span>
 </footer>

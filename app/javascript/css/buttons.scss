@@ -1,15 +1,22 @@
 
 .button {
-  @apply pt-2 pb-3 px-6 font-medium rounded cursor-pointer;
+  @apply pt-2 pb-3 px-6 font-medium rounded shadow cursor-pointer;
 }
 
 .button.small {
-  @apply pt-1 pb-2 px-3;
+  @apply pt-1 pb-2 px-3 font-normal text-sm;
 }
 
 .button.primary {
   @apply bg-blue-500 text-white;
   &:hover {
     @apply bg-blue-600 shadow-lg;
+  }
+}
+
+.button.transparent {
+  @apply text-gray-600 border-gray-100 border;
+  &:hover {
+    @apply bg-gray-100;
   }
 }

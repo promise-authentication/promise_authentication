@@ -1,6 +1,6 @@
 module ApplicationHelper
   def name
-    'Promise Authentication'
+    'Promise'.html_safe
   end
 
   def navigation_link(*args, &block)

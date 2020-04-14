@@ -67,13 +67,8 @@ class AuthenticationController < ApplicationController
     redirect_to login_path(login_configuration)
   end
 
-  def relying_party
-    @relying_party ||= ::Authentication::RelyingParty.find(params[:aud])
-  end
-  helper_method :relying_party
-
   def login_configuration
-    params.permit(:aud, :redirect_url, :mfa)
+    params.permit(:aud, :redirect_url, :mfa, :locale)
   end
   helper_method :login_configuration
 

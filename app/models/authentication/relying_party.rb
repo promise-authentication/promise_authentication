@@ -1,7 +1,7 @@
 class Authentication::RelyingParty
   include ActiveModel::Model
 
-  attr_accessor :id, :name, :logo_url
+  attr_accessor :id, :name, :logo_url, :locale
 
   def self.find(id)
     return nil if id.blank?

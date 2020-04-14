@@ -2,7 +2,9 @@
   <%= image_tag('logo.png', class: 'h-4 m-3') %>
   <% if relying_party&.logo_url %>
     <div class="flex-grow flex justify-between items-center">
-      <span class="text-gray-600">Sign in with <%= name %></span>
+      <span class="text-gray-600">
+        <%= t '.sign_in_with_html', name: name %>
+      </span>
       <%= image_tag(relying_party.logo_url, class: 'h-6 my-3 mr-3') %>
     </div>
   <% else %>
@@ -12,13 +14,46 @@
   <% end %>
 <% end %>
 <%= content_for :body do %>
-  <%= form_tag authenticate_path do %>
+  <%= form_tag authenticate_path(login_configuration) do %>
     <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
-      <%= render partial: 'email_password' %>
+      <h2 class="text-2xl pt-8">
+        <%= t '.login' %>
+      </h2>
+      <p class="text-gray-600 text-sm max-w-xs text-center mt-4">
+        <%= t '.enter_credentials_html', name: name %>
+        <% if relying_party %>
+          <%= t '.you_will_be_redirected_html', relying_party_name: relying_party.name %>
+        <% else %>
+          <%= t '.redirect_to_dashboard' %>
+        <% end %>
+      </p>
+      <label class="w-full mt-8">
+        <p class="input-label">
+          E-mail
+        </p>
+        <%= email_field_tag :email, @auth_request.email, class: 'login-input', autofocus: !flash[:password_message].present?, placeholder: flash[:email_message] %>
+      </label>
+      <label class="mt-3 w-full">
+        <% if flash[:password_message].present? %>
+          <p class="input-label font-bold">
+            <%= flash[:password_message] %>
+          </p>
+          <%= password_field_tag :password, nil, class: "login-input", autofocus: true %>
+        <% else %>
+          <p class="input-label">
+            Password
+          </p>
+          <%= password_field_tag :password, nil, class: "login-input" %>
+        <% end %>
+      </label>
+      <div class="flex w-full justify-end items-center mt-6">
+        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary self-end' %>
+      </div>
+
 
       <% if relying_party %>
         <p class="mt-8 text-gray-600 text-sm">
-          <strong class="text-gray-700">No personal information will be shared</strong> with <%= relying_party&.name %>. Not even your email. All they will get is a unique string identifying you.
+          <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
         </p>
       <% end %>
     </div>

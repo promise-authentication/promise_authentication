@@ -1,13 +1,45 @@
 <%= content_for :header do %>
-  <%= render partial: 'header' %>
+  <% if relying_party.present? %>
+    <% if relying_party.logo_url.present? %>
+      <div class="flex-grow flex items-center justify-center">
+        <%= image_tag(relying_party.logo_url, class: 'h-6 m-3') %>
+      </div>
+    <% else %>
+      <%= image_tag('logo.png', class: 'h-4 m-3') %>
+      <h1 class="text-gray-500">
+        <%= name %>
+      </h1>
+    <% end %>
+  <% else %>
+    <%= image_tag('logo.png', class: 'h-4 m-3') %>
+    <h1 class="text-gray-500">
+      <%= name %>
+    </h1>
+  <% end %>
+
 <% end %>
 <%= content_for :body do %>
   <%= form_tag authenticate_path do %>
     <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
-      <%= render partial: 'use_current' %>
+      <h2 class="text-2xl pt-8 text-center leading-tight">
+        <%= t '.sign_in_on_html', relying_party_name: relying_party.name %>
+      </h2>
+      <p class="text-gray-600 text-sm max-w-xs text-center mt-3 mb-8">
+        <%= t '.you_are_html', email: personal_data.email, name: name %>
+      </p>
+
+      <%= link_to t('.go_to_html', relying_party_name: relying_party.name), go_to_path(login_configuration), class: "button primary" %>
+
+      <div class="flex flex-col mt-6 items-center">
+        <span class="text-gray-600">
+          <%= t '.not_you_html', email: personal_data.email %>
+        </span>
+        <%= link_to t('.logout'), relogin_path(login_configuration), class: "button transparent small mt-2" %>
+      </div>
+
 
       <p class="mt-8 text-gray-600 text-sm">
-        <strong class="text-gray-700">No personal information will be shared</strong> with <%= relying_party&.name %>. Not even your email. All they will get is a unique string identifying you.
+        <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
       </p>
     </div>
   <% end %>
