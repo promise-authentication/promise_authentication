@@ -1,4 +1,3 @@
 class WellKnownsController < ApplicationController
 
-  
 end
