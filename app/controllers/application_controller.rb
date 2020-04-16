@@ -24,9 +24,19 @@ class ApplicationController < ActionController::Base
   end
 
   def relying_party
-    @relying_party ||= ::Authentication::RelyingParty.find(params[:aud])
+    @relying_party ||= ::Authentication::RelyingParty.find(relying_party_id)
   end
   helper_method :relying_party
+
+  def relying_party_id
+    relying_party_from_host || params[:aud]
+  end
+
+  def relying_party_from_host
+    if request.host.match /^auth\./
+      request.host.gsub(/^auth\./, '')
+    end
+  end
 
   def personal_data
     return nil if current_user_id.blank?

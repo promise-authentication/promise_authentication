@@ -7,7 +7,7 @@ class HumansController < ApplicationController
       end
       render layout: 'authentication'
     else
-      redirect_to root_path unless personal_data.present?
+      redirect_to root_url unless personal_data.present?
     end
   end
 
