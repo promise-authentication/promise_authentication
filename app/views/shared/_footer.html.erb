@@ -27,7 +27,7 @@
 <footer class="text-center text-xs text-gray-500 mt-3 mb-2">
   <span class="tracking-wide">
     <%= link_to name, root_path %> - 2020
-    <% if personal_data %>
+    <% if personal_data && !relying_party %>
       - <%= link_to t('.change_password'), password_path, class: 'underline' %>
     <% end %>
   </span>
