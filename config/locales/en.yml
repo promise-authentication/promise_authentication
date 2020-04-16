@@ -36,7 +36,7 @@ en:
         body_html: The source code for %{name} is available for anyone to read. This ensures that both quality and security is as high as humanly possible.
       humans:
         header: By humans, for humans
-        body_html: "%{name} is made by human beings. Our only interest is to serve other human beings. We're not here for profits. We only care about creating a piece of internet infrastructure that will make all of our or digital lives just a little bit easier and more secure."
+        body_html: "%{name} is made by human beings. Our only interest is to serve other human beings. We're not here for profits. We only care about creating a piece of internet infrastructure that will make all of our digital lives just a little bit easier and more secure."
     try:
       header: Try %{name}
       body_html: To get a sense of how this works, you can try signing in to <strong>%{app}</strong>. 
