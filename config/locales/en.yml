@@ -1,5 +1,7 @@
 en:
   locale_name: English
+  password_not_matching: Wrong password. Please try again
+  fill_both: Please provide all
   activemodel:
     attributes:
       email: E-mail
@@ -61,4 +63,10 @@ en:
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Login
       no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your email. All they will get is a unique string identifying you.
-
+  passwords:
+    show:
+      header: Change password
+      description: Here you can provide a new password for signing in on %{name}.
+      go_on: Change password
+      current_password: Current password
+      new_password: New password
