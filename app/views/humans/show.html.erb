@@ -7,26 +7,28 @@
 <%= content_for :body do %>
   <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
     <h1 class="mt-8 text-2xl">
-      Choose application
+      <%= t '.choose_application' %>
     </h1>
     <p class="text-gray-600 text-sm max-w-xs text-center mt-1">
-      Login to any of your connected applications.
+      <%= t '.explain_choosing' %>
     </p>
-    <div class="w-full flex items-center flex-col pb-10 mt-8">
-      <% @relying_parties.each do |rp| %>
-        <a href="<%= confirm_path(aud: rp.id) %>" class="border-b w-full py-3 hover:bg-gray-200 flex justify-center items-center">
-          <% if rp.logo_url %>
-            <%= image_tag rp.logo_url, class: 'h-4 mr-2' %>
-          <% end %>
-          <span>
-            <%= rp.name %> &rarr;
-          </span>
-        </a>
-      <% end %>
-    </div>
-    <p class="my-8 text-gray-600 text-sm">
-      <strong class="text-gray-700">No personal information will be shared</strong>. Not even your email. All they will get is a unique string identifying you.
-    </p>
-
+    <% if @relying_parties.any? %>
+      <div class="w-full flex items-center flex-col pb-10 mt-8">
+        <% @relying_parties.each do |rp| %>
+          <a href="<%= confirm_path(aud: rp.id) %>" class="border-b w-full py-3 hover:bg-gray-200 flex justify-center items-center">
+            <% if rp.logo_url %>
+              <%= image_tag rp.logo_url, class: 'h-4 mr-2' %>
+            <% end %>
+            <span>
+              <%= rp.name %> &rarr;
+            </span>
+          </a>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="my-16 text-center text-gray-400 mx-6 border-b p-2">
+        <%= t '.no_relying_parties' %>
+      </p>
+    <% end %>
   </div>
 <% end  %>

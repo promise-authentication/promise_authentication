@@ -16,7 +16,7 @@ class Authentication::Services::Authenticate::RegisterTest < ActiveSupport::Test
       @described_class.(@email, @password)
     end
 
-    assert Authentication::Password.find(user_id)
+    assert Authentication::Password.find(user_id).match!(@password)
     assert Authentication::HashedEmail.find_by_user_id(user_id)
 
     # Now make sure the vault content can be decrypted

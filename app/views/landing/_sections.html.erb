@@ -1,0 +1,37 @@
+<h1 class="px-6 text-center mt-12 uppercase font-thin text-gray-500 text-xl tracking-widest">
+  <%= t '.core_values', name: name %>
+</h1>
+
+<div class="flex flex-col items-center mt-4">
+  <div class="flex flex-wrap sm:flex-no-wrap justify-center">
+    <% %w(security privacy).each do |section| %>
+      <%= 
+        render partial: 'section', locals: {
+          header: t(".#{section}.header"),
+          body: t(".#{section}.body_html", name: name),
+        }
+      %>
+    <% end %>
+  </div>
+  <div class="flex flex-wrap justify-center">
+    <% %w(non_profit open_source).each do |section| %>
+      <%= 
+        render partial: 'section', locals: {
+          header: t(".#{section}.header"),
+          body: t(".#{section}.body_html", name: name),
+        }
+      %>
+    <% end %>
+  </div>
+  <div class="flex flex-wrap justify-center">
+    <% %w(humans).each do |section| %>
+      <%= 
+        render partial: 'section', locals: {
+          header: t(".#{section}.header"),
+          body: t(".#{section}.body_html", name: name),
+        }
+      %>
+    <% end %>
+  </div>
+</div>
+

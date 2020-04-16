@@ -1,0 +1,19 @@
+<%= render partial: 'github' %>
+
+<div class="px-6 flex flex-col items-center bg-gray-100 pb-16">
+  <%= image_tag 'logo.png', class: 'h-20 mt-10 sm:mt-16' %>
+  <h1 class="text-4xl sm:text-5xl font-black text-center mt-6 leading-tight">
+    <%= t '.callout_html' %>
+  </h1>
+  <p class="mt-10 text-left text-gray-700 text-xl sm:text-2xl sm:max-w-2xl px-10">
+    <%= t '.short_intro_html', name: name %>
+  </p>
+</div>
+
+<%= render partial: 'sections' %>
+
+<%= render partial: 'try' %>
+
+<hr class="w-2/3 m-auto my-10 hidden sm:block"/>
+
+<%= render partial: 'shared/footer' %>

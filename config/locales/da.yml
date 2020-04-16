@@ -1,8 +1,55 @@
 da:
   locale_name: Dansk
+  password_not_matching: Forkert password. Prøv igen
+  fill_both: Udfyld venligst alle felter
+  activemodel:
+    attributes:
+      authentication/services/authenticate:
+        email: E-mail
+        password: Password
+      authentication/services/change_password:
+        current_password: Nuværende password
+        new_password: Nyt password
+    errors:
+      messages:
+        blank: udfyldes her
   shared:
     footer:
       created_by: Lavet af Anders Lemke-Holstein
+      logged_in_as_html: Du er logget ind som <strong>%{email}</strong>
+      logout: Log ud
+      login: Log ind
+      change_password: Skift password
+  landing:
+    index:
+      callout_html: Ét&nbsp;password til&nbsp;det&nbsp;hele? Ja&nbsp;tak!
+      short_intro_html: "Vi har hver især så mange passwords og muligheder for at logge ind, at vi umuligt kan holde styr på det. <strong>%{name}</strong> tilbyder en central løsning til potentielt at logge ind alle steder, til os allesammen."
+    sections:
+      core_values: Kerneværdierne i %{name}
+      privacy:
+        header: Privatliv
+        body_html: Når du bruger %{name} til at logge ind, vil der aldrig blive delt personlige informationer om dig. Hvért sted, får hvér sin unikke og tilfældige streng som identificerer dig overfor dem.
+      security:
+        header: Sikkerhed
+        body_html: "%{name} er baseret på åbne standarder for at give maksimal sikkerhed for dine data. Alt er krypteret og nøglerne er opbevaret et andet og sikkert sted. Så selv ved et evt. brud vil det være praktisk talt umuligt for hackere at læse dine data."
+      non_profit:
+        header: Non-profit
+        body_html: "%{name} er en organisation som ikke skal genenerere overskud. Der er dermed ingen kommercielle interesser der kan "
+      open_source:
+        header: Open source
+        body_html: Kildekoden til %{name} er open source. Det gør at alle har mulighed for at forstå hvordan teknologien virker, samt bidrage til at gøre %{name} bedre for os allesammen.
+      humans:
+        header: Af mennesker, for mennesker
+        body_html: "%{name} er lavet af mennesker, for mennesker. Vi er ikke en virksomhed der skal tjene penge. Vi er kun interesserede i at bygge et stykke infrastuktur til internettet som kan gøre alle vores digitale liv en lille smule nemmere."
+    try:
+      header: Prøv %{name}
+      body_html: For at få en fornemmelse for hvordan det virker, kan du prøve at logge ind på <strong>%{app}</strong>. 
+      cta: Gå til %{app}
+  humans:
+    show:
+      choose_application: Vælg applikation
+      explain_choosing: Log ind på en af dine applikationer her.
+      no_relying_parties: Du har endnu ikke nogle applikationer tilknyttet
   authentication:
     confirm:
       sign_in_on_html: "Login på <strong>%{relying_party_name}</strong>"
@@ -19,5 +66,12 @@ da:
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       go_on: Videre
       no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få et unik streng som identificerer dig.
+  passwords:
+    show:
+      header: Skift password
+      description: Her sætter du et nyt password til at logge ind på %{name}.
+      go_on: Skift password
+      current_password: Nuværende password
+      new_password: Nyt password
 
 

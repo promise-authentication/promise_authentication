@@ -3,6 +3,10 @@ class Authentication::PersonalData
 
   attr_accessor :emails, :ids
 
+  def ids
+    @ids || {}
+  end
+
   def email
     emails&.first
   end

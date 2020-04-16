@@ -15,6 +15,8 @@ class Authentication::Vault
       decrypt encrypted
 
     Authentication::PersonalData.new(decrypted)
+  rescue RbNaCl::CryptoError
+    return nil
   end
 
   def self.key_from(password, salt)

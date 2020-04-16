@@ -1,0 +1,12 @@
+<div class="flex justify-center">
+  <div class="flex flex-col justify-center items-center my-10 bg-gray-200 rounded-lg shadow-xl py-10 max-w-sm sm:max-w-xs px-4 sm:px-6 mx-2">
+    <h4 class="text-2xl font-black">
+      <%= t '.header', name: name %>
+    </h4>
+    <p class="text-center mt-1">
+      <%= t '.body_html', app: 'Ruby App' %>
+    </p>
+    <%= link_to (t('.cta', app: 'Ruby App') + ' &rarr;').html_safe, 'https://ruby.promiseauthentication.org', class: "button external mt-6" %>
+  </div>
+
+</div>

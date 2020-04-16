@@ -1,4 +1,17 @@
-<div class="flex w-full justify-center items-center">
+<% unless relying_party.present? %>
+  <div class="flex flex-col items-center mt-4">
+    <% if personal_data.present? %>
+      <p class="text-center text-gray-600">
+        <%= link_to t('.logged_in_as_html', email: personal_data.email), dashboard_path %>
+      </p>
+      <%= link_to t('.logout'), logout_path, class: "button small transparent mb-4 mt-1" %>
+    <% else %>
+      <%= link_to t('.login'), login_path, class: "button small transparent mb-4 mt-1" %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="flex w-full justify-center items-center mt-4">
   <% I18n.available_locales.each do |locale| %>
     <% locale_name = I18n.with_locale(locale) { t('locale_name') } %>
       <% if I18n.locale == locale %>
@@ -10,9 +23,13 @@
       <% end %>
   <% end %>
 </div>
-<footer class="text-center text-xs text-gray-500 mt-6 mb-2">
+
+<footer class="text-center text-xs text-gray-500 mt-3 mb-2">
   <span class="tracking-wide">
     <%= link_to name, root_path %> - 2020
+    <% if personal_data %>
+      - <%= link_to t('.change_password'), password_path, class: 'underline' %>
+    <% end %>
   </span>
   <br />
   <span class="italic">

@@ -17,6 +17,11 @@ class Authentication::Services::AuthenticateTest < ActiveSupport::TestCase
     assert @request.valid?
   end
 
+  test 'downcasing email' do
+    @request.email = 'Hello@example.com'
+    assert_equal @request.email, 'hello@example.com'
+  end
+
   test 'it will use existing' do
     Authentication::Services::Authenticate::Existing.stub :call, 'hello' do
       Authentication::Services::Authenticate::Register.stub :call, 'world' do

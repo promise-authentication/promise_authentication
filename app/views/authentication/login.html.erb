@@ -14,7 +14,7 @@
   <% end %>
 <% end %>
 <%= content_for :body do %>
-  <%= form_tag authenticate_path(login_configuration) do %>
+  <%= form_tag authenticate_path(login_configuration), class: 'w-full' do %>
     <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
       <h2 class="text-2xl pt-8">
         <%= t '.login' %>

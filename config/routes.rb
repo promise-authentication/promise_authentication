@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  root 'about#welcome'
+  root 'landing#index'
 
   namespace 'about' do
     get 'welcome'
@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get 'confirm', to: 'authentication#confirm', as: 'confirm'
   post 'authenticate', to: 'authentication#authenticate', as: 'authenticate'
   get 'go_to', to: 'authentication#go_to', as: 'go_to'
+
+  resource :password, only: [:show, :create]
 
   get 'me', to: 'humans#show', as: 'dashboard'
 

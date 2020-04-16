@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def extract_locale_from_accept_language_header
-    request.env['HTTP_ACCEPT_LANGUAGE']&.scan(/^[a-z]{2}/)&.first
+    request_locale = request.env['HTTP_ACCEPT_LANGUAGE']&.scan(/^[a-z]{2}/)&.first
   end
 
   def user_settings
@@ -27,6 +27,10 @@ class ApplicationController < ActionController::Base
     @relying_party ||= ::Authentication::RelyingParty.find(params[:aud])
   end
   helper_method :relying_party
+  
+  def authenticate
+    redirect_to logout_path if personal_data.nil?
+  end
 
   def personal_data
     return nil if current_user_id.blank?

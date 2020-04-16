@@ -14,9 +14,16 @@
   }
 }
 
+.button.external {
+  @apply bg-red-500 text-white;
+  &:hover {
+    @apply bg-red-600 shadow-lg;
+  }
+}
+
 .button.transparent {
   @apply text-gray-600 border-gray-100 border;
   &:hover {
-    @apply bg-gray-100;
+    @apply text-gray-700 bg-gray-100;
   }
 }
