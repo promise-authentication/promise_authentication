@@ -68,7 +68,7 @@ class AuthenticationController < ApplicationController
   end
 
   def login_configuration
-    params.permit(:aud, :redirect_url, :mfa, :locale)
+    params.permit(:aud, :redirect_url, :mfa)
   end
   helper_method :login_configuration
 

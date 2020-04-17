@@ -21,7 +21,7 @@ en:
       callout_html: One&nbsp;password for&nbsp;everything? Yes,&nbsp;please!
       short_intro_html: "Each of us has so many passwords and ways of signing in, that we can't possible keep track. <strong>%{name}</strong> is a potential single-sign-on solution for everywhere and all of us."
     sections:
-      core_values: Our core values at %{name}
+      core_values: The core values at %{name}
       privacy:
         header: Privacy
         body_html: When using %{name} to sign into an application, no personal information will be shared with them. Not even your email. Every application will recieve their own unique random string identifying you to them.
@@ -36,7 +36,7 @@ en:
         body_html: The source code for %{name} is available for anyone to read. This ensures that both quality and security is as high as humanly possible.
       humans:
         header: By humans, for humans
-        body_html: "%{name} is made by human beings. Our only interest is to serve other human beings. We're not here for profits. We only care about creating a piece of internet infrastructure that will make all of our digital lives just a little bit easier and more secure."
+        body_html: "%{name} is made by human beings. The only interest is to serve other human beings. We're not here for profits. We only care about creating a piece of internet infrastructure that will make all of our digital lives just a little bit easier and more secure."
     try:
       header: Try %{name}
       body_html: To get a sense of how this works, you can try signing in to <strong>%{app}</strong>. 

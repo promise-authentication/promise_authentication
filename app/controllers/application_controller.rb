@@ -12,15 +12,19 @@ class ApplicationController < ActionController::Base
   end
 
   def locale
-    user_settings&.locale || params[:locale] || relying_party&.locale || extract_locale_from_accept_language_header || I18n.default_locale
+    locale_from_cookie || extract_locale_from_accept_language_header || relying_party&.locale || I18n.default_locale
   end
 
   def extract_locale_from_accept_language_header
     request_locale = request.env['HTTP_ACCEPT_LANGUAGE']&.scan(/^[a-z]{2}/)&.first
   end
 
-  def user_settings
-    nil
+  def locale_from_cookie
+    if params[:locale]
+      cookies.permanent[:locale] = params[:locale]
+    end
+
+    cookies[:locale]
   end
 
   def relying_party

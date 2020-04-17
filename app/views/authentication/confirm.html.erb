@@ -24,13 +24,13 @@
       <h2 class="text-2xl pt-8 text-center leading-tight">
         <%= t '.sign_in_on_html', relying_party_name: relying_party.name %>
       </h2>
-      <p class="text-gray-600 text-sm max-w-xs text-center mt-3 mb-8">
+      <p class="text-gray-600 text-sm max-w-xs text-center mt-3">
         <%= t '.you_are_html', email: personal_data.email, name: name %>
       </p>
 
-      <%= link_to t('.go_to_html', relying_party_name: relying_party.name), go_to_path(login_configuration), class: "button primary" %>
+      <%= link_to t('.go_to_html', relying_party_name: relying_party.name), go_to_path(login_configuration), class: "button primary my-10" %>
 
-      <div class="flex flex-col mt-6 items-center">
+      <div class="flex flex-col items-center">
         <span class="text-gray-600">
           <%= t '.not_you_html', email: personal_data.email %>
         </span>
