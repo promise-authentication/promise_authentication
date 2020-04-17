@@ -45,8 +45,7 @@ class AuthenticationController < ApplicationController
 
     if @auth_request.valid?
 
-      user_id, salt = @auth_request.user_id_and_salt
-      vault_key = Authentication::Vault.key_from(@auth_request.password, salt)
+      user_id, vault_key = @auth_request.user_id_and_vault_key
 
       cookies.encrypted.permanent[:user_id] = user_id
       cookies.encrypted.permanent[:vault_key] = vault_key

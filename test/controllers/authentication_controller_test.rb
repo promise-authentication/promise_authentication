@@ -26,15 +26,15 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   test 'authentication with no relying party' do
     service = Minitest::Mock.new
     service.expect :valid?, true
-    service.expect :user_id_and_salt, ['uid', 'salt']
-    service.expect :password, 'secret'
+    service.expect :user_id_and_vault_key, ['uid', 'key']
     Authentication::Vault.stub :key_from, 'key' do
       Authentication::Services::Authenticate.stub :new, service do
         post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
 
         assert_mock service
-        assert cookies[:user_id]
-        assert cookies[:vault_key]
+        jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+        assert_equal jar.encrypted[:user_id], 'uid'
+        assert_equal jar.encrypted[:vault_key], 'key'
       end
     end
   end
@@ -42,8 +42,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   test 'authentication with relying party' do
     auth_service = Minitest::Mock.new
     auth_service.expect :valid?, true
-    auth_service.expect :user_id_and_salt, ['uid', 'salt']
-    auth_service.expect :password, 'secret'
+    auth_service.expect :user_id_and_vault_key, ['uid', 'key']
 
     Authentication::Vault.stub :key_from, 'key' do
       Authentication::Services::Authenticate.stub :new, auth_service do
@@ -51,8 +50,9 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
           assert_mock auth_service
 
-          assert cookies[:user_id]
-          assert cookies[:vault_key]
+          jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+          assert_equal jar.encrypted[:user_id], 'uid'
+          assert_equal jar.encrypted[:vault_key], 'key'
 
           assert_redirected_to confirm_path(aud: 'party.com')
       end

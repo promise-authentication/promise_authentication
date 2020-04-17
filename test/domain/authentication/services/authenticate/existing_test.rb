@@ -18,9 +18,9 @@ class Authentication::Services::Authenticate::ExistingTest < ActiveSupport::Test
       mock.expect :vault_key_salt, 'salt'
       Authentication::Password.stub :find, mock do
 
-        uid, salt = @described_class.(@email, @password)
+        uid, key = @described_class.(@email, @password)
         assert_equal 'uid', uid
-        assert_equal 'salt', salt
+        assert key
 
         assert_mock mock
       end

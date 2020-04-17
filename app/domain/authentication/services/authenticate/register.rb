@@ -11,26 +11,16 @@ module Authentication::Services::Authenticate::Register
       hashed_email: hashed_email
     ).execute!
 
-    vault_key_salt = SecureRandom.uuid
-    digest = Authentication::Password.digest_from(password)
-
-    Authentication::Commands::AddPassword.new(
-      user_id: new_user_id,
-      vault_key_salt: vault_key_salt,
-      digest: digest
-    ).execute!
-
     data = Authentication::PersonalData.new
     data.add_email email
-    vault_key = Authentication::Vault.key_from(password, vault_key_salt)
-    cipher = Authentication::Vault.new(key: vault_key).encrypt(data)
 
-    Authentication::Commands::UpdateVault.new(
+    vault_key = Authentication::Services::SetPassword.new(
       user_id: new_user_id,
-      encrypted_personal_data: cipher
-    ).execute!
+      password: password,
+      personal_data: data
+    ).call
 
-    return new_user_id, vault_key_salt
+    return new_user_id, vault_key
   end
 
 end

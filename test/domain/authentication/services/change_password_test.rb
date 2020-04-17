@@ -7,7 +7,7 @@ class Authentication::Services::ChangePasswordTest < ActiveSupport::TestCase
       email: 'hello@world.dk',
       password: @old_password
     )
-    @user_id, @salt = @authentication.user_id_and_salt
+    @user_id, @vault_key = @authentication.user_id_and_vault_key
 
     @new_password = 'verysecret'
 
@@ -25,16 +25,16 @@ class Authentication::Services::ChangePasswordTest < ActiveSupport::TestCase
   test 'it fails if not knowing current vault' do
     @request.current_password = 'hello'
     assert_raise Authentication::Password::NotMatching do
-      @request.new_salt
+      @request.call
     end
   end
 
   test 'it should provide new salt and set password' do
-    new_salt = @request.new_salt
-    assert new_salt
+    @request.call
+    new_vault_key = @request.new_vault_key
+    assert new_vault_key
 
-    key = Authentication::Vault.key_from(@new_password, new_salt)
-    personal_data = Authentication::Vault.personal_data(@user_id, key)
+    personal_data = Authentication::Vault.personal_data(@user_id, new_vault_key)
     assert personal_data
 
     hashed = Authentication::Password.find(@user_id)

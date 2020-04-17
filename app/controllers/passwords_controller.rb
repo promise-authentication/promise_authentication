@@ -8,8 +8,7 @@ class PasswordsController < ApplicationController
     change_request.user_id = current_user_id
 
     if change_request.valid?
-      salt = change_request.new_salt
-      vault_key = Authentication::Vault.key_from(change_request.new_password, salt)
+      vault_key = change_request.new_key
 
       cookies.encrypted.permanent[:vault_key] = vault_key
 

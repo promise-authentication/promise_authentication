@@ -25,7 +25,7 @@ class Authentication::Services::AuthenticateTest < ActiveSupport::TestCase
   test 'it will use existing' do
     Authentication::Services::Authenticate::Existing.stub :call, 'hello' do
       Authentication::Services::Authenticate::Register.stub :call, 'world' do
-        user_id, salt = @request.user_id_and_salt
+        user_id, salt = @request.user_id_and_vault_key
         assert_equal user_id, 'hello'
       end
     end
@@ -34,7 +34,7 @@ class Authentication::Services::AuthenticateTest < ActiveSupport::TestCase
   test 'it will create a new if no existing' do
     Authentication::Services::Authenticate::Existing.stub :call, nil do
       Authentication::Services::Authenticate::Register.stub :call, 'world' do
-        user_id, salt = @request.user_id_and_salt
+        user_id, key = @request.user_id_and_vault_key
         assert_equal user_id, 'world'
       end
     end

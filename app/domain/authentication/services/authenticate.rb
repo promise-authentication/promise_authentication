@@ -9,7 +9,7 @@ class Authentication::Services::Authenticate
     @email&.downcase
   end
 
-  def user_id_and_salt
+  def user_id_and_vault_key
     Existing.(email, password) || Register.(email, password)
   end
 end

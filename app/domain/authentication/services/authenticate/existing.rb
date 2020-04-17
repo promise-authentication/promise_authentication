@@ -10,6 +10,8 @@ module Authentication::Services::Authenticate::Existing
 
     pw.match!(password)
 
-    return current_user_id, pw.vault_key_salt
+    vault_key = Authentication::Vault.key_from(password, pw.vault_key_salt)
+
+    return current_user_id, vault_key
   end
 end
