@@ -10,13 +10,21 @@ class Authentication::Services::SetPassword
     vault_key_salt = SecureRandom.uuid
     digest = Authentication::Password.digest_from(password)
 
+    vault_key = Authentication::Vault.key_from(password, vault_key_salt)
+
+    # Encrypt vault key with public key encryption
+    box = RbNaCl::SimpleBox.from_keypair(
+      ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'].b,
+      ENV['PROMISE_PRIVATE_KEY_FOR_VAULT_KEY_ENCRYPTION'].b
+    )
+
     Authentication::Commands::AddPassword.new(
       user_id: user_id,
       vault_key_salt: vault_key_salt,
-      digest: digest
+      digest: digest,
+      encrypted_vault_key: box.encrypt(vault_key)
     ).execute!
 
-    vault_key = Authentication::Vault.key_from(password, vault_key_salt)
     cipher = Authentication::Vault.new(key: vault_key).encrypt(personal_data)
 
     Authentication::Commands::UpdateVault.new(
