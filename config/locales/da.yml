@@ -34,7 +34,7 @@ da:
         body_html: "%{name} er baseret på åbne standarder for at give maksimal sikkerhed for dine data. Alt er krypteret og nøglerne er opbevaret et andet og sikkert sted. Så selv ved et evt. brud vil det være praktisk talt umuligt for hackere at læse dine data."
       non_profit:
         header: Non-profit
-        body_html: "%{name} er en organisation som ikke skal genenerere overskud. Der er dermed ingen kommercielle interesser der kan "
+        body_html: "%{name} er en organisation som ikke skal genenerere overskud. Ingen reklamer der skal vises. Så du behøver aldrig bekymre dig om, om din data bliver solgt til højestbydende."
       open_source:
         header: Open source
         body_html: Kildekoden til %{name} er open source. Det gør at alle har mulighed for at forstå hvordan teknologien virker, samt bidrage til at gøre %{name} bedre for os allesammen.
