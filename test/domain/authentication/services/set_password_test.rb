@@ -16,12 +16,12 @@ class Authentication::Services::SetPasswordTest < ActiveSupport::TestCase
 
     @private_key = RbNaCl::PrivateKey.generate
     @public_key = @private_key.public_key
-    ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'] = Base64.encode64(@public_key.to_s).encode('utf-8')
+    ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'] = Base64.strict_encode64(@public_key.to_s).encode('utf-8')
 
     own_private = RbNaCl::PrivateKey.generate
     @own_public = own_private.public_key.to_s
 
-    ENV['PROMISE_PRIVATE_KEY_FOR_VAULT_KEY_ENCRYPTION'] = Base64.encode64(own_private.to_s).encode('utf-8')
+    ENV['PROMISE_PRIVATE_KEY_FOR_VAULT_KEY_ENCRYPTION'] = Base64.strict_encode64(own_private.to_s).encode('utf-8')
   end
 
   test 'keys are utf-8' do
