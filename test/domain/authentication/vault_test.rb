@@ -22,15 +22,15 @@ class Authentication::VaultTest < ActiveSupport::TestCase
   test 'using wrong then right password' do
     content = { hello: 'world' }
 
-    ec = @vault.encrypt(content)
-    assert_not_equal ec, content
+    enctrypted_content = @vault.encrypt(content)
+    assert_not_equal enctrypted_content, content
 
     wrong = @described_class.new key: @wrong_key
     assert_raises RbNaCl::CryptoError do
-      wrong.decrypt(ec)
+      wrong.decrypt(enctrypted_content)
     end
 
     right = @described_class.new key: @key
-    assert_equal right.decrypt(ec), { 'hello' => 'world' }
+    assert_equal right.decrypt(enctrypted_content), { 'hello' => 'world' }
   end
 end

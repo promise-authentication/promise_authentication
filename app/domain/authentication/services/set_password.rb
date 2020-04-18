@@ -14,15 +14,15 @@ class Authentication::Services::SetPassword
 
     # Encrypt vault key with public key encryption
     box = RbNaCl::SimpleBox.from_keypair(
-      ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'].b,
-      ENV['PROMISE_PRIVATE_KEY_FOR_VAULT_KEY_ENCRYPTION'].b
+      Base64.decode64(ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION']),
+      Base64.decode64(ENV['PROMISE_PRIVATE_KEY_FOR_VAULT_KEY_ENCRYPTION'])
     )
 
     Authentication::Commands::AddPassword.new(
       user_id: user_id,
       vault_key_salt: vault_key_salt,
       digest: digest,
-      encrypted_vault_key: box.encrypt(vault_key)
+      encrypted_vault_key: Base64.encode64(box.encrypt(vault_key)).encode('utf-8')
     ).execute!
 
     cipher = Authentication::Vault.new(key: vault_key).encrypt(personal_data)
