@@ -52,7 +52,7 @@ da:
       no_relying_parties: Du har endnu ikke nogle applikationer tilknyttet
   authentication:
     confirm:
-      sign_in_on_html: "Login på <strong>%{relying_party_name}</strong>"
+      sign_in_on_html: "Log ind på <strong>%{relying_party_name}</strong>"
       you_are_html: Du er logget ind på %{name} med <strong>%{email}</strong>.
       go_to_html: "Videre til <strong>%{relying_party_name}</strong> &rarr;"
       not_you_html: Er <strong>%{email}</strong> ikke dig?
