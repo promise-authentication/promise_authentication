@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_08_182903) do
+ActiveRecord::Schema.define(version: 2020_04_19_084321) do
 
   create_table "authentication_hashed_emails", id: :string, force: :cascade do |t|
     t.string "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "authentication_key_pairs", id: :string, force: :cascade do |t|
+    t.string "private_key_cipher_base64"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

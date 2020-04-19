@@ -12,17 +12,16 @@ class Authentication::Services::SetPassword
 
     vault_key = Authentication::Vault.key_from(password, vault_key_salt)
 
-    # Encrypt vault key with public key encryption
-    box = RbNaCl::SimpleBox.from_keypair(
-      Base64.strict_decode64(ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION']),
-      Base64.strict_decode64(ENV['PROMISE_PRIVATE_KEY_FOR_VAULT_KEY_ENCRYPTION'])
-    )
+    vault_key_cipher, key_pair_id = Authentication::Services::VaultKeyEncrypter.(vault_key)
 
     Authentication::Commands::AddPassword.new(
       user_id: user_id,
       vault_key_salt: vault_key_salt,
       digest: digest,
-      encrypted_vault_key: Base64.strict_encode64(box.encrypt(vault_key)).encode('utf-8')
+      encrypted_vault_key: {
+        cipher_base64: vault_key_cipher,
+        key_pair_id: key_pair_id
+      }
     ).execute!
 
     cipher = Authentication::Vault.new(key: vault_key).encrypt(personal_data)
