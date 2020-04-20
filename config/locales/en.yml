@@ -66,7 +66,7 @@ en:
       logout: Logout
       no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your email. All they will get is a unique string identifying you.
       no_id_yet: Your unique ID for %{relying_party_name} is not generated yet
-      your_id: Your unique id for %{relying_party_name} is %{id}
+      your_id: Your unique ID for %{relying_party_name} is %{id}
     login:
       sign_in_with_html: Sign in with %{name}
       login: Login
