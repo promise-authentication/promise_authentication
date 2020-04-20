@@ -57,7 +57,9 @@ da:
       go_to_html: "Videre til <strong>%{relying_party_name}</strong> &rarr;"
       not_you_html: Er <strong>%{email}</strong> ikke dig?
       logout: Log ud
-      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få et unik streng som identificerer dig.
+      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få en unik streng som identificerer dig.
+      no_id_yet: Dit unikke ID til %{relying_party_name} er ikke genereret endnu
+      your_id: Dit unikke ID hos %{relying_party_name} er %{id}
     login:
       sign_in_with_html: Log ind med %{name}
       login: Log ind

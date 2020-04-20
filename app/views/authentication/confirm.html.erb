@@ -38,7 +38,8 @@
       </div>
 
 
-      <p class="mt-8 text-gray-600 text-sm">
+      <% id = personal_data.id_for(relying_party.id) %>
+      <p class="mt-8 text-gray-600 text-sm" style="cursor:help;" title="<%= id.present? ? t('.your_id', id: id, relying_party_name: relying_party.name) : t('.no_id_yet', relying_party_name: relying_party.name) %>">
         <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
       </p>
     </div>
