@@ -41,6 +41,16 @@ en:
       header: Try %{name}
       body_html: To get a sense of how this works, you can try signing in to <strong>%{app}</strong>. 
       cta: Go to %{app}
+    getting_started:
+      title: Getting started
+      assumptions_html: Let's assume that you have a digital product on <code>example.com</code> that requires users to sign in.
+      first_step: All you have to do, is to redirect your users to
+      doing_the_job_html: Now %{name} will make sure to identify the user. That is done by having the user sign in to %{name}. The %{name} will generate a unique identifier  which will be used to identify that specific user to <code>example.com</code>.
+      back_to_you: "The user will now be redirected to"
+      content_of_jwt_html: "Here <code>id_token</code> will be a signed JWT <strong>must be verified by you</strong> with the public keys from %{name} that is readily available. The contents of the JWT will look like this:"
+      explain_jwt_html: 'From this, <strong>you must incorporate both <code>iss</code> and <code>aud</code> in a user ID</strong>. E.g.'
+      that_is_it: That's it. You now have a guaranteed unique user ID verifiably issued by %{name}.
+      next_for_us: This is the most basic case for authentication. In the future %{name} will also provide MFA, custom redirect URL'er and a whole lot of other stuff making all use cases supported.
   humans:
     show:
       choose_application: Choose application

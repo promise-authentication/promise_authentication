@@ -19,6 +19,9 @@ Rails.application.routes.draw do
     get 'configuration'
   end
 
+  get 'a/:aud', to: 'authentication#login', as: 'login_with_relying_party', :constraints => { :aud => /[^\/]+/ }
+  get 'a', to: 'authentication#login', as: 'login_short'
+
   get 'login', to: 'authentication#login', as: 'login'
   get 'logout', to: 'authentication#logout', as: 'logout'
   get 'relogin', to: 'authentication#relogin', as: 'relogin'
@@ -30,7 +33,6 @@ Rails.application.routes.draw do
 
   get 'me', to: 'humans#show', as: 'dashboard'
 
-  get ':aud/login', to: 'authentication#login', as: 'login_with_relying_party', :constraints => { :aud => /[^\/]+/ }
 
   scope path: '.well-known' do
     get 'jwks', to: 'well_knowns#jwks'

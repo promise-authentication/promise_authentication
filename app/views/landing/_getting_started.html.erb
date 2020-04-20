@@ -1,0 +1,35 @@
+<h1 class="px-6 text-center uppercase font-thin text-gray-500 text-xl tracking-widest">
+  <%= t '.title' %>
+</h1>
+
+<div class="markdown max-w-lg m-auto mt-4 px-6">
+  <p>
+    <%= t '.assumptions_html', name: name %>
+  </p>
+  <p>
+    <%= t '.first_step' %>
+  </p>
+  <%= render partial: 'code/first' %>
+  <p>
+    <%= t '.doing_the_job_html', name: name %>
+  </p>
+  <p>
+    <%= t '.back_to_you', name: name %>
+  </p>
+  <%= render partial: 'code/second' %>
+  <p>
+    <%= t '.content_of_jwt_html', name: name %>
+  </p>
+  <%= render partial: 'code/jwt' %>
+  <p>
+    <%= t '.explain_jwt_html', name: name %>
+  </p>
+  <%= render partial: 'code/user_id' %>
+  <p>
+    <%= t '.that_is_it', name: name %>
+  </p>
+  <p>
+    <%= t '.next_for_us', name: name %>
+  </p>
+</div>
+

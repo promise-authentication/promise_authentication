@@ -20,4 +20,8 @@ class Authentication::RelyingParty
   def name
     @name || id
   end
+
+  def redirect_url(id_token:, login_configuration:)
+    "https://#{id}/authenticate?id_token=#{id_token}"
+  end
 end

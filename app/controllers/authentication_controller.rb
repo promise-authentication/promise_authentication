@@ -33,7 +33,10 @@ class AuthenticationController < ApplicationController
         vault_key: current_vault_key
       ).id_token
 
-      redirect_to "https://#{relying_party.id}/authenticate?id_token=#{id_token}"
+      redirect_to relying_party.redirect_url(
+        id_token: id_token,
+        login_configuration: login_configuration
+      )
     else
       redirect_to dashboard_path
     end

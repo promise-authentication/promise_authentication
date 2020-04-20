@@ -45,6 +45,17 @@ da:
       header: Prøv %{name}
       body_html: For at få en fornemmelse for hvordan det virker, kan du prøve at logge ind på <strong>%{app}</strong>. 
       cta: Gå til %{app}
+    getting_started:
+      title: Kom godt igang
+      assumptions_html: Lad os antage at du har <code>example.com</code> som er et digitalt produkt som kræver at brugere logger ind.
+      first_step: Alt du skal gøre er at redirect'e dine brugere til
+      doing_the_job_html: Her vil %{name} sørge for at identificeret brugeren. Det foregår ved at brugeren logger ind på %{name}. Der vil herefter blive genereret et unikt ID som fremover vil blive brugt til at identificeret den enkelte bruger overfor <code>example.com</code>.
+      back_to_you: "Nu vil brugeren blive sendt tilbage til jer på følgende URL:"
+      content_of_jwt_html: "Indholdet af <code>id_token</code> er et signeret JWT som <strong>skal verificeres af jeres server</strong> med offentlige kryptografiske nøgler fra %{name} som er nemt tilgængelige. Indholdet JWT vil ligne det her:"
+      explain_jwt_html: 'Ud fra dette, <strong>skal man bruge både <code>iss</code> og <code>aud</code> til at lave et bruger ID</strong>. For eksempel på denne måde:'
+      that_is_it: That's it. You now have a guaranteed unique user ID verifiably issued by a trusted party.
+      that_is_it: Det var det. Du har nu et garanteret unikt ID som beviseligt kommer fra %{name}.
+      next_for_us: Dette eksempel tager udgangspunkt i det simplest tænkelige scenarie. %{name} kommer bl.a. også til at understøtte MFA og custom redirect URL'er så alle tænkelige use cases kan understøttes.
   humans:
     show:
       choose_application: Vælg applikation

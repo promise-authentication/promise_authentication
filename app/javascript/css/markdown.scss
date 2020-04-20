@@ -1,5 +1,5 @@
 .markdown {
-  @apply leading-normal px-4 text-base;
+  @apply leading-normal text-base;
   @screen sm {
     @apply px-8 text-lg;
   }
@@ -51,10 +51,10 @@
     @apply leading-tight text-lg font-bold text-black mt-8 -mb-2;
   }
   & code {
-    @apply font-mono text-xs inline;
+    @apply font-mono text-sm inline;
   }
   & pre code {
-    @apply block bg-gray-800 p-4 rounded text-white overflow-x-scroll;
+    @apply block bg-gray-800 rounded-none p-4 -mx-4 rounded text-white overflow-x-scroll;
   }
   & blockquote {
     @apply border-l-4 my-4 pl-4 italic text-gray-700;
