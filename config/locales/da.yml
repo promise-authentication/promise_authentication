@@ -28,13 +28,13 @@ da:
       core_values: Kerneværdierne i %{name}
       privacy:
         header: Privatliv
-        body_html: Når du bruger %{name} til at logge ind, vil der aldrig blive delt personlige informationer om dig. Hvért sted, får hvér sin unikke og tilfældige streng som identificerer dig overfor dem.
+        body_html: Når du bruger %{name} til at logge ind, vil der aldrig blive delt personlige informationer om dig. Tilmed får hvért sted, hvér sit unikke og tilfældige ID som identificerer dig overfor dem. Det gør at man ikke nemt kan samkøre data på tværs af organisationer for at lave en profil af dig.
       security:
         header: Sikkerhed
-        body_html: "%{name} er baseret på åbne standarder for at give maksimal sikkerhed for dine data. Alt er krypteret og nøglerne er opbevaret et andet og sikkert sted. Så selv ved et evt. brud vil det være praktisk talt umuligt for hackere at læse dine data."
+        body_html: "%{name} er baseret på åbne standarder for at give maksimal sikkerhed for dine data. Alt lagres krypteret og nøglerne er opbevaret et andet og sikkert sted. Så selv ved et evt. databrud vil det være praktisk talt umuligt for hackere at læse dine data."
       non_profit:
         header: Non-profit
-        body_html: "%{name} er en organisation som ikke skal genenerere overskud. Ingen reklamer der skal vises. Så du behøver aldrig bekymre dig om, om din data bliver solgt til højestbydende."
+        body_html: "%{name} er en organisation som ikke skal generere overskud. Ingen reklamer der skal vises. Så du behøver aldrig bekymre dig om, om din data bliver solgt til højestbydende. Det gør den ikke!"
       open_source:
         header: Open source
         body_html: Kildekoden til %{name} er open source. Det gør at alle har mulighed for at forstå hvordan teknologien virker, samt bidrage til at gøre %{name} bedre for os allesammen.
@@ -68,7 +68,7 @@ da:
       go_to_html: "Videre til <strong>%{relying_party_name}</strong> &rarr;"
       not_you_html: Er <strong>%{email}</strong> ikke dig?
       logout: Log ud
-      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få en unik streng som identificerer dig.
+      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få et unikt ID som identificerer dig.
       no_id_yet: Dit unikke ID til %{relying_party_name} er ikke genereret endnu
       your_id: Dit unikke ID hos %{relying_party_name} er %{id}
     login:
@@ -78,7 +78,7 @@ da:
       you_will_be_redirected_html: Du vil blive sendt videre til <strong>%{relying_party_name}</strong>.
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       go_on: Videre
-      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få et unik streng som identificerer dig.
+      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få et unikt ID som identificerer dig.
   passwords:
     show:
       header: Skift password

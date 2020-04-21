@@ -27,7 +27,7 @@ en:
         body_html: When using %{name} to sign into an application, no personal information will be shared with them. Not even your email. Every application will recieve their own unique random string identifying you to them.
       security:
         header: Security
-        body_html: "%{name} is based on open standards to provide maximum security for your data. Everything is encrypted and the keys are keps off-site, so even if there is a breach, it will be practically impossible to read any of your data."
+        body_html: "%{name} is based on open standards to provide maximum security for your data. Everything is stored encrypted and the keys are keps off-site. So even in the  case of a breach, it will be practically impossible to read any of your data."
       non_profit:
         header: Non-profit
         body_html: "%{name} has no commercial interests. No ads to show. You never have to worry if your data will be sold to highest bidder. It won't."
