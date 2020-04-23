@@ -9,7 +9,7 @@ class Authentication::RelyingParty
   def self.find(id)
     return nil if id.blank?
 
-    url = "https://#{id}/.well-known/authentication.json"
+    url = "https://#{id}/.well-known/promise.json"
 
     well_knowns = begin
                     JSON.parse(HTTParty.get(url).body)
