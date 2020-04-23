@@ -27,7 +27,7 @@ en:
         body_html: When using %{name} to sign into an application, no personal information will be shared with them. Not even your email. Every application will recieve their own unique random string identifying you to them.
       security:
         header: Security
-        body_html: "%{name} is based on open standards to provide maximum security for your data. Everything is stored encrypted and the keys are keps off-site. So even in the  case of a breach, it will be practically impossible to read any of your data."
+        body_html: "The techonology behind %{name} is based on open standards to provide maximum security for your data. Everything is stored encrypted and the keys are keps off-site. So even in the  case of a breach, it will be practically impossible to read any of your data."
       non_profit:
         header: Non-profit
         body_html: "%{name} has no commercial interests. No ads to show. You never have to worry if your data will be sold to highest bidder. It won't."
@@ -45,7 +45,7 @@ en:
       title: Getting started
       assumptions_html: Let's assume that you have a digital product on <code>example.com</code> that requires users to sign in.
       first_step: All you have to do, is to redirect your users to
-      doing_the_job_html: Now %{name} will make sure to identify the user. That is done by having the user sign in to %{name}. The %{name} will generate a unique identifier  which will be used to identify that specific user to <code>example.com</code>.
+      doing_the_job_html: Now %{name} will make sure to identify the user. That is done by having the user sign in to %{name}. Then %{name} will generate a unique identifier  which will be used to identify that specific user to <code>example.com</code>.
       back_to_you: "The user will now be redirected to"
       content_of_jwt_html: "Here <code>id_token</code> will be a signed JWT that <strong>must be verified by you</strong> with the public keys from %{name} that is readily available. The contents of the JWT will look like this:"
       explain_jwt_html: 'From this, <strong>you must incorporate both <code>iss</code> and <code>aud</code> in a user ID</strong>. E.g.'
@@ -61,7 +61,7 @@ en:
       sign_in_with: Sign in with %{name}
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
       you_are_html: You are logged in on %{name} as <strong>%{email}</strong>.
-      go_to_html: "Go to <strong>%{relying_party_name}</strong> &rarr;"
+      go_to_html: "Go to <strong>%{relying_party_name}</strong>"
       not_you_html: Not <strong>%{email}</strong>?
       logout: Logout
       no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your email. All they will get is a unique string identifying you.
