@@ -34,8 +34,8 @@ class Authentication::RelyingParty
     return nil unless valid?
 
     response = HTTParty.get(legacy_account_authentication_url, query: {
-      email: email,
-      password: password
+      email: CGI.escape(email),
+      password: CGI.escape(password)
     })
 
     return nil if response&.code != 200
