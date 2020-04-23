@@ -7,7 +7,9 @@ class Authentication::Services::ChangePasswordTest < ActiveSupport::TestCase
       email: 'hello@world.dk',
       password: @old_password
     )
-    @user_id, @vault_key = @authentication.user_id_and_vault_key
+    @authentication.call!
+    @user_id = @authentication.user_id
+    @vault_key = @authentication.vault_key
 
     @new_password = 'verysecret'
 

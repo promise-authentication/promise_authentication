@@ -2,6 +2,9 @@ class Authentication::RelyingParty
   include ActiveModel::Model
 
   attr_accessor :id, :name, :logo_url, :locale
+  attr_accessor :legacy_account_authentication_url, :legacy_account_forgot_password_url
+
+  validates :legacy_account_authentication_url, format: { with: /\Ahttps/ }, allow_nil: true
 
   def self.find(id)
     return nil if id.blank?
@@ -15,6 +18,29 @@ class Authentication::RelyingParty
                   end
 
     new(well_knowns.merge({id: id}))
+  end
+
+  def supports_legacy_accounts?
+    legacy_account_authentication_url.present? &&
+      legacy_account_forgot_password_url.present?
+  end
+
+  def knows_legacy_account?(email)
+    false
+  end
+
+  def legacy_account_user_id_for(email, password)
+    return nil unless supports_legacy_accounts?
+    return nil unless valid?
+
+    response = HTTParty.get(legacy_account_authentication_url, query: {
+      email: email,
+      password: password
+    })
+
+    return nil if response&.code != 200
+
+    JSON.parse(response.body)['user_id']
   end
 
   def name

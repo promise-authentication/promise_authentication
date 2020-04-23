@@ -24,38 +24,84 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication with no relying party' do
-    service = Minitest::Mock.new
-    service.expect :valid?, true
-    service.expect :user_id_and_vault_key, ['uid', 'key']
-    Authentication::Vault.stub :key_from, 'key' do
-      Authentication::Services::Authenticate.stub :new, service do
-        post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
 
-        assert_mock service
-        jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
-        assert_equal jar.encrypted[:user_id], 'uid'
-        assert_equal jar.encrypted[:vault_key], 'key'
-      end
-    end
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    user_id = jar.encrypted[:user_id]
+    vault_key = jar.encrypted[:vault_key]
+    assert Authentication::Vault.personal_data(user_id, vault_key)
   end
 
   test 'authentication with relying party' do
-    auth_service = Minitest::Mock.new
-    auth_service.expect :valid?, true
-    auth_service.expect :user_id_and_vault_key, ['uid', 'key']
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', aud: 'party.com' }
 
-    Authentication::Vault.stub :key_from, 'key' do
-      Authentication::Services::Authenticate.stub :new, auth_service do
-          post authenticate_url, params: { email: 'hello@world.com', password: 'secret', aud: 'party.com' }
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    user_id = jar.encrypted[:user_id]
+    vault_key = jar.encrypted[:vault_key]
+    assert Authentication::Vault.personal_data(user_id, vault_key)
 
-          assert_mock auth_service
+    assert_redirected_to confirm_path(aud: 'party.com')
+  end
 
-          jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
-          assert_equal jar.encrypted[:user_id], 'uid'
-          assert_equal jar.encrypted[:vault_key], 'key'
+  test 'relying party with legacy accounts and no existing account' do
+    email = 'hello@world.com'
+    password = 'secr2t'
+    relying_party_id = 'example.com'
 
-          assert_redirected_to confirm_path(aud: 'party.com')
-      end
+    relying_party = Minitest::Mock.new
+    relying_party.expect :locale, nil
+    relying_party.expect :id, relying_party_id
+    relying_party.expect :id, relying_party_id
+    relying_party.expect :knows_legacy_account?, true, [email]
+    relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
+
+    Authentication::RelyingParty.stub :find, relying_party do
+      post authenticate_url, params: { email: email, password: password, aud: relying_party_id }
+
+      jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+      user_id = jar.encrypted[:user_id]
+      vault_key = jar.encrypted[:vault_key]
+      personal_data = Authentication::Vault.personal_data(user_id, vault_key)
+      assert_equal personal_data.id_for(relying_party_id), 'leguid'
+
+      # It will record that the password is knowns by relying party
+      event = Rails.configuration.event_store.read.of_type(Authentication::Events::PasswordSet).last
+      assert_equal event.data[:password_known_by_relying_party_id], relying_party_id
+
+      assert_mock relying_party
+
+      assert_redirected_to confirm_path(aud: relying_party_id)
+    end
+  end
+
+  test 'relying party with legacy accounts and an existing account' do
+    email = 'hello@world.com'
+    password = 'secr2t'
+    relying_party_id = 'example.com'
+
+    # Create existing account
+    post authenticate_url, params: { email: email, password: password }
+
+    relying_party = Minitest::Mock.new
+    relying_party.expect :locale, nil
+    relying_party.expect :id, relying_party_id
+
+    Authentication::RelyingParty.stub :find, relying_party do
+      post authenticate_url, params: { email: email, password: password, aud: relying_party_id }
+
+      jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+      user_id = jar.encrypted[:user_id]
+      vault_key = jar.encrypted[:vault_key]
+      personal_data = Authentication::Vault.personal_data(user_id, vault_key)
+      assert_nil personal_data.id_for(relying_party_id)
+
+      # It will record that the password is knowns by relying party
+      event = Rails.configuration.event_store.read.of_type(Authentication::Events::PasswordSet).last
+      assert_nil event.data[:password_known_by_relying_party_id]
+
+      assert_mock relying_party
+
+      assert_redirected_to confirm_path(aud: relying_party_id)
     end
   end
 end

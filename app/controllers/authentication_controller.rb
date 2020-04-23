@@ -45,13 +45,13 @@ class AuthenticationController < ApplicationController
 
   def authenticate
     @auth_request = ::Authentication::Services::Authenticate.new params.permit(:email, :password)
+    @auth_request.relying_party_id = relying_party&.id
 
     if @auth_request.valid?
+      @auth_request.call!
 
-      user_id, vault_key = @auth_request.user_id_and_vault_key
-
-      cookies.encrypted.permanent[:user_id] = user_id
-      cookies.encrypted.permanent[:vault_key] = vault_key
+      cookies.encrypted.permanent[:user_id]  = @auth_request.user_id
+      cookies.encrypted.permanent[:vault_key] = @auth_request.vault_key
 
       redirect_to confirm_path(login_configuration)
     else

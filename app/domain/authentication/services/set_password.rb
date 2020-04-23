@@ -1,7 +1,7 @@
 class Authentication::Services::SetPassword
   include ActiveModel::Model
 
-  attr_accessor :user_id, :password, :personal_data
+  attr_accessor :user_id, :password, :personal_data, :password_known_by_relying_party_id
   attr_reader :vault_key
 
   def call
@@ -21,7 +21,8 @@ class Authentication::Services::SetPassword
       encrypted_vault_key: {
         cipher_base64: vault_key_cipher,
         key_pair_id: key_pair_id
-      }
+      },
+      password_known_by_relying_party_id: password_known_by_relying_party_id
     ).execute!
 
     cipher = Authentication::Vault.new(key: vault_key).encrypt(personal_data)

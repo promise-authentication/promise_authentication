@@ -5,12 +5,18 @@ class Authentication::Human
     @user_id = user_id
   end
 
-  def set_password(digest:, vault_key_salt:, encrypted_vault_key:)
+  def set_password(
+    digest:,
+    vault_key_salt:,
+    encrypted_vault_key:,
+    password_known_by_relying_party_id:
+  )
     apply Authentication::Events::PasswordSet.new(data: {
       user_id: @user_id,
       digest: digest,
       vault_key_salt: vault_key_salt,
-      encrypted_vault_key: encrypted_vault_key
+      encrypted_vault_key: encrypted_vault_key,
+      password_known_by_relying_party_id: password_known_by_relying_party_id
     })
   end
 

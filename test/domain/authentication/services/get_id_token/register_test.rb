@@ -5,9 +5,13 @@ class Authentication::Services::GetIdToken::RegisterTest < ActiveSupport::TestCa
     @described_class = Authentication::Services::GetIdToken::Register
     @email = 'anders@lemke.dk'
     @password = 'secr3t'
-    @user_id, @vault_key = Authentication::Services::Authenticate.new(
+    authentication = Authentication::Services::Authenticate.new(
       email: @email, 
-      password: @password).user_id_and_vault_key
+      password: @password
+    ).call!
+    @user_id = authentication.user_id
+    @vault_key = authentication.vault_key
+
     @relying_party_id = 'example.com'
   end
 

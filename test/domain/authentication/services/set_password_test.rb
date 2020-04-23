@@ -28,6 +28,7 @@ class Authentication::Services::SetPasswordTest < ActiveSupport::TestCase
       assert event.data[:vault_key_salt]
       assert event.data[:digest]
       assert_equal event.data[:user_id], @user_id
+      assert_nil event.data[:password_known_by_relying_party_id]
     end
   end
 end
