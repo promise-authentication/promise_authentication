@@ -8,8 +8,12 @@ class AuthenticationController < ApplicationController
   end
 
   def confirm
-    if relying_party.blank?
-      redirect_to dashboard_path
+    if personal_data.blank?
+      redirect_to login_path(login_configuration)
+    else
+      if relying_party.blank?
+        redirect_to dashboard_path
+      end
     end
   end
 

@@ -66,6 +66,7 @@ da:
       sign_in_on_html: "Log ind på <strong>%{relying_party_name}</strong>"
       you_are_html: Du er logget ind på %{name} med <strong>%{email}</strong>.
       go_to_html: "Videre til <strong>%{relying_party_name}</strong>"
+      create_account_html: "Opret ny identitet på <strong>%{relying_party_name}</strong>"
       not_you_html: Er <strong>%{email}</strong> ikke dig?
       logout: Log ud
       no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få et unikt ID som identificerer dig.

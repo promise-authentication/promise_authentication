@@ -62,6 +62,7 @@ en:
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
       you_are_html: You are logged in on %{name} as <strong>%{email}</strong>.
       go_to_html: "Go to <strong>%{relying_party_name}</strong>"
+      create_account_html: Create new identity for <strong>%{relying_party_name}</strong>"
       not_you_html: Not <strong>%{email}</strong>?
       logout: Logout
       no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your email. All they will get is a unique string identifying you.
