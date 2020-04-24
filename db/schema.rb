@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_19_084321) do
+ActiveRecord::Schema.define(version: 2020_04_24_191851) do
 
   create_table "authentication_hashed_emails", id: :string, force: :cascade do |t|
     t.string "user_id"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2020_04_19_084321) do
   end
 
   create_table "authentication_key_pairs", id: :string, force: :cascade do |t|
-    t.string "private_key_cipher_base64"
+    t.string "public_key_base64"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
