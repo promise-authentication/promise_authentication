@@ -29,7 +29,13 @@ class Authentication::Services::Authenticate
         )
       end
 
-      @user_id, @vault_key = Register.(email, password, relying_party&.id, legacy_account_user_id)
+      @user_id, @vault_key = Register.(
+        email: email,
+        password: password,
+        relying_party_id: relying_party&.id,
+        legacy_account_user_id: legacy_account_user_id,
+        relying_party_knows_password: legacy_account_user_id.present?
+      )
       @newly_created_account = true
     end
     self
