@@ -27,6 +27,6 @@
   <body class="">
     <%= content_for?(:content) ? yield(:content) : yield %>
 
-    <%= link_to letter, uniq_path, class: "m-1 py-1 px-2 text-white rounded font-mono text-xs font-bold fixed bottom-0 right-0 bg-uniq" %>
+    <%= link_to letter, uniq_path, class: "m-1 py-1 px-2 text-white rounded font-mono text-xs font-bold fixed bottom-0 right-0 bg-uniq", style: 'cursor:help;' %>
   </body>
 </html>
