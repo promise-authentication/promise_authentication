@@ -27,7 +27,6 @@
       <p class="text-gray-600 text-sm max-w-xs text-center mt-3">
         <%= t '.you_are_html', email: email, name: name %>
       </p>
-
       <%= link_to  go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center" do %>
         <span class="text-center">
           <% if relying_party.supports_legacy_accounts? && personal_data.id_for(relying_party.id).blank? %>

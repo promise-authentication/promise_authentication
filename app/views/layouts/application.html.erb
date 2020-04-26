@@ -11,8 +11,22 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+    <style>
+      .button.primary {
+        background-color: #<%= color %>;
+      }
+      .bg-uniq {
+        background-color: #<%= color %>;
+      }
+      .text-uniq {
+        color: #<%= color %>;
+      }
+    </style>
   </head>
   <body class="">
     <%= content_for?(:content) ? yield(:content) : yield %>
+
+    <%= link_to letter, uniq_path, class: "m-1 py-1 px-2 text-white rounded font-mono text-xs font-bold fixed bottom-0 right-0 bg-uniq" %>
   </body>
 </html>

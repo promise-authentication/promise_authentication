@@ -36,6 +36,16 @@ class ApplicationController < ActionController::Base
     redirect_to logout_path if personal_data.nil?
   end
 
+  def color
+    @color ||= ColorGenerator.new(saturation: 0.9, lightness: 0.35).create_hex
+  end
+  helper_method :color
+
+  def letter
+    @letter ||= SecureRandom.alphanumeric.first.upcase
+  end
+  helper_method :letter
+
   def personal_data
     return nil if current_user_id.blank?
 

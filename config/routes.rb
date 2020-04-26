@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   resource :password, only: [:show, :create]
 
   get 'me', to: 'humans#show', as: 'dashboard'
+  get 'uniq', to: 'humans#uniq', as: 'uniq'
 
 
   scope path: '.well-known' do

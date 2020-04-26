@@ -14,6 +14,8 @@ gem 'jwt'
 
 gem 'httparty'
 
+gem 'color-generator'
+
 # To be able to .to_jwk on key
 gem 'json-jwt'
 

@@ -8,4 +8,7 @@ class HumansController < ApplicationController
     render layout: 'authentication'
   end
 
+  def uniq
+    render layout: 'application'
+  end
 end

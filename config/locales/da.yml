@@ -69,7 +69,7 @@ da:
       create_account_html: "Opret ny identitet på <strong>%{relying_party_name}</strong>"
       not_you_html: Er <strong>%{email}</strong> ikke dig?
       logout: Log ud
-      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få et unikt ID som identificerer dig.
+      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
       no_id_yet: Dit unikke ID til %{relying_party_name} er ikke genereret endnu
       your_id: Dit unikke ID hos %{relying_party_name} er %{id}
     login:
@@ -80,7 +80,7 @@ da:
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data: Din e-mail og password bliver ikke gemt i et læsbart format på vores servere.
       go_on: Videre
-      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få et unikt ID som identificerer dig.
+      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
   passwords:
     show:
       header: Skift password
