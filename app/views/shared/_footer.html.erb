@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center mt-4">
     <% if personal_data.present? %>
       <p class="text-center text-gray-600">
-        <%= link_to t('.logged_in_as_html', email: personal_data.email), dashboard_path %>
+        <%= link_to t('.logged_in_as_html', email: email), dashboard_path %>
       </p>
       <%= link_to t('.logout'), logout_path, class: "button small transparent mb-4 mt-1" %>
     <% else %>

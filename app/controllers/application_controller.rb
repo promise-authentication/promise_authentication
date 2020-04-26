@@ -45,6 +45,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :personal_data
 
+  def email
+    cookies.encrypted[:email]
+  end
+  helper_method :email
+
   def current_user_id
     cookies.encrypted[:user_id]
   end

@@ -18,7 +18,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     vault_key = jar.encrypted[:vault_key]
     user_id = jar.encrypted[:user_id]
     personal_data = Authentication::Vault.personal_data(user_id, vault_key)
-    assert_equal @email, personal_data.emails.first
+    assert personal_data
   end
 end
 

@@ -12,7 +12,6 @@ module Authentication::Services::Authenticate::Register
     ).execute!
 
     data = Authentication::PersonalData.new
-    data.add_email email
     if(relying_party_id.present? && legacy_account_user_id.present?)
       data.add_id legacy_account_user_id, relying_party_id
     end

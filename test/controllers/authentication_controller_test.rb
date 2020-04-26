@@ -29,6 +29,9 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
     vault_key = jar.encrypted[:vault_key]
+    email = jar.encrypted[:email]
+
+    assert_equal 'hello@world.com', email
     assert Authentication::Vault.personal_data(user_id, vault_key)
   end
 
@@ -38,9 +41,17 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
     vault_key = jar.encrypted[:vault_key]
+    email = jar.encrypted[:email]
+
+    assert_equal 'hello@world.com', email
     assert Authentication::Vault.personal_data(user_id, vault_key)
 
     assert_redirected_to confirm_path(aud: 'party.com')
+
+    get confirm_path(aud: 'party.com')
+    assert_response :success
+
+    assert_select 'p', /hello@world\.com/
   end
 
   test 'relying party with legacy accounts and no existing account' do

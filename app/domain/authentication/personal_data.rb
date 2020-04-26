@@ -1,19 +1,10 @@
 class Authentication::PersonalData
   include ActiveModel::Model
 
-  attr_accessor :emails, :ids
+  attr_accessor :ids
 
   def ids
     @ids || {}
-  end
-
-  def email
-    emails&.first
-  end
-
-  def add_email(email)
-    @emails ||= []
-    @emails << email
   end
 
   def id_for(relying_party)
@@ -28,7 +19,6 @@ class Authentication::PersonalData
 
   def to_json
     {
-      emails: emails,
       ids: ids
     }.to_json
   end

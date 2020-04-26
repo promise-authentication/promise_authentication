@@ -24,10 +24,7 @@ class Authentication::Services::Authenticate::RegisterTest < ActiveSupport::Test
 
     # Now make sure the vault content can be decrypted
     personal_data = Authentication::Vault.personal_data(user_id, vault_key)
-    assert personal_data.email
-
-    # And that is has email
-    assert_equal @email, personal_data.emails.first
+    assert personal_data
   end
 end
 

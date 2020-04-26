@@ -20,12 +20,14 @@ class AuthenticationController < ApplicationController
   def relogin
     cookies.delete :user_id
     cookies.delete :vault_key
+    cookies.delete :email
     redirect_to login_path(login_configuration)
   end
 
   def logout
     cookies.delete :user_id
     cookies.delete :vault_key
+    cookies.delete :email
     redirect_to login_path(login_configuration)
   end
 
@@ -56,6 +58,7 @@ class AuthenticationController < ApplicationController
 
       cookies.encrypted.permanent[:user_id]  = @auth_request.user_id
       cookies.encrypted.permanent[:vault_key] = @auth_request.vault_key
+      cookies.encrypted.permanent[:email] = params[:email]
 
       redirect_to confirm_path(login_configuration)
     else

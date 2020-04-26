@@ -6,7 +6,6 @@ class Authentication::Services::SetPasswordTest < ActiveSupport::TestCase
     @password = 'secret'
     @email = 'hello@example.com'
     @personal_data = Authentication::PersonalData.new
-    @personal_data.add_email @email
 
     @request = Authentication::Services::SetPassword.new(
       user_id: @user_id,
