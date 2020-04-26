@@ -13,20 +13,29 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
     <style>
-      .button.primary {
-        background-color: #<%= color %>;
-      }
-      .bg-uniq {
-        background-color: #<%= color %>;
-      }
-      .text-uniq {
-        color: #<%= color %>;
-      }
+      <% if personal_data %>
+        .button.primary {
+          background-color: #<%= color %>;
+          opacity: 0.9;
+        }
+        .button.primary:hover {
+          background-color: #<%= color %>;
+          opacity: 1;
+        }
+        .bg-uniq {
+          background-color: #<%= color %>;
+        }
+        .text-uniq {
+          color: #<%= color %>;
+        }
+      <% end %>
     </style>
   </head>
   <body class="">
     <%= content_for?(:content) ? yield(:content) : yield %>
 
-    <%= link_to letter, uniq_path, class: "m-1 py-1 px-2 text-white rounded font-mono text-xs font-bold fixed bottom-0 right-0 bg-uniq", style: 'cursor:help;' %>
+    <% if personal_data %>
+      <%= link_to letter, uniq_path, class: "m-1 py-1 px-2 text-white rounded font-mono text-xs font-bold fixed bottom-0 right-0 bg-uniq", style: 'cursor:help;', 'aria-label': "Your unique letter/number-color combination is #{letter} and #{color}" %>
+    <% end %>
   </body>
 </html>
