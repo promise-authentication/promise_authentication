@@ -78,6 +78,7 @@ da:
       enter_credentials_html: Angiv den e-mail og det password du bruger, eller vil bruge, på <strong>%{name}</strong>.
       you_will_be_redirected_html: Du vil blive sendt videre til <strong>%{relying_party_name}</strong>.
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
+      we_save_no_data: Din e-mail og password bliver ikke gemt i et læsbart format på vores servere.
       go_on: Videre
       no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din email. De vil udelukkende få et unikt ID som identificerer dig.
   passwords:

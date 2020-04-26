@@ -47,7 +47,10 @@
         <% end %>
       </label>
       <div class="flex w-full justify-end items-center mt-6">
-        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary self-end' %>
+        <p class="text-gray-600 text-sm text-right mr-3">
+          <%= t '.we_save_no_data' %>
+        </p>
+        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary' %>
       </div>
 
 
