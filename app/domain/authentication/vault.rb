@@ -15,7 +15,7 @@ class Authentication::Vault
       decrypt encrypted
 
     Authentication::PersonalData.new(decrypted)
-  rescue RbNaCl::CryptoError
+  rescue RbNaCl::CryptoError, ActiveRecord::RecordNotFound
     return nil
   end
 

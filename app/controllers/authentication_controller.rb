@@ -18,10 +18,7 @@ class AuthenticationController < ApplicationController
   end
 
   def relogin
-    cookies.delete :user_id
-    cookies.delete :vault_key
-    cookies.delete :email
-    redirect_to login_path(login_configuration)
+    logout
   end
 
   def logout

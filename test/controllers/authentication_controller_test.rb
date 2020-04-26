@@ -35,6 +35,16 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert Authentication::Vault.personal_data(user_id, vault_key)
   end
 
+  test 'logout' do
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
+    get logout_url
+
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert_nil jar.encrypted[:user_id]
+    assert_nil jar.encrypted[:vault_key]
+    assert_nil jar.encrypted[:email]
+  end
+
   test 'authentication with relying party' do
     post authenticate_url, params: { email: 'hello@world.com', password: 'secret', aud: 'party.com' }
 
@@ -45,7 +55,10 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal 'hello@world.com', email
     assert Authentication::Vault.personal_data(user_id, vault_key)
+  end
 
+  test 'showing email after login' do
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', aud: 'party.com' }
     assert_redirected_to confirm_path(aud: 'party.com')
 
     get confirm_path(aud: 'party.com')
