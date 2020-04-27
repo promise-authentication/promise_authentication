@@ -37,12 +37,12 @@ class ApplicationController < ActionController::Base
   end
 
   def color
-    @color ||= ColorGenerator.new(saturation: 0.9, lightness: 0.35).create_hex
+    session[:color] ||= ColorGenerator.new(saturation: 0.9, lightness: 0.35).create_hex
   end
   helper_method :color
 
   def letter
-    @letter ||= SecureRandom.alphanumeric.first.upcase
+    session[:letter] ||= SecureRandom.alphanumeric.first.upcase
   end
   helper_method :letter
 
