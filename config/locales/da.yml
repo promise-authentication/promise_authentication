@@ -61,6 +61,7 @@ da:
       choose_application: Vælg applikation
       explain_choosing: Log ind på en af dine applikationer her.
       no_relying_parties: Du har endnu ikke nogle applikationer tilknyttet
+      go_to_rp: Fortsæt til %{name}
   authentication:
     confirm:
       sign_in_on_html: "Log ind på <strong>%{relying_party_name}</strong>"

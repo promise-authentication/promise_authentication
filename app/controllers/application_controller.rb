@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   helper_method :relying_party
   
   def authenticate
-    redirect_to logout_path if personal_data.nil?
+    redirect_to login_path if personal_data.nil?
   end
 
   def color

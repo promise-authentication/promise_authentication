@@ -19,7 +19,6 @@
 
 <% end %>
 <%= content_for :body do %>
-  <%= form_tag authenticate_path do %>
     <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
       <h2 class="text-2xl pt-8 text-center leading-tight">
         <%= t '.sign_in_on_html', relying_party_name: relying_party.name %>
@@ -27,7 +26,7 @@
       <p class="text-gray-600 text-sm max-w-xs text-center mt-3">
         <%= t '.you_are_html', email: email, name: name %>
       </p>
-      <%= link_to  go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center" do %>
+      <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center", autofocus: true do %>
         <span class="text-center">
           <% if relying_party.supports_legacy_accounts? && personal_data.id_for(relying_party.id).blank? %>
             <%= t('.create_account_html', relying_party_name: relying_party.name) %>
@@ -47,7 +46,7 @@
         <span class="text-gray-600">
           <%= t '.not_you_html', email: email %>
         </span>
-        <%= link_to t('.logout'), relogin_path(login_configuration), class: "button transparent small mt-2" %>
+        <%= button_to t('.logout'), relogin_path(login_configuration), method: :delete, class: "button transparent small mt-2" %>
       </div>
 
 
@@ -56,5 +55,4 @@
         <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
       </p>
     </div>
-  <% end %>
 <% end %>

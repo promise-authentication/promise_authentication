@@ -22,7 +22,7 @@
 }
 
 .button.transparent {
-  @apply text-gray-600 border-gray-100 border;
+  @apply bg-transparent text-gray-600 border-gray-100 border;
   &:hover {
     @apply text-gray-700 bg-gray-100;
   }

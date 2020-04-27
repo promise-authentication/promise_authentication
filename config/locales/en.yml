@@ -56,6 +56,7 @@ en:
       choose_application: Choose application
       explain_choosing: Login to any of your connected applications.
       no_relying_parties: You have no connected applications yet
+      go_to_rp: Go to %{name}
   authentication:
     confirm:
       sign_in_with: Sign in with %{name}
