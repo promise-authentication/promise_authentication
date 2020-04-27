@@ -19,7 +19,7 @@ en:
   landing:
     index:
       callout_html: "Pure&nbsp;identity with privacy&nbsp;at&nbsp;heart"
-      short_intro_html: "%{name} is a single-sign-on pure identity provider. That means no personal data will be stored anywhere or shared with anyone. We promise!"
+      short_intro_html: "%{name} is a single-sign-on pure identity provider. No personal data will be stored anywhere or shared with anyone. We promise!"
     sections:
       core_values: The core values at %{name}
       privacy:

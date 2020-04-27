@@ -22,8 +22,8 @@ da:
       change_password: Skift password
   landing:
     index:
-      callout_html: Ét&nbsp;password til&nbsp;det&nbsp;hele? Ja&nbsp;tak!
-      short_intro_html: "Vi har hver især så mange passwords og muligheder for at logge ind, at vi umuligt kan holde styr på det. <strong>%{name}</strong> tilbyder en central løsning til potentielt at logge ind alle steder, til os allesammen."
+      callout_html: "Pure&nbsp;identity with privacy&nbsp;at&nbsp;heart"
+      short_intro_html: "%{name} is a single-sign-on pure identity provider. No personal data will be stored anywhere or shared with anyone. We promise!"
     sections:
       core_values: Kerneværdierne i %{name}
       privacy:
