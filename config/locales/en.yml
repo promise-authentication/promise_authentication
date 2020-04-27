@@ -18,8 +18,8 @@ en:
       change_password: Change password
   landing:
     index:
-      callout_html: One&nbsp;password for&nbsp;everything? Yes,&nbsp;please!
-      short_intro_html: "Each of us has so many passwords and ways of signing in, that we can't possible keep track. <strong>%{name}</strong> is a potential single-sign-on solution for everywhere and all of us."
+      callout_html: "Pure&nbsp;identity with privacy&nbsp;at&nbsp;heart"
+      short_intro_html: "%{name} is a single-sign-on pure identity provider. That means no personal data will be stored anywhere or shared with anyone. We promise!"
     sections:
       core_values: The core values at %{name}
       privacy:

@@ -30,6 +30,8 @@
         }
       <% end %>
     </style>
+
+    <%= javascript_pack_tag 'stimulus', 'data-turbolinks-track': 'reload', defer: true %>
   </head>
   <body class="">
     <%= content_for?(:content) ? yield(:content) : yield %>
