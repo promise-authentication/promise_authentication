@@ -1,33 +1,41 @@
-
-<%= link_to 'javascript:history.go(-1);', class: "fixed inset-0 m-2 mb-24 bg-uniq rounded text-white flex flex-col justify-center items-center" do %>
-  <button class="text-2xl fixed top-0 right-0 mr-6 mt-6 text-uniq bg-white rounded-full h-8 w-8 flex items-center justify-center pb-1 leading-none" aria-label="Close this box here">
+<%= link_to 'javascript:history.go(-1);', class: "fixed inset-0 m-2 mb-16 bg-uniq rounded-lg text-white overflow-scroll shadow" do %>
+  <button class="text-2xl fixed top-0 right-0 mr-6 mt-4 text-white leading-none" aria-label="Close this box here">
     ×
   </button>
-  <h1>
-    Your unique letter or number is:
-  </h1>
-  <h2 class="text-6xl font-black font-mono">
-    <%= letter %>
-  </h2>
-  <h1>
-    Your unique color is:
-  </h1>
-  <h2 class="text-6xl font-black font-mono">
-    <%= color %>
-  </h2>
-  <p>
-    (That's the background color on this box)
-  </p>
-  <p class="p-2 sm:p-10 text-center">
-    Besides always showing the small badge in the bottom right corner, your color will be used for buttons when you confirm signing in to a relying party.
-  </p>
+
+  <div class="p-4 pb-10 text-sm max-w-sm m-auto">
+    <h1 class="text-center mt-4">
+      Your unique letter/ number is:
+    </h1>
+    <h2 class="text-2xl font-black text-center font-mono">
+      <%= letter %>
+    </h2>
+    <h1 class="text-center mt-4">
+      Your unique color is:
+    </h1>
+    <h2 class="text-xl font-black font-mono text-center">
+      #<%= color %>
+    </h2>
+    <p class="text-xs text-center">
+      (That's the background color on this box)
+    </p>
+    <p class="mt-4">
+      You should always expect to see this combination in the bottom of the screen when logged in.
+    </p>
+    <p class="mt-4">
+      Besides always showing the small badge in the bottom right corner, your color will be used for buttons when you confirm signing in to a relying party.
+    </p>
+    <p class="mt-4">
+      If you do not see this combination, you are not on a site that <%= name %> controls.
+    </p>
+  </div>
 <% end %>
 
 <div class="fixed bottom-0 right-0 p-2 w-1/2 mr-8 flex items-end justify-end">
-  <p class="text-right mr-3">
-    <span class="whitespace-no-wrap">You unique combination of a letter</span> <span class="whitespace-no-wrap">and color will always show here</span>
+  <p class="text-right mr-1 text-sm mb-1">
+    <span class="whitespace-no-wrap">You unique combination of a letter/number</span> <span class="whitespace-no-wrap">and color will always show here</span>
   </p>
-  <p class="-mb-1">
+  <p class="mb-1">
     &rarr;
   </p>
 

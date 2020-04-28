@@ -1,0 +1,53 @@
+.a-turn {
+  animation: turn 40s linear infinite;
+}
+@keyframes turn {
+  0% { transform: rotateZ(0deg); }
+  100% { transform: rotateZ(360deg); }
+}
+
+.a-bow {
+  animation: bow 5s infinite;
+}
+@keyframes bow {
+  0% { transform: translateY(0px); }
+  10% { transform: translateY(-1px); }
+  20% { transform: translateY(0px); }
+}
+
+.a-shake {
+  animation: shake 3s infinite;
+}
+@keyframes shake {
+  0% { transform: rotate(-2deg); }
+  1% { transform: rotate(2deg); }
+  2% { transform: rotate(-2deg); }
+  3% { transform: rotate(2deg); }
+  4% { transform: rotate(-2deg); }
+  5% { transform: rotate(2deg); }
+  6% { transform: rotate(-2deg); }
+  7% { transform: rotate(2deg); }
+  8% { transform: rotate(-2deg); }
+  9% { transform: rotate(2deg); }
+  19% { transform: rotate(2deg); }
+  20% { transform: rotate(-2deg); }
+  21% { transform: rotate(2deg); }
+  22% { transform: rotate(-2deg); }
+  23% { transform: rotate(2deg); }
+  24% { transform: rotate(-2deg); }
+  25% { transform: rotate(2deg); }
+  26% { transform: rotate(-2deg); }
+  27% { transform: rotate(2deg); }
+  28% { transform: rotate(-2deg); }
+  29% { transform: rotate(2deg); }
+  30% { transform: rotate(0deg); }
+}
+
+.a-zoom {
+  animation: zoom 4s infinite;
+}
+@keyframes zoom {
+  0% { transform: scale(1); }
+  10% { transform: scale(1.05); }
+  20% { transform: scale(1); }
+}

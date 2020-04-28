@@ -22,7 +22,7 @@ da:
       change_password: Skift password
   landing:
     index:
-      callout_html: "Pure&nbsp;identity with privacy&nbsp;at&nbsp;heart"
+      callout_html: "Pure&nbsp;identity<br />with privacy&nbsp;at&nbsp;heart"
       short_intro_html: "%{name} is a single-sign-on pure identity provider. No personal data will be stored anywhere or shared with anyone. We promise!"
     sections:
       core_values: Kerneværdierne i %{name}

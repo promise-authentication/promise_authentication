@@ -31,13 +31,13 @@
       <% end %>
     </style>
 
-    <%= javascript_pack_tag 'stimulus', 'data-turbolinks-track': 'reload', defer: true %>
+    <%#= javascript_pack_tag 'stimulus', 'data-turbolinks-track': 'reload', defer: true %>
   </head>
   <body class="">
     <%= content_for?(:content) ? yield(:content) : yield %>
 
     <% if personal_data %>
-      <%= link_to letter, uniq_path, class: "m-1 text-white font-mono text-xs font-black fixed bottom-0 right-0 bg-uniq rounded-full h-6 w-6 flex items-center justify-center", style: 'cursor:help;', 'aria-label': "Your unique letter/number-color combination is #{letter} and #{color}" %>
+      <%= link_to letter, uniq_path, class: "m-2 mb-3 text-white font-mono text-xs font-black fixed bottom-0 right-0 bg-uniq rounded-full h-6 w-6 flex items-center justify-center", style: 'cursor:help;', 'aria-label': "Your unique letter/number-color combination is #{letter} and #{color}" %>
     <% end %>
   </body>
 </html>

@@ -4,10 +4,10 @@
 
 <div class="max-w-lg m-auto p-6">
   <ul class="ml-2">
-    <% icon_classes = "mr-4 w-6 text-2xl text-gray-600 text-uniq flex-none" %>
+    <% icon_classes = "mr-4 w-6 h-6 text-2xl text-gray-600 text-uniq flex-none flex items-center" %>
     <% item_classes = "flex mb-5 items-center" %>
     <li class="<%= item_classes %>">
-      <div class="<%= icon_classes %>">
+      <div class="<%= icon_classes %> a-shake">
         📱
       </div>
       <span>
@@ -15,7 +15,15 @@
       </span>
     </li>
     <li class="<%= item_classes %>">
-      <div class="<%= icon_classes %>">
+      <div class="<%= icon_classes %> a-bow">
+        🙌
+      </div>
+      <span>
+        You <strong>care about privacy</strong> and want to start your relation with your customers the best possible way.
+      </span>
+    </li>
+    <li class="<%= item_classes %>">
+      <div class="<%= icon_classes %> a-turn">
         ☀️
       </div>
       <span>
@@ -23,35 +31,23 @@
       </span>
     </li>
     <li class="<%= item_classes %>">
-      <div class="<%= icon_classes %>" data-controller="globe">
-        <div data-target="globe.position" class="">🌍</div>
-        <div data-target="globe.position" class="hidden">🌎</div>
-        <div data-target="globe.position" class="hidden">🌏</div>
+      <div class="<%= icon_classes %> ">
+        <div class="absolute">🌍</div>
+        <div class="absolute globe position first">🌍</div>
+        <div class="absolute globe position second">🌎</div>
+        <div class="absolute globe position third">🌏</div>
       </div>
       <span>
-        You believe <strong>the world deserves a better solution</strong> to centralized authentication perfectly free from commercial&nbsp;interests.
+        You believe <strong>the world deserves a better solution</strong> to centralized authentication. Perfectly free from commercial&nbsp;interests.
       </span>
     </li>
     <li class="<%= item_classes %>">
-      <div class="<%= icon_classes %>">
-        💸
+      <div class="<%= icon_classes %> a-zoom">
+        🎁
       </div>
       <span>
-        You accept <strong>paying a fair amount</strong> while contributing to provide basic authentication infrastructure for all.
-      </span>
-    </li>
-    <li class="<%= item_classes %>">
-      <div class="<%= icon_classes %>">
-        🙌
-      </div>
-      <span>
-        You <strong>care about privacy</strong> and want to start your relation with your customers the best possible way.
+        You want to <strong>contribute to basic authentication infrastructure</strong> by paying your fair amount based on usage.
       </span>
     </li>
   </ul>
 </div>
-
-
-
-
-

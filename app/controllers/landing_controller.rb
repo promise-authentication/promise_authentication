@@ -1,5 +1,6 @@
 class LandingController < ApplicationController
   before_action :set_view_paths
+  skip_around_action :switch_locale
 
   private
 
