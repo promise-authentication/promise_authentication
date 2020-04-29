@@ -20,6 +20,9 @@ da:
       logout: Log ud
       login: Log ind
       change_password: Skift password
+  layouts:
+    application:
+      meta_description: "%{name} is a single-sign-on pute identity provider."
   landing:
     index:
       callout_html: "Pure&nbsp;identity<br />with privacy&nbsp;at&nbsp;heart"

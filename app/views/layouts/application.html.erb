@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
     <title><%= name %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
+    <meta name="Description" content="<%= t '.meta_description', name: name %>">
 
     <meta name="viewport" content= "width=device-width, initial-scale=1.0"> 
     <link rel="icon" type="image/png" sizes="32x32" href="<%= image_url 'logo.png' %>">
@@ -35,7 +37,7 @@
     <%= content_for?(:content) ? yield(:content) : yield %>
 
     <% if personal_data %>
-      <%= link_to letter, uniq_path, class: "m-2 mb-3 text-white font-mono text-xs font-black fixed bottom-0 right-0 bg-uniq rounded-full h-6 w-6 flex items-center justify-center", style: 'cursor:help;', 'aria-label': "Your unique letter/number-color combination is #{letter} and #{color}" %>
+      <%= link_to letter, uniq_path, class: "mr-3 mb-3 text-white font-mono text-xs font-black fixed bottom-0 right-0 bg-uniq rounded-full h-6 w-6 flex items-center justify-center shadow-lg", style: 'cursor:help;', 'aria-label': "Your unique letter/number-color combination is #{letter} and #{color}" %>
     <% end %>
   </body>
 </html>

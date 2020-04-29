@@ -16,6 +16,9 @@ en:
       logout: Sign out
       login: Sign in
       change_password: Change password
+  layouts:
+    application:
+      meta_description: "%{name} er en single-sign-on ren identitetsudbyder."
   landing:
     index:
       callout_html: "Pure&nbsp;identity<br />with privacy&nbsp;at&nbsp;heart"
