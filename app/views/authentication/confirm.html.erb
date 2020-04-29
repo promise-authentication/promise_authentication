@@ -2,7 +2,7 @@
   <% if relying_party.present? %>
     <% if relying_party.logo_url.present? %>
       <div class="flex-grow flex items-center justify-center">
-        <%= image_tag(relying_party.logo_url, class: 'h-6 m-3') %>
+        <%= image_tag(relying_party.logo_data, class: 'h-6 m-3') %>
       </div>
     <% else %>
       <%= image_tag('logo.png', class: 'h-4 m-3') %>

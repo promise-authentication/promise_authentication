@@ -20,6 +20,17 @@ class Authentication::RelyingParty
     new(well_knowns.merge({id: id}))
   end
 
+  def logo_data
+    return nil unless logo_url.present?
+
+    response = HTTParty.get(logo_url)
+    return nil if response&.code != 200
+
+    content_type = response.headers['content-type']
+    base64 = Base64.strict_encode64(response.body)
+    return "data:#{content_type};base64,#{base64}"
+  end
+
   def supports_legacy_accounts?
     legacy_account_authentication_url.present? &&
       legacy_account_forgot_password_url.present?
