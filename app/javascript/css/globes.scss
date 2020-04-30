@@ -5,20 +5,21 @@
   &.third  { animation:  third 6s infinite; }
 }
 @keyframes first {
-  0%  { opacity: 1; }
-  32% { opacity: 1; }
-  33% { opacity: 0; }
+  5%  { opacity: 1; }
+  28% { opacity: 1; }
+  38% { opacity: 0; }
+  95% { opacity: 0; }
 }
 @keyframes second {
   0%  { opacity: 0; }
-  32% { opacity: 0; }
-  33% { opacity: 1; }
-  65% { opacity: 1; }
-  66% { opacity: 0; }
+  28% { opacity: 0; }
+  38% { opacity: 1; }
+  58% { opacity: 1; }
+  68% { opacity: 0; }
 }
 @keyframes third {
-  0%   { opacity: 0; }
-  65%  { opacity: 0; }
-  66%  { opacity: 1; }
-  100% { opacity: 1; }
+  5%   { opacity: 0; }
+  58%  { opacity: 0; }
+  68%  { opacity: 1; }
+  95% { opacity: 1; }
 }
