@@ -4,7 +4,7 @@
 
 To get going, all you have to do, is to redirect your users to
 
-    https://promiseauthentication.org?aud=example.com
+    https://promiseauthentication.org?client_id=example.com
 
 Now, <%= name %> will ensure the user is authenticated, and redirect the user to
 

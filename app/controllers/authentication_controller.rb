@@ -33,10 +33,11 @@ class AuthenticationController < ApplicationController
       id_token = Authentication::Services::GetIdToken.new(
         user_id: current_user_id, 
         relying_party_id: relying_party.id,
-        vault_key: current_vault_key
+        vault_key: current_vault_key,
+        nonce: login_configuration[:nonce]
       ).id_token
 
-      redirect_to relying_party.redirect_url(
+      redirect_to relying_party.redirect_uri(
         id_token: id_token,
         login_configuration: login_configuration
       )
@@ -74,7 +75,7 @@ class AuthenticationController < ApplicationController
   end
 
   def login_configuration
-    params.permit(:aud, :redirect_url, :mfa)
+    params.permit(:client_id, :redirect_uri, :nonce)
   end
   helper_method :login_configuration
 

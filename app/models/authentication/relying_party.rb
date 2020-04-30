@@ -1,4 +1,6 @@
 class Authentication::RelyingParty
+  class InvalidRedirectUri < Exception; end
+
   include ActiveModel::Model
 
   attr_accessor :id, :name, :logo_url, :locale
@@ -58,7 +60,18 @@ class Authentication::RelyingParty
     @name || id
   end
 
-  def redirect_url(id_token:, login_configuration:)
-    "https://#{id}/authenticate?id_token=#{id_token}"
+  def redirect_uri(id_token:, login_configuration:)
+    if login_configuration[:redirect_uri].present?
+      uri = URI.parse(login_configuration[:redirect_uri])
+      if uri.host == id
+        new_query_ar = URI.decode_www_form(uri.query || '') << ['id_token', id_token]
+        uri.query = URI.encode_www_form(new_query_ar)
+        uri.to_s
+      else
+        raise InvalidRedirectUri.new(login_configuration[:redirect_uri])
+      end
+    else
+      "https://#{id}/authenticate?id_token=#{id_token}"
+    end
   end
 end

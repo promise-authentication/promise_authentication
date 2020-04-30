@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   end
 
   def relying_party
-    @relying_party ||= ::Authentication::RelyingParty.find(params[:aud])
+    @relying_party ||= ::Authentication::RelyingParty.find(params[:client_id])
   end
   helper_method :relying_party
   

@@ -5,7 +5,8 @@ class Authentication::Services::GetIdTokenTest < ActiveSupport::TestCase
     @request = Authentication::Services::GetIdToken.new(
       user_id: 'id',
       relying_party_id: 'pid',
-      vault_key: 'key'
+      vault_key: 'key',
+      nonce: 'nonce'
     )
   end
 
@@ -24,6 +25,7 @@ class Authentication::Services::GetIdTokenTest < ActiveSupport::TestCase
         token = @request.id_token
         assert_equal token.sub, 'hello'
         assert_equal token.aud, 'pid'
+        assert_equal token.nonce, 'nonce'
         assert token.to_s
       end
     end
@@ -36,6 +38,7 @@ class Authentication::Services::GetIdTokenTest < ActiveSupport::TestCase
         token = @request.id_token
         assert_equal token.sub, 'world'
         assert_equal token.aud, 'pid'
+        assert_equal token.nonce, 'nonce'
         assert token.to_s
       end
     end

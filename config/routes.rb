@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     get 'configuration'
   end
 
-  get 'a/:aud', to: 'authentication#login', as: 'login_with_relying_party', :constraints => { :aud => /[^\/]+/ }
+  get 'a/:client_id', to: 'authentication#login', as: 'login_with_relying_party', :constraints => { :client_id => /[^\/]+/ }
   get 'a', to: 'authentication#login', as: 'login_short'
 
   get 'login', to: 'authentication#login', as: 'login'

@@ -37,7 +37,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
   test 'logout' do
     post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
-    get logout_url
+    delete logout_url
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     assert_nil jar.encrypted[:user_id]
@@ -46,7 +46,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication with relying party' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', aud: 'party.com' }
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', client_id: 'party.com' }
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
@@ -58,10 +58,10 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'showing email after login' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', aud: 'party.com' }
-    assert_redirected_to confirm_path(aud: 'party.com')
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', client_id: 'party.com' }
+    assert_redirected_to confirm_path(client_id: 'party.com')
 
-    get confirm_path(aud: 'party.com')
+    get confirm_path(client_id: 'party.com')
     assert_response :success
 
     assert_select 'p', /hello@world\.com/
@@ -80,7 +80,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
 
     Authentication::RelyingParty.stub :find, relying_party do
-      post authenticate_url, params: { email: email, password: password, aud: relying_party_id }
+      post authenticate_url, params: { email: email, password: password, client_id: relying_party_id }
 
       jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
       user_id = jar.encrypted[:user_id]
@@ -94,7 +94,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
       assert_mock relying_party
 
-      assert_redirected_to confirm_path(aud: relying_party_id)
+      assert_redirected_to confirm_path(client_id: relying_party_id)
     end
   end
 
@@ -111,7 +111,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :id, relying_party_id
 
     Authentication::RelyingParty.stub :find, relying_party do
-      post authenticate_url, params: { email: email, password: password, aud: relying_party_id }
+      post authenticate_url, params: { email: email, password: password, client_id: relying_party_id }
 
       jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
       user_id = jar.encrypted[:user_id]
@@ -125,7 +125,33 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
       assert_mock relying_party
 
-      assert_redirected_to confirm_path(aud: relying_party_id)
+      assert_redirected_to confirm_path(client_id: relying_party_id)
     end
+  end
+
+  test 'go_to relying party' do
+    email = 'hello@world.com'
+    password = 'secr2t'
+    relying_party_id = 'example.com'
+    post authenticate_url, params: { email: email, password: password }
+    post go_to_url, params: { client_id: relying_party_id, nonce: 'abc', redirect_uri: 'https://example.com/hello' }
+
+    uri = URI.parse(response.redirect_url)
+
+    assert_equal uri.host, 'example.com'
+    assert_equal uri.path, '/hello'
+    query = URI.decode_www_form(uri.query || '')
+    assert_equal query[0][0], 'id_token'
+
+    id_token = query[0][1]
+    payload, header = JWT.decode(id_token , nil, false)
+    key = Rails.configuration.jwt_public_key
+    decoded_token = JWT.decode(id_token, key, true, { algorithm: header['alg'] }).first
+
+    assert decoded_token['sub']
+    assert decoded_token['iat']
+    assert_equal decoded_token['nonce'], 'abc'
+    assert_equal decoded_token['iss'], 'promiseauthentication.org'
+    assert_equal decoded_token['aud'], 'example.com'
   end
 end
