@@ -16,7 +16,11 @@ module Authentication::EventListener
       vault = Authentication::VaultContent.find_or_initialize_by(id: event.data[:user_id])
       vault.encrypted_personal_data = event.data[:encrypted_personal_data]
       vault.save
-
+    when Authentication::Events::SomethingUniqueAdded
+      uniq = Authentication::SomethingUnique.find_or_initialize_by(id: event.data[:user_id])
+      uniq.color = event.data[:something_unique][:color]
+      uniq.character = event.data[:something_unique][:character]
+      uniq.save
     end
   end
 end

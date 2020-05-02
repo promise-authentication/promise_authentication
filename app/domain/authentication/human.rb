@@ -20,6 +20,13 @@ class Authentication::Human
     })
   end
 
+  def add_something_unique(something_unique:)
+    apply Authentication::Events::SomethingUniqueAdded.new(data: {
+      user_id: @user_id,
+      something_unique: something_unique.to_h
+    })
+  end
+
   def update_vault(encrypted_personal_data:)
     apply Authentication::Events::VaultUpdated.new(data: {
       user_id: @user_id,
@@ -28,6 +35,9 @@ class Authentication::Human
   end
 
   def apply_password_set(event)
+  end
+
+  def apply_something_unique_added(event)
   end
 
   def apply_vault_updated(event)

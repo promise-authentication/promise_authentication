@@ -19,6 +19,11 @@ module Authentication::Services::Authenticate::Register
         data.add_id legacy_account_user_id, relying_party_id
       end
 
+      Authentication::Commands::AddSomethingUnique.new(
+        user_id: new_user_id,
+        something_unique: Authentication::SomethingUnique.generate
+      ).execute!
+
       vault_key = Authentication::Services::SetPassword.new(
         user_id: new_user_id,
         password: password,

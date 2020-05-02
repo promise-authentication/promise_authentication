@@ -22,6 +22,10 @@ class Authentication::Services::Authenticate::RegisterTest < ActiveSupport::Test
     assert Authentication::Password.find(user_id).match!(@password)
     assert Authentication::HashedEmail.find_by_user_id(user_id)
 
+    uniq = Authentication::SomethingUnique.find(user_id)
+    assert uniq.character
+    assert uniq.color
+
     # Now make sure the vault content can be decrypted
     personal_data = Authentication::Vault.personal_data(user_id, vault_key)
     assert personal_data

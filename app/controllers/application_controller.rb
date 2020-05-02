@@ -36,15 +36,23 @@ class ApplicationController < ActionController::Base
     redirect_to login_path if personal_data.nil?
   end
 
-  def color
-    session[:color] ||= ColorGenerator.new(saturation: 0.9, lightness: 0.35).create_hex
-  end
-  helper_method :color
+  def something_unique
+    return nil unless current_user_id
 
-  def letter
-    session[:letter] ||= SecureRandom.alphanumeric.first.upcase
+    @something_unique ||= ::Authentication::SomethingUnique.find(current_user_id)
+  rescue ActiveRecord::RecordNotFound
+    nil
   end
-  helper_method :letter
+
+  def unique_color
+    something_unique&.color
+  end
+  helper_method :unique_color
+
+  def unique_character
+    something_unique&.character
+  end
+  helper_method :unique_character
 
   def personal_data
     return nil if current_user_id.blank?

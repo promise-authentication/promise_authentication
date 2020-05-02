@@ -14,20 +14,20 @@
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 
     <style>
-      <% if personal_data %>
+      <% if unique_color %>
         .button.primary {
-          background-color: #<%= color %>;
+          background-color: #<%= unique_color %>;
           opacity: 0.9;
         }
         .button.primary:hover {
-          background-color: #<%= color %>;
+          background-color: #<%= unique_color %>;
           opacity: 1;
         }
         .bg-uniq {
-          background-color: #<%= color %>;
+          background-color: #<%= unique_color %>;
         }
         .text-uniq {
-          color: #<%= color %>;
+          color: #<%= unique_color %>;
         }
       <% end %>
     </style>
@@ -35,8 +35,8 @@
   <body class="">
     <%= content_for?(:content) ? yield(:content) : yield %>
 
-    <% if personal_data %>
-      <%= link_to letter, uniq_path, class: "mr-3 mb-3 text-white font-mono text-xs font-black fixed bottom-0 right-0 bg-uniq rounded-full h-6 w-6 flex items-center justify-center shadow-lg", style: 'cursor:help;', 'aria-label': "Your unique letter/number-color combination is #{letter} and #{color}" %>
+    <% if unique_character %>
+      <%= link_to unique_character, uniq_path, class: "mr-3 mb-3 text-white font-mono text-xs font-black fixed bottom-0 right-0 bg-uniq rounded-full h-6 w-6 flex items-center justify-center shadow-lg", style: 'cursor:help;', 'aria-label': "Your unique letter/number-color combination is #{unique_character} and #{unique_color}" %>
     <% end %>
   </body>
 </html>
