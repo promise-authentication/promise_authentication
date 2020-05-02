@@ -6,22 +6,26 @@ module Authentication::Services::Authenticate::Register
 
     hashed_email = Authentication::HashedEmail.from_cleartext(email)
 
-    thing = Authentication::Commands::ClaimEmail.new(
-      user_id: new_user_id,
-      hashed_email: hashed_email
-    ).execute!
+    vault_key = nil
 
-    data = Authentication::PersonalData.new
-    if(relying_party_id.present? && legacy_account_user_id.present?)
-      data.add_id legacy_account_user_id, relying_party_id
+    ActiveRecord::Base.transaction do
+      Authentication::Commands::ClaimEmail.new(
+        user_id: new_user_id,
+        hashed_email: hashed_email
+      ).execute!
+
+      data = Authentication::PersonalData.new
+      if(relying_party_id.present? && legacy_account_user_id.present?)
+        data.add_id legacy_account_user_id, relying_party_id
+      end
+
+      vault_key = Authentication::Services::SetPassword.new(
+        user_id: new_user_id,
+        password: password,
+        personal_data: data,
+        password_known_by_relying_party_id: relying_party_knows_password ? relying_party_id : nil
+      ).call
     end
-
-    vault_key = Authentication::Services::SetPassword.new(
-      user_id: new_user_id,
-      password: password,
-      personal_data: data,
-      password_known_by_relying_party_id: relying_party_knows_password ? relying_party_id : nil
-    ).call
 
     return new_user_id, vault_key
   end
