@@ -86,6 +86,7 @@ da:
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data: Din e-mail og password bliver ikke gemt i et læsbart format på vores servere.
       forgot_password: Glemt password?
+      remember_me: Forbliv logget ind
       go_on: Videre
       no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
   passwords:

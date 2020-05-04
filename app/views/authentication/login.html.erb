@@ -39,13 +39,19 @@
             <%= flash[:password_message] %>
           </p>
           <%= password_field_tag :password, nil, class: "login-input", autofocus: true %>
+          <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-gray-700 font-bold' : 'text-gray-500 '}" %>
         <% else %>
           <p class="input-label">
             Password
           </p>
           <%= password_field_tag :password, nil, class: "login-input" %>
         <% end %>
-        <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-gray-700 font-bold' : 'text-gray-500 '}" %>
+      </label>
+      <label class="flex justify-start items-center w-full mt-4">
+        <%= check_box_tag :remember_me, nil, flash[:remember_me] %>
+        <span class="ml-2 text-gray-900">
+          <%= t('.remember_me') %>
+        </span>
       </label>
       <div class="flex w-full justify-end items-center mt-3">
         <p class="text-gray-600 text-sm text-right mr-3">

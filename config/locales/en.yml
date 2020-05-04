@@ -82,6 +82,7 @@ en:
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Login
       forgot_password: Forgot password?
+      remember_me: Stay signed in
       we_save_no_data: Your e-mail and password will not be stored in a readable form on our servers.
       no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your e-mail. All they will get is a unique string identifying you.
   passwords:

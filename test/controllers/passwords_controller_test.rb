@@ -4,7 +4,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   test 'changing password' do
     @email = 'hello@example.com'
     @old_password = 'old'
-    post '/authenticate', params: { email: @email, password: @old_password }
+    post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
     assert cookies[:user_id]
     assert cookies[:vault_key]
 
@@ -31,7 +31,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   test 'recovering password when mail present' do
     @email = 'hello@example.com'
     @old_password = 'old'
-    post '/authenticate', params: { email: @email, password: @old_password }
+    post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]

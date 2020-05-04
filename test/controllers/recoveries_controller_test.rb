@@ -47,7 +47,7 @@ class RecoveriesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
 
     # Sign in with new password:
-    post authenticate_url, params: { email: email, password: 'hello' }
+    post authenticate_url, params: { email: email, password: 'hello', remember_me: 1 }
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     assert_equal user_id, jar.encrypted[:user_id]

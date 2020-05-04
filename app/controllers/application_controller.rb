@@ -64,15 +64,22 @@ class ApplicationController < ActionController::Base
   helper_method :personal_data
 
   def email
-    cookies.encrypted[:email]
+    cookies.encrypted[:email] || session[:email]
   end
   helper_method :email
 
   def current_user_id
-    cookies.encrypted[:user_id]
+    cookies.encrypted[:user_id] || session[:user_id]
   end
 
   def current_vault_key
-    cookies.encrypted[:vault_key]
+    cookies.encrypted[:vault_key] || session[:vault_key]
+  end
+
+  def do_logout!
+    reset_session
+    cookies.delete :user_id
+    cookies.delete :vault_key
+    cookies.delete :email
   end
 end

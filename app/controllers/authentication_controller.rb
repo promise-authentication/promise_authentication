@@ -1,6 +1,8 @@
 class AuthenticationController < ApplicationController
 
   def login
+    reset_session
+
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
     if personal_data
       redirect_to confirm_path(login_configuration)
@@ -22,9 +24,7 @@ class AuthenticationController < ApplicationController
   end
 
   def logout
-    cookies.delete :user_id
-    cookies.delete :vault_key
-    cookies.delete :email
+    do_logout!
     redirect_to login_path(login_configuration)
   end
 
@@ -41,6 +41,8 @@ class AuthenticationController < ApplicationController
         id_token: id_token,
         login_configuration: login_configuration
       )
+
+      reset_session
     else
       redirect_to dashboard_path
     end
@@ -48,30 +50,39 @@ class AuthenticationController < ApplicationController
 
 
   def authenticate
+    do_logout!
+
     @auth_request = ::Authentication::Services::Authenticate.new params.permit(:email, :password)
     @auth_request.relying_party_id = relying_party&.id
 
     if @auth_request.valid?
       @auth_request.call!
 
-      cookies.encrypted.permanent[:user_id]  = @auth_request.user_id
-      cookies.encrypted.permanent[:vault_key] = @auth_request.vault_key
-      cookies.encrypted.permanent[:email] = params[:email]
+      if params[:remember_me]
+        cookies.encrypted.permanent[:user_id]  = @auth_request.user_id
+        cookies.encrypted.permanent[:vault_key] = @auth_request.vault_key
+        cookies.encrypted.permanent[:email] = params[:email]
+      end
+      session[:user_id]  = @auth_request.user_id
+      session[:vault_key] = @auth_request.vault_key
+      session[:email] = params[:email]
 
       redirect_to confirm_path(login_configuration)
     else
+      flash.now[:remember_me] = params[:remember_me]
       if @auth_request.errors.include?(:email)
-        flash[:email_message] = @auth_request.errors.full_messages_for(:email).first
+        flash.now[:email_message] = @auth_request.errors.full_messages_for(:email).first
       else
-        flash[:password_message] = @auth_request.errors.full_messages_for(:password).first
+        flash.now[:password_message] = @auth_request.errors.full_messages_for(:password).first
       end
-      flash[:email] = @auth_request.email
-      redirect_to login_path(login_configuration)
+      flash.now[:email] = @auth_request.email
+      render action: 'login'
     end
   rescue Authentication::Password::NotMatching
-    flash[:email] = @auth_request.email
-    flash[:password_message] = t('.password_not_correct')
-    redirect_to login_path(login_configuration)
+    flash.now[:remember_me] = params[:remember_me]
+    flash.now[:email] = @auth_request.email
+    flash.now[:password_message] = t('.password_not_correct')
+    render action: 'login'
   end
 
   def login_configuration
