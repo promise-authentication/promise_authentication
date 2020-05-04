@@ -22,9 +22,7 @@ class AuthenticationController < ApplicationController
   end
 
   def logout
-    cookies.delete :user_id
-    cookies.delete :vault_key
-    cookies.delete :email
+    do_logout!
     redirect_to login_path(login_configuration)
   end
 

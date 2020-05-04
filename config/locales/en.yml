@@ -16,6 +16,7 @@ en:
       logout: Sign out
       login: Sign in
       change_password: Change password
+      change_email: Change e-mail
   layouts:
     application:
       meta_description: "%{name} er en single-sign-on ren identitetsudbyder."
@@ -84,6 +85,13 @@ en:
       forgot_password: Forgot password?
       we_save_no_data: Your e-mail and password will not be stored in a readable form on our servers.
       no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your e-mail. All they will get is a unique string identifying you.
+  emails:
+    show:
+      header: Change e-mail
+      description_html: This is where you change your e-mail if you no longer wish to sign in to %{name} with <strong>%{email}</strong>.
+      email: New e-mail
+      go_on: Change e-mail
+      privacy: Your e-mail will not be shared with anyone or stored anywhere.
   passwords:
     show:
       header: Change password

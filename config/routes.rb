@@ -40,6 +40,8 @@ Rails.application.routes.draw do
     resources :recoveries
   end
 
+  resource :email
+
   get 'me', to: 'humans#show', as: 'dashboard'
   get 'uniq', to: 'humans#uniq', as: 'uniq'
 

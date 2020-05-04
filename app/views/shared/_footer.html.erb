@@ -29,6 +29,8 @@
     <%= link_to name, root_path %> - 2020
     <% if personal_data && !relying_party %>
       - <%= link_to t('.change_password'), password_path, class: 'underline' %>
+      - <%= link_to t('.change_email'), email_path, class: 'underline' %>
+
     <% end %>
   </span>
   <br />

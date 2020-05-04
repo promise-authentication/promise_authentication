@@ -75,4 +75,10 @@ class ApplicationController < ActionController::Base
   def current_vault_key
     cookies.encrypted[:vault_key]
   end
+
+  def do_logout!
+    cookies.delete :user_id
+    cookies.delete :vault_key
+    cookies.delete :email
+  end
 end

@@ -20,6 +20,7 @@ da:
       logout: Log ud
       login: Log ind
       change_password: Skift password
+      change_email: Skift e-mail
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on pute identity provider."
@@ -88,6 +89,13 @@ da:
       forgot_password: Glemt password?
       go_on: Videre
       no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
+  emails:
+    show:
+      header: Skift e-mail
+      description_html: Her kan du ændre din e-mail, så du ikke længere logger ind på %{name} med <strong>%{email}</strong>.
+      email: Ny e-mail
+      go_on: Opdatér e-mail
+      privacy: Husk at din e-mail ikke gemmes nogle steder og ikke deles med tredjepart på noget tidspunkt.
   passwords:
     show:
       header: Skift password
