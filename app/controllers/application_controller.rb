@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   around_action :switch_locale
 
+  protect_from_forgery with: :reset_session
+
   private
 
   def switch_locale(&action)
