@@ -1,0 +1,18 @@
+
+<%= content_for :header do %>
+  <%= image_tag('logo.png', class: 'h-4 m-3') %>
+  <h1 class="text-gray-600">
+    <%= name %>
+  </h1>
+<% end %>
+<%= content_for :body do %>
+  <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
+    <h2 class="text-2xl pt-8">
+      <%= t '.header' %>
+    </h2>
+    <p class="text-gray-600 text-sm max-w-xs text-center mt-4">
+      <%= t '.description', name: name %>
+    </p>
+  </div>
+<% end %>
+

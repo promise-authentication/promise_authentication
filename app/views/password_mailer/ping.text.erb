@@ -1,0 +1,15 @@
+Brugeren med id
+
+uid = "<%= @user_id %>"
+email = "<%= @email %>"
+locale = "<%= @locale %>"
+make = Authentication::Services::MakeRecoverable.new(user_id: uid)
+pp make.info;1
+
+Now get the vault key from off site location, and then:
+
+vault_key = [decrypted vault key]
+make.encrypt! vault_key
+make.send! email, locale
+
+har bedt om nyt password.

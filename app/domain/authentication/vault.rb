@@ -6,6 +6,12 @@ class Authentication::Vault
   attr_accessor :key
 
   def self.personal_data(user_id, vault_key)
+    personal_data!(user_id, vault_key)
+  rescue RbNaCl::CryptoError, ActiveRecord::RecordNotFound
+    return nil
+  end
+
+  def self.personal_data!(user_id, vault_key)
     encrypted = Authentication::VaultContent.
       find(user_id).
       encrypted_personal_data
@@ -15,8 +21,6 @@ class Authentication::Vault
       decrypt encrypted
 
     Authentication::PersonalData.new(decrypted)
-  rescue RbNaCl::CryptoError, ActiveRecord::RecordNotFound
-    return nil
   end
 
   def self.key_from(password, salt)

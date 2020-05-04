@@ -29,7 +29,16 @@ Rails.application.routes.draw do
   post 'authenticate', to: 'authentication#authenticate', as: 'authenticate'
   post 'go_to', to: 'authentication#go_to', as: 'go_to'
 
-  resource :password, only: [:show, :create]
+  resource :password, only: [:new, :show, :create] do
+    member do
+      post :recover
+      get :wait
+    end
+  end
+
+  resources :keys do
+    resources :recoveries
+  end
 
   get 'me', to: 'humans#show', as: 'dashboard'
   get 'uniq', to: 'humans#uniq', as: 'uniq'

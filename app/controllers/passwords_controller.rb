@@ -1,5 +1,5 @@
 class PasswordsController < ApplicationController
-  before_action :authenticate
+  before_action :authenticate, only: :create
 
   layout 'authentication'
 
@@ -19,12 +19,16 @@ class PasswordsController < ApplicationController
       else
         @current_password_message = I18n.t('fill_both')
       end
-
-      render action: 'show'
     end
   rescue Authentication::Password::NotMatching
     @current_password_message = I18n.t('password_not_matching')
     render action: 'show'
+  end
+
+  def recover
+    ::Authentication::Services::RecoverPassword.new(params.permit(:email).merge({locale: I18n.locale})).call
+
+    redirect_to wait_password_path
   end
 
 end

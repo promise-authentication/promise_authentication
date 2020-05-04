@@ -8,7 +8,13 @@ class Authentication::Services::VaultKeyEncrypterTest < ActiveSupport::TestCase
     @private_key_off_site = 'alkwejwelkhwefhweflkwefkekwkwjek'
     @off_site_private_key = RbNaCl::PrivateKey.new(@private_key_off_site.b)
     @off_site_public_key = @off_site_private_key.public_key
+
+    @old_key =ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION']
     ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'] = Base64.strict_encode64(@off_site_public_key.to_s).encode('utf-8')
+  end
+
+  teardown do
+    ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'] = @old_key
   end
 
   test 'should save keys and be able to decrypt' do
