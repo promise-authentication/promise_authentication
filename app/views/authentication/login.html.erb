@@ -47,13 +47,13 @@
           <%= password_field_tag :password, nil, class: "login-input" %>
         <% end %>
       </label>
-      <label class="flex justify-start items-center w-full mt-4">
+      <label class="flex justify-start items-center w-full pt-4 pb-4 cursor-pointer">
         <%= check_box_tag :remember_me, nil, flash[:remember_me] %>
         <span class="ml-2 text-gray-900">
           <%= t('.remember_me') %>
         </span>
       </label>
-      <div class="flex w-full justify-end items-center mt-3">
+      <div class="flex w-full justify-end items-center">
         <p class="text-gray-600 text-sm text-right mr-3">
           <%= t '.we_save_no_data' %>
         </p>
