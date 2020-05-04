@@ -83,6 +83,7 @@ da:
       you_will_be_redirected_html: Du vil blive sendt videre til <strong>%{relying_party_name}</strong>.
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data: Din e-mail og password bliver ikke gemt i et læsbart format på vores servere.
+      forgot_password: Glemt password?
       go_on: Videre
       no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
   passwords:
@@ -92,5 +93,30 @@ da:
       go_on: Skift password
       current_password: Nuværende password
       new_password: Nyt password
+    new:
+      header: Nulstil password
+      description: Hvis du har glemt dit password til at logge ind på %{name} kan du nulstille det ved at skrive din email herunder. Så sender vi en mail med et link som du kan bruge til at lave et nyt password.
+      expect: Vær opmærksom på at det kan tage noget tid (op til et døgn), før du modtager mailen da det af sikkerhedmæssige grunde involverer en manuel process.
+      email: E-mail
+      go_on: Nulstil password
+    wait:
+      header: ✅
+      description: Du vil modtage en e-mail, som du kan bruge til at nulstille dit password.
+  recoveries:
+    show:
+      header: Nulstil password
+      description: Efter dit password er nulstillet, vil du blive bedt om at logge ind igen.
+      new_password: Nyt password
+      go_on: Videre
+  password_mailer:
+    unknown_mail:
+      subject: Nultil password for ukendt mail
+      intro: Vi kan ikke finde en konto på Promise med e-mail %{email}.
+      disclaimer: Hvis det ikke er dig der har bedt om at få nulstillet dit password på Promise, er der muligvis nogle andre der forsøger at bruge din e-mail på Promise.
+      link_text: Gå til Promise
+    recover_password:
+      subject: Nulstil password på Promise
+      link_text: Klik her for at nulstille password
+
 
 

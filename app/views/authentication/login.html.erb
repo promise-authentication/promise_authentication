@@ -44,16 +44,15 @@
             Password
           </p>
           <%= password_field_tag :password, nil, class: "login-input" %>
+          <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: 'float-right text-gray-500 text-sm mt-1' %>
         <% end %>
       </label>
-      <div class="flex w-full justify-end items-center mt-6">
+      <div class="flex w-full justify-end items-center mt-3">
         <p class="text-gray-600 text-sm text-right mr-3">
           <%= t '.we_save_no_data' %>
         </p>
         <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary' %>
       </div>
-
-
       <% if relying_party %>
         <p class="mt-8 text-gray-600 text-sm">
           <%= t '.no_sharing_html', relying_party_name: relying_party.name %>

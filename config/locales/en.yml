@@ -79,6 +79,7 @@ en:
       you_will_be_redirected_html: You will be redirected to <strong>%{relying_party_name}</strong> after authentication.
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Login
+      forgot_password: Forgot password?
       we_save_no_data: Your e-mail and password will not be stored in a readable form on our servers.
       no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your e-mail. All they will get is a unique string identifying you.
   passwords:
@@ -88,3 +89,27 @@ en:
       go_on: Change password
       current_password: Current password
       new_password: New password
+    new:
+      header: Reset password
+      description: If you forgot your password to sign in to %{name}, you can request to reset it by providing your e-mail here. We will send you an e-mail containing a link that will allow you to reset your password.
+      expect: Please not that it might take some time before you receive the email. For security purposes the process requires a manual sted.
+      email: E-mail
+      go_on: Reset password
+    wait:
+      header: ✅
+      description: You will recieve an e-mail with instructions for resetting your password.
+  recoveries:
+    show:
+      header: Reset password
+      description: After resetting the password you will have to sign in again.
+      new_password: New password
+      go_on: Go on
+  password_mailer:
+    unknown_mail:
+      subject: Reset password for unknown e-mail
+      intro: There is no account on Promise with the e-mail %{email}.
+      disclaimer: If you did not try to reset your password on Promise, someone else might try to use your e-mail on Promise.
+      link_text: Go to Promise
+    recover_password:
+      subject: Reset password on Promise
+      link_text: Click here to reset password

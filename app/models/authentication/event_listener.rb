@@ -12,6 +12,13 @@ module Authentication::EventListener
       password.digest = event.data[:digest]
       password.vault_key_salt = event.data[:vault_key_salt]
       password.save
+
+      if event.recoverable?
+        recovery = Authentication::VaultKeysForRecovery.find_or_initialize_by(id: event.data[:user_id])
+        recovery.key_pair_id = event.data[:encrypted_vault_key][:key_pair_id]
+        recovery.vault_key_cipher_base64 = event.data[:encrypted_vault_key][:cipher_base64]
+        recovery.save
+      end
     when Authentication::Events::VaultUpdated
       vault = Authentication::VaultContent.find_or_initialize_by(id: event.data[:user_id])
       vault.encrypted_personal_data = event.data[:encrypted_personal_data]
