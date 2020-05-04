@@ -70,7 +70,7 @@ class AuthenticationController < ApplicationController
     end
   rescue Authentication::Password::NotMatching
     flash[:email] = @auth_request.email
-    flash[:password_message] = 'Password not correct. Please try again'
+    flash[:password_message] = t('.password_not_correct')
     redirect_to login_path(login_configuration)
   end
 

@@ -44,8 +44,8 @@
             Password
           </p>
           <%= password_field_tag :password, nil, class: "login-input" %>
-          <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: 'float-right text-gray-500 text-sm mt-1' %>
         <% end %>
+        <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-gray-700 font-bold' : 'text-gray-500 '}" %>
       </label>
       <div class="flex w-full justify-end items-center mt-3">
         <p class="text-gray-600 text-sm text-right mr-3">

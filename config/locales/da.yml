@@ -76,6 +76,8 @@ da:
       no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
       no_id_yet: Dit unikke ID til %{relying_party_name} er ikke genereret endnu
       your_id: Dit unikke ID hos %{relying_party_name} er %{id}
+    authenticate:
+      password_not_correct: 'Forkert password. Prøv igen'
     login:
       sign_in_with_html: Log ind med %{name}
       login: Log ind

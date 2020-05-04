@@ -72,6 +72,8 @@ en:
       no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your e-mail. All they will get is a unique string identifying you.
       no_id_yet: Your unique ID for %{relying_party_name} is not generated yet
       your_id: Your unique ID for %{relying_party_name} is %{id}
+    authenticate:
+      password_not_correct: Password not matching. Try again
     login:
       sign_in_with_html: Sign in with %{name}
       login: Login
