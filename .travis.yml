@@ -3,7 +3,7 @@ services:
   - postgresql
   - rabbitmq
 before_install:
-  - sudo apt-get install libsodium-dev -y
+  - sudo apt-get install libsodium18 -y
 before_script:
   - cp config/database.yml.travis config/database.yml
   - bin/rake db:create
