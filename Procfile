@@ -1,3 +1,3 @@
 release: rails db:migrate
-web: bundle exec puma -C config/puma.rb
+web: bin/rails server
 workers: WORKERS=Workers::Default,Workers::Parallel bin/rake sneakers:run
