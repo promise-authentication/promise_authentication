@@ -13,10 +13,10 @@ class Authentication::RelyingParty
 
     url = "https://#{id}/.well-known/promise.json"
 
-    body = fetch(url)&.body || ''
     well_knowns = begin
+                    body = fetch(url)&.body || ''
                     JSON.parse(body)
-                  rescue JSON::ParserError, SocketError, URI::InvalidURIError, OpenSSL::SSL::SSLError
+                  rescue JSON::ParserError
                     {}
                   end
 
@@ -29,6 +29,8 @@ class Authentication::RelyingParty
       builder.adapter Faraday.default_adapter
     end
     client.get(url)
+  rescue Faraday::SSLError, Faraday::ConnectionFailed
+    nil
   end
 
   def logo_data
