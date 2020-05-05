@@ -1,0 +1,8 @@
+language: ruby
+services:
+  - postgresql
+  - rabbitmq
+before_script:
+  - cp config/database.yml.travis config/database.yml
+  - bin/rake db:create
+  - bin/rake db:migrate
