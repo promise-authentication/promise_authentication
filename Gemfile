@@ -16,7 +16,7 @@ gem 'faraday-http-cache'
 
 gem 'color-generator'
 
-gem 'airbrake'
+# gem 'airbrake'
 
 # For background processing powered by RabbitMQ
 gem 'sneakers'

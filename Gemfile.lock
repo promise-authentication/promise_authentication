@@ -63,10 +63,6 @@ GEM
     aes_key_wrap (1.0.1)
     aggregate_root (1.0.0)
       ruby_event_store (= 1.0.0)
-    airbrake (10.0.3)
-      airbrake-ruby (~> 4.13)
-    airbrake-ruby (4.14.1)
-      rbtree3 (~> 0.5)
     amq-protocol (2.3.1)
     arkency-command_bus (0.4.0)
       thread_safe
@@ -188,7 +184,6 @@ GEM
       ffi (~> 1.0)
     rbnacl (7.1.1)
       ffi
-    rbtree3 (0.6.0)
     redcarpet (3.5.0)
     regexp_parser (1.7.0)
     retries (0.0.5)
@@ -272,7 +267,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
