@@ -14,7 +14,7 @@ class Authentication::RelyingParty
     url = "https://#{id}/.well-known/promise.json"
 
     well_knowns = begin
-                    JSON.parse(HTTParty.get(url).body)
+                    JSON.parse(fetch(url).body)
                   rescue JSON::ParserError, SocketError, URI::InvalidURIError, OpenSSL::SSL::SSLError
                     {}
                   end
@@ -22,11 +22,19 @@ class Authentication::RelyingParty
     new(well_knowns.merge({id: id}))
   end
 
+  def self.fetch(url)
+    client = Faraday.new do |builder|
+      builder.use :http_cache, store: Rails.cache, logger: Rails.logger, serializer: Marshal
+      builder.adapter Faraday.default_adapter
+    end
+    client.get(url)
+  end
+
   def logo_data
     return nil unless logo_url.present?
 
-    response = HTTParty.get(logo_url)
-    return nil if response&.code != 200
+    response = self.class.fetch(logo_url)
+    return nil if response&.status != 200
 
     content_type = response.headers['content-type']
     base64 = Base64.strict_encode64(response.body)
@@ -46,7 +54,7 @@ class Authentication::RelyingParty
     return nil unless supports_legacy_accounts?
     return nil unless valid?
 
-    response = HTTParty.get(legacy_account_authentication_url, query: {
+    response = self.class.fetch(legacy_account_authentication_url, query: {
       email: email,
       password: password
     })

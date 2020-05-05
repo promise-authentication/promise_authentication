@@ -2,7 +2,8 @@ require 'test_helper'
 
 class Authentication::RelyingPartyTest < ActiveSupport::TestCase
   setup do
-    @relying_party = Authentication::RelyingParty.new
+    @described_class = Authentication::RelyingParty
+    @relying_party = @described_class.new
   end
 
   test 'it will call the well knowns' do
@@ -11,7 +12,7 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
       legacy_account_authentication_url: 'https://url',
       legacy_account_forgot_password_url: 'https://forgot'
     }.to_json
-    HTTParty.stub :get, response do
+    @described_class.stub :fetch, response do
       @relying_party = Authentication::RelyingParty.find('foo')
     end
     assert @relying_party
@@ -35,7 +36,7 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
     response.expect :body, {
       user_id: 'uid'
     }.to_json
-    HTTParty.stub :get, response do
+    @described_class.stub :fetch, response do
       assert_equal @relying_party.legacy_account_user_id_for(
         'email',
         'password'

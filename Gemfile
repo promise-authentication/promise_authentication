@@ -12,7 +12,7 @@ gem 'retries'
 
 gem 'jwt'
 
-gem 'httparty'
+gem 'faraday-http-cache'
 
 gem 'color-generator'
 
