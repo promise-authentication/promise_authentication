@@ -2,6 +2,8 @@ language: ruby
 services:
   - postgresql
   - rabbitmq
+before_install:
+  - sudo apt-get install libsodium-dev -y
 before_script:
   - cp config/database.yml.travis config/database.yml
   - bin/rake db:create
