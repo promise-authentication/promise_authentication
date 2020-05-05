@@ -63,6 +63,11 @@ GEM
     aes_key_wrap (1.0.1)
     aggregate_root (1.0.0)
       ruby_event_store (= 1.0.0)
+    airbrake (10.0.3)
+      airbrake-ruby (~> 4.13)
+    airbrake-ruby (4.14.1)
+      rbtree3 (~> 0.5)
+    amq-protocol (2.3.1)
     arkency-command_bus (0.4.0)
       thread_safe
     bindata (2.4.7)
@@ -71,6 +76,8 @@ GEM
       msgpack (~> 1.0)
     bounded_context (1.0.0)
     builder (3.2.4)
+    bunny (2.15.0)
+      amq-protocol (~> 2.3, >= 2.3.1)
     byebug (11.1.3)
     capybara (3.32.1)
       addressable
@@ -181,6 +188,7 @@ GEM
       ffi (~> 1.0)
     rbnacl (7.1.1)
       ffi
+    rbtree3 (0.6.0)
     redcarpet (3.5.0)
     regexp_parser (1.7.0)
     retries (0.0.5)
@@ -204,12 +212,21 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
+    serverengine (2.0.7)
+      sigdump (~> 0.2.2)
+    sigdump (0.2.4)
     semantic_range (2.3.0)
     sinatra (2.0.8.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
       rack-protection (= 2.0.8.1)
       tilt (~> 2.0)
+    sneakers (2.11.0)
+      bunny (~> 2.12)
+      concurrent-ruby (~> 1.0)
+      rake
+      serverengine (~> 2.0.5)
+      thor
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -255,6 +272,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  airbrake
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
@@ -273,6 +291,7 @@ DEPENDENCIES
   retries
   sass-rails (>= 6)
   selenium-webdriver
+  sneakers
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.4)
