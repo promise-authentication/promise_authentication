@@ -46,7 +46,9 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication with relying party' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', client_id: 'party.com', remember_me: 1 }
+    Authentication::RelyingParty.stub :fetch, nil do
+      post authenticate_url, params: { email: 'hello@world.com', password: 'secret', client_id: 'party.com', remember_me: 1 }
+    end
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
@@ -70,13 +72,15 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'showing email after login' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', client_id: 'party.com' }
-    assert_redirected_to confirm_path(client_id: 'party.com')
+    Authentication::RelyingParty.stub :fetch, nil do
+      post authenticate_url, params: { email: 'hello@world.com', password: 'secret', client_id: 'party.com' }
+      assert_redirected_to confirm_path(client_id: 'party.com')
 
-    get confirm_path(client_id: 'party.com')
-    assert_response :success
+      get confirm_path(client_id: 'party.com')
+      assert_response :success
 
-    assert_select 'p', /hello@world\.com/
+      assert_select 'p', /hello@world\.com/
+    end
   end
 
   test 'relying party with legacy accounts and no existing account' do

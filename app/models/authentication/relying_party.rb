@@ -13,8 +13,9 @@ class Authentication::RelyingParty
 
     url = "https://#{id}/.well-known/promise.json"
 
+    body = fetch(url)&.body || ''
     well_knowns = begin
-                    JSON.parse(fetch(url).body)
+                    JSON.parse(body)
                   rescue JSON::ParserError, SocketError, URI::InvalidURIError, OpenSSL::SSL::SSLError
                     {}
                   end
