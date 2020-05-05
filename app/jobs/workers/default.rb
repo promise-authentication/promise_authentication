@@ -1,3 +1,5 @@
 class Workers::Default < Workers::Base
-  from_queue 'default'
+  def self.queue_name
+    'default'
+  end
 end

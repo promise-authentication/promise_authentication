@@ -1,3 +1,5 @@
 class Workers::Parallel < Workers::Base
-  from_queue 'parallel'
+  def self.queue_name
+    'parallel'
+  end
 end
