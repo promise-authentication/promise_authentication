@@ -24,6 +24,11 @@ gem 'sneakers'
 # To be able to .to_jwk on key
 gem 'json-jwt'
 
+# For analytics
+gem 'ahoy_matey'
+gem 'chartkick'
+gem 'groupdate'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 # Use Puma as the app server
