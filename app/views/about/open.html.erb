@@ -7,9 +7,9 @@
     Promise is based on openness. Here you can see some key figures and data.
   </p>
   <h2 class="">
-    Vistors on promiseauthentication.org:
+    Vistors on promiseauthentication.org (by hour):
   </h2>
-  <%= line_chart Ahoy::Visit.where("started_at > ?", 1.month.ago).group_by_day(:started_at).count %>
+  <%= line_chart Ahoy::Visit.where("started_at > ?", 1.month.ago).group_by_hour(:started_at).count %>
   <p>
     This is based on data like this:
   </p>
