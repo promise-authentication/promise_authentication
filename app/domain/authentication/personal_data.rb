@@ -17,9 +17,13 @@ class Authentication::PersonalData
     @ids[relying_party] = id
   end
 
-  def to_json
+  def to_h
     {
       ids: ids
-    }.to_json
+    }
+  end
+
+  def to_json
+    to_h.to_json
   end
 end

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   end
 
   get 'open', to: 'about#open', as: 'open'
+  get 'data', to: 'about#data', as: 'data'
 
   namespace 'documentation' do
     get 'get_started'

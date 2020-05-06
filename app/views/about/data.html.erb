@@ -1,0 +1,55 @@
+<div class="max-w-2xl p-4 m-auto markdown">
+  <h1 class="text-xl font-black text-center mt-12">
+    Your data is safe with us.
+  </h1>
+  <h2>
+    Email:
+  </h2>
+  <p>
+    If, for example, you use e-mail <%= @email %> to sign in to <%= name %>. All we represent that e-mail on our servers like this:
+  </p>
+  <pre><code><%= Authentication::HashedEmail.from_cleartext(@email) %></code></pre>
+  <p>
+    This is the combined SHA-256 and BLAKE2b.
+  </p>
+  <p>
+    Your email is only stored in an encrypted cookie in your browser.
+  </p>
+  <h2>
+    Vault:
+  </h2>
+  <p>
+    All your data, i.e. your identitifiers for relying parties, are stored in a vault. The content looks like this:
+  </p>
+  <pre><code><%= JSON.pretty_generate @personal_data.to_h %></code></pre>
+  <p>
+    This is not how it is stored on the server, though. On the server it is encrypted with a key only accessible to you. It's generated from your password and a salt. A key looks like this:
+  </p>
+  <pre><code><%= @auth.vault_key %></code></pre>
+  <p>
+    This is stored in an encrypted cookie as well.
+  </p>
+  <p>
+    All this, means that your personal data is stored on our servers like this:
+  </p>
+  <pre><code><%= @vault_content.encrypted_personal_data %></code></pre>
+  <h2>
+    Recovery
+  </h2>
+  <p>
+    In order to be able to recover your account, i.e. reset password, we have to keep an encrypted version of your vault key. This is encrypted using public key encryption. It looks like this:
+  </p>
+  <pre><code><%= @vault_key_for_recovery.vault_key_cipher_base64 %></code></pre>
+  <p>
+    As mentioned, this is encrypted using a private and public key. To decrypt, you'll need the corresponding public and private keys.
+  </p>
+  <p>
+    The private key used to decrypt, is currently kept in a safe place that only I, Anders Lemke-Holstein, knows about.
+  </p>
+  <p>
+    The public key, is kept in the production database.
+  </p>
+  <p>
+    If you do not want your account to be recoverable, all that has to be done, is to delete that public key.
+  </p>
+</div>

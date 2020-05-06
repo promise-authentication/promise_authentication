@@ -1,6 +1,6 @@
 <%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
 <div class="max-w-2xl p-4 m-auto space-y-4">
-  <h1 class="text-xl font-black text-center">
+  <h1 class="text-xl font-black text-center mt-12">
     Come in, we're open! 👋
   </h1>
   <p class="">
@@ -11,7 +11,7 @@
   </h2>
   <%= line_chart Ahoy::Visit.where("started_at > ?", 1.month.ago).group_by_hour(:started_at).count %>
   <p>
-    This is based on data like this:
+    This is based on anonymized data. There are no cookies used for tracking and IPs are masked to for example 8.8.4.4 becomes 8.8.4.0. Here is the latest visitor (might be you):
   </p>
   <code><pre class="text-xs break-all overflow-scroll"><%= JSON.pretty_generate Ahoy::Visit.last.attributes.compact %></pre></code>
 </div>
