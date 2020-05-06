@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     get 'technology'
   end
 
+  get 'open', to: 'about#open', as: 'open'
+
   namespace 'documentation' do
     get 'get_started'
     get 'well_known'
