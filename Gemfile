@@ -30,7 +30,7 @@ gem 'chartkick'
 gem 'groupdate'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
+gem 'rails', '~> 6.0.3'
 # Use Puma as the app server
 gem 'puma', '~> 4.3'
 # Use SCSS for stylesheets
