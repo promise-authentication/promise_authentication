@@ -4,6 +4,7 @@ class Authentication::RelyingParty
   include ActiveModel::Model
 
   attr_accessor :id, :name, :logo_url, :locale
+  attr_accessor :admin_user_ids
   attr_accessor :legacy_account_authentication_url, :legacy_account_forgot_password_url
 
   validates :legacy_account_authentication_url, format: { with: /\Ahttps/ }, allow_nil: true
@@ -21,6 +22,10 @@ class Authentication::RelyingParty
                   end
 
     new(well_knowns.merge({id: id}))
+  end
+
+  def administratable?(user_id)
+    admin_user_ids&.include?(user_id)
   end
 
   def self.fetch(url)

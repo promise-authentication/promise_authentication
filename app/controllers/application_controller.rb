@@ -33,9 +33,9 @@ class ApplicationController < ActionController::Base
     @relying_party ||= ::Authentication::RelyingParty.find(params[:client_id])
   end
   helper_method :relying_party
-  
+
   def authenticate
-    redirect_to login_path if personal_data.nil?
+    redirect_to login_path(redirect_to: url_for) if personal_data.nil?
   end
 
   def something_unique
@@ -73,6 +73,7 @@ class ApplicationController < ActionController::Base
   def current_user_id
     cookies.encrypted[:user_id] || session[:user_id]
   end
+  helper_method :current_user_id
 
   def current_vault_key
     cookies.encrypted[:vault_key] || session[:vault_key]

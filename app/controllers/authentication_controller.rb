@@ -14,7 +14,11 @@ class AuthenticationController < ApplicationController
       redirect_to login_path(login_configuration)
     else
       if relying_party.blank?
-        redirect_to dashboard_path
+        if params[:redirect_to]
+          redirect_to params[:redirect_to]
+        else
+          redirect_to dashboard_path
+        end
       end
     end
   end
@@ -92,7 +96,7 @@ class AuthenticationController < ApplicationController
   end
 
   def login_configuration
-    params.permit(:client_id, :redirect_uri, :nonce)
+    params.permit(:client_id, :redirect_uri, :nonce, :redirect_to)
   end
   helper_method :login_configuration
 

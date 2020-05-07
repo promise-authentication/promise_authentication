@@ -22,7 +22,11 @@ Rails.application.routes.draw do
     get 'configuration'
   end
 
-  get 'a/:client_id', to: 'authentication#login', as: 'login_with_relying_party', :constraints => { :client_id => /[^\/]+/ }
+  namespace 'admin' do
+    resources :relying_parties, constraints: { id: /[^\/]+/ }
+  end
+
+  get 'a/:client_id', to: 'authentication#login', as: 'login_with_relying_party', constraints: { client_id: /[^\/]+/ }
   get 'a', to: 'authentication#login', as: 'login_short'
 
   get 'login', to: 'authentication#login', as: 'login'
