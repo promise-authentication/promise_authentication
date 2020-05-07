@@ -12,16 +12,31 @@ class Authentication::RelyingParty
   def self.find(id)
     return nil if id.blank?
 
-    url = "https://#{id}/.well-known/promise.json"
+    new(well_knowns(well_known_url(id)).merge({id: id}))
+  end
 
-    well_knowns = begin
-                    body = fetch(url)&.body || ''
-                    JSON.parse(body)
-                  rescue JSON::ParserError
-                    {}
-                  end
+  def self.well_known_url(id)
+    "https://#{id}/.well-known/promise.json"
+  end
 
-    new(well_knowns.merge({id: id}))
+  def self.well_knowns(url)
+    response = fetch(url)
+    body = response&.body || ''
+    JSON.parse(body)
+  rescue JSON::ParserError
+    {}
+  end
+
+  def well_knowns
+    self.class.well_knowns(well_known_url)
+  end
+
+  def http_headers
+    self.class.fetch(well_known_url)&.headers
+  end
+
+  def well_known_url
+    self.class.well_known_url(id)
   end
 
   def administratable?(user_id)
