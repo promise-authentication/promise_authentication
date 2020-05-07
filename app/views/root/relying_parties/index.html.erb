@@ -1,0 +1,12 @@
+<%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
+<div class="max-w-2xl p-4 m-auto space-y-4">
+  <h1 class="text-xl font-black text-center mt-12">
+    Relying parties
+  </h1>
+  <% Statistics::SignInEvent.pluck(:relying_party_id).uniq.each do |rp_id| %>
+    <h2 class="">
+      Tokens generated for <strong><%= rp_id %></strong>:
+    </h2>
+    <%= line_chart Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 1.month.ago, rp_id).group_by_hour(:created_at).count %>
+  <% end %>
+</div>
