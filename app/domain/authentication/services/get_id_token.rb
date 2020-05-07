@@ -10,6 +10,7 @@ class Authentication::Services::GetIdToken
       Register.(user_id, relying_party_id, vault_key)
 
     Authentication::IdToken.new(
+      jti: SecureRandom.uuid,
       nonce: nonce,
       sub: id,
       aud: relying_party_id

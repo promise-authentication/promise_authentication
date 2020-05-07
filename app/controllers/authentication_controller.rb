@@ -37,6 +37,12 @@ class AuthenticationController < ApplicationController
         nonce: login_configuration[:nonce]
       ).id_token
 
+      Statistics::SignInEvent.create(
+        token_id: id_token.jti,
+        user_id: id_token.sub,
+        relying_party_id: id_token.aud,
+      )
+
       redirect_to relying_party.redirect_uri(
         id_token: id_token,
         login_configuration: login_configuration

@@ -1,7 +1,7 @@
 class Authentication::IdToken
   include ActiveModel::Model
 
-  attr_accessor :sub, :aud, :iat, :iss, :nonce
+  attr_accessor :sub, :aud, :iat, :iss, :nonce, :jti
 
   def self.generate_key_pair
     ecdsa_key = OpenSSL::PKey::EC.new 'secp521r1'
@@ -28,6 +28,7 @@ class Authentication::IdToken
 
   def payload
     {
+      jti: jti,
       sub: sub,
       aud: aud,
       iss: 'promiseauthentication.org',

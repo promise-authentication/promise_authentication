@@ -14,4 +14,13 @@
     This is based on anonymized data. There are no cookies used for tracking and IPs are masked to for example 8.8.4.4 becomes 8.8.4.0. Here is the latest visitor (might be you):
   </p>
   <code><pre class="text-xs break-all overflow-scroll"><%= JSON.pretty_generate Ahoy::Visit.last.attributes.compact %></pre></code>
+
+  <h2 class="">
+    Tokens generated (by hour):
+  </h2>
+  <%= line_chart Statistics::SignInEvent.where("created_at > ?", 1.month.ago).group_by_hour(:created_at).count %>
+  <p>
+    This is based on anonymized data. Here is an example:
+  </p>
+  <code><pre class="text-xs break-all overflow-scroll"><%= JSON.pretty_generate Statistics::SignInEvent.last.attributes %></pre></code>
 </div>

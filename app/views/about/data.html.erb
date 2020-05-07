@@ -3,20 +3,20 @@
     Your data is safe with us.
   </h1>
   <h2>
-    Email:
+    Email
   </h2>
   <p>
-    If, for example, you use e-mail <%= @email %> to sign in to <%= name %>. All we represent that e-mail on our servers like this:
+    If, for example, you use e-mail <%= @email %> to sign in to <%= name %>. We represent that e-mail on our servers like this:
   </p>
   <pre><code><%= Authentication::HashedEmail.from_cleartext(@email) %></code></pre>
   <p>
     This is the combined SHA-256 and BLAKE2b.
   </p>
   <p>
-    Your email is only stored in an encrypted cookie in your browser.
+    Your e-mail is only stored in an encrypted cookie in your browser.
   </p>
   <h2>
-    Vault:
+    Vault
   </h2>
   <p>
     All your data, i.e. your identitifiers for relying parties, are stored in a vault. The content looks like this:

@@ -169,5 +169,12 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_equal decoded_token['nonce'], 'abc'
     assert_equal decoded_token['iss'], 'promiseauthentication.org'
     assert_equal decoded_token['aud'], 'example.com'
+
+    # It will create an event
+
+    stats = Statistics::SignInEvent.last
+    assert_equal stats.user_id, decoded_token['sub']
+    assert_equal stats.relying_party_id, decoded_token['aud']
+    assert_equal stats.token_id, decoded_token['jti']
   end
 end
