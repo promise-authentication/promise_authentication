@@ -39,10 +39,7 @@
     @apply font-bold;
   }
   & h1 {
-    @apply leading-tight text-3xl font-bold text-black text-center mb-16;
-    background: -webkit-linear-gradient(#03397F, darken(#03397F, 5%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    @apply leading-tight text-3xl font-black text-center mb-10;
   }
   & h2 {
     @apply leading-tight text-xl font-bold text-black mb-2 mt-10;

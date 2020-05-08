@@ -5,7 +5,7 @@ module ApplicationHelper
 
   def navigation_link(*args, &block)
     is_active = current_page?(args[0]) || current_page?(args[1])
-    classes = "#{ is_active ? 'text-blue-900 font-bold' : 'text-blue-800 font-normal'}"
+    classes = "#{ is_active ? 'text-gray-900 font-bold' : 'text-gray-800 font-normal'}"
 
 
     content_tag(:li, class: classes) do
