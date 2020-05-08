@@ -9,12 +9,14 @@ class Authentication::PersonalData
 
   def id_for(relying_party)
     @ids ||= {}
-    @ids[relying_party]
+    @ids[relying_party]&.keys&.first
   end
 
   def add_id(id, relying_party)
     @ids ||= {}
-    @ids[relying_party] = id
+    @ids[relying_party] = {
+      id => 'default'
+    }
   end
 
   def to_h
