@@ -4,6 +4,11 @@
 <h1>
   Configuration for <%= admin_relying_party.name %>
 </h1>
+<% if admin_relying_party.administratable?(current_user_id) %>
+  <p class="p-4 bg-green-700 text-center text-white rounded">
+    You are an admin of <%=  admin_relying_party.name %>
+  </p>
+<% end %>
 
 <p>
   <%= name %> uses the implicit flow in OpenID Connect (OIDC) which is an open standard.
@@ -127,13 +132,14 @@
         Log in to show an example with your actual user ID.
       </p>
     <% else %>
-      <% if admin_relying_party.administratable?(current_user_id) %>
-        <p class="p-4 bg-green-700 text-center text-white rounded">
-          You are already admin!
+      <p class="bg-blue-200 rounded p-4 text-center">
+        Your user ID on <%= name %>:
+        <br />
+        <code class="bg-black text-white p-2 rounded"><%= current_user_id %></code></p>
+      <% unless admin_relying_party.administratable?(current_user_id) %>
+        <p class="p-4 bg-red-700 text-center text-white rounded">
+          You are not admin of <%= admin_relying_party.name %>
         </p>
       <% else %>
-        <p class="p-4 bg-red-700 text-center text-white rounded">
-          You are not admin
-        </p>
       <% end %>
     <% end %>
