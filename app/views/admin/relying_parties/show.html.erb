@@ -102,7 +102,7 @@
   <%= name %> caches the JSON based on the HTTP headers:
 </p>
 
-<pre><code><%= raw JSON.pretty_generate(admin_relying_party.http_headers) %></code></pre>
+<pre><code><%= raw JSON.pretty_generate(admin_relying_party.http_headers || {}) %></code></pre>
 
 <p>
   We suggest using Etag and Cache-Control public, must-revalidate, max-age=300.
@@ -113,7 +113,7 @@
   Admin
 </h3>
   <p>
-    If you want to become an admin for <%= admin_relying_party.name %>, you can add your <%= name %>.
+    If you want to become an admin for <%= admin_relying_party.name %>, you can add your <%= name %> user ID to <code><%= admin_relying_party.well_known_url %></code> like this:
   </p>
     <pre><code>{
   &hellip;
