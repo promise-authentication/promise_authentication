@@ -14,8 +14,8 @@ class Admin::RelyingPartiesController < ApplicationController
 
   private
 
-  def relying_party
-    @relying_party ||= ::Authentication::RelyingParty.find(params[:id])
+  def admin_relying_party
+    @admin_relying_party ||= ::Authentication::RelyingParty.find(params[:id])
   end
-  helper_method :relying_party
+  helper_method :admin_relying_party
 end

@@ -1,8 +1,8 @@
 <%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
-<%= image_tag(relying_party.logo_data, alt: "#{relying_party.name}", class: "w-20 m-auto") if relying_party.logo_data.present? %>
+<%= image_tag(admin_relying_party.logo_data, alt: "#{admin_relying_party.name}", class: "w-20 m-auto") if admin_relying_party.logo_data.present? %>
 
 <h1>
-  Configuration for <%= relying_party.name %>
+  Configuration for <%= admin_relying_party.name %>
 </h1>
 
 <p>
@@ -12,18 +12,18 @@
   To sign in users, redirect them to
 </p>
 
-<pre><code><%= login_with_relying_party_url(client_id: relying_party.id ) %></code></pre>
+<pre><code><%= login_with_relying_party_url(client_id: admin_relying_party.id ) %></code></pre>
 
 <p>
   Now, <%= name %> will take care of authentication and redirect the user back to 
 </p>
 
-<pre><code><%= relying_party.redirect_uri(id_token: '[id_token]', login_configuration: {}) %></code></pre>
+<pre><code><%= admin_relying_party.redirect_uri(id_token: '[id_token]', login_configuration: {}) %></code></pre>
 
 <p>
   The <code>id_token</code> will be a JWT looking like this:
 </p>
-<pre><code><%= JSON.pretty_generate Authentication::IdToken.new(sub: 'unique-user-id', aud: relying_party.id).payload %></code></pre>
+<pre><code><%= JSON.pretty_generate Authentication::IdToken.new(sub: 'unique-user-id', aud: admin_relying_party.id).payload %></code></pre>
 <p>
   All you will have to do, it to validate that the token actually came from <%= name %>, by using the public key available at
 </p>
@@ -39,15 +39,15 @@
   This is important as this enables <%= name %> in the future to delegate the responsibility of authentication to a provider chosen by the user.
 </p>
 
-<% if relying_party.administratable?(current_user_id) %>
+<% if admin_relying_party.administratable?(current_user_id) %>
   <h2>
-    Sign ins on <%= relying_party.id %> (by hour):
+    Sign ins on <%= admin_relying_party.id %> (by hour):
   </h2>
   <p class="bg-blue-200 rounded p-4">
-    Only accessible because you have admin access to <%= relying_party.name %>.
+    Only accessible because you have admin access to <%= admin_relying_party.name %>.
   </p>
 
-  <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, relying_party.id).group_by_hour(:created_at).count) %>
+  <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, admin_relying_party.id).group_by_hour(:created_at).count) %>
 <% end %>
 
 <h2>
@@ -56,7 +56,7 @@
 <p>
   You can configure <%= name %> by providing a JSON object on
 </p>
-<pre><code><%= relying_party.well_known_url %></code></pre>
+<pre><code><%= admin_relying_party.well_known_url %></code></pre>
 
 <h3>
   Configurable attributes
@@ -93,16 +93,16 @@
   Current configuration
 </h3>
 <p>
-  Your configuration fetched from <code><%= relying_party.well_known_url %></code>:
+  Your configuration fetched from <code><%= admin_relying_party.well_known_url %></code>:
 </p>
 
-<pre><code><%= raw JSON.pretty_generate(relying_party.well_knowns) %></code></pre>
+<pre><code><%= raw JSON.pretty_generate(admin_relying_party.well_knowns) %></code></pre>
 
 <p>
   <%= name %> caches the JSON based on the HTTP headers:
 </p>
 
-<pre><code><%= raw JSON.pretty_generate(relying_party.http_headers) %></code></pre>
+<pre><code><%= raw JSON.pretty_generate(admin_relying_party.http_headers) %></code></pre>
 
 <p>
   We suggest using Etag and Cache-Control public, must-revalidate, max-age=300.
@@ -113,7 +113,7 @@
   Admin
 </h3>
   <p>
-    If you want to become an admin for <%= relying_party.name %>, you can add your <%= name %>.
+    If you want to become an admin for <%= admin_relying_party.name %>, you can add your <%= name %>.
   </p>
     <pre><code>{
   &hellip;
@@ -127,7 +127,7 @@
         Log in to show an example with your actual user ID.
       </p>
     <% else %>
-      <% if relying_party.administratable?(current_user_id) %>
+      <% if admin_relying_party.administratable?(current_user_id) %>
         <p class="p-4 bg-green-700 text-center text-white rounded">
           You are already admin!
         </p>
