@@ -167,7 +167,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert decoded_token['sub']
     assert decoded_token['iat']
     assert_equal decoded_token['nonce'], 'abc'
-    assert_equal decoded_token['iss'], 'promiseauthentication.org'
+    assert_equal decoded_token['iss'], 'https://promiseauthentication.org'
     assert_equal decoded_token['aud'], 'example.com'
 
     # It will create an event

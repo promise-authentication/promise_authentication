@@ -48,7 +48,8 @@ class Authentication::RelyingParty
       builder.use :http_cache, store: Rails.cache, logger: Rails.logger, serializer: Marshal
       builder.adapter Faraday.default_adapter
     end
-    client.get(url)
+    response = client.get(url)
+    response
   rescue Faraday::SSLError, Faraday::ConnectionFailed
     nil
   end

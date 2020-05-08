@@ -3,7 +3,6 @@ class AboutController < ApplicationController
   end
 
   def open
-    render layout: 'application'
   end
 
   def data
@@ -26,9 +25,6 @@ class AboutController < ApplicationController
 
     @vault_content = Authentication::VaultContent.find(@auth.user_id)
 
-
     @vault_key_for_recovery = Authentication::VaultKeysForRecovery.find(@auth.user_id)
-
-    render layout: 'application'
   end
 end

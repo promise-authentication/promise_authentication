@@ -1,22 +1,15 @@
 <div class="px-4 flex items-center">
-  <ul class="font-medium text-sm sm:text-base text-gray-600 flex justify-center w-full flex-wrap items-center">
+  <ul class="font-medium text-sm sm:text-base text-gray-600 flex justify-center w-full flex-col items-center">
     <div class="flex justify-center items-center">
       <li class="h-100">
-        <%= link_to image_tag('logo.png', class: 'h-6 sm:h-8 my-2'), root_path %>
+        <%= link_to image_tag('logo.png', class: 'h-6 sm:h-8 my-2 mx-4'), root_path %>
       </li>
     </div>
     <div class="flex flex-wrap justify-center items-center">
       <div class="flex justify-center items-center">
-        <%= navigation_link 'Login', login_path %>
-        <%= navigation_link 'Security', about_security_path %>
-        <%= navigation_link 'Privacy', about_privacy_path %>
-        <%= navigation_link 'Trust', about_trust_path %>
-        <%= navigation_link 'Identity', about_identity_path %>
-      </div>
-      <div class="flex justify-center items-center flex-wrap">
-        <%= navigation_link 'Technology', about_technology_path %>
-        <%= navigation_link 'Non-profit', about_non_profit_path %>
-        <%= navigation_link 'Get started', documentation_get_started_path %>
+        <%= navigation_link 'Getting started', admin_relying_parties_path %>
+        <%= navigation_link 'Stats', open_path %>
+        <%= navigation_link 'Data', data_path %>
       </div>
     </div>
   </ul>

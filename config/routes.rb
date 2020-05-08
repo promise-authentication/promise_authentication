@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   end
 
   namespace 'admin' do
-    resources :relying_parties, constraints: { id: /[^\/]+/ }, only: [:show]
+    resources :relying_parties, constraints: { id: /[^\/]+/ }, only: [:show, :index]
   end
 
   namespace 'root' do

@@ -24,14 +24,12 @@ class Authentication::IdToken
     self.new(decoded_token.first)
   end
 
-  private
-
   def payload
     {
       jti: jti,
       sub: sub,
       aud: aud,
-      iss: 'promiseauthentication.org',
+      iss: 'https://promiseauthentication.org',
       iat: (iat || Time.now).to_i,
       nonce: nonce
     }.compact

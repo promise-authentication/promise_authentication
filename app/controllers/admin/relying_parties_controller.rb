@@ -1,7 +1,15 @@
 class Admin::RelyingPartiesController < ApplicationController
-  before_action :authenticate
+  # before_action :authenticate
+
+  layout 'about'
 
   def show
+  end
+
+  def index
+    if params[:id]
+      redirect_to admin_relying_party_path(id: params[:id])
+    end
   end
 
   private

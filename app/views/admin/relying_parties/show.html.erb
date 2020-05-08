@@ -1,28 +1,135 @@
 <%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
-<div class="max-w-2xl px-6 m-auto space-y-10 markdown">
-  <h1 class="text-center mt-24 text-2xl">
-    Admin dashboard for <%= relying_party.name %>
-  </h1>
-  <% if relying_party.administratable?(current_user_id) %>
-    <h2 class="">
-      Sign ins on <%= relying_party.id %> (by hour):
-    </h2>
-    <%= line_chart Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, relying_party.id).group_by_hour(:created_at).count %>
-  <% else %>
-    <p>
-      You can not see this. To get access, make sure your Promise user ID is added to the well knowns on your domain: <%= relying_party.well_known_url %>
-    </p>
-    <p>
-      It should contain this:
-    </p>
-    <pre><code><%= JSON.pretty_generate( {admin_user_ids: [current_user_id]}) %></code></pre>
-  <% end %>
-  <p>
-    Your configuration fetched from <%= relying_party.well_known_url %>:
+<%= image_tag(relying_party.logo_data, alt: "#{relying_party.name}", class: "w-20 m-auto") if relying_party.logo_data.present? %>
+
+<h1>
+  Configuration for <%= relying_party.name %>
+</h1>
+
+<p>
+  <%= name %> uses the implicit flow in OpenID Connect (OIDC) which is an open standard.
+</p>
+<p>
+  To sign in users, redirect them to
+</p>
+
+<pre><code><%= login_with_relying_party_url(client_id: relying_party.id ) %></code></pre>
+
+<p>
+  Now, <%= name %> will take care of authentication and redirect the user back to 
+</p>
+
+<pre><code><%= relying_party.redirect_uri(id_token: '[id_token]', login_configuration: {}) %></code></pre>
+
+<p>
+  The <code>id_token</code> will be a JWT looking like this:
+</p>
+<pre><code><%= JSON.pretty_generate Authentication::IdToken.new(sub: 'unique-user-id', aud: relying_party.id).payload %></code></pre>
+<p>
+  All you will have to do, it to validate that the token actually came from <%= name %>, by using the public key available at
+</p>
+<pre><code>https://promiseauthentication.org/.well-known/jwks.json</code></pre>
+<p>
+  You can do that by using your preferred JWT library. <%= link_to 'Find yours here', 'https://jwt.io' %>.
+</p>
+<p>
+  When you have validated the JWT, you <strong>must</strong> identify the user by concatenating <strong>both</strong> <code>iss</code> <strong>and</strong> <code>sub</code>. For example:
+</p>
+<pre><code>https://promiseauthentication.org|unique-user-id</code></pre>
+<p>
+  This is important as this enables <%= name %> in the future to delegate the responsibility of authentication to a provider chosen by the user.
+</p>
+
+<% if relying_party.administratable?(current_user_id) %>
+  <h2>
+    Sign ins on <%= relying_party.id %> (by hour):
+  </h2>
+  <p class="bg-blue-200 rounded p-4">
+    Only accessible because you have admin access to <%= relying_party.name %>.
   </p>
-  <pre><code><%= JSON.pretty_generate(relying_party.well_knowns) %></code></pre>
+
+  <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, relying_party.id).group_by_hour(:created_at).count) %>
+<% end %>
+
+<h2>
+  Configuration of <%= name %>
+</h2>
+<p>
+  You can configure <%= name %> by providing a JSON object on
+</p>
+<pre><code><%= relying_party.well_known_url %></code></pre>
+
+<h3>
+  Configurable attributes
+</h3>
+<table cellspacing="0" class="table-auto w-full mt-10">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Example</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody class="text-sm">
+    <% [
+      ['name', 'String', '"Nice app"', 'The name of your app or service.'],
+      ['logo_url', 'String', '"http://..."', 'An URL for a logo.'],
+      ['admin_user_ids', 'Array<String>', '["a", "b"]', "An array of user IDs you want to have admin access here on #{name}"],
+      ['locale', 'String', '"da"', 'The locale you want to fall back to, if the user has not chosen a locale.'],
+    ].each do |row| %>
+      <tr class="<%= cycle('bg-gray-200', '') %>">
+        <td class="border px-4 py-2 font-mono"><%= row[0] %></td>
+        <td class="border px-4 py-2 font-mono"><%= row[1] %></td>
+        <td class="border px-4 py-2 text-gray-600"><%= row[2] %></td>
+        <td class="border px-4 py-2"><%= row[3] %></td>
+      </tr>
+
+    <% end %>
+  </tbody>
+
+</table>
+
+<h3>
+  Current configuration
+</h3>
+<p>
+  Your configuration fetched from <code><%= relying_party.well_known_url %></code>:
+</p>
+
+<pre><code><%= raw JSON.pretty_generate(relying_party.well_knowns) %></code></pre>
+
+<p>
+  <%= name %> caches the JSON based on the HTTP headers:
+</p>
+
+<pre><code><%= raw JSON.pretty_generate(relying_party.http_headers) %></code></pre>
+
+
+<h3>
+  Admin
+</h3>
   <p>
-    It might be cached. Here are the headers.
+    If you want to become an admin for <%= relying_party.name %>, you can add your <%= name %>.
   </p>
-  <pre><code><%= JSON.pretty_generate(relying_party.http_headers) %></code></pre>
-</div>
+    <pre><code>{
+  &hellip;
+  admin_user_ids": [
+    "<%= current_user_id || 'your-user-id-on-promise' %>"
+  ],
+  &hellip;
+}</code></pre>
+    <% if !current_user_id %>
+      <p class="p-4 bg-yellow-200 rounded">
+        Log in to show an example with your actual user ID.
+      </p>
+    <% else %>
+      <% if relying_party.administratable?(current_user_id) %>
+        <p class="p-4 bg-green-700 text-center text-white rounded">
+          You are already admin!
+        </p>
+      <% else %>
+        <p class="p-4 bg-red-700 text-center text-white rounded">
+          You are not admin
+        </p>
+      <% end %>
+    <% end %>
