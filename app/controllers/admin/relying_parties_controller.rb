@@ -8,7 +8,7 @@ class Admin::RelyingPartiesController < ApplicationController
 
   def index
     if params[:id]
-      redirect_to admin_relying_party_path(id: params[:id])
+      redirect_to admin_relying_party_path(id: params[:id].presence || 'example.com')
     end
   end
 

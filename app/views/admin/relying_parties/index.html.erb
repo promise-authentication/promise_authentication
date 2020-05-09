@@ -2,16 +2,23 @@
 <h1>
   Welcome to <%= name %>
 </h1>
+<p>
+  <%= name %> is basically an identity provider currently supporting the Implicit Flow of the OpenID Connect protocol.
+</p>
 
-<p class="text-center">
+<p class="text-center p-4 bg-gray-300 rounded-lg">
   To get started, first provide a domain.
-  <br />
-  Don't worry, it won't get saved as a lead anywhere.
 </p>
 
 <%= form_tag admin_relying_parties_path, method: :get, class: 'w-full' do %>
-  <%= text_field_tag(:id, nil, class: 'text-center block w-full border-b p-4', placeholder: 'example.com', autofocus: true) %>
-  <%= submit_tag 'Go', class: 'button primary mt-4 m-auto block' %>
+  <%= text_field_tag(:id, nil, class: 'text-center block w-full border rounded p-4', placeholder: 'example.com', autofocus: true) %>
+  <p class="text-center mt-4 text-gray-600">
+    Don't worry, it won't get saved as a lead anywhere.
+  </p>
+  <%= submit_tag 'Go', class: 'button primary mt-1 m-auto block' %>
 <% end %>
-
-<%= link_to 'See configuration for a sample app', admin_relying_party_path(id: 'ruby.promiseauthentication.org'), class: 'block m-auto text-center pt-4' %>
+<p class="text-center text-gray-600">
+  - or -
+  <br />
+  <%= link_to 'See configuration for a sample app', admin_relying_party_path(id: 'ruby.promiseauthentication.org'), class: 'block m-auto pt-2' %>
+</p>

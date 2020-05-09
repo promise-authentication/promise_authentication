@@ -11,13 +11,61 @@
 <% end %>
 
 <p>
-  <%= name %> uses the implicit flow in OpenID Connect (OIDC) which is an open standard.
+  <%= name %> uses a simplified version of the Implicit Flow in the protocol <%= link_to 'OpenID Connect (OIDC)', 'https://openid.net/specs/openid-connect-core-1_0.html' %>.
 </p>
+
+<h2>
+  OIDC disclaimer
+</h2>
+<p>
+  The Authentication Request used in the implementation on <%= name %> differs a bit from the <%= link_to 'general specification of the Authentication Request', 'https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest' %> and the <%= link_to 'specification of Authentication Requests specifically for the Implicit Flow', 'https://openid.net/specs/openid-connect-core-1_0.html#ImplicitAuthRequest' %>. Here is how:
+</p>
+<dl class="mt-8">
+  <% [
+    ['scope', 'REQUIRED', 'IGNORED', nil, "The specification says the only value here can be openid. This is not exactly what #{name} provides, so this parameter does not make much sense."],
+    ['response_type', 'REQUIRED', 'IGNORED', '"id_token"', "This is the only service #{name} provides. So asking for anything else here would not make sense."],
+    ['client_id', 'REQUIRED', 'REQUIRED', nil, "This is the domain. Be advised, that the same user will get a different user identifier (<code>sub</code>) for each <code>client_id</code>. So you should pick your <code>client_id</code> to be the shortest possible domain you control."],
+    ['redirect_uri', 'REQUIRED', 'OPTIONAL', "\"#{admin_relying_party.redirect_uri(id_token: '[id_token]', login_configuration: {})}\"", "#{name} provides a sensible default, so this parameter is OPTIONAL."],
+    ['nonce', 'REQUIRED', 'OPTIONAL', nil, "As #{name} also includes a <code>jti</code> in the generated token, requiring a nonce is not the only possible way to mitigate replay attacks."]
+  ].each do |row| %>
+  <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 pb-5 m-0">
+    <dt class="font-mono font-bold"><%= row[0] %></dt>
+    <dd class="ml-3 sm:ml-10 "> <span class="text-gray-600"><%= row[1] %> &rarr;</span>  <span><%= row[2] %></span> </dd>
+    <% if row[3] %>
+      <dd class="ml-3 sm:ml-10 pt-3">Default: <%= row[3] %></dd>
+    <% end %>
+    <dd class="ml-3 sm:ml-10 pt-3"><%= row[4].html_safe %></dd>
+  </div>
+<% end %>
+</dl>
+<p>
+  The following parameters is not implemented yet:
+  <%= %w{max_age ui_locales login_hint acr_values}.map do |param|
+    "<code>#{param}</code>"
+  end.join(', ').html_safe %>.
+</p>
+<p>
+  The following parameters will probably never be implemented:
+  <%= %w{response_mode display prompt id_token_hint}.map do |param|
+    "<code>#{param}</code>"
+  end.join(', ').html_safe %>.
+</p>
+<p>
+  With that out of the way, let's move on.
+</p>
+
+<h2>
+  Sign in users
+</h2>
 <p>
   To sign in users, redirect them to
 </p>
 
 <pre><code><%= login_with_relying_party_url(client_id: admin_relying_party.id ) %></code></pre>
+
+<p>
+  Please notice that the <code>client_id</code> is part of the URI. The other Authentication Request parameters are supplied as URL query parameters. Eg. <code>?nonce=abc</code>.
+</p>
 
 <p>
   Now, <%= name %> will take care of authentication and redirect the user back to 
@@ -28,7 +76,7 @@
 <p>
   The <code>id_token</code> will be a JWT looking like this:
 </p>
-<pre><code><%= JSON.pretty_generate Authentication::IdToken.new(sub: 'unique-user-id', aud: admin_relying_party.id).payload %></code></pre>
+<pre><code><%= JSON.pretty_generate Authentication::IdToken.new(sub: 'unique-user-id', aud: admin_relying_party.id, jti: SecureRandom.uuid).payload %></code></pre>
 <p>
   All you will have to do, is to validate that the token actually came from <%= name %>, by using the public key available at
 </p>
@@ -59,7 +107,7 @@
   Configuration of <%= name %>
 </h2>
 <p>
-  You can configure <%= name %> by providing a JSON object on
+  <%= name %> can be configured by <%= admin_relying_party.name %> by providing a JSON object on
 </p>
 <pre><code><%= admin_relying_party.well_known_url %></code></pre>
 
@@ -70,13 +118,14 @@
 <dl class="mt-8">
   <% [
     ['admin_user_ids', 'Array<String>', '["a", "b"]', "An array of user IDs you want to have admin access here on #{name}"],
-    ['locale', 'String', '"da"', 'The locale you want to fall back to, if the user has not chosen a locale.'],
-    ['logo_url', 'String', '"http://example.com.logo.png"', 'An URL for a logo. Will be shown to users on sign in screens.'],
-    ['name', 'String', '"Nice app"', 'The name of your app or service. Will be shown on login screens.'],
+    ['allowed_redirect_uris', 'Array<String>', "[\"https://a.#{admin_relying_party.id}}\"]", "[NOT IMPLEMENTED YET] A list of URIs that #{name} will allow as <code>redirect_uri</code>. This list does not have to include the default <code>redirect_uri</code>."],
+    ['locale', 'String', '"da"', 'The locale preferred, if the user has not chosen a locale. Currently "da" and "en" are supported.'],
+    ['logo_url', 'String', "\"https://#{admin_relying_party.id}/logo.png\"", 'An URL for a logo. Will be shown to users on sign in screens.'],
+    ['name', 'String', '"Nice app"', 'The name of the app or service. Will be shown on login screens.'],
   ].each do |row| %>
   <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 m-0">
     <dt class="font-mono font-bold"><%= row[0] %> <span class="text-gray-600 font-normal">(<%= row[1] %>)</span></dt>
-    <dd class="ml-3 sm:ml-10 py-3"><%= row[3] %></dd>
+    <dd class="ml-3 sm:ml-10 py-3"><%= row[3].html_safe %></dd>
     <dd class="ml-3 sm:ml-10 text-gray-600">Example: <%= row[2] %></dd>
   </div>
 
@@ -88,7 +137,7 @@
   Current configuration
 </h3>
 <p>
-  Your configuration fetched from
+  The configuration fetched from
 </p>
 <pre><code><%= admin_relying_party.well_known_url %></code></pre>
 
@@ -127,10 +176,10 @@
         Log in to show an example with your actual user ID.
       </p>
     <% else %>
-      <p class="bg-blue-200 rounded p-4 text-center">
-        Your user ID on <%= name %>:
-        <br />
-        <code class="bg-gray-800 text-white p-2 rounded"><%= current_user_id %></code></p>
+      <p class="text-center mt-10">
+        Your user ID on <%= name %> with <strong><%= email %></strong>:
+      </p>
+      <p class="text-center"><code class="bg-gray-800 text-white p-2 rounded inline-block mt-3"><%= current_user_id %></code></p>
       <% unless admin_relying_party.administratable?(current_user_id) %>
         <p class="p-4 bg-red-700 text-center text-white rounded">
           You are not admin of <%= admin_relying_party.name %>

@@ -1,7 +1,7 @@
 .markdown {
   @apply leading-normal text-base;
   @screen sm {
-    @apply px-8 text-lg;
+    @apply px-8;
   }
   & > * + *, & li > p + p {
     @apply mt-3;
