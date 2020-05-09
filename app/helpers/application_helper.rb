@@ -9,7 +9,7 @@ module ApplicationHelper
 
 
     content_tag(:li, class: classes) do
-      link_to *args, class: 'py-1 px-2 inline-block', &block
+      link_to *args, class: 'py-1 px-2 inline-block whitespace-no-wrap', &block
     end
   end
 
