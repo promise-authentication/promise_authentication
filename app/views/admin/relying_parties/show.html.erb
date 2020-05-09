@@ -66,40 +66,31 @@
 <h3>
   Configurable attributes
 </h3>
-<table cellspacing="0" class="table-auto w-full mt-10">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Example</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody class="text-sm">
-    <% [
-      ['name', 'String', '"Nice app"', 'The name of your app or service.'],
-      ['logo_url', 'String', '"http://..."', 'An URL for a logo.'],
-      ['admin_user_ids', 'Array<String>', '["a", "b"]', "An array of user IDs you want to have admin access here on #{name}"],
-      ['locale', 'String', '"da"', 'The locale you want to fall back to, if the user has not chosen a locale.'],
-    ].each do |row| %>
-      <tr class="<%= cycle('bg-gray-200', '') %>">
-        <td class="border px-4 py-2 font-mono"><%= row[0] %></td>
-        <td class="border px-4 py-2 font-mono"><%= row[1] %></td>
-        <td class="border px-4 py-2 text-gray-600"><%= row[2] %></td>
-        <td class="border px-4 py-2"><%= row[3] %></td>
-      </tr>
 
-    <% end %>
-  </tbody>
+<dl class="mt-8">
+  <% [
+    ['admin_user_ids', 'Array<String>', '["a", "b"]', "An array of user IDs you want to have admin access here on #{name}"],
+    ['locale', 'String', '"da"', 'The locale you want to fall back to, if the user has not chosen a locale.'],
+    ['logo_url', 'String', '"http://example.com.logo.png"', 'An URL for a logo. Will be shown to users on sign in screens.'],
+    ['name', 'String', '"Nice app"', 'The name of your app or service. Will be shown on login screens.'],
+  ].each do |row| %>
+  <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 m-0">
+    <dt class="font-mono font-bold"><%= row[0] %> <span class="text-gray-600 font-normal">(<%= row[1] %>)</span></dt>
+    <dd class="ml-3 sm:ml-10 py-3"><%= row[3] %></dd>
+    <dd class="ml-3 sm:ml-10 text-gray-600">Example: <%= row[2] %></dd>
+  </div>
 
-</table>
+</dl>
+
+      <% end %>
 
 <h3>
   Current configuration
 </h3>
 <p>
-  Your configuration fetched from <code><%= admin_relying_party.well_known_url %></code>:
+  Your configuration fetched from
 </p>
+<pre><code><%= admin_relying_party.well_known_url %></code></pre>
 
 <pre><code><%= raw JSON.pretty_generate(admin_relying_party.well_knowns) %></code></pre>
 
@@ -118,7 +109,11 @@
   Admin
 </h3>
   <p>
-    If you want to become an admin for <%= admin_relying_party.name %>, you can add your <%= name %> user ID to <code><%= admin_relying_party.well_known_url %></code> like this:
+    If you want to become an admin for <%= admin_relying_party.name %>, you can add your <%= name %> user ID to
+  </p>
+  <pre><code><%= admin_relying_party.well_known_url %></code></pre>
+  <p>
+    Like this:
   </p>
     <pre><code>{
   &hellip;
@@ -135,7 +130,7 @@
       <p class="bg-blue-200 rounded p-4 text-center">
         Your user ID on <%= name %>:
         <br />
-        <code class="bg-black text-white p-2 rounded"><%= current_user_id %></code></p>
+        <code class="bg-gray-800 text-white p-2 rounded"><%= current_user_id %></code></p>
       <% unless admin_relying_party.administratable?(current_user_id) %>
         <p class="p-4 bg-red-700 text-center text-white rounded">
           You are not admin of <%= admin_relying_party.name %>
