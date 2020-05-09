@@ -2,7 +2,7 @@
 <%= image_tag(admin_relying_party.logo_data, alt: "#{admin_relying_party.name}", class: "w-20 m-auto") if admin_relying_party.logo_data.present? %>
 
 <h1>
-  Configuration for <%= admin_relying_party.name %>
+  Configuration for <%= admin_relying_party.name_html %>
 </h1>
 <% if admin_relying_party.administratable?(current_user_id) %>
   <p class="p-4 bg-green-700 text-center text-white rounded">
