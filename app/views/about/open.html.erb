@@ -1,12 +1,12 @@
 <%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
 <h1 class="text-xl font-black text-center">
-  Come in, we're open!
+  Open by design
 </h1>
 <p class="">
   Promise is based on openness. Here you can see some key figures and data.
 </p>
 <h2 class="">
-  Vistors on promiseauthentication.org (by hour):
+  Vistors on promiseauthentication.org:
 </h2>
 <%= line_chart Ahoy::Visit.where("started_at > ?", 1.month.ago).group_by_hour(:started_at).count %>
 <p>
@@ -15,7 +15,7 @@
 <code><pre class="text-xs break-all overflow-scroll"><%= JSON.pretty_generate Ahoy::Visit.last.attributes.compact %></pre></code>
 
   <h2 class="">
-    Tokens generated (by hour):
+    Tokens generated:
   </h2>
   <%= line_chart Statistics::SignInEvent.where("created_at > ?", 1.month.ago).group_by_hour(:created_at).count %>
   <p>
