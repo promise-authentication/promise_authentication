@@ -30,7 +30,7 @@
 </p>
 <pre><code><%= JSON.pretty_generate Authentication::IdToken.new(sub: 'unique-user-id', aud: admin_relying_party.id).payload %></code></pre>
 <p>
-  All you will have to do, it to validate that the token actually came from <%= name %>, by using the public key available at
+  All you will have to do, is to validate that the token actually came from <%= name %>, by using the public key available at
 </p>
 <pre><code>https://promiseauthentication.org/.well-known/jwks.json</code></pre>
 <p>
