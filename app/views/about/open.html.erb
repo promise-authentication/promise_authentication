@@ -15,7 +15,7 @@
 <code><pre class="text-xs break-all overflow-scroll"><%= JSON.pretty_generate Ahoy::Visit.last.attributes.compact %></pre></code>
 
   <h2 class="">
-    Tokens generated:
+    JWTs generated:
   </h2>
   <%= line_chart Statistics::SignInEvent.where("created_at > ?", 1.month.ago).group_by_hour(:created_at).count %>
   <p>
