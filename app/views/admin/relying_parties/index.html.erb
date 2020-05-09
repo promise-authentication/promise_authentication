@@ -2,12 +2,12 @@
 <h1>
   Welcome to <%= name %>
 </h1>
-<p>
-  <%= name %> is basically an identity provider currently supporting the Implicit Flow of the OpenID Connect protocol.
+<p class="text-center">
+  <%= name %> is an pure identity provider currently supporting the Implicit Flow of the OpenID Connect protocol.
 </p>
 
 <p class="text-center p-4">
-  To get started, first provide a domain.
+  To get instructions based on your domain, provide it here:
 </p>
 
 <%= form_tag admin_relying_parties_path, method: :get, class: 'w-full' do %>
