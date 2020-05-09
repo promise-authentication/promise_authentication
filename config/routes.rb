@@ -11,10 +11,11 @@ Rails.application.routes.draw do
     get 'security'
     get 'trust'
     get 'technology'
-  end
 
-  get 'open', to: 'about#open', as: 'open'
-  get 'data', to: 'about#data', as: 'data'
+    get 'open', as: 'open'
+    get 'data', as: 'data'
+    get 'pricing', as: 'pricing'
+  end
 
   namespace 'documentation' do
     get 'get_started'

@@ -23,42 +23,6 @@ da:
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on pute identity provider."
-  landing:
-    index:
-      callout_html: "Pure&nbsp;identity<br />with privacy&nbsp;at&nbsp;heart"
-      short_intro_html: "%{name} is a single-sign-on pure identity provider. No personal data will be stored anywhere or shared with anyone. We promise!"
-    sections:
-      core_values: Kerneværdierne i %{name}
-      privacy:
-        header: Privatliv
-        body_html: Når du bruger %{name} til at logge ind, vil der aldrig blive delt personlige informationer om dig. Tilmed får hvért sted, hvér sit unikke og tilfældige ID som identificerer dig overfor dem. Det gør at man ikke nemt kan samkøre data på tværs af organisationer for at lave en profil af dig.
-      security:
-        header: Sikkerhed
-        body_html: "Teknologien bag %{name} er baseret på åbne standarder for at give maksimal sikkerhed for dine data. Alt lagres krypteret og nøglerne er opbevaret et andet og sikkert sted. Så selv ved et evt. databrud vil det være praktisk talt umuligt for hackere at læse dine data."
-      non_profit:
-        header: Non-profit
-        body_html: "%{name} er en organisation som ikke skal generere overskud. Ingen reklamer der skal vises. Så du behøver aldrig bekymre dig om, om din data bliver solgt til højestbydende. Det gør den ikke!"
-      open_source:
-        header: Open source
-        body_html: Kildekoden til %{name} er open source. Det gør at alle har mulighed for at forstå hvordan teknologien virker, samt bidrage til at gøre %{name} bedre for os allesammen.
-      humans:
-        header: Af mennesker, for mennesker
-        body_html: "%{name} er lavet af mennesker, for mennesker. Vi er ikke en virksomhed der skal tjene penge. Vi er kun interesserede i at bygge et stykke infrastuktur til internettet som kan gøre alle vores digitale liv en lille smule nemmere."
-    try:
-      header: Prøv %{name}
-      body_html: For at få en fornemmelse for hvordan det virker, kan du prøve at logge ind på <strong>%{app}</strong>. 
-      cta: Gå til %{app}
-    getting_started:
-      title: Kom godt igang
-      assumptions_html: Lad os antage at du har <code>example.com</code> som er et digitalt produkt som kræver at brugere logger ind.
-      first_step: Alt du skal gøre er at redirect'e dine brugere til
-      doing_the_job_html: Her vil %{name} sørge for at identificeret brugeren. Det foregår ved at brugeren logger ind på %{name}. Der vil herefter blive genereret et unikt ID som fremover vil blive brugt til at identificeret den enkelte bruger overfor <code>example.com</code>.
-      back_to_you: "Nu vil brugeren blive sendt tilbage til jer på følgende URL:"
-      content_of_jwt_html: "Indholdet af <code>id_token</code> er et signeret JWT som <strong>skal verificeres</strong> med offentlige kryptografiske nøgler fra %{name} som er nemt tilgængelige. Indholdet JWT vil ligne det her:"
-      explain_jwt_html: 'Ud fra dette, <strong>skal man bruge både <code>iss</code> og <code>aud</code> til at lave et bruger ID</strong>. For eksempel på denne måde:'
-      that_is_it: That's it. You now have a guaranteed unique user ID verifiably issued by a trusted party.
-      that_is_it: Det var det. Du har nu et garanteret unikt ID som beviseligt kommer fra %{name}.
-      next_for_us: Dette eksempel tager udgangspunkt i det simplest tænkelige scenarie. %{name} kommer bl.a. også til at understøtte MFA og custom redirect URL'er så alle tænkelige use cases kan understøttes.
   humans:
     show:
       choose_application: Vælg applikation

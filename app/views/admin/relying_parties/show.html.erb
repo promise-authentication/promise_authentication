@@ -58,6 +58,9 @@
 <p>
   This is important as this enables <%= name %> in the future to delegate the responsibility of authentication to a provider chosen by the user.
 </p>
+<p>
+  Please notice that the users e-mail is <strong>not</strong> included in the JWT. This is by design. If you need an e-mail, or any other personal data belonging to the user, you will have to get that yourself by asking nicely.
+</p>
 
 <h2>
   <a name="authentication_request">Authentication Request</a>
@@ -96,9 +99,6 @@
     "<code>#{param}</code>"
   end.join(', ').html_safe %>.
 </p>
-<p>
-  With that out of the way, let's move on.
-</p>
 
 
 <h2>
@@ -115,7 +115,7 @@
 
 <dl class="mt-8">
   <% [
-    ['admin_user_ids', 'Array<String>', '["a", "b"]', "An array of user IDs you want to have admin access here on #{name}"],
+    ['admin_user_ids', 'Array<String>', '["a", "b"]', "An array of user IDs you want to have admin access here on #{name}."],
     ['allowed_redirect_uris', 'Array<String>', "[\"https://a.#{admin_relying_party.id}}\"]", "[NOT IMPLEMENTED YET] A list of URIs that #{name} will allow as <code>redirect_uri</code>. This list does not have to include the default <code>redirect_uri</code>."],
     ['locale', 'String', '"da"', 'The locale preferred, if the user has not chosen a locale. Currently "da" and "en" are supported.'],
     ['logo_url', 'String', "\"https://#{admin_relying_party.id}/logo.png\"", 'An URL for a logo. Will be shown to users on sign in screens. The logo will be downloaded on the server and sent to the client as Base64 encoded data. This is to protect the user from potential tracking.'],
@@ -132,7 +132,7 @@
       <% end %>
 
 <h3>
-  Current configuration
+  Current configuration for <%= admin_relying_party.name %>
 </h3>
 <p>
   When fetching from
@@ -150,7 +150,8 @@
 <pre><code><%= raw JSON.pretty_generate(admin_relying_party.http_headers || {}) %></code></pre>
 
 <p>
-  We suggest using <code>Etag</code> and <code>Cache-Control: public, must-revalidate, max-age=300</code> but that would be your call. The configuration is needed everytime we show a screen to a user for your client, so allowing us to cache it seems sensible.
+  The configuration is needed everytime we show a sign in screen for <%= admin_relying_party.name %> to a user, so allowing <%= name %> to cache it seems sensible.
+  Suggested headers include <code>Etag</code> and <code>Cache-Control: public, must-revalidate, max-age=300</code>. But that would be your call.
 </p>
 
 
@@ -168,9 +169,6 @@
   &hellip;
 }</code></pre>
 <% if !current_user_id %>
-  <p class="p-4 bg-yellow-200 rounded">
-    Log in to show an example with your actual user ID.
-  </p>
 <% else %>
   <p class="text-center mt-10">
     Yes, <em>your</em> user ID on <%= name %> with <strong><%= email %></strong> is
