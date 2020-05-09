@@ -92,6 +92,10 @@ class Authentication::RelyingParty
     @name || id
   end
 
+  def name_html
+    name.gsub(' ', '&nbsp').html_safe
+  end
+
   def redirect_uri(id_token:, login_configuration:)
     if login_configuration[:redirect_uri].present?
       uri = URI.parse(login_configuration[:redirect_uri])
