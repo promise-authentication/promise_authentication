@@ -1,62 +1,29 @@
 <%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
+
 <%= image_tag(admin_relying_party.logo_data, alt: "#{admin_relying_party.name}", class: "w-20 m-auto") if admin_relying_party.logo_data.present? %>
 
 <h1>
   Configuration for <%= admin_relying_party.name_html %>
 </h1>
 <% if admin_relying_party.administratable?(current_user_id) %>
-  <p class="p-4 bg-green-700 text-center text-white rounded">
-    You are an admin of <%=  admin_relying_party.name %>
+  <h2>
+    Sign ins on <%= admin_relying_party.id %> (by hour):
+  </h2>
+  <p class="bg-blue-200 rounded p-4 text-center">
+    You can only see this because you are an admin on <%= admin_relying_party.name %>.
   </p>
+
+  <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, admin_relying_party.id).group_by_hour(:created_at).count) %>
 <% end %>
 
-<p>
-  <%= name %> uses a simplified version of the Implicit Flow in the protocol <%= link_to 'OpenID Connect (OIDC)', 'https://openid.net/specs/openid-connect-core-1_0.html' %>.
-</p>
-
-<h2>
-  OIDC disclaimer
-</h2>
-<p>
-  The Authentication Request used in the implementation on <%= name %> differs a bit from the <%= link_to 'general specification of the Authentication Request', 'https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest' %> and the <%= link_to 'specification of Authentication Requests specifically for the Implicit Flow', 'https://openid.net/specs/openid-connect-core-1_0.html#ImplicitAuthRequest' %>. Here is how:
-</p>
-<dl class="mt-8">
-  <% [
-    ['scope', 'REQUIRED', 'IGNORED', nil, "The specification says the only value here can be openid. This is not exactly what #{name} provides, so this parameter does not make much sense."],
-    ['response_type', 'REQUIRED', 'IGNORED', '"id_token"', "This is the only service #{name} provides. So asking for anything else here would not make sense."],
-    ['client_id', 'REQUIRED', 'REQUIRED', nil, "This is the domain. Be advised, that the same user will get a different user identifier (<code>sub</code>) for each <code>client_id</code>. So you should pick your <code>client_id</code> to be the shortest possible domain you control."],
-    ['redirect_uri', 'REQUIRED', 'OPTIONAL', "\"#{admin_relying_party.redirect_uri(id_token: '[id_token]', login_configuration: {})}\"", "#{name} provides a sensible default, so this parameter is OPTIONAL."],
-    ['nonce', 'REQUIRED', 'OPTIONAL', nil, "As #{name} also includes a <code>jti</code> in the generated token, requiring a nonce is not the only possible way to mitigate replay attacks."]
-  ].each do |row| %>
-  <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 pb-5 m-0">
-    <dt class="font-mono font-bold"><%= row[0] %></dt>
-    <dd class="ml-3 sm:ml-10 "> <span class="text-gray-600"><%= row[1] %> &rarr;</span>  <span><%= row[2] %></span> </dd>
-    <% if row[3] %>
-      <dd class="ml-3 sm:ml-10 pt-3">Default: <%= row[3] %></dd>
-    <% end %>
-    <dd class="ml-3 sm:ml-10 pt-3"><%= row[4].html_safe %></dd>
-  </div>
-<% end %>
-</dl>
-<p>
-  The following parameters is not implemented yet:
-  <%= %w{max_age ui_locales login_hint acr_values}.map do |param|
-    "<code>#{param}</code>"
-  end.join(', ').html_safe %>.
-</p>
-<p>
-  The following parameters will probably never be implemented:
-  <%= %w{response_mode display prompt id_token_hint}.map do |param|
-    "<code>#{param}</code>"
-  end.join(', ').html_safe %>.
-</p>
-<p>
-  With that out of the way, let's move on.
-</p>
 
 <h2>
   Sign in users
 </h2>
+<p>
+  <%= name %> uses a simplified version of the Implicit Flow in the protocol <%= link_to 'OpenID Connect (OIDC)', 'https://openid.net/specs/openid-connect-core-1_0.html' %>.
+</p>
+
 <p>
   To sign in users, redirect them to
 </p>
@@ -64,7 +31,7 @@
 <pre><code><%= login_with_relying_party_url(client_id: admin_relying_party.id ) %></code></pre>
 
 <p>
-  Please notice that the <code>client_id</code> is part of the URI. The other Authentication Request parameters are supplied as URL query parameters. Eg. <code>?nonce=abc</code>.
+  Please notice that the <code>client_id</code> is part of the URI. The other <%= link_to 'Authentication Request parameters', '#authentication_request' %> are supplied as URL query parameters. Eg. <code>?nonce=abc</code>.
 </p>
 
 <p>
@@ -92,19 +59,50 @@
   This is important as this enables <%= name %> in the future to delegate the responsibility of authentication to a provider chosen by the user.
 </p>
 
-<% if admin_relying_party.administratable?(current_user_id) %>
-  <h2>
-    Sign ins on <%= admin_relying_party.id %> (by hour):
-  </h2>
-  <p class="bg-blue-200 rounded p-4">
-    Only accessible because you have admin access to <%= admin_relying_party.name %>.
-  </p>
-
-  <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, admin_relying_party.id).group_by_hour(:created_at).count) %>
+<h2>
+  <a name="authentication_request">Authentication Request</a>
+</h2>
+<p>
+  The Authentication Request used in the implementation on <%= name %> differs a bit from the <%= link_to 'general specification of the Authentication Request', 'https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest' %> and the <%= link_to 'specification of Authentication Requests specifically for the Implicit Flow', 'https://openid.net/specs/openid-connect-core-1_0.html#ImplicitAuthRequest' %>.
+</p>
+<p>
+  The parameters <code>scope</code> and <code>response_type</code> are ignored as they do not convey anything meaningful in the implementation used at <%= name %>. <code>response_type</code> is always <code>"id_token"</code>.
+</p>
+<dl class="mt-8">
+  <% [
+    ['client_id', 'REQUIRED', 'REQUIRED', nil, "This is the domain. Be advised, that the same user will get a different user identifier (<code>sub</code>) for each <code>client_id</code>. So you should pick your <code>client_id</code> to be the shortest possible domain you control."],
+    ['redirect_uri', 'REQUIRED', 'OPTIONAL', "\"#{admin_relying_party.default_redirect_uri}\"", "If you want to redirect the user to anywhere else that the default provide the URI here. You will have to whitelist the <code>redirect_uri</code> in the <code>allowed_redirect_uris</code> in the #{link_to 'configuration', '#configuration'}."],
+    ['nonce', 'REQUIRED', 'OPTIONAL', nil, "As #{name} also includes a <code>jti</code> in the generated token, requiring a nonce is not the only possible way to mitigate replay attacks."]
+  ].each do |row| %>
+  <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 pb-5 m-0">
+    <dt class="font-mono font-bold"><%= row[0] %></dt>
+    <dd class="ml-3 sm:ml-10 "> <span class="text-gray-600"><%= row[1] %> &rarr;</span>  <span><%= row[2] %></span> </dd>
+    <dd class="ml-3 sm:ml-10 pt-3"><%= row[4].html_safe %></dd>
+    <% if row[3] %>
+      <dd class="ml-3 sm:ml-10 pt-3"><span class="text-gray-600">Default:</span> <%= row[3] %></dd>
+    <% end %>
+  </div>
 <% end %>
+</dl>
+<p>
+  The following parameters is not implemented yet:
+  <%= %w{max_age ui_locales login_hint acr_values}.map do |param|
+    "<code>#{param}</code>"
+  end.join(', ').html_safe %>.
+</p>
+<p>
+  The following parameters will probably never be implemented:
+  <%= %w{response_mode display prompt id_token_hint}.map do |param|
+    "<code>#{param}</code>"
+  end.join(', ').html_safe %>.
+</p>
+<p>
+  With that out of the way, let's move on.
+</p>
+
 
 <h2>
-  Configuration of <%= name %>
+  <a name="configuration">Configuration of <%= name %></a>
 </h2>
 <p>
   <%= name %> can be configured by <%= admin_relying_party.name %> by providing a JSON object on
@@ -120,7 +118,7 @@
     ['admin_user_ids', 'Array<String>', '["a", "b"]', "An array of user IDs you want to have admin access here on #{name}"],
     ['allowed_redirect_uris', 'Array<String>', "[\"https://a.#{admin_relying_party.id}}\"]", "[NOT IMPLEMENTED YET] A list of URIs that #{name} will allow as <code>redirect_uri</code>. This list does not have to include the default <code>redirect_uri</code>."],
     ['locale', 'String', '"da"', 'The locale preferred, if the user has not chosen a locale. Currently "da" and "en" are supported.'],
-    ['logo_url', 'String', "\"https://#{admin_relying_party.id}/logo.png\"", 'An URL for a logo. Will be shown to users on sign in screens.'],
+    ['logo_url', 'String', "\"https://#{admin_relying_party.id}/logo.png\"", 'An URL for a logo. Will be shown to users on sign in screens. The logo will be downloaded on the server and sent to the client as Base64 encoded data. This is to protect the user from potential tracking.'],
     ['name', 'String', '"Nice app"', 'The name of the app or service. Will be shown on login screens.'],
   ].each do |row| %>
   <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 m-0">
@@ -137,10 +135,12 @@
   Current configuration
 </h3>
 <p>
-  The configuration fetched from
+  When fetching from
 </p>
 <pre><code><%= admin_relying_party.well_known_url %></code></pre>
-
+<p>
+  we get
+</p>
 <pre><code><%= raw JSON.pretty_generate(admin_relying_party.well_knowns) %></code></pre>
 
 <p>
@@ -150,40 +150,34 @@
 <pre><code><%= raw JSON.pretty_generate(admin_relying_party.http_headers || {}) %></code></pre>
 
 <p>
-  We suggest using Etag and Cache-Control public, must-revalidate, max-age=300.
+  We suggest using <code>Etag</code> and <code>Cache-Control: public, must-revalidate, max-age=300</code> but that would be your call. The configuration is needed everytime we show a screen to a user for your client, so allowing us to cache it seems sensible.
 </p>
 
 
 <h3>
   Admin
 </h3>
-  <p>
-    If you want to become an admin for <%= admin_relying_party.name %>, you can add your <%= name %> user ID to
-  </p>
-  <pre><code><%= admin_relying_party.well_known_url %></code></pre>
-  <p>
-    Like this:
-  </p>
-    <pre><code>{
+<p>
+  If <em>you</em> want to become an admin for <%= admin_relying_party.name %>, you can add your <%= name %> user ID to the <%= link_to "#{admin_relying_party.name} configuration of #{name}", '#configuration' %>:
+</p>
+<pre><code>{
   &hellip;
   admin_user_ids": [
     "<%= current_user_id || 'your-user-id-on-promise' %>"
   ],
   &hellip;
 }</code></pre>
-    <% if !current_user_id %>
-      <p class="p-4 bg-yellow-200 rounded">
-        Log in to show an example with your actual user ID.
-      </p>
-    <% else %>
-      <p class="text-center mt-10">
-        Your user ID on <%= name %> with <strong><%= email %></strong>:
-      </p>
-      <p class="text-center"><code class="bg-gray-800 text-white p-2 rounded inline-block mt-3"><%= current_user_id %></code></p>
-      <% unless admin_relying_party.administratable?(current_user_id) %>
-        <p class="p-4 bg-red-700 text-center text-white rounded">
-          You are not admin of <%= admin_relying_party.name %>
-        </p>
-      <% else %>
-      <% end %>
-    <% end %>
+<% if !current_user_id %>
+  <p class="p-4 bg-yellow-200 rounded">
+    Log in to show an example with your actual user ID.
+  </p>
+<% else %>
+  <p class="text-center mt-10">
+    Yes, <em>your</em> user ID on <%= name %> with <strong><%= email %></strong> is
+  </p>
+  <p class="text-center"><code class="bg-gray-800 text-white p-2 rounded inline-block mt-3"><%= current_user_id %></code></p>
+<% end %>
+
+<p class="text-center mt-24">
+  ✨ That's it! ✨
+</p>

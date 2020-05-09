@@ -96,6 +96,10 @@ class Authentication::RelyingParty
     name.gsub(' ', '&nbsp').html_safe
   end
 
+  def default_redirect_uri
+    "https://#{id}/authenticate"
+  end
+
   def redirect_uri(id_token:, login_configuration:)
     if login_configuration[:redirect_uri].present?
       uri = URI.parse(login_configuration[:redirect_uri])
@@ -107,7 +111,7 @@ class Authentication::RelyingParty
         raise InvalidRedirectUri.new(login_configuration[:redirect_uri])
       end
     else
-      "https://#{id}/authenticate?id_token=#{id_token}"
+      "#{default_redirect_uri}?id_token=#{id_token}"
     end
   end
 end
