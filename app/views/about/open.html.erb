@@ -12,7 +12,7 @@
 <p>
   This is based on anonymized data. There are no cookies used for tracking and IPs are masked to for example 8.8.4.4 becomes 8.8.4.0. Here is the latest visitor (might be you):
 </p>
-<code><pre class="text-xs break-all overflow-scroll"><%= JSON.pretty_generate Ahoy::Visit.last.attributes.compact %></pre></code>
+<pre><code><%= JSON.pretty_generate Ahoy::Visit.last.attributes.compact %></code></pre>
 
   <h2 class="">
     JWTs generated:
@@ -21,4 +21,4 @@
   <p>
     This is based on anonymized data. Here is an example:
   </p>
-  <code><pre class="text-xs break-all overflow-scroll"><%= JSON.pretty_generate Statistics::SignInEvent.last.attributes %></pre></code>
+  <pre><code><%= JSON.pretty_generate Statistics::SignInEvent.last.attributes %></code></pre>
