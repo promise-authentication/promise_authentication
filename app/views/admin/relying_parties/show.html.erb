@@ -74,7 +74,7 @@
 <dl class="mt-8">
   <% [
     ['client_id', 'REQUIRED', 'REQUIRED', nil, "This is the domain. Be advised, that the same user will get a different user identifier (<code>sub</code>) for each <code>client_id</code>. So you should pick your <code>client_id</code> to be the shortest possible domain you control."],
-    ['redirect_uri', 'REQUIRED', 'OPTIONAL', "\"#{admin_relying_party.default_redirect_uri}\"", "If you want to redirect the user to anywhere else that the default provide the URI here. You will have to whitelist the <code>redirect_uri</code> in the <code>allowed_redirect_uris</code> in the #{link_to 'configuration', '#configuration'}."],
+    ['redirect_uri', 'REQUIRED', 'OPTIONAL', "\"#{admin_relying_party.default_redirect_uri}\"", "If you want to redirect the user to anywhere else than the default provide the URI here. You will have to whitelist the <code>redirect_uri</code> in the <code>allowed_redirect_uris</code> in the #{link_to 'configuration', '#configuration'}."],
     ['nonce', 'REQUIRED', 'OPTIONAL', nil, "As #{name} also includes a <code>jti</code> in the generated token, requiring a nonce is not the only possible way to mitigate replay attacks."]
   ].each do |row| %>
   <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 pb-5 m-0">
