@@ -69,22 +69,23 @@ en:
       create_account_html: Create new identity for <strong>%{relying_party_name}</strong>"
       not_you_html: Not <strong>%{email}</strong>?
       logout: Logout
-      no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your e-mail. All they will get is a unique string identifying you.
+      no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
       no_id_yet: Your unique ID for %{relying_party_name} is not generated yet
       your_id: Your unique ID for %{relying_party_name} is %{id}
     authenticate:
       password_not_correct: Password not matching. Try again
     login:
       sign_in_with_html: Sign in with %{name}
-      login: Login
-      enter_credentials_html: Enter the email and password you want to use or already use on <strong>%{name}</strong>.
+      login: Sign in
+      enter_credentials_html: Enter the email and password you use or want to use on <strong>%{name}</strong>.
+      description: "%{relying_party} uses %{name} as a sign in provider. %{name} is not affiliated with %{relying_party} and will share no personal information with them. The e-mail and password you provide here will only be used to sign in to %{name}."
       you_will_be_redirected_html: You will be redirected to <strong>%{relying_party_name}</strong> after authentication.
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Login
       forgot_password: Forgot password?
-      remember_me: Stay signed in
-      we_save_no_data: Your e-mail and password will not be stored in a readable form on our servers.
-      no_sharing_html: <strong>No personal information will be shared</strong> with %{relying_party_name}. Not even your e-mail. All they will get is a unique string identifying you.
+      remember_me: Remember me
+      we_save_no_data_html: Your e-mail and password will not be saved for <em>anyone</em> to read.
+      no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
   passwords:
     show:
       header: Change password

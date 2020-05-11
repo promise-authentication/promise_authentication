@@ -1,26 +1,37 @@
 <%= content_for :header do %>
-  <%= image_tag('logo.png', class: 'h-4 m-3') %>
-  <% if relying_party&.logo_url %>
+  <%= image_tag('logo.png', class: 'h-4 m-4') %>
+  <% if relying_party&.logo_data %>
     <div class="flex-grow flex justify-between items-center">
-      <span class="text-gray-600">
+      <span class="">
         <%= t '.sign_in_with_html', name: name %>
       </span>
       <%= image_tag(relying_party.logo_data, class: 'h-6 my-3 mr-3') %>
     </div>
   <% else %>
-    <h1 class="text-gray-600">
+    <h1 class="tracking-wide">
       <%= name %>
     </h1>
   <% end %>
 <% end %>
+
 <%= content_for :body do %>
   <%= form_tag authenticate_path(login_configuration), class: 'w-full' do %>
     <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
-      <h2 class="text-2xl pt-8">
-        <%= t '.login' %>
+      <h2 class="text-2xl pt-8 text-primary">
+        <%= relying_party&.name || t('.login') %>
       </h2>
-      <p class="text-gray-600 text-sm max-w-xs text-center mt-4">
+      <a href="javascript:document.getElementById('promise_description').classList.toggle('hidden');" class="block text-primary max-w-xs text-center mt-4">
         <%= t '.enter_credentials_html', name: name %>
+        <% if relying_party %>
+          <svg class="h-5 mb-1 inline-block" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+        <% end %>
+      </a>
+      <% if relying_party %>
+        <a href="javascript:document.getElementById('promise_description').classList.toggle('hidden');" id="promise_description" class="hidden p-4 rounded bg-gray-200">
+          <%= t '.description', name: name, relying_party: relying_party.name %>
+        </a>
+      <% end %>
+      <p class="text-secondary text-sm max-w-xs text-center mt-4">
         <% if relying_party %>
           <%= t '.you_will_be_redirected_html', relying_party_name: relying_party.name %>
         <% else %>
@@ -39,28 +50,28 @@
             <%= flash[:password_message] %>
           </p>
           <%= password_field_tag :password, nil, class: "login-input", autofocus: true %>
-          <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-gray-700 font-bold' : 'text-gray-500 '}" %>
+          <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-primary font-bold' : 'text-secondary '}" %>
         <% else %>
           <p class="input-label">
             Password
           </p>
-          <%= password_field_tag :password, nil, class: "login-input" %>
+          <%= password_field_tag :password, nil, class: "login-input mb-6" %>
         <% end %>
       </label>
-      <label class="flex justify-start items-center w-full pt-4 pb-4 cursor-pointer">
+      <label class="flex justify-start items-center w-full cursor-pointer pb-2">
         <%= check_box_tag :remember_me, nil, flash[:remember_me] %>
-        <span class="ml-2 text-gray-900">
-          <%= t('.remember_me') %>
+        <span class="ml-2">
+          <%= t(".remember_me") %>
         </span>
       </label>
-      <div class="flex w-full justify-end items-center">
-        <p class="text-gray-600 text-sm text-right mr-3">
-          <%= t '.we_save_no_data' %>
+      <div class="flex w-full flex-col justify-end items-end">
+        <p class="text-secondary text-sm text-right w-64">
+          <%= t '.we_save_no_data_html' %>
         </p>
-        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary' %>
+        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2' %>
       </div>
       <% if relying_party %>
-        <p class="mt-8 text-gray-600 text-sm">
+        <p class="mt-8 text-secondary  text-sm">
           <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
         </p>
       <% end %>

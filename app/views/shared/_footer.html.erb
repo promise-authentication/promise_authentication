@@ -1,7 +1,7 @@
 <% unless relying_party.present? %>
   <div class="flex flex-col items-center mt-4">
     <% if personal_data.present? %>
-      <p class="text-center text-gray-600">
+      <p class="text-center text-secondary">
         <%= link_to t('.logged_in_as_html', email: email), dashboard_path %>
       </p>
       <%= button_to t('.logout'), logout_path, method: :delete, class: "button small transparent mb-4 mt-1" %>
@@ -15,16 +15,16 @@
   <% I18n.available_locales.each do |locale| %>
     <% locale_name = I18n.with_locale(locale) { t('locale_name') } %>
       <% if I18n.locale == locale %>
-        <span class="text-gray-600 block p-3 font-bold">
+        <span class="text-secondary block p-3 font-bold">
           <%= locale_name %>
         </span>
       <% else %>
-        <%= link_to locale_name, url_for( params.clone.permit!.merge(locale: locale, only_path: true )), class: "text-gray-600 block p-3" %>
+        <%= link_to locale_name, url_for( params.clone.permit!.merge(locale: locale, only_path: true )), class: "text-secondary block p-3" %>
       <% end %>
   <% end %>
 </div>
 
-<footer class="text-center text-xs text-gray-600 mt-3 mb-6">
+<footer class="text-center text-xs text-secondary mt-3 mb-6">
   <span class="tracking-wide">
     <%= link_to name, root_path %> - 2020
     <% if personal_data && !relying_party %>

@@ -37,7 +37,7 @@ da:
       create_account_html: "Opret ny identitet på <strong>%{relying_party_name}</strong>"
       not_you_html: Er <strong>%{email}</strong> ikke dig?
       logout: Log ud
-      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
+      no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
       no_id_yet: Dit unikke ID til %{relying_party_name} er ikke genereret endnu
       your_id: Dit unikke ID hos %{relying_party_name} er %{id}
     authenticate:
@@ -46,13 +46,14 @@ da:
       sign_in_with_html: Log ind med %{name}
       login: Log ind
       enter_credentials_html: Angiv den e-mail og det password du bruger, eller vil bruge, på <strong>%{name}</strong>.
+      description: "%{relying_party} bruger %{name} til at logge ind. %{name} er ikke tilknyttet %{relying_party} på andre måder og vil ikke dele nogle personlige oplysninger med dem. Den e-mail og det password du angiver her, vil udelukkende blive brugt til at identificere dig overfor %{name}."
       you_will_be_redirected_html: Du vil blive sendt videre til <strong>%{relying_party_name}</strong>.
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
-      we_save_no_data: Din e-mail og password bliver ikke gemt i et læsbart format på vores servere.
+      we_save_no_data_html: Din e-mail og password bliver ikke gemt så <em>nogen</em> kan læse dem.
       forgot_password: Glemt password?
-      remember_me: Forbliv logget ind
+      remember_me: Husk mig
       go_on: Videre
-      no_sharing_html: <strong>Ingen personlig data vil blive delt</strong> med %{relying_party_name}. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
+      no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
   passwords:
     show:
       header: Skift password
