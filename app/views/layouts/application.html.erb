@@ -31,8 +31,10 @@
         }
       <% end %>
     </style>
+
+    <%= content_for?(:head) ? yield(:head) : nil %>
   </head>
-  <body class="">
+  <body class="text-primary">
     <%= content_for?(:content) ? yield(:content) : yield %>
 
     <% if unique_character %>

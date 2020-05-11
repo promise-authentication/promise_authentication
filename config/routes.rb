@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   end
 
   namespace 'root' do
+    get '/', to: "relying_parties#index"
     resources :relying_parties, constraints: { id: /[^\/]+/ }, only: [:index]
   end
 

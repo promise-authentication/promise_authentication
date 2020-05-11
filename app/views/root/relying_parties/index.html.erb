@@ -1,4 +1,7 @@
-<%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
+<%= content_for :head do %>
+  <%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
 <div class="max-w-2xl p-4 m-auto space-y-4">
   <h1 class="text-xl font-black text-center mt-12">
     Relying parties

@@ -1,4 +1,6 @@
-<%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
+<%= content_for :head do %>
+  <%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
+<% end %>
 
 <%= image_tag(admin_relying_party.logo_data, alt: "#{admin_relying_party.name}", class: "w-20 m-auto") if admin_relying_party.logo_data.present? %>
 
