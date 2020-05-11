@@ -6,13 +6,13 @@
       </div>
     <% else %>
       <%= image_tag('logo.png', class: 'h-4 m-3') %>
-      <h1 class="text-gray-600">
+      <h1 class="text-secondary">
         <%= name %>
       </h1>
     <% end %>
   <% else %>
     <%= image_tag('logo.png', class: 'h-4 m-3') %>
-    <h1 class="text-gray-600">
+    <h1 class="text-secondary">
       <%= name %>
     </h1>
   <% end %>
@@ -23,7 +23,7 @@
       <h2 class="text-2xl pt-8 text-center leading-tight">
         <%= t '.sign_in_on_html', relying_party_name: relying_party.name %>
       </h2>
-      <p class="text-gray-600 text-sm max-w-xs text-center mt-3">
+      <p class="text-secondary text-sm max-w-xs text-center mt-3">
         <%= t '.you_are_html', email: email, name: name %>
       </p>
       <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center", autofocus: true do %>
@@ -43,7 +43,7 @@
       <% end %>
 
       <div class="flex flex-col items-center">
-        <span class="text-gray-600">
+        <span class="text-secondary">
           <%= t '.not_you_html', email: email %>
         </span>
         <%= button_to t('.logout'), relogin_path(login_configuration), method: :delete, class: "button transparent small mt-2" %>
@@ -51,7 +51,7 @@
 
 
       <% id = personal_data.id_for(relying_party.id) %>
-      <p class="mt-8 text-gray-600 text-sm" style="cursor:help;" title="<%= id.present? ? t('.your_id', id: id, relying_party_name: relying_party.name) : t('.no_id_yet', relying_party_name: relying_party.name) %>">
+      <p class="mt-8 text-secondary text-sm" style="cursor:help;" title="<%= id.present? ? t('.your_id', id: id, relying_party_name: relying_party.name) : t('.no_id_yet', relying_party_name: relying_party.name) %>">
         <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
       </p>
     </div>

@@ -81,10 +81,10 @@
   ].each do |row| %>
   <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 pb-5 m-0">
     <dt class="font-mono font-bold"><%= row[0] %></dt>
-    <dd class="ml-3 sm:ml-10 "> <span class="text-gray-600"><%= row[1] %> &rarr;</span>  <span><%= row[2] %></span> </dd>
+    <dd class="ml-3 sm:ml-10 "> <span class="text-secondary"><%= row[1] %> &rarr;</span>  <span><%= row[2] %></span> </dd>
     <dd class="ml-3 sm:ml-10 pt-3"><%= row[4].html_safe %></dd>
     <% if row[3] %>
-      <dd class="ml-3 sm:ml-10 pt-3 break-all"><span class="text-gray-600">Default:</span> <%= row[3] %></dd>
+      <dd class="ml-3 sm:ml-10 pt-3 break-all"><span class="text-secondary">Default:</span> <%= row[3] %></dd>
     <% end %>
   </div>
 <% end %>
@@ -124,9 +124,9 @@
     ['name', 'String', '"Nice app"', 'The name of the app or service. Will be shown on login screens.'],
   ].each do |row| %>
   <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 m-0">
-    <dt class="font-mono font-bold"><%= row[0] %> <span class="text-gray-600 font-normal">(<%= row[1] %>)</span></dt>
+    <dt class="font-mono font-bold"><%= row[0] %> <span class="text-secondary font-normal">(<%= row[1] %>)</span></dt>
     <dd class="ml-3 sm:ml-10 py-3"><%= row[3].html_safe %></dd>
-    <dd class="ml-3 sm:ml-10 text-gray-600 break-all">Example: <%= row[2] %></dd>
+    <dd class="ml-3 sm:ml-10 text-secondary break-all">Example: <%= row[2] %></dd>
   </div>
 
 </dl>
