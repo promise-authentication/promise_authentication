@@ -15,7 +15,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
     assert_select 'input#email'
     assert_select 'input#password'
-    assert_select 'h2', 'Login'
+    assert_select 'h2', 'Sign in'
   end
 
   test 'authenticating with nothing' do
