@@ -62,7 +62,7 @@ en:
       go_to_rp: Go to %{name}
   authentication:
     confirm:
-      sign_in_with: Sign in with %{name}
+      sign_in_with_html: Sign in with %{name}
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
       you_are_html: You are logged in on %{name} as <strong>%{email}</strong>.
       go_to_html: "Go to <strong>%{relying_party_name}</strong>"

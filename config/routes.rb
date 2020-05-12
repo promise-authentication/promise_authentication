@@ -3,15 +3,7 @@ Rails.application.routes.draw do
   root 'landing#index'
 
   namespace 'about' do
-    get 'welcome'
-    get 'current_state_of_authentication'
-    get 'non_profit'
-    get 'identity'
-    get 'privacy'
-    get 'security'
-    get 'trust'
-    get 'technology'
-
+    get 'motivation', as: 'motivation'
     get 'open', as: 'open'
     get 'data', as: 'data'
     get 'pricing', as: 'pricing'

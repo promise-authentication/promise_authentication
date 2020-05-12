@@ -1,18 +1,16 @@
 <%= content_for :header do %>
-  <% if relying_party.present? %>
-    <% if relying_party.logo_url.present? %>
-      <div class="flex-grow flex items-center justify-center">
-        <%= image_tag(relying_party.logo_data, class: 'h-6 m-3') %>
-      </div>
-    <% else %>
-      <%= image_tag('logo.png', class: 'h-4 m-3') %>
-      <h1 class="text-secondary">
-        <%= name %>
-      </h1>
-    <% end %>
+  <%= image_tag('logo.png', class: 'h-4 m-4') %>
+  <% if relying_party %>
+    <div class="flex-grow flex justify-between items-center">
+      <span class="">
+        <%= t '.sign_in_with_html', name: name %>
+      </span>
+      <% if relying_party&.logo_data %>
+        <%= image_tag(relying_party.logo_data, class: 'h-6 my-3 mr-3') %>
+      <% end %>
+    </div>
   <% else %>
-    <%= image_tag('logo.png', class: 'h-4 m-3') %>
-    <h1 class="text-secondary">
+    <h1 class="tracking-wide">
       <%= name %>
     </h1>
   <% end %>

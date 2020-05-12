@@ -31,6 +31,7 @@ da:
       go_to_rp: Fortsæt til %{name}
   authentication:
     confirm:
+      sign_in_with_html: Log ind med %{name}
       sign_in_on_html: "Log ind på <strong>%{relying_party_name}</strong>"
       you_are_html: Du er logget ind på %{name} med <strong>%{email}</strong>.
       go_to_html: "Videre til <strong>%{relying_party_name}</strong>"

@@ -5,7 +5,7 @@
 <%= image_tag(admin_relying_party.logo_data, alt: "#{admin_relying_party.name}", class: "w-20 m-auto") if admin_relying_party.logo_data.present? %>
 
 <h1>
-  Configuration for <%= admin_relying_party.name_html %>
+  <%= admin_relying_party.name_html %> on <%= name %>
 </h1>
 <% if admin_relying_party.administratable?(current_user_id) %>
   <h2>
@@ -15,7 +15,7 @@
     You can only see this because you are an admin on <%= admin_relying_party.name %>.
   </p>
 
-  <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, admin_relying_party.id).group_by_hour(:created_at).count) %>
+  <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, admin_relying_party.id).group_by_day(:created_at).count) %>
 <% end %>
 
 
@@ -75,16 +75,19 @@
 </p>
 <dl class="mt-8">
   <% [
-    ['client_id', 'REQUIRED', 'REQUIRED', nil, "This is the domain. Be advised, that the same user will get a different user identifier (<code>sub</code>) for each <code>client_id</code>. So you should pick your <code>client_id</code> to be the shortest possible domain you control."],
+    ['client_id', 'REQUIRED', 'REQUIRED', nil, "This is the domain. Be advised, that the same user will get a different user identifier (<code>sub</code>) for each <code>client_id</code>. So you should pick your <code>client_id</code> to be the shortest possible domain you control.", admin_relying_party.id],
     ['redirect_uri', 'REQUIRED', 'OPTIONAL', "\"#{admin_relying_party.default_redirect_uri}\"", "If you want to redirect the user to anywhere else than the default provide the URI here. You will have to whitelist the <code>redirect_uri</code> in the <code>allowed_redirect_uris</code> in the #{link_to 'configuration', '#configuration'}."],
     ['nonce', 'REQUIRED', 'OPTIONAL', nil, "As #{name} also includes a <code>jti</code> in the generated token, requiring a nonce is not the only possible way to mitigate replay attacks."]
   ].each do |row| %>
   <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 pb-5 m-0">
     <dt class="font-mono font-bold"><%= row[0] %></dt>
-    <dd class="ml-3 sm:ml-10 "> <span class="text-secondary"><%= row[1] %> &rarr;</span>  <span><%= row[2] %></span> </dd>
+    <dd class="ml-3 sm:ml-10 "><%= row[2] %><span class="text-gray-500"> <%= row[1] == row[2] ? '' : "but #{row[1]} in specification" %></span></dd>
     <dd class="ml-3 sm:ml-10 pt-3"><%= row[4].html_safe %></dd>
     <% if row[3] %>
       <dd class="ml-3 sm:ml-10 pt-3 break-all"><span class="text-secondary">Default:</span> <%= row[3] %></dd>
+    <% end %>
+    <% if row[5] %>
+      <dd class="ml-3 sm:ml-10 pt-3 break-all"><span class="text-secondary">Example:</span> <%= row[5] %></dd>
     <% end %>
   </div>
 <% end %>

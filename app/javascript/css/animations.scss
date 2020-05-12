@@ -51,3 +51,25 @@
   10% { transform: scale(1.05); }
   20% { transform: scale(1); }
 }
+
+.a-in {
+  animation: in 800ms;
+  opacity: 1;
+  max-height: 30em;
+}
+@keyframes in {
+  0% { opacity: 0; max-height: 0em; }
+  40% { opacity: 0; }
+  100% { display: none; opacity: 1; max-height: 30em; }
+}
+
+.a-out {
+  animation: out 800ms;
+  max-height: 0em;
+  opacity: 0;
+}
+@keyframes out {
+  0% { opacity: 1; max-height: 30em; }
+  40% { opacity: 0; }
+  100% { opacity: 0; max-height: 0px; }
+}

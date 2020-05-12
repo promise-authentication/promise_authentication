@@ -10,6 +10,6 @@
     <h2 class="">
       Tokens generated for <strong><%= rp_id %></strong>:
     </h2>
-    <%= line_chart Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 1.month.ago, rp_id).group_by_hour(:created_at).count %>
+    <%= line_chart Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 1.month.ago, rp_id).group_by_day(:created_at).count %>
   <% end %>
 </div>
