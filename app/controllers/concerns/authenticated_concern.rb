@@ -11,7 +11,9 @@ module AuthenticatedConcern
   end
 
   def logged_in?
-    current_user_email.present?
+    current_user_email.present? &&
+      current_user_id.present? &&
+      current_user_vault_key.present?
   end
 
   def current_user
