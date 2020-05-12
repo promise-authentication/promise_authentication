@@ -6,6 +6,6 @@ class RootController < ApplicationController
 
   def verify_root
     root_user_ids = ENV.fetch('PROMISE_ROOT_USER_IDS') { '' }.split(',')
-    redirect_to login_path unless root_user_ids.include?(current_user_id)
+    redirect_to login_path unless root_user_ids.include?(current_user.id)
   end
 end

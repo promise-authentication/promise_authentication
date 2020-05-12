@@ -7,7 +7,7 @@
 <h1>
   <%= admin_relying_party.name_html %> on <%= name %>
 </h1>
-<% if admin_relying_party.administratable?(current_user_id) %>
+<% if admin_relying_party.administratable?(current_user.id) %>
   <h2>
     Sign ins on <%= admin_relying_party.id %>:
   </h2>
@@ -169,16 +169,16 @@
 <pre><code>{
   &hellip;
   admin_user_ids": [
-    "<%= current_user_id || 'your-user-id-on-promise' %>"
+    "<%= current_user.id || 'your-user-id-on-promise' %>"
   ],
   &hellip;
 }</code></pre>
-<% if !current_user_id %>
+<% if !current_user.id %>
 <% else %>
   <p class="text-center mt-10">
-    Yes, <em>your</em> user ID on <%= name %> with <strong><%= email %></strong> is
+    Yes, <em>your</em> user ID on <%= name %> with <strong><%= current_user.email %></strong> is
   </p>
-  <p class="text-center"><code class="bg-gray-800 text-white p-2 rounded inline-block mt-3"><%= current_user_id %></code></p>
+  <p class="text-center"><code class="bg-gray-800 text-white p-2 rounded inline-block mt-3"><%= current_user.id %></code></p>
 <% end %>
 
 <p class="text-center mt-24">

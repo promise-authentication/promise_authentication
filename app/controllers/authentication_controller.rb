@@ -4,15 +4,13 @@ class AuthenticationController < ApplicationController
     reset_session
 
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
-    if personal_data
+    if logged_in?
       redirect_to confirm_path(login_configuration)
     end
   end
 
   def confirm
-    if personal_data.blank?
-      redirect_to login_path(login_configuration)
-    else
+    if logged_in?
       if relying_party.blank?
         if params[:redirect_to]
           redirect_to params[:redirect_to]
@@ -20,6 +18,8 @@ class AuthenticationController < ApplicationController
           redirect_to dashboard_path
         end
       end
+    else
+      redirect_to login_path(login_configuration)
     end
   end
 
@@ -35,9 +35,9 @@ class AuthenticationController < ApplicationController
   def go_to
     if relying_party.present?
       id_token = Authentication::Services::GetIdToken.new(
-        user_id: current_user_id, 
+        user_id: current_user.id, 
         relying_party_id: relying_party.id,
-        vault_key: current_vault_key,
+        vault_key: current_user.vault_key,
         nonce: login_configuration[:nonce]
       ).id_token
 

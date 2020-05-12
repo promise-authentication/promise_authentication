@@ -5,7 +5,7 @@ class PasswordsController < ApplicationController
 
   def create
     change_request = ::Authentication::Services::ChangePassword.new params.permit(:current_password, :new_password)
-    change_request.user_id = current_user_id
+    change_request.user_id = current_user.id
 
     if change_request.valid?
       vault_key = change_request.call

@@ -1,8 +1,8 @@
 <% unless relying_party.present? %>
   <div class="flex flex-col items-center mt-4">
-    <% if personal_data.present? %>
+    <% if logged_in? %>
       <p class="text-center text-secondary">
-        <%= link_to t('.logged_in_as_html', email: email), dashboard_path %>
+        <%= link_to t('.logged_in_as_html', email: current_user.email), dashboard_path %>
       </p>
       <%= button_to t('.logout'), logout_path, method: :delete, class: "button small transparent mb-4 mt-1" %>
     <% else %>
@@ -27,7 +27,7 @@
 <footer class="text-center text-xs text-secondary mt-3 mb-6">
   <span class="tracking-wide">
     <%= link_to name, root_path %> - 2020
-    <% if personal_data && !relying_party %>
+    <% if logged_in? && !relying_party %>
       - <%= link_to t('.change_password'), password_path, class: 'underline' %>
     <% end %>
   </span>

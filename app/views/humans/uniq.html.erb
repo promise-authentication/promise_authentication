@@ -8,13 +8,13 @@
       Your unique letter/number is:
     </h1>
     <h2 class="text-2xl font-black text-center font-mono">
-      <%= unique_character %>
+      <%= current_user.unique.character %>
     </h2>
     <h1 class="text-center mt-4">
       Your unique color is:
     </h1>
     <h2 class="text-xl font-black font-mono text-center">
-      #<%= unique_color %>
+      #<%= current_user.unique.color %>
     </h2>
     <p class="text-xs text-center">
       (That's the background color on this box)
