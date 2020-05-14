@@ -4,6 +4,7 @@ class Authentication::RelyingParty
   include ActiveModel::Model
 
   attr_accessor :id, :name, :logo_url, :locale
+  attr_accessor :allowed_redirect_domain_names
   attr_accessor :admin_user_ids
   attr_accessor :legacy_account_authentication_url, :legacy_account_forgot_password_url
 
@@ -92,6 +93,10 @@ class Authentication::RelyingParty
     @name || id
   end
 
+  def allowed_redirect_domain_names
+    ((@allowed_redirect_domain_names || []) + [id, 'localhost', '127.0.0.1'])
+  end
+
   def name_html
     name.gsub(' ', '&nbsp').html_safe
   end
@@ -101,17 +106,18 @@ class Authentication::RelyingParty
   end
 
   def redirect_uri(id_token:, login_configuration:)
-    if login_configuration[:redirect_uri].present?
-      uri = URI.parse(login_configuration[:redirect_uri])
-      if uri.host == id
-        new_query_ar = URI.decode_www_form(uri.query || '') << ['id_token', id_token]
-        uri.query = URI.encode_www_form(new_query_ar)
-        uri.to_s
-      else
-        raise InvalidRedirectUri.new(login_configuration[:redirect_uri])
-      end
+    url = login_configuration[:redirect_uri] || default_redirect_uri
+    uri = URI.parse(url)
+
+    allowed_schemes = ['https']
+    allowed_schemes << 'http' if ["localhost", "127.0.0.1"].include?(uri.host)
+
+    if allowed_schemes.include?(uri.scheme) && allowed_redirect_domain_names.include?(uri.host)
+      new_query_ar = URI.decode_www_form(uri.query || '') << ['id_token', id_token]
+      uri.query = URI.encode_www_form(new_query_ar)
+      uri.to_s
     else
-      "#{default_redirect_uri}?id_token=#{id_token}"
+      raise InvalidRedirectUri.new(url)
     end
   end
 end

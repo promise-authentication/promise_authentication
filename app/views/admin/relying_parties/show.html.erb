@@ -76,7 +76,7 @@
 <dl class="mt-8">
   <% [
     ['client_id', 'REQUIRED', 'REQUIRED', nil, "This is the domain. Be advised, that the same user will get a different user identifier (<code>sub</code>) for each <code>client_id</code>. So you should pick your <code>client_id</code> to be the shortest possible domain you control.", admin_relying_party.id],
-    ['redirect_uri', 'REQUIRED', 'OPTIONAL', "\"#{admin_relying_party.default_redirect_uri}\"", "If you want to redirect the user to anywhere else than the default provide the URI here. You will have to whitelist the <code>redirect_uri</code> in the <code>allowed_redirect_uris</code> in the #{link_to 'configuration', '#configuration'}."],
+    ['redirect_uri', 'REQUIRED', 'OPTIONAL', "\"#{admin_relying_party.default_redirect_uri}\"", "If you want to redirect the user to anywhere else than the default provide the URI here. You will have to whitelist the <code>redirect_uri</code> in the <code>allowed_redirect_domain_names</code> in the #{link_to 'configuration', '#configuration'}."],
     ['nonce', 'REQUIRED', 'OPTIONAL', nil, "As #{name} also includes a <code>jti</code> in the generated token, requiring a nonce is not the only possible way to mitigate replay attacks."]
   ].each do |row| %>
   <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 pb-5 m-0">
@@ -121,7 +121,7 @@
 <dl class="mt-8">
   <% [
     ['admin_user_ids', 'Array<String>', '["a", "b"]', "An array of user IDs you want to have admin access here on #{name}."],
-    ['allowed_redirect_uris', 'Array<String>', "[\"https://a.#{admin_relying_party.id}}\"]", "[NOT IMPLEMENTED YET] A list of URIs that #{name} will allow as <code>redirect_uri</code>. This list does not have to include the default <code>redirect_uri</code>."],
+    ['allowed_redirect_domain_names', 'Array<String>', "[\"a.#{admin_relying_party.id}}\"]", "A list of domain names that #{name} will allow as <code>redirect_uri</code>. This list does not have to include the default <code>redirect_uri</code>. Also be aware that <code>localhost</code> and <code>127.0.0.1</code> is allowed by default, so no need to add that. You can also provide IP addresses."],
     ['locale', 'String', '"da"', 'The locale preferred, if the user has not chosen a locale. Currently "da" and "en" are supported.'],
     ['logo_url', 'String', "\"https://#{admin_relying_party.id}/logo.png\"", 'An URL for a logo. Will be shown to users on sign in screens. The logo will be downloaded on the server and sent to the client as Base64 encoded data. This is to protect the user from potential tracking.'],
     ['name', 'String', '"Nice app"', 'The name of the app or service. Will be shown on login screens.'],
