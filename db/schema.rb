@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_07_182939) do
+ActiveRecord::Schema.define(version: 2020_05_16_055057) do
 
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
@@ -70,6 +70,14 @@ ActiveRecord::Schema.define(version: 2020_05_07_182939) do
     t.string "vault_key_salt"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "authentication_relying_party_emails", force: :cascade do |t|
+    t.string "hashed_email"
+    t.string "relying_party_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["hashed_email", "relying_party_id"], name: "lookup", unique: true
   end
 
   create_table "authentication_something_uniques", id: :string, force: :cascade do |t|

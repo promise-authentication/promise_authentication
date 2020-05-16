@@ -11,7 +11,9 @@ Rails.application.routes.draw do
 
   # This is also the getting started part
   namespace 'admin' do
-    resources :relying_parties, constraints: { id: /[^\/]+/ }, only: [:show, :index]
+    resources :relying_parties, constraints: { id: /[^\/]+/ }, only: [:show, :index] do
+      resources :emails, only: [:create, :destroy]
+    end
   end
 
   namespace 'root' do
