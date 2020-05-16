@@ -1,6 +1,6 @@
 class Trust::Certificate < ApplicationRecord
 
-  scope :unexpired, -> { where('expires_at > ?', Time.now) }
+  scope :unexpired, -> { where('expires_at > ?', Time.now).order('expires_at DESC') }
 
   def self.current
     self.last
