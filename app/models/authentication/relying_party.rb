@@ -44,6 +44,11 @@ class Authentication::RelyingParty
     admin_user_ids&.include?(user_id)
   end
 
+  def secret_key_base64
+    message = ENV['PROMISE_RELYING_PARTY_KEY_SALT'] + id
+    Base64.strict_encode64 RbNaCl::Hash.sha256(message)
+  end
+
   def self.fetch(url)
     client = Faraday.new do |builder|
       builder.use :http_cache, store: Rails.cache, logger: Rails.logger, serializer: Marshal

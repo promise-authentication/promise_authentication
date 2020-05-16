@@ -16,6 +16,14 @@
   </p>
 
   <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, admin_relying_party.id).group_by_day(:created_at).count) %>
+
+  <h2>
+    Secret key
+  </h2>
+  <p>
+    The secret key for accessing eg. the email endpoints is:
+  </p>
+  <pre><code><%= admin_relying_party.secret_key_base64 %></code></pre>
 <% end %>
 
 

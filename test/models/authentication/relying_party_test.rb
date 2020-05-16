@@ -3,7 +3,21 @@ require 'test_helper'
 class Authentication::RelyingPartyTest < ActiveSupport::TestCase
   setup do
     @described_class = Authentication::RelyingParty
-    @relying_party = @described_class.new
+    @relying_party = @described_class.new(id: 'hello.world')
+    @old_value = ENV['PROMISE_RELYING_PARTY_KEY_SALT']
+  end
+
+  teardown do
+    ENV['PROMISE_RELYING_PARTY_KEY_SALT'] = @old_value
+  end
+
+  test 'it will have secret key' do
+    old = @relying_party.secret_key_base64
+    ENV['PROMISE_RELYING_PARTY_KEY_SALT'] = 'secret'
+    new = @relying_party.secret_key_base64
+
+    assert_not_equal old, new
+    assert_equal new, 'C5e8F5113d1WNwECgmuL8yACraZaKd81cwJeNeAnPIc='
   end
 
   test 'it will call the well knowns' do
