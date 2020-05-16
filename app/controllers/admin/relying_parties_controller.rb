@@ -1,6 +1,4 @@
 class Admin::RelyingPartiesController < ApplicationController
-  # before_action :authenticate
-
   layout 'about'
 
   def show
