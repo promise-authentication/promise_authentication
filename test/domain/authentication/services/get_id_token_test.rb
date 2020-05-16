@@ -2,6 +2,8 @@ require 'test_helper'
 
 class Authentication::Services::GetIdTokenTest < ActiveSupport::TestCase
   setup do
+    Trust::Certificate.generate_key_pair!
+
     @request = Authentication::Services::GetIdToken.new(
       user_id: 'id',
       relying_party_id: 'pid',

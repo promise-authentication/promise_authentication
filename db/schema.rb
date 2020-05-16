@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_16_055057) do
+ActiveRecord::Schema.define(version: 2020_05_16_181120) do
 
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
@@ -125,6 +125,15 @@ ActiveRecord::Schema.define(version: 2020_05_16_055057) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["relying_party_id"], name: "index_statistics_sign_in_events_on_relying_party_id"
+  end
+
+  create_table "trust_certificates", force: :cascade do |t|
+    t.text "public_key"
+    t.text "private_key"
+    t.datetime "expires_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["expires_at"], name: "index_trust_certificates_on_expires_at"
   end
 
 end

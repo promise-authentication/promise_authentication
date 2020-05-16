@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  public_key: MyText
+  private_key: MyText
+  expires_at: 2020-05-16 20:11:20
+
+two:
+  public_key: MyText
+  private_key: MyText
+  expires_at: 2020-05-16 20:11:20

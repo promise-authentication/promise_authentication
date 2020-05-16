@@ -146,6 +146,8 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'go_to relying party' do
+    Trust::Certificate.generate_key_pair!
+
     email = 'hello@world.com'
     password = 'secr2t'
     relying_party_id = 'example.com'
@@ -161,7 +163,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
     id_token = query[0][1]
     payload, header = JWT.decode(id_token , nil, false)
-    key = Rails.configuration.jwt_public_key
+    key = Trust::Certificate.current.public_key
     decoded_token = JWT.decode(id_token, key, true, { algorithm: header['alg'] }).first
 
     assert decoded_token['sub']

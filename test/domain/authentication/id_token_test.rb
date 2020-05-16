@@ -1,11 +1,10 @@
 require 'test_helper'
 
 class Authentication::IdTokenTest < ActiveSupport::TestCase
-  test 'generating key pair' do
-    assert Authentication::IdToken.generate_key_pair
-  end
 
   test 'encode' do
+    Trust::Certificate.rollover!
+
     token = Authentication::IdToken.new(
       sub: 'hello',
       nonce: 'nonce'
