@@ -35,8 +35,8 @@ class Authentication::HashedEmailTest < ActiveSupport::TestCase
 
   test 'returns UTF-8 encoded string' do
     string = @described_class.from_cleartext('hello@example.com')
+    assert_equal "F1O9s2gnGnhYh92/uSYWTy98aoj2CcB/8EAcVXKVUgabnIiDlRJDlj1IZIOeIDFRujyyosNPc9Zwhoi7WzRElsKpYgVAPB3es0qOl5nQWRN6L0LnDrQ4Xw3v4hSHWlWG", string
     assert_equal Encoding::UTF_8, string.encoding
-    assert_equal "1753bdb368271a785887ddbfb926164f2f7c6a88f609c07ff0401c55729552069b9c8883951243963d4864839e203151ba3cb2a2c34f73d6708688bb5b344496c2a96205403c1ddeb34a8e9799d059137a2f42e70eb4385f0defe214875a5586", string
   end
 
   test 'from_cleartext' do

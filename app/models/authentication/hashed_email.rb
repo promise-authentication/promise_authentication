@@ -13,8 +13,7 @@ class Authentication::HashedEmail < ApplicationRecord
     blake = RbNaCl::Hash.blake2b(email)
     binary = sha + blake
 
-    # Now get the hexdigest of
-    binary.unpack('H*').first.encode('utf-8')
+    return Base64.strict_encode64(binary).encode('utf-8')
   end
 
   def self.user_id_for_cleartext(email)
