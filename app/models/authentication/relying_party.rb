@@ -47,6 +47,7 @@ class Authentication::RelyingParty
   def self.fetch(url)
     client = Faraday.new do |builder|
       builder.use :http_cache, store: Rails.cache, logger: Rails.logger, serializer: Marshal
+      builder.use FaradayMiddleware::FollowRedirects
       builder.adapter Faraday.default_adapter
     end
     response = client.get(url)

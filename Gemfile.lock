@@ -104,6 +104,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (2.2.0)
       faraday (>= 0.8)
+    faraday_middleware (1.0.0)
+      faraday (~> 1.0)
     ffi (1.12.2)
     geocoder (1.6.3)
     globalid (0.4.2)
@@ -293,6 +295,7 @@ DEPENDENCIES
   chartkick
   color-generator
   faraday-http-cache
+  faraday_middleware
   groupdate
   jbuilder (~> 2.7)
   json-jwt
