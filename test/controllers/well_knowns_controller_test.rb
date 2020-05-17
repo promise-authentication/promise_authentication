@@ -2,7 +2,7 @@ require 'test_helper'
 
 class WellKnownsControllerTest < ActionDispatch::IntegrationTest
   test 'authentication' do
-    Trust::Certificate.rollover!
+    Trust::Certificate.rotate!
 
     get '/.well-known/jwks.json'
 

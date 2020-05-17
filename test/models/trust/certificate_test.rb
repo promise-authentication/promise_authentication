@@ -5,10 +5,10 @@ class Trust::CertificateTest < ActiveSupport::TestCase
     @described_class = Trust::Certificate
   end
 
-  test 'rollover' do
+  test 'rotate' do
     assert_equal 0, @described_class.count
 
-    @described_class.rollover!
+    @described_class.rotate!
 
     assert_equal 1, @described_class.count
   end

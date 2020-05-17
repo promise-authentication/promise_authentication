@@ -6,7 +6,7 @@ class Trust::Certificate < ApplicationRecord
     self.last
   end
 
-  def self.rollover!
+  def self.rotate!
     generate_key_pair!
   end
 

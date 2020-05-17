@@ -3,7 +3,7 @@ require 'test_helper'
 class Authentication::IdTokenTest < ActiveSupport::TestCase
 
   test 'encode' do
-    Trust::Certificate.rollover!
+    Trust::Certificate.rotate!
 
     token = Authentication::IdToken.new(
       sub: 'hello',

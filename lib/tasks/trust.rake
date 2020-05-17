@@ -1,6 +1,6 @@
 namespace :trust do
-  desc "Rollover certificates"
+  desc "Rotate certificates"
   task roll_certificates: [:environment] do
-    Trust::Certificate.rollover!
+    Trust::Certificate.rotate!
   end
 end
