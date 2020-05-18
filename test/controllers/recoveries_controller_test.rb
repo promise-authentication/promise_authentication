@@ -27,6 +27,10 @@ class RecoveriesControllerTest < ActionDispatch::IntegrationTest
     post token_recoveries_path(token_id: token, new_password: 'hello')
     assert_redirected_to login_path
 
+    # It will not accept more
+    get token_recoveries_path(token_id: token)
+    assert_redirected_to root_path
+
     # Sign in with new password:
     post authenticate_url, params: { email: email, password: 'hello', remember_me: 1 }
 

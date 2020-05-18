@@ -5,7 +5,8 @@ class Authentication::Services::RecoverySetPassword
   attr_reader :vault_key
 
   def call!
-    user_id = Authentication::RecoveryToken.find_by_token(token)&.user_id
+    recovery_token = Authentication::RecoveryToken.find_by_token(token)
+    user_id = recovery_token.user_id
 
     recovery = Authentication::VaultKeysForRecovery.find(user_id)
     key_pair = Authentication::KeyPair.find(recovery.key_pair_id)
@@ -26,5 +27,7 @@ class Authentication::Services::RecoverySetPassword
       user_id: user_id,
       personal_data: personal_data
     ).call
+
+    recovery_token.destroy
   end
 end
