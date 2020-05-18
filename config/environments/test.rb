@@ -47,8 +47,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
   #
 
-  @private_key = RbNaCl::PrivateKey.generate
-  @public_key = @private_key.public_key
-  ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'] = Base64.strict_encode64(@public_key.to_s).encode('utf-8')
   ENV['PROMISE_RELYING_PARTY_KEY_SALT'] = 'foo'
 end

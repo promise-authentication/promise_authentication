@@ -19,41 +19,6 @@ en:
   layouts:
     application:
       meta_description: "%{name} er en single-sign-on ren identitetsudbyder."
-  landing:
-    index:
-      callout_html: "Pure&nbsp;identity<br />with privacy&nbsp;at&nbsp;heart"
-      short_intro_html: "%{name} is a single-sign-on pure identity provider. No personal data will be stored anywhere or shared with anyone. We promise!"
-    sections:
-      core_values: The core values at %{name}
-      privacy:
-        header: Privacy
-        body_html: When using %{name} to sign into an application, no personal information will be shared with them. Not even your e-mail. Every application will recieve their own unique random string identifying you to them.
-      security:
-        header: Security
-        body_html: "The techonology behind %{name} is based on open standards to provide maximum security for your data. Everything is stored encrypted and the keys are keps off-site. So even in the  case of a breach, it will be practically impossible to read any of your data."
-      non_profit:
-        header: Non-profit
-        body_html: "%{name} has no commercial interests. No ads to show. You never have to worry if your data will be sold to highest bidder. It won't."
-      open_source:
-        header: Open source
-        body_html: The source code for %{name} is available for anyone to read. This ensures that both quality and security is as high as humanly possible.
-      humans:
-        header: By humans, for humans
-        body_html: "%{name} is made by human beings. The only interest is to serve other human beings. We're not here for profits. We only care about creating a piece of internet infrastructure that will make all of our digital lives just a little bit easier and more secure."
-    try:
-      header: Try %{name}
-      body_html: To get a sense of how this works, you can try signing in to <strong>%{app}</strong>. 
-      cta: Go to %{app}
-    getting_started:
-      title: Getting started
-      assumptions_html: Let's assume that you have a digital product on <code>example.com</code> that requires users to sign in.
-      first_step: All you have to do, is to redirect your users to
-      doing_the_job_html: Now %{name} will make sure to identify the user. That is done by having the user sign in to %{name}. Then %{name} will generate a unique identifier  which will be used to identify that specific user to <code>example.com</code>.
-      back_to_you: "The user will now be redirected to"
-      content_of_jwt_html: "Here <code>id_token</code> will be a signed JWT that <strong>must be verified by you</strong> with the public keys from %{name} that is readily available. The contents of the JWT will look like this:"
-      explain_jwt_html: 'From this, <strong>you must incorporate both <code>iss</code> and <code>aud</code> in a user ID</strong>. E.g.'
-      that_is_it: That's it. You now have a guaranteed unique user ID verifiably issued by %{name}.
-      next_for_us: This is the most basic case for authentication. In the future %{name} will also provide MFA, custom redirect URLs and a whole lot of other stuff making all use cases supported.
   humans:
     show:
       choose_application: Choose application

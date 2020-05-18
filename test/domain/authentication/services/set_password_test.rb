@@ -15,7 +15,7 @@ class Authentication::Services::SetPasswordTest < ActiveSupport::TestCase
   end
 
   test 'sets everything' do
-    Authentication::Services::VaultKeyEncrypter.stub :call, ['cipher', 'key_pair_id'] do
+    Authentication::Services::EncryptVaultKey.stub :call, ['cipher', 'key_pair_id'] do
       key = @request.call
       assert key
       assert_equal key.encoding, Encoding::UTF_8

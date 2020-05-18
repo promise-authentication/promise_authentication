@@ -10,25 +10,11 @@ class PasswordMailer < ApplicationMailer
     end
   end
 
-  def ping
-    @user_id = params[:user_id]
-    @email = params[:email]
-    @locale = params[:locale]
-
-    # Haha, yeah. I'm gonna get tired of this!
-    # But when I do, that means that Promise is happening. 🤯
-    mail(
-      to: 'anderslemke@gmail.com',
-      subject: "Recover password requested"
-    )
-  end
-
   def recover_password
     @email = params[:email]
-    @user_id = params[:user_id]
-    @secret_key = params[:secret_key]
+    @token = params[:token]
 
-    @url = key_recovery_url(id: @user_id, key_id: @secret_key, locale: I18n.locale)
+    @url = token_recoveries_url(token_id: @token, locale: I18n.locale)
 
     mail(
       to: @email,

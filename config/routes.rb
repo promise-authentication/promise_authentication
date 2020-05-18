@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :keys do
+  resources :tokens do
     resources :recoveries
   end
 

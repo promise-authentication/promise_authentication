@@ -31,17 +31,19 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   test 'recovering password when mail present' do
     @email = 'hello@example.com'
     @old_password = 'old'
-    post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
-
-    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
-    user_id = jar.encrypted[:user_id]
+    auth = Authentication::Services::Authenticate.new(
+      email: @email,
+      password: @old_password
+    )
+    auth.call!
 
     assert_emails 1 do
       post '/password/recover', params: { email: @email }
+      token = Authentication::RecoveryToken.where(user_id: auth.user_id).last.token
       email = ActionMailer::Base.deliveries.first
-      assert_includes email.body.to_s, @email
-      assert_includes email.body.to_s, user_id
-      assert_includes email.body.to_s, 'locale = "en"'
+      assert_includes email.to, @email
+      assert_includes email.html_part.body.to_s, token
+      assert_includes email.text_part.body.to_s, token
     end
     assert_redirected_to wait_password_path
   end

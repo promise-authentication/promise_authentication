@@ -1,37 +1,31 @@
 <h1 class="px-6 text-center mt-16 uppercase font-thin text-secondary text-xl tracking-widest">
-  <%= t '.core_values', name: name %>
+  The core values at <%= name %>
 </h1>
 
 <div class="flex flex-col items-center mt-2">
   <div class="flex flex-wrap sm:flex-no-wrap justify-center">
-    <% %w(security privacy).each do |section| %>
-      <%= 
-        render partial: 'section', locals: {
-          header: t(".#{section}.header"),
-          body: t(".#{section}.body_html", name: name),
-        }
-      %>
-    <% end %>
+    <%= render partial: 'section', locals: {
+      header: "Security",
+      body: "We care about sleep. Deeply. And the only way we can sleep at night, is by building a truly secure system robust to incidents, but with detailed procedures for incident handling." } %>
+    <%= render partial: 'section', locals: {
+      header: "Privacy",
+      body: "Decoupling authentication from personal identity makes this the solution that potentially can become universal. #{name} is an authentication provider completely void from personal identity." } %>
+
   </div>
   <div class="flex flex-wrap justify-center">
-    <% %w(non_profit open_source).each do |section| %>
-      <%= 
-        render partial: 'section', locals: {
-          header: t(".#{section}.header"),
-          body: t(".#{section}.body_html", name: name),
-        }
-      %>
-    <% end %>
+    <%= render partial: 'section', locals: {
+      header: "Non-profit",
+      body: "#{name} has no commercial interests. No ads to show. You never have to worry if your data will be sold to highest bidder. It won't." } %>
+    <%= render partial: 'section', locals: {
+      header: "Open source",
+      body: "The source code for #{name} is available for anyone to read. This ensures that both quality and security is as high as humanly possible." } %>
+
   </div>
   <div class="flex flex-wrap justify-center">
-    <% %w(humans).each do |section| %>
-      <%= 
-        render partial: 'section', locals: {
-          header: t(".#{section}.header"),
-          body: t(".#{section}.body_html", name: name),
-        }
-      %>
-    <% end %>
+    <%= render partial: 'section', locals: {
+      header: "By humans, for humans",
+      body: "#{name} is made by human beings. The only interest is to serve other human beings. We're not here for profits. We only care about creating a piece of internet infrastructure that will make all of our digital lives just a little bit easier and more secure." } %>
+
   </div>
 </div>
 

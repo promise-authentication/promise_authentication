@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_16_181120) do
+ActiveRecord::Schema.define(version: 2020_05_18_145122) do
 
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
@@ -63,6 +63,8 @@ ActiveRecord::Schema.define(version: 2020_05_16_181120) do
     t.string "public_key_base64"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "user_id"
+    t.string "off_site_public_key_base64"
   end
 
   create_table "authentication_passwords", id: :string, force: :cascade do |t|
@@ -70,6 +72,14 @@ ActiveRecord::Schema.define(version: 2020_05_16_181120) do
     t.string "vault_key_salt"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "authentication_recovery_tokens", force: :cascade do |t|
+    t.string "user_id"
+    t.string "token"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token"], name: "index_authentication_recovery_tokens_on_token"
   end
 
   create_table "authentication_relying_party_emails", force: :cascade do |t|

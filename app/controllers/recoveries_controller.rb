@@ -2,17 +2,16 @@ class RecoveriesController < ApplicationController
   layout 'authentication'
   before_action :ensure_recoverable
 
-  def show
+  def index
   end
 
-  def update
+  def create
     if params[:new_password].blank?
-      render action: :show
+      render action: :index
     else
       Authentication::Services::RecoverySetPassword.new(
         new_password: params[:new_password],
-        user_id: params[:id],
-        secret_key_base64: params[:key_id]
+        token: params[:token_id]
       ).call!
       redirect_to login_path
     end
@@ -23,12 +22,11 @@ class RecoveriesController < ApplicationController
   private
 
   def ensure_recoverable
-    recovery = Authentication::VaultKeysForRecovery.find(params[:id])
-    unless recovery&.recoverable_vault_key_cipher_base64.present?
+    recovery = Authentication::RecoveryToken.find_by_token(params[:token_id])
+    unless recovery.present?
       redirect_to root_path
     end
   rescue ActiveRecord::RecordNotFound
     redirect_to root_path
   end
 end
-

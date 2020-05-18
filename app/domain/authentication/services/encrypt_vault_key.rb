@@ -1,8 +1,9 @@
-module Authentication::Services::VaultKeyEncrypter
+module Authentication::Services::EncryptVaultKey
   module_function
 
-  def call(vault_key)
-    off_site_public_key = Base64.strict_decode64(ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'])
+  def call(vault_key, user_id)
+    key = Trust::KeyPair.create
+    off_site_public_key = Base64.strict_decode64 key.public_key
 
     uniq_private_key = RbNaCl::PrivateKey.generate
     uniq_public_key = uniq_private_key.public_key
@@ -17,7 +18,9 @@ module Authentication::Services::VaultKeyEncrypter
     key_pair_id = SecureRandom.uuid
     Authentication::KeyPair.create!(
       id: key_pair_id,
-      public_key_base64: Base64.strict_encode64(uniq_public_key)
+      user_id: user_id,
+      public_key_base64: Base64.strict_encode64(uniq_public_key),
+      off_site_public_key_base64: key.public_key
     )
 
     return Base64.strict_encode64(vault_key_cipher).encode('utf-8'),

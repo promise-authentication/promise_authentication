@@ -1,0 +1,105 @@
+<div class="flex flex-wrap justify-center">
+  <div>
+    <h1 class="px-6 text-center mt-12 uppercase font-thin text-xl tracking-widest text-secondary">
+      Key features for users
+    </h1>
+    <div class="max-w-lg m-auto pr-6 pl-5 mt-8">
+      <ul class="">
+        <% icon_classes = "mr-5 w-6 h-6 text-2xl flex-none flex items-center justify-center" %>
+        <% item_classes = "flex mb-5 items-start" %>
+        <li class="<%= item_classes %>">
+          <div class="<%= icon_classes %>">
+            👤
+          </div>
+          <span>
+            <strong>Private</strong>
+            <br />
+            Your personally identifiable information (your e-mail) is not shared with anyone. In fact, it is <em>not even stored anywhere</em> (except in your browser to show that you are signed in as you). That means, that even in the case of a breach, it will be impossible to identify you.
+          </span>
+        </li>
+        <li class="<%= item_classes %>">
+          <div class="<%= icon_classes %>">
+            👥
+          </div>
+          <span>
+            <strong>Pseudonymous</strong>
+            <br />
+            You will get a unique identity pr. service you use. This ensures that relying parties have no way to profile you across services.
+          </span>
+        </li>
+        <li class="<%= item_classes %>">
+          <div class="<%= icon_classes %>">
+            🔐
+          </div>
+          <span>
+            <strong>Secure</strong>
+            <br />
+            Your identities are only stored in an encrypted format. To provide account recovery keys are generated for decrypting your identities. Those keys are stored seperately from production data.
+          </span>
+        </li>
+        <li class="<%= item_classes %>">
+          <div class="<%= icon_classes %>">
+            😌
+          </div>
+          <span>
+            <strong>Easy to use</strong>
+            <br />
+            <%= name %> uses concepts you already know. Nothing new to learn and understand.
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <h1 class="px-6 text-center mt-12 uppercase font-thin text-xl tracking-widest text-secondary">
+      Key features for businesses
+    </h1>
+
+    <div class="max-w-lg m-auto pr-6 pl-5 mt-8">
+      <ul class="">
+        <% icon_classes = "mr-5 w-6 h-6 text-2xl flex-none flex items-start justify-center" %>
+        <% item_classes = "flex mb-5 items-start" %>
+        <li class="<%= item_classes %>">
+          <div class="<%= icon_classes %>">
+            🌐
+          </div>
+          <span>
+            <strong>Web domain based</strong>
+            <br />
+            If you have a domain name, you can use <%= name %>.
+          </span>
+        </li>
+        <li class="<%= item_classes %>">
+          <div class="<%= icon_classes %>">
+            🔓
+          </div>
+          <span>
+            <strong>No secrets to keep</strong>
+            <br />
+            You will only get a unique random identifier for a user. There is nothing inherently secret in this information, and it can not be used to identify the human being behing. You'll sleep better.
+          </span>
+        </li>
+        <li class="<%= item_classes %>">
+          <div class="<%= icon_classes %>">
+            😍
+          </div>
+          <span>
+            <strong>Developer friendly</strong>
+            <br />
+            <%= name %> uses open standards that is easy to become familiar with. That makes it very easy to get started.
+          </span>
+        </li>
+        <li class="<%= item_classes %>">
+          <div class="<%= icon_classes %>">
+            ✨
+          </div>
+          <span>
+            <strong>The right thing to do</strong>
+            <br />
+            Start building trust with your users instead of making them create more password or selling their data to others.
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

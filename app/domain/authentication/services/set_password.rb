@@ -12,7 +12,7 @@ class Authentication::Services::SetPassword
 
     vault_key = Authentication::Vault.key_from(password, vault_key_salt)
 
-    vault_key_cipher, key_pair_id = Authentication::Services::VaultKeyEncrypter.(vault_key)
+    vault_key_cipher, key_pair_id = Authentication::Services::EncryptVaultKey.(vault_key, user_id)
 
     Authentication::Commands::AddPassword.new(
       user_id: user_id,

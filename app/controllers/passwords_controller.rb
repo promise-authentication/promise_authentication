@@ -26,7 +26,7 @@ class PasswordsController < ApplicationController
   end
 
   def recover
-    ::Authentication::Services::RecoverPassword.new(params.permit(:email).merge({locale: I18n.locale})).call
+    ::Authentication::Services::SendRecoveryMail.new(params.permit(:email).merge({locale: I18n.locale})).call
 
     redirect_to wait_password_path
   end

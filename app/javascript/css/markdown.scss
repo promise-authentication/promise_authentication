@@ -42,10 +42,10 @@
     @apply leading-tight text-3xl font-black text-center mb-10;
   }
   & h2 {
-    @apply leading-tight text-xl font-bold text-black mb-2 mt-10;
+    @apply leading-tight text-xl font-bold mb-2 mt-10;
   }
   & h3 {
-    @apply leading-tight text-lg font-bold text-black mt-8 -mb-2;
+    @apply leading-tight text-lg font-bold mt-8 -mb-2;
   }
   & code {
     @apply font-mono text-sm inline;

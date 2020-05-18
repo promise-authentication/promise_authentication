@@ -5,13 +5,6 @@ class RecoveriesControllerTest < ActionDispatch::IntegrationTest
     private_key_off_site = 'alkwejwelkhwefhweflkwefkekwkwjek'
     @off_site_private_key = RbNaCl::PrivateKey.new(private_key_off_site.b)
     off_site_public_key = @off_site_private_key.public_key
-
-    @old_key =ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION']
-    ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'] = Base64.strict_encode64(off_site_public_key.to_s).encode('utf-8')
-  end
-
-  teardown do
-    ENV['PROMISE_PUBLIC_KEY_FOR_VAULT_KEY_ENCRYPTION'] = @old_key
   end
 
   test 'recovering password' do
@@ -24,26 +17,14 @@ class RecoveriesControllerTest < ActionDispatch::IntegrationTest
 
     user_id = auth.user_id
 
-    # Now we make the account recoverable
-    make = Authentication::Services::MakeRecoverable.new(user_id: user_id)
-    info = make.info
-    public_key = Base64.strict_decode64(info[:public_key_base64])
-    vault_cipher = Base64.strict_decode64(info[:vault_key_cipher_base64])
-
-    # Decrypt the key off-site
-    box = RbNaCl::SimpleBox.from_keypair(
-      public_key.b,
-      @off_site_private_key
-    )
-    vault_key = box.decrypt(vault_cipher)
-
-    # Make the vault key recoverable
-    make.encrypt!(vault_key)
+    # Request the recovery
+    Authentication::Services::SendRecoveryMail.new(email: email).call
+    token = Authentication::RecoveryToken.find_by_user_id(user_id).token
 
     # Get the view
-    get key_recovery_path(id: user_id, key_id: make.secret_key)
+    get token_recoveries_path(token_id: token)
     # Set new password
-    put key_recovery_path(id: user_id, key_id: make.secret_key, new_password: 'hello')
+    post token_recoveries_path(token_id: token, new_password: 'hello')
     assert_redirected_to login_path
 
     # Sign in with new password:

@@ -8,22 +8,26 @@
   <%= admin_relying_party.name_html %> on <%= name %>
 </h1>
 <% if admin_relying_party.administratable?(current_user.id) %>
-  <h2>
-    Sign ins on <%= admin_relying_party.id %>:
-  </h2>
-  <p class="bg-blue-200 rounded p-4 text-center">
-    You can only see this because you are an admin on <%= admin_relying_party.name %>.
-  </p>
+  <div class="-ml-4 -mr-4 p-4 bg-red-200">
+    <h2 class="text-center p-3 rounded -mt-10 bg-red-900 text-white">
+      Admin area
+    </h2>
+    <p class="">
+      You can only see this because you are an admin on <%= admin_relying_party.name %>.
+    </p>
+    <h2>
+      Sign ins on <%= admin_relying_party.id %>:
+    </h2>
+    <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, admin_relying_party.id).group_by_day(:created_at).count) %>
 
-  <%= line_chart(Statistics::SignInEvent.where("created_at > ? AND relying_party_id = ?", 2.month.ago, admin_relying_party.id).group_by_day(:created_at).count) %>
-
-  <h2>
-    Secret key
-  </h2>
-  <p>
-    The secret key for accessing eg. the email endpoints is:
-  </p>
-  <pre><code><%= admin_relying_party.secret_key_base64 %></code></pre>
+    <h2>
+      Secret key
+    </h2>
+    <p>
+      The secret key for accessing eg. the email endpoints is:
+    </p>
+    <pre><code><%= admin_relying_party.secret_key_base64 %></code></pre>
+  </div>
 <% end %>
 
 
