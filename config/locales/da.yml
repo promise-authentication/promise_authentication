@@ -72,7 +72,7 @@ da:
       header: ✅
       description: Du vil modtage en e-mail, som du kan bruge til at nulstille dit password.
   recoveries:
-    show:
+    index:
       header: Nulstil password
       description: Efter dit password er nulstillet, vil du blive bedt om at logge ind igen.
       new_password: Nyt password

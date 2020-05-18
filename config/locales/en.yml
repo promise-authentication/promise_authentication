@@ -68,7 +68,7 @@ en:
       header: ✅
       description: You will recieve an e-mail with instructions for resetting your password.
   recoveries:
-    show:
+    index:
       header: Reset password
       description: After resetting the password you will have to sign in again.
       new_password: New password
