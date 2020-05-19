@@ -1,5 +1,5 @@
 class HumansController < ApplicationController
-  before_action :authenticate
+  before_action :require_signed_id
 
   def show
     @relying_parties = current_user.data.ids.keys.map do |key|

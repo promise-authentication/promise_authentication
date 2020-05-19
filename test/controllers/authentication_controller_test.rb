@@ -152,8 +152,10 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     password = 'secr2t'
     relying_party_id = 'example.com'
     post authenticate_url, params: { email: email, password: password }
+    assert_response :redirect
     post go_to_url, params: { client_id: relying_party_id, nonce: 'abc', redirect_uri: 'https://example.com/hello' }
 
+    assert_response :redirect
     uri = URI.parse(response.redirect_url)
 
     assert_equal uri.host, 'example.com'

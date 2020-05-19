@@ -1,5 +1,5 @@
 class PasswordsController < ApplicationController
-  before_action :authenticate, only: :create
+  before_action :require_signed_id, only: :create
 
   layout 'authentication'
 

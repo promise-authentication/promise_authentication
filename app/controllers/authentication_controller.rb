@@ -1,4 +1,5 @@
 class AuthenticationController < ApplicationController
+  before_action :require_signed_id, except: [:login, :authenticate]
 
   def login
     reset_session
@@ -10,16 +11,12 @@ class AuthenticationController < ApplicationController
   end
 
   def confirm
-    if logged_in?
-      if relying_party.blank?
-        if params[:redirect_to]
-          redirect_to params[:redirect_to]
-        else
-          redirect_to dashboard_path
-        end
+    if relying_party.blank?
+      if params[:redirect_to]
+        redirect_to params[:redirect_to]
+      else
+        redirect_to dashboard_path
       end
-    else
-      redirect_to login_path(login_configuration)
     end
   end
 
@@ -58,7 +55,6 @@ class AuthenticationController < ApplicationController
     end
   end
 
-
   def authenticate
     do_logout!
 
@@ -95,11 +91,11 @@ class AuthenticationController < ApplicationController
     render action: 'login'
   end
 
+  private
+
   def login_configuration
     params.permit(:client_id, :redirect_uri, :nonce, :redirect_to)
   end
   helper_method :login_configuration
-
-  private
 
 end

@@ -6,14 +6,15 @@ module AuthenticatedConcern
     helper_method :current_user
   end
 
-  def authenticate
+  def require_signed_id
     redirect_to login_path(redirect_to: url_for) unless logged_in?
   end
 
   def logged_in?
     current_user_email.present? &&
       current_user_id.present? &&
-      current_user_vault_key.present?
+      current_user_vault_key.present? &&
+      current_user_personal_data.present?
   end
 
   def current_user
@@ -32,7 +33,7 @@ module AuthenticatedConcern
   end
 
   def current_user_personal_data
-    return nil unless logged_in?
+    return nil unless current_user_vault_key.present?
 
     @personal_data ||= -> do
       Authentication::Vault.personal_data(current_user_id, current_user_vault_key)

@@ -1,5 +1,5 @@
 class RootController < ApplicationController
-  before_action :authenticate
+  before_action :require_signed_id
   before_action :verify_root
 
   private
