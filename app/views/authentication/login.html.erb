@@ -1,25 +1,14 @@
 <%= content_for :header do %>
-  <%= image_tag('logo.png', class: 'h-4 m-4') %>
-  <% if relying_party %>
-    <div class="flex-grow flex justify-between items-center">
-      <span class="">
-        <%= t '.sign_in_with_html', name: name %>
-      </span>
-      <% if relying_party&.logo_data %>
-        <%= image_tag(relying_party.logo_data, class: 'h-6 my-3 mr-3') %>
-      <% end %>
-    </div>
-  <% else %>
-    <h1 class="tracking-wide">
-      <%= name %>
-    </h1>
-  <% end %>
+  <%= render partial: 'header' %>
 <% end %>
 
 <%= content_for :body do %>
   <%= form_tag authenticate_path(login_configuration), class: 'w-full' do %>
-    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
-      <h2 class="text-2xl pt-8 text-primary">
+    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10 pt-8">
+      <% if relying_party&.logo_data %>
+        <%= image_tag(relying_party.logo_data, class: 'relying-party-logo') %>
+      <% end %>
+      <h2 class="text-2xl pt-4 text-primary font-bold">
         <%= relying_party&.name || t('.login') %>
       </h2>
       <script>
@@ -38,17 +27,10 @@
       <% if relying_party %>
         <a href="javascript:void(toggleDescription());" id="promise_description" class="hidden a-out rounded bg-gray-200 overflow-hidden">
           <span class="block m-4">
-            <%= t '.description', name: name, relying_party: relying_party.name %>
+            <%= t '.description_html', name: name, relying_party: relying_party.name %>
           </span>
         </a>
       <% end %>
-      <p class="text-secondary text-sm max-w-xs text-center mt-4">
-        <% if relying_party %>
-          <%= t '.you_will_be_redirected_html', relying_party_name: relying_party.name %>
-        <% else %>
-          <%= t '.redirect_to_dashboard' %>
-        <% end %>
-      </p>
       <label class="w-full mt-8">
         <p class="input-label">
           E-mail

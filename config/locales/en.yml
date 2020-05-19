@@ -26,10 +26,11 @@ en:
       no_relying_parties: You have no connected applications yet
       go_to_rp: Go to %{name}
   authentication:
-    confirm:
+    header:
       sign_in_with_html: Sign in with %{name}
+    confirm:
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
-      you_are_html: You are logged in on %{name} as <strong>%{email}</strong>.
+      you_are_html: You are signed in as <strong>%{email}</strong>.
       go_to_html: "Go to <strong>%{relying_party_name}</strong>"
       create_account_html: Create new identity for <strong>%{relying_party_name}</strong>"
       not_you_html: Not <strong>%{email}</strong>?
@@ -42,9 +43,8 @@ en:
     login:
       sign_in_with_html: Sign in with %{name}
       login: Sign in
-      enter_credentials_html: Enter the email and password you use or want to use on <strong>%{name}</strong>.
-      description: "%{relying_party} uses %{name} as a sign in provider. %{name} is not affiliated with %{relying_party} and will share no personal information with them. The e-mail and password you provide here will only be used to sign in to %{name}."
-      you_will_be_redirected_html: You will be redirected to <strong>%{relying_party_name}</strong> after authentication.
+      enter_credentials_html: Enter the e-mail and password you want to sign in with.
+      description_html: "%{relying_party} uses <strong>%{name}</strong> as a sign in provider. <strong>%{name}</strong> is not affiliated with %{relying_party} and will share no personal information with them. The e-mail and password you provide here will only be used to sign in to <strong>%{name}</strong>."
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Login
       forgot_password: Forgot password?
