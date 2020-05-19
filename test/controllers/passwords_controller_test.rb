@@ -6,14 +6,14 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     @old_password = 'old'
     post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
     assert cookies[:user_id]
-    assert cookies[:vault_key]
+    assert cookies[:vault_key_base64]
 
     post '/password', params: { current_password: @old_password, new_password: 'new' }
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
 
     # Can still read personal data
-    vault_key = jar.encrypted[:vault_key]
+    vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
     user_id = jar.encrypted[:user_id]
     personal_data = Authentication::Vault.personal_data(user_id, vault_key)
     assert personal_data

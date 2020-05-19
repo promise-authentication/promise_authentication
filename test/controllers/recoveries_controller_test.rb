@@ -1,12 +1,6 @@
 require 'test_helper'
 
 class RecoveriesControllerTest < ActionDispatch::IntegrationTest
-  setup do
-    private_key_off_site = 'alkwejwelkhwefhweflkwefkekwkwjek'
-    @off_site_private_key = RbNaCl::PrivateKey.new(private_key_off_site.b)
-    off_site_public_key = @off_site_private_key.public_key
-  end
-
   test 'recovering password' do
     # First let's make the account
     email = 'hello@world.dk'
@@ -27,6 +21,10 @@ class RecoveriesControllerTest < ActionDispatch::IntegrationTest
     post token_recoveries_path(token_id: token, new_password: 'hello')
     assert_redirected_to login_path
 
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert_nil jar.encrypted[:user_id]
+    assert_nil jar.encrypted[:email]
+
     # It will not accept more
     get token_recoveries_path(token_id: token)
     assert_redirected_to root_path
@@ -38,7 +36,7 @@ class RecoveriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal user_id, jar.encrypted[:user_id]
     assert_equal email, jar.encrypted[:email]
 
-    vault_key = jar.encrypted[:vault_key]
+    vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
     assert Authentication::Vault.personal_data(user_id, vault_key)
   end
 end

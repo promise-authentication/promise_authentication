@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_18_145122) do
+ActiveRecord::Schema.define(version: 2020_05_19_142555) do
 
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 2020_05_18_145122) do
 
   create_table "authentication_passwords", id: :string, force: :cascade do |t|
     t.binary "digest"
-    t.string "vault_key_salt"
+    t.binary "vault_key_salt"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

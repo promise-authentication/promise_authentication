@@ -7,9 +7,9 @@ class Authentication::Services::SetPassword
   def call
     raise 'Already called' if vault_key
 
-    vault_key_salt = SecureRandom.uuid
     digest = Authentication::Password.digest_from(password)
 
+    vault_key_salt = Authentication::Vault.generate_salt
     vault_key = Authentication::Vault.key_from(password, vault_key_salt)
 
     vault_key_cipher, key_pair_id = Authentication::Services::EncryptVaultKey.(vault_key, user_id)

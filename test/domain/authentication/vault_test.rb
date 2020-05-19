@@ -4,19 +4,19 @@ class Authentication::VaultTest < ActiveSupport::TestCase
   setup do
     @described_class = Authentication::Vault
 
-    @salt = "e434f15f-919d-47e0-8cf9-98c38a7b41bd"
+    @salt = Base64.strict_decode64("P4lFPxhDVTIq64hUfdximV0/F2Pve/cJ6pwLHBwnS84=")
     @password = 'secret'
     @key = Authentication::Vault.key_from(@password, @salt)
 
-    @wrong_key = Authentication::Vault.key_from('hello', 'world')
+    @wrong_key = Authentication::Vault.key_from('hello', @salt)
     @vault = Authentication::Vault.new(
       key: @key
     )
   end
 
   test 'key' do
-    assert_equal Encoding::UTF_8, @key.encoding
-    assert_equal 'xulog-gycyh-hanas-kezyp-zoniz-ha', @key
+    assert_equal Encoding::BINARY, @key.encoding
+    assert_equal 'xlcblv/oBTVWNsbZujhxs1ptidTDrWPLCdIiQLVe8Hc=', Base64.strict_encode64(@key)
   end
 
   test 'using wrong then right password' do

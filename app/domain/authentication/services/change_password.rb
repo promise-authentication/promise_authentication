@@ -6,6 +6,10 @@ class Authentication::Services::ChangePassword
 
   validates :user_id, :current_password, :new_password, presence: true
 
+  def vault_key_base64
+    Base64.strict_encode64(new_vault_key)
+  end
+
   def call
     hashed = Authentication::Password.find(user_id)
     hashed.match!(current_password)

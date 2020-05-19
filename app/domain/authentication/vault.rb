@@ -23,16 +23,26 @@ class Authentication::Vault
     Authentication::PersonalData.new(decrypted)
   end
 
-  def self.key_from(password, salt)
-    mixed = RbNaCl::SecretBox.key_bytes.times.map do |index|
-      if index % 2 == 0
-        password[index % password.size]
-      else
-        salt[index % salt.size]
-      end
-    end.join
+  def self.generate_salt
+    RbNaCl::Random.random_bytes(RbNaCl::PasswordHash::SCrypt::SALTBYTES)
+  end
 
-    Digest::SHA256.bubblebabble(mixed).first(32).encode('utf-8')
+  def self.key_from(password, salt)
+    opslimit = 2**20
+    memlimit = 2**24
+
+    # Size of digest to compute in bytes (default 64)
+    digest_size = 32
+
+    output_key_material = RbNaCl::PasswordHash.scrypt(
+      password.b, 
+      salt,
+      opslimit,
+      memlimit,
+      digest_size
+    )
+
+    output_key_material
   end
 
   def encrypt(data)
@@ -46,7 +56,7 @@ class Authentication::Vault
   private
 
   def box
-    @box ||= RbNaCl::SimpleBox.from_secret_key(key.b)
+    @box ||= RbNaCl::SimpleBox.from_secret_key(key)
   end
 
 end

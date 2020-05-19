@@ -70,11 +70,11 @@ class AuthenticationController < ApplicationController
 
       if params[:remember_me]
         cookies.encrypted.permanent[:user_id]  = @auth_request.user_id
-        cookies.encrypted.permanent[:vault_key] = @auth_request.vault_key
+        cookies.encrypted.permanent[:vault_key_base64] = @auth_request.vault_key_base64
         cookies.encrypted.permanent[:email] = params[:email]
       end
       session[:user_id]  = @auth_request.user_id
-      session[:vault_key] = @auth_request.vault_key
+      session[:vault_key_base64] = @auth_request.vault_key_base64
       session[:email] = params[:email]
 
       redirect_to confirm_path(login_configuration)

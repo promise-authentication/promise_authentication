@@ -18,7 +18,7 @@ class Authentication::Services::SetPasswordTest < ActiveSupport::TestCase
     Authentication::Services::EncryptVaultKey.stub :call, ['cipher', 'key_pair_id'] do
       key = @request.call
       assert key
-      assert_equal key.encoding, Encoding::UTF_8
+      assert_equal key.encoding, Encoding::BINARY
 
       event = Rails.configuration.event_store.read.of_type(Authentication::Events::PasswordSet).last
       assert event

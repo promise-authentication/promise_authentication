@@ -11,6 +11,10 @@ class Authentication::Services::Authenticate
     @email&.downcase
   end
 
+  def vault_key_base64
+    Base64.strict_encode64(vault_key)
+  end
+
   def relying_party
     Authentication::RelyingParty.find(relying_party_id)
   end

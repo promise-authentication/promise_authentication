@@ -15,7 +15,7 @@ class Authentication::Services::Authenticate::ExistingTest < ActiveSupport::Test
     Authentication::HashedEmail.stub :user_id_for_cleartext, 'uid' do
       mock = Minitest::Mock.new
       mock.expect :match!, true, [@password]
-      mock.expect :vault_key_salt, 'salt'
+      mock.expect :vault_key_salt, Authentication::Vault.generate_salt
       Authentication::Password.stub :find, mock do
 
         uid, key = @described_class.(@email, @password)

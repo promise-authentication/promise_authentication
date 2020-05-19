@@ -48,7 +48,8 @@ module AuthenticatedConcern
   end
 
   def current_user_vault_key
-    cookies.encrypted[:vault_key] || session[:vault_key]
+    base64 = cookies.encrypted[:vault_key_base64] || session[:vault_key_base64]
+    Base64.strict_decode64(base64) if base64
   end
 
   def something_unique
@@ -70,7 +71,7 @@ module AuthenticatedConcern
   def do_logout!
     reset_session
     cookies.delete :user_id
-    cookies.delete :vault_key
+    cookies.delete :vault_key_base64
     cookies.delete :email
   end
 end

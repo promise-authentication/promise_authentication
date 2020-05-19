@@ -28,7 +28,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
-    vault_key = jar.encrypted[:vault_key]
+    vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
     email = jar.encrypted[:email]
 
     assert_equal 'hello@world.com', email
@@ -41,7 +41,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     assert_nil jar.encrypted[:user_id]
-    assert_nil jar.encrypted[:vault_key]
+    assert_nil jar.encrypted[:vault_key_base64]
     assert_nil jar.encrypted[:email]
   end
 
@@ -52,7 +52,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
-    vault_key = jar.encrypted[:vault_key]
+    vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
     email = jar.encrypted[:email]
 
     assert_equal 'hello@world.com', email
@@ -100,7 +100,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
       jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
       user_id = jar.encrypted[:user_id]
-      vault_key = jar.encrypted[:vault_key]
+      vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
       personal_data = Authentication::Vault.personal_data(user_id, vault_key)
       assert_equal personal_data.id_for(relying_party_id), 'leguid'
 
@@ -131,7 +131,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
       jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
       user_id = jar.encrypted[:user_id]
-      vault_key = jar.encrypted[:vault_key]
+      vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
       personal_data = Authentication::Vault.personal_data(user_id, vault_key)
       assert_nil personal_data.id_for(relying_party_id)
 

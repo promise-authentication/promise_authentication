@@ -8,9 +8,9 @@ class PasswordsController < ApplicationController
     change_request.user_id = current_user.id
 
     if change_request.valid?
-      vault_key = change_request.call
+      change_request.call
 
-      cookies.encrypted.permanent[:vault_key] = vault_key
+      cookies.encrypted.permanent[:vault_key_base64] = change_request.vault_key_base64
 
       redirect_to login_path
     else
