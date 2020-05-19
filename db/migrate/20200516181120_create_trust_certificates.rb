@@ -9,5 +9,7 @@ class CreateTrustCertificates < ActiveRecord::Migration[6.0]
 
       t.index :expires_at
     end
+    # Make sure we create one now
+    Trust::Certificate.rotate!
   end
 end
