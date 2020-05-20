@@ -2,7 +2,9 @@ class AuthenticationController < ApplicationController
   before_action :require_signed_id, except: [:login, :authenticate]
 
   def login
+    slide_class = flash[:slide_class]
     reset_session
+    flash.now[:slide_class] = slide_class
 
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
     if logged_in?
@@ -21,7 +23,9 @@ class AuthenticationController < ApplicationController
   end
 
   def relogin
-    logout
+    do_logout!
+    flash[:slide_class] = 'a-slide-in-from-left'
+    redirect_to login_path(login_configuration)
   end
 
   def logout
@@ -73,6 +77,7 @@ class AuthenticationController < ApplicationController
       session[:vault_key_base64] = @auth_request.vault_key_base64
       session[:email] = params[:email]
 
+      flash[:slide_class] = 'a-slide-in-from-right'
       redirect_to confirm_path(login_configuration)
     else
       flash.now[:remember_me] = params[:remember_me]

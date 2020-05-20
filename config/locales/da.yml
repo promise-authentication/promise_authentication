@@ -68,6 +68,7 @@ da:
       expect: Vær opmærksom på at det kan tage noget tid (op til et døgn), før du modtager mailen da det af sikkerhedmæssige grunde involverer en manuel process.
       email: E-mail
       go_on: Nulstil password
+      cancel: Tilbage
     wait:
       header: ✅
       description: Du vil modtage en e-mail, som du kan bruge til at nulstille dit password.

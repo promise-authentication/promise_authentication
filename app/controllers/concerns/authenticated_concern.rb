@@ -4,6 +4,7 @@ module AuthenticatedConcern
   included do
     helper_method :logged_in?
     helper_method :current_user
+    helper_method :login_configuration
   end
 
   def require_signed_id
@@ -74,5 +75,9 @@ module AuthenticatedConcern
     cookies.delete :user_id
     cookies.delete :vault_key_base64
     cookies.delete :email
+  end
+
+  def login_configuration
+    params.permit(:client_id, :redirect_uri, :nonce, :redirect_to)
   end
 end

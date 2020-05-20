@@ -64,6 +64,7 @@ en:
       expect: Please not that it might take some time before you receive the email. For security purposes the process requires a manual sted.
       email: E-mail
       go_on: Reset password
+      cancel: Back
     wait:
       header: ✅
       description: You will recieve an e-mail with instructions for resetting your password.

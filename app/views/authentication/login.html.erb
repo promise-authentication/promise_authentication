@@ -35,24 +35,24 @@
         <p class="input-label">
           E-mail
         </p>
-        <%= email_field_tag :email, @auth_request.email, class: 'login-input', autofocus: !flash[:password_message].present?, placeholder: flash[:email_message] %>
+        <%= email_field_tag :email, @auth_request.email, class: 'login-input', autofocus: !flash[:password_message].present?, placeholder: flash[:email_message], tabindex: 1 %>
       </label>
       <label class="mt-3 w-full">
         <% if flash[:password_message].present? %>
           <p class="input-label font-bold">
             <%= flash[:password_message] %>
           </p>
-          <%= password_field_tag :password, nil, class: "login-input", autofocus: true %>
-          <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-primary font-bold' : 'text-secondary '}" %>
+          <%= password_field_tag :password, nil, class: "login-input", autofocus: true, tabindex: 1 %>
         <% else %>
           <p class="input-label">
             Password
           </p>
-          <%= password_field_tag :password, nil, class: "login-input mb-6" %>
+          <%= password_field_tag :password, nil, class: "login-input", tabindex: 1 %>
         <% end %>
+        <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-primary font-bold' : 'text-secondary '}" %>
       </label>
       <label class="flex justify-start items-center w-full cursor-pointer pb-2">
-        <%= check_box_tag :remember_me, nil, flash[:remember_me] %>
+        <%= check_box_tag :remember_me, nil, flash[:remember_me], tabindex: 1 %>
         <span class="ml-2">
           <%= t(".remember_me") %>
         </span>
@@ -61,7 +61,7 @@
         <p class="text-secondary text-sm text-right w-64">
           <%= t '.we_save_no_data_html' %>
         </p>
-        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2' %>
+        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2', tabindex: 1 %>
       </div>
       <% if relying_party %>
         <p class="mt-8 text-secondary  text-sm">
