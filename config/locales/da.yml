@@ -54,6 +54,7 @@ da:
       forgot_password: Glemt password?
       remember_me: Husk mig
       go_on: Videre
+      signing_in_html: 'Logger ind&hellip;'
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
   passwords:
     show:

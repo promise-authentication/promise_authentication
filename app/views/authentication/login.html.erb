@@ -3,7 +3,7 @@
 <% end %>
 
 <%= content_for :body do %>
-  <%= form_tag authenticate_path(login_configuration), class: 'w-full' do %>
+  <%= form_tag authenticate_path(login_configuration), remote: true, class: 'w-full' do %>
     <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10 pt-8">
       <% if relying_party&.logo_data %>
         <%= image_tag(relying_party.logo_data, class: 'relying-party-logo') %>
@@ -61,7 +61,7 @@
         <p class="text-secondary text-sm text-right w-64">
           <%= t '.we_save_no_data_html' %>
         </p>
-        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2', tabindex: 1 %>
+        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2', tabindex: 1, data: { 'disable-with' => t('.signing_in_html') } %>
       </div>
       <% if relying_party %>
         <p class="mt-8 text-secondary  text-sm">

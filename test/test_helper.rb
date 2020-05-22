@@ -15,8 +15,11 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
   setup do
+    @old_domain = ENV['PROMISE_KEY_REGISTRY_API_ROOT']
+    ENV['PROMISE_KEY_REGISTRY_API_ROOT'] = "https://somewhere.nice"
+    key_site = ENV['PROMISE_KEY_REGISTRY_API_ROOT']
     key = RbNaCl::PrivateKey.generate
-    stub_request(:post, "https://promise-277514.ew.r.appspot.com/api/42f402a9-7bec-4a9c-9697-5cd9ba55fcf2/key_pairs.json").
+    stub_request(:post, "#{key_site}/key_pairs.json").
     with(
       body: "{}",
       headers: {
@@ -28,7 +31,7 @@ class ActiveSupport::TestCase
       to_return(status: 200, body: "{\"public_key\":\"#{Base64.strict_encode64(key.public_key)}\"}", headers: {})
 
 
-      stub_request(:get, "https://promise-277514.ew.r.appspot.com/api/42f402a9-7bec-4a9c-9697-5cd9ba55fcf2/key_pairs/#{CGI.escape Base64.strict_encode64(key.public_key)}.json").
+      stub_request(:get, "#{key_site}/key_pairs/#{CGI.escape Base64.strict_encode64(key.public_key)}.json").
       with(
         headers: {
           'Accept'=>'application/json',
@@ -46,5 +49,9 @@ class ActiveSupport::TestCase
             'User-Agent'=>'Faraday v1.0.1'
           }).
           to_return(status: 200, body: "", headers: {})
+  end
+
+  teardown do
+    ENV['PROMISE_KEY_REGISTRY_API_ROOT'] = @old_domain
   end
 end

@@ -20,7 +20,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
   test 'authenticating with nothing' do
     post authenticate_url
-    assert_response :success
+    assert_response :redirect
   end
 
   test 'authentication with no relying party' do

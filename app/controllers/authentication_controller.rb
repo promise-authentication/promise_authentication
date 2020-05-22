@@ -2,9 +2,11 @@ class AuthenticationController < ApplicationController
   before_action :require_signed_id, except: [:login, :authenticate]
 
   def login
-    slide_class = flash[:slide_class]
+    old_flash = flash.to_h
     reset_session
-    flash.now[:slide_class] = slide_class
+    old_flash.each do |k, v|
+      flash.now[k] = v
+    end
 
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
     if logged_in?
@@ -80,27 +82,19 @@ class AuthenticationController < ApplicationController
       flash[:slide_class] = 'a-slide-in-from-right'
       redirect_to confirm_path(login_configuration)
     else
-      flash.now[:remember_me] = params[:remember_me]
+      flash[:remember_me] = params[:remember_me]
       if @auth_request.errors.include?(:email)
-        flash.now[:email_message] = @auth_request.errors.full_messages_for(:email).first
+        flash[:email_message] = @auth_request.errors.full_messages_for(:email).first
       else
-        flash.now[:password_message] = @auth_request.errors.full_messages_for(:password).first
+        flash[:password_message] = @auth_request.errors.full_messages_for(:password).first
       end
-      flash.now[:email] = @auth_request.email
-      render action: 'login'
+      flash[:email] = @auth_request.email
+      redirect_to login_path(login_configuration)
     end
   rescue Authentication::Password::NotMatching
-    flash.now[:remember_me] = params[:remember_me]
-    flash.now[:email] = @auth_request.email
-    flash.now[:password_message] = t('.password_not_correct')
-    render action: 'login'
+    flash[:remember_me] = params[:remember_me]
+    flash[:email] = @auth_request.email
+    flash[:password_message] = t('.password_not_correct')
+    redirect_to login_path(login_configuration)
   end
-
-  private
-
-  def login_configuration
-    params.permit(:client_id, :redirect_uri, :nonce, :redirect_to)
-  end
-  helper_method :login_configuration
-
 end
