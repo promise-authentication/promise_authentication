@@ -16,7 +16,7 @@
       <div class="w-full flex items-center flex-col pb-10 mt-8">
         <% @relying_parties.each do |rp| %>
           <%= link_to "https://#{rp.id}", title: t('.go_to_rp', name: rp.name), class: "py-3 border-b w-full hover:bg-gray-200 flex justify-center items-center", form_class: 'w-full' do %>
-            <% if rp.logo_url %>
+            <% if rp.logo_data %>
               <%= image_tag rp.logo_data, class: 'h-4 mr-2' %>
             <% end %>
             <span>
