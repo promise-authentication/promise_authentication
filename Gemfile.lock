@@ -127,7 +127,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
-    json-jwt (1.11.0)
+    json-jwt (1.13.0)
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
