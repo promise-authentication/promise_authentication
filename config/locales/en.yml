@@ -62,7 +62,6 @@ en:
     new:
       header: Reset password
       description: If you forgot your password to sign in to %{name}, you can request to reset it by providing your e-mail here. We will send you an e-mail containing a link that will allow you to reset your password.
-      expect: Please not that it might take some time before you receive the email. For security purposes the process requires a manual sted.
       email: E-mail
       go_on: Reset password
       cancel: Back

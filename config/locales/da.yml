@@ -66,7 +66,6 @@ da:
     new:
       header: Nulstil password
       description: Hvis du har glemt dit password til at logge ind på %{name} kan du nulstille det ved at skrive din email herunder. Så sender vi en mail med et link som du kan bruge til at lave et nyt password.
-      expect: Vær opmærksom på at det kan tage noget tid (op til et døgn), før du modtager mailen da det af sikkerhedmæssige grunde involverer en manuel process.
       email: E-mail
       go_on: Nulstil password
       cancel: Tilbage
