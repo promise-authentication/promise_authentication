@@ -42,7 +42,7 @@ I wanted to see, if it would be possible to implement authentication completely 
 
 As of May 2020, I believe it is.
 
-## Wan't to join?
+## Want to join?
 
 I would love to have you with me on this mission. So please do not hesitate to reach out if you want to join in some way or another.
 
