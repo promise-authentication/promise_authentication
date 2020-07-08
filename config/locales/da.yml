@@ -22,7 +22,7 @@ da:
       change_password: Skift password
   layouts:
     application:
-      meta_description: "%{name} is a single-sign-on pute identity provider."
+      meta_description: "%{name} is a single-sign-on pure identity provider."
   humans:
     show:
       choose_application: Vælg applikation

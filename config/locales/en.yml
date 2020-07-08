@@ -18,7 +18,7 @@ en:
       change_password: Change password
   layouts:
     application:
-      meta_description: "%{name} er en single-sign-on ren identitetsudbyder."
+      meta_description: "%{name} is a single-sign-on identity provider."
   humans:
     show:
       choose_application: Choose application
