@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   namespace 'about' do
     get 'motivation', as: 'motivation'
+    get 'organisation', as: 'organisation'
     get 'open', as: 'open'
     get 'data', as: 'data'
     get 'pricing', as: 'pricing'
