@@ -42,8 +42,12 @@
   To sign in users, redirect them to
 </p>
 
-<pre><code><%= login_with_relying_party_url(client_id: admin_relying_party.id ) %></code></pre>
+<% nonce = SecureRandom.uuid.first(8) %>
+<pre><code><%= login_with_relying_party_url(client_id: admin_relying_party.id, nonce: nonce ) %></code></pre>
 
+<p>
+  The <code>nonce</code> is a randomly generated string that enables guarding against replay attacks.
+</p>
 <p>
   Please notice that the <code>client_id</code> is part of the URI. The other <%= link_to 'Authentication Request parameters', '#authentication_request' %> are supplied as URL query parameters. Eg. <code>?nonce=abc</code>.
 </p>
@@ -52,16 +56,24 @@
   Now, <%= name %> will take care of authentication and redirect the user back to 
 </p>
 
-<pre><code><%= admin_relying_party.redirect_uri(id_token: '[id_token]', login_configuration: {}) %></code></pre>
+<pre><code><%= admin_relying_party.redirect_uri(id_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'.truncate(10), login_configuration: {}) %></code></pre>
 
 <p>
   The <code>id_token</code> will be a JWT looking like this:
 </p>
-<pre><code><%= JSON.pretty_generate Authentication::IdToken.new(sub: 'unique-user-id', aud: admin_relying_party.id, jti: SecureRandom.uuid).payload %></code></pre>
+<pre><code><%= JSON.pretty_generate Authentication::IdToken.new(sub: 'unique-user-id', aud: admin_relying_party.id, jti: SecureRandom.uuid, nonce: nonce).payload %></code></pre>
 <p>
-  All you will have to do, is to validate that the token actually came from <%= name %>, by using the public key available at
+  When receiving the <code>id_token</code>, you have to
 </p>
-<pre><code>https://promiseauthentication.org/.well-known/jwks.json</code></pre>
+<ol>
+  <li>
+    Validate that the <code>nonce</code> is not replayed.
+  </li>
+  <li>
+    validate that the token actually came from <%= name %>, by using the public key available at
+    <pre><code>https://promiseauthentication.org/.well-known/jwks.json</code></pre>
+  </li>
+</ol>
 <p>
   You can do that by using your preferred JWT library. <%= link_to 'Find yours here', 'https://jwt.io' %>.
 </p>
