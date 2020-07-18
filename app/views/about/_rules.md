@@ -2,11 +2,15 @@
 
 The purpose of the association is to run and develop promiseauthentication.org.
 
-The association is committed to run promiseauthentication.org in a way that will not compromise users privacy.
+promiseauthentication.org is an identity provider offering global single sign-on (SSO) to users.
+
+The association is committed to run promiseauthentication.org in a way that will never compromise users privacy.
+
+promiseauthentication.org must be run in a way that allows users to decentralize authentication. This means keeping the source code open source, and being in compliance with the Promise Protocol.
 
 ## §2 Members
 
-Membership of the association requires ownership of a domain that is active as relying party on promiseauthentication.org.
+Membership of the association requires ownership of a domain that is active as a relying party on promiseauthentication.org.
 
 ## §3 Exclusion
 
