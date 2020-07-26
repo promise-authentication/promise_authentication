@@ -1,13 +1,8 @@
-<div class="px-4 flex items-center">
+<div class="px-4 flex items-center mt-4">
   <ul class="font-medium text-secondary flex justify-center w-full flex-col items-center">
-    <div class="flex justify-center items-center">
-      <li class="h-100">
-        <%= link_to image_tag('logo.png', class: 'h-6 sm:h-8 my-2 mx-4'), root_path %>
-      </li>
-    </div>
     <div class="flex flex-wrap justify-center items-center">
       <div class="flex justify-center items-center">
-        <%= navigation_link 'Getting started', admin_relying_parties_path %>
+        <%= navigation_link 'Getting started', admin_relying_party_path('example.com') %>
         <%= navigation_link 'Security', about_data_path %>
       </div>
       <div class="flex justify-center items-center">

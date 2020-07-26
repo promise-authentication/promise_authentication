@@ -1,5 +1,8 @@
 <%= content_for :content do %>
   <div class="px-4 pt-5 m-auto max-w-2xl">
+    <div class="flex justify-center items-center">
+      <%= link_to image_tag('logo.png', class: 'h-6 sm:h-8 my-2 mx-4'), root_path %>
+    </div>
     <%= render partial: 'about/navigation' %>
     <div class="markdown mb-12 mt-12">
       <%= yield %>

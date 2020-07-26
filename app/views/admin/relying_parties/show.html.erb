@@ -5,7 +5,11 @@
 <%= image_tag(admin_relying_party.logo_data, alt: "#{admin_relying_party.name}", class: "w-20 m-auto") if admin_relying_party.logo_data.present? %>
 
 <h1>
-  <%= admin_relying_party.name_html %> on <%= name %>
+  <% if admin_relying_party.id == 'example.com' %>
+    How to implement <%= name %> on your site
+<% else %>
+  How to implement <%= name %> on <%= admin_relying_party.name_html %>
+<% end %>
 </h1>
 <% if admin_relying_party.administratable?(current_user.id) %>
   <div class="-ml-4 -mr-4 p-4 bg-red-200">
@@ -30,13 +34,18 @@
   </div>
 <% end %>
 
+<p>
+  <%= name %> uses a simplified version of the Implicit Flow in the protocol <%= link_to 'OpenID Connect (OIDC)', 'https://openid.net/specs/openid-connect-core-1_0.html' %>.
+</p>
+<% if admin_relying_party.id == 'example.com' %>
+  <p class="">
+    The following guide uses <code><%= admin_relying_party.id %></code> as <code>client_id</code>. Your <code>client_id</code> should be the shortest possible domain name you control.
+  </p>
+<% end %>
 
 <h2>
   Sign in users
 </h2>
-<p>
-  <%= name %> uses a simplified version of the Implicit Flow in the protocol <%= link_to 'OpenID Connect (OIDC)', 'https://openid.net/specs/openid-connect-core-1_0.html' %>.
-</p>
 
 <p>
   To sign in users, redirect them to
@@ -46,7 +55,7 @@
 <pre><code><%= login_with_relying_party_url(client_id: admin_relying_party.id, nonce: nonce ) %></code></pre>
 
 <p>
-  The <code>nonce</code> is a randomly generated string that enables guarding against replay attacks.
+  The <code>nonce</code> is a randomly generated string that enables protection against replay attacks.
 </p>
 <p>
   Please notice that the <code>client_id</code> is part of the URI. The other <%= link_to 'Authentication Request parameters', '#authentication_request' %> are supplied as URL query parameters. Eg. <code>?nonce=abc</code>.
