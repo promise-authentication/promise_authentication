@@ -71,7 +71,7 @@ GEM
     aes_key_wrap (1.0.1)
     aggregate_root (1.1.1)
       ruby_event_store (= 1.1.1)
-    ahoy_matey (3.0.4)
+    ahoy_matey (3.0.5)
       activesupport (>= 5)
       device_detector
       geocoder (>= 1.4.5)
@@ -107,7 +107,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
-    device_detector (1.0.3)
+    device_detector (1.0.4)
     errbase (0.2.0)
     erubi (1.9.0)
     faraday (1.0.1)
