@@ -1,6 +1,8 @@
 <%= render partial: 'github' %>
 
-<div class="px-6 flex flex-col items-center bg-gray-100 pb-20">
+<%= stylesheet_link_tag 'worldmap' %>
+<div class="px-6 flex flex-col items-center pb-20 w-screen overflow-hidden relative">
+  <div class="worldmap bg-gray-100"></div>
   <%= render partial: 'about/navigation' %>
 
   <%= image_tag 'logo.png', class: 'h-20 mt-10 sm:mt-16', alt: 'Logo' %>
