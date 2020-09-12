@@ -1,14 +1,26 @@
-<div class="px-4 flex items-center mt-4">
-  <ul class="font-medium text-secondary flex justify-center w-full flex-col items-center">
-    <div class="flex flex-wrap justify-center items-center">
-      <div class="flex justify-center items-center">
-        <%= navigation_link 'Getting started', admin_relying_party_path('example.com') %>
-        <%= navigation_link 'Security', about_data_path %>
-      </div>
-      <div class="flex justify-center items-center">
-        <%= navigation_link 'Non-profit', about_organisation_path %>
-        <%= navigation_link 'Pricing', about_pricing_path %>
-      </div>
+<nav class="px-4 flex items-center justify-between flex-wrap mt-4 w-screen">
+  <div class="flex items-center flex-shrink-0 relative">
+    <%= link_to root_path, class: "flex items-center font-bold text-xl bg-clip-text text-transparent bg-gradient-to-t from-blue-900 to-blue-500" do %>
+      <%= image_tag('logo.png', class: 'h-8 mr-1') %>
+      Promise
+    <% end %>
+  </div>
+  <div class="block md:hidden fixed right-0 top-0">
+    <button class="flex items-center p-2 m-3 text-gray-600 hover:text-gray-900" onclick="document.querySelectorAll('#mainnavigation')[0].classList.toggle('hidden');">
+      <svg class="w-6 h-6 fill-current stroke-current" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+  </div>
+  <div id="mainnavigation" class="hidden md:opacity-100 font-medium text-secondary md:w-auto md:h-auto bg-white md:bg-transparent rounded-bl-lg z-20 md:flex md:items-center fixed md:static right-0 top-0 shadow md:shadow-none pl-10 pb-10 md:p-0">
+    <div class="block md:hidden fixed right-0 top-0">
+      <button class="flex items-center p-2 m-3 text-gray-600 hover:text-gray-900" onclick="document.querySelectorAll('#mainnavigation')[0].classList.toggle('hidden');">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
     </div>
-  </ul>
-</div>
+    <ul class="pt-16 md:pt-0 pr-0 md:pr-0 block md:flex md:items-center " style="">
+      <%= navigation_link 'Getting started', admin_relying_party_path('example.com') %>
+      <%= navigation_link 'Security', about_data_path %>
+      <%= navigation_link 'Non-profit', about_organisation_path %>
+      <%= navigation_link 'Pricing', about_pricing_path %>
+    </ul>
+  </div>
+</nav>

@@ -8,7 +8,7 @@
     "@rails/webpacker": "4.2.2",
     "chart.js": "^2.9.3",
     "chartkick": "^3.2.0",
-    "tailwindcss": "^1.4.4",
+    "tailwindcss": "^1.8.8",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",

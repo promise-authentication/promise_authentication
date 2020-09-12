@@ -1,12 +1,9 @@
-<%= render partial: 'github' %>
-
 <%= stylesheet_link_tag 'worldmap' %>
 <div class="px-6 flex flex-col items-center pb-20 w-screen overflow-hidden relative">
   <div class="worldmap bg-gray-100"></div>
   <%= render partial: 'about/navigation' %>
 
-  <%= image_tag 'logo.png', class: 'h-20 mt-10 sm:mt-16', alt: 'Logo' %>
-  <h1 class="text-4xl sm:text-5xl max-w-xl font-black text-center mt-6 leading-tight tracking-tight">
+  <h1 class="text-4xl sm:text-5xl max-w-xl font-black text-center mt-6 leading-tight tracking-tight pt-12 sm:pt-24">
     Authentication infrastructure for the internet. Just&nbsp;that.
   </h1>
   <p class="mt-10 text-left text-gray-700 text-xl sm:text-2xl sm:max-w-2xl sm:px-10 tracking-wide">
@@ -28,8 +25,6 @@
 <%= render partial: 'sections' %>
 
 <%= render partial: 'try' %>
-
-<%= render partial: 'about/navigation' %>
 
 <hr class="w-2/3 m-auto mb-10 mt-8"/>
 
