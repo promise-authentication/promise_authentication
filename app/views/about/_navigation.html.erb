@@ -1,8 +1,10 @@
 <nav class="px-4 flex items-center justify-between flex-wrap mt-4 w-screen">
-  <div class="flex items-center flex-shrink-0 relative">
-    <%= link_to root_path, class: "flex items-center font-bold text-xl bg-clip-text text-transparent bg-gradient-to-t from-blue-900 to-blue-500" do %>
+  <div class="flex items-center flex-shrink-0 relative text-blue-500">
+    <%= link_to root_path, class: "flex items-center font-bold text-xl" do %>
       <%= image_tag('logo.png', class: 'h-8 mr-1') %>
-      Promise
+      <span class=" bg-clip-text text-transparent bg-gradient-to-t from-blue-900 to-blue-500">
+        Promise
+      </span>
     <% end %>
   </div>
   <div class="block md:hidden fixed right-0 top-0">
