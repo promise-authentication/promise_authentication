@@ -1,8 +1,5 @@
 <%= content_for :head do %>
-  <%= stylesheet_link_tag 'worldmap', rel: 'preload', as: 'style', onload: "this.onload=null;this.rel='stylesheet'".html_safe %>
-  <noscript>
-    <%= stylesheet_link_tag 'worldmap' %>
-  </noscript>
+  <%= stylesheet_link_tag 'worldmap' %>
 <% end %>
 
 <div class="px-6 flex flex-col items-center pb-20 w-screen overflow-hidden relative">
