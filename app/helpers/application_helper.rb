@@ -8,7 +8,7 @@ module ApplicationHelper
     classes = "#{ is_active ? 'font-black' : 'font-medium'}"
 
     content_tag(:li, class: classes) do
-      link_to *args, class: 'pr-12 md:px-3 py-2 md:py-4 inline-block whitespace-no-wrap text-gray-900 tracking-wide', &block
+      link_to *args, class: 'pr-12 md:px-3 py-2 md:pb-4 md:pt-5 inline-block whitespace-no-wrap text-gray-900 tracking-wide', &block
     end
   end
 

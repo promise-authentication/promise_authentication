@@ -6,18 +6,19 @@
   <div class="worldmap bg-gray-100 absolute left-0 right-0 top-0 bottom-0" style="z-index:-1;"></div>
   <%= render partial: 'about/navigation' %>
 
-  <h1 class="text-4xl sm:text-5xl max-w-xl font-black text-center mt-6 leading-tight tracking-tight pt-12 sm:pt-24">
+  <h1 class="text-4xl sm:text-6xl max-w-xl font-black text-center mt-6 leading-none tracking-tight pt-12 sm:pt-24">
     Authentication infrastructure for the internet. Just&nbsp;that.
   </h1>
   <p class="mt-10 text-left text-gray-700 text-xl sm:text-2xl sm:max-w-2xl sm:px-10">
-    <em><%= name %></em> is a protocol <em>and</em> a non-profit organisation running a single-sign-on platform implementing the protocol.
+    <%= name %> is a single-sign-on platform using a standard protocol.
 
-    We're just here to fix authentication for all of us. Nothing else.
+    It is non-profit. We're just here to fix authentication for all of us. Nothing else.
 
     We promise!
   </p>
 </div>
 
+<%= render partial: 'try' %>
 
 <%= render partial: 'for_who' %>
 
