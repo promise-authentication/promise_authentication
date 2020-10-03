@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     get 'open', as: 'open'
     get 'data', as: 'data'
     get 'pricing', as: 'pricing'
+    get 'comparison', as: 'comparison'
   end
 
   # This is also the getting started part

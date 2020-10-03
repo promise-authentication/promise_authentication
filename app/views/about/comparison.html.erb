@@ -1,0 +1,107 @@
+<h1>
+  Comparing Promise
+</h1>
+
+<style>
+  table.comparison td:first-child {
+    font-weight: bold;
+    text-align: left;
+    padding-left: 0.5rem;
+  }
+</style>
+<table class="table-fixed text-center w-full comparison">
+  <thead class="text-xs md:text-sm">
+    <tr class="leading-none">
+      <th class="w-16 sm:w-24 md:w-40"></th>
+      <th class="align-bottom pb-3">SSO</th>
+      <th class="align-top sm:align-bottom pb-10 sm:pb-3">Private</th>
+      <th class="align-bottom pb-3">Pseudo&shy;nymous</th>
+      <th class="align-top sm:align-bottom pb-10 sm:pb-3">Decen&shy;tralised</th>
+      <th class="align-bottom pb-3">Cen&shy;tralised</th>
+      <th class="align-top sm:align-bottom pb-10 sm:pb-3">Non-profit</th>
+      <th class="align-bottom pb-3">Nothing to&nbsp;learn</th>
+      <th class="align-top sm:align-bottom pb-10 sm:pb-3">Open source</th>
+    </tr>
+  </thead>
+  <tbody class="text-xs sm:text-sm">
+    <tr class="bg-gray-300">
+      <td>Promise</td>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+    </tr>
+    <tr>
+      <td>OpenID</td>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+    </tr>
+    <tr class="bg-gray-100">
+      <td>SQRL</td>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+    </tr>
+    <tr>
+      <td>Google</td>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+    </tr>
+    <tr class="bg-gray-100">
+      <td>Facebook</td>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+    </tr>
+    <tr>
+      <td>Apple</td>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+    </tr>
+    <tr class="bg-gray-100">
+      <td>Beyond Identity</td>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <td></td>
+      <%= render partial: 'no' %>
+      <%= render partial: 'yes' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'no' %>
+      <%= render partial: 'no' %>
+    </tr>
+  </tbody>
+  
+</table>
+
