@@ -13,95 +13,38 @@
   <thead class="text-xs md:text-sm">
     <tr class="leading-none">
       <th class="w-16 sm:w-24 md:w-40"></th>
-      <th class="align-bottom pb-3">SSO</th>
-      <th class="align-top sm:align-bottom pb-10 sm:pb-3">Private</th>
-      <th class="align-bottom pb-3">Pseudo&shy;nymous</th>
-      <th class="align-top sm:align-bottom pb-10 sm:pb-3">Decen&shy;tralised</th>
-      <th class="align-bottom pb-3">Cen&shy;tralised</th>
-      <th class="align-top sm:align-bottom pb-10 sm:pb-3">Non-profit</th>
-      <th class="align-bottom pb-3">Nothing to&nbsp;learn</th>
-      <th class="align-top sm:align-bottom pb-10 sm:pb-3">Open source</th>
+      <% @order_of_attributes.each do |attribute| %>
+        <th class="<%= cycle("align-bottom pb-3", "align-top sm:align-bottom pb-10 sm:pb-3") %>"><%= {
+          sso: 'SSO',
+          non_profit: 'Non-profit',
+          pseudonymous: 'Pseudo&shy;nymous',
+          private: 'Private',
+          decentralised: 'Decen&shy;tralised',
+          centralised: 'Cen&shy;tralised',
+          nothing_to_learn: 'Nothing to&nbsp;learn',
+          open_source: 'Open source'
+        }[attribute].html_safe %></th>
+      <% end %>
     </tr>
   </thead>
   <tbody class="text-xs sm:text-sm">
-    <tr class="bg-gray-300">
-      <td>Promise</td>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-    </tr>
-    <tr>
-      <td>OpenID</td>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-    </tr>
-    <tr class="bg-gray-100">
-      <td>SQRL</td>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-    </tr>
-    <tr>
-      <td>Google</td>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-    </tr>
-    <tr class="bg-gray-100">
-      <td>Facebook</td>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-    </tr>
-    <tr>
-      <td>Apple</td>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-    </tr>
-    <tr class="bg-gray-100">
-      <td>Beyond Identity</td>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <td></td>
-      <%= render partial: 'no' %>
-      <%= render partial: 'yes' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'no' %>
-      <%= render partial: 'no' %>
-    </tr>
+    <% @order_of_providers.each do |provider| %>
+      <tr class="<%= cycle('bg-gray-100', 'bg-white') %>">
+        <td>
+          <%= provider %>
+        </td>
+        <% @order_of_attributes.each do |attribute| %>
+          <% value = @providers[provider][attribute] %>
+          <% if value.nil? %>
+            <%= render partial: 'dunno' %>
+          <% elsif value %>
+            <%= render partial: 'yes' %>
+          <% else %>
+            <%= render partial: 'no' %>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
   </tbody>
-  
 </table>
 
