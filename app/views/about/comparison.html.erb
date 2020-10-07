@@ -14,7 +14,7 @@
     <tr class="leading-none">
       <th class="w-16 sm:w-24 md:w-40"></th>
       <% @order_of_attributes.each do |attribute| %>
-        <th class="<%= cycle("align-bottom pb-3", "align-top sm:align-bottom pb-10 sm:pb-3") %>"><%= {
+        <th class="<%= cycle("align-bottom pb-3", "align-top sm:align-bottom pb-10 sm:pb-3") %>"><%= link_to({
           sso: 'SSO',
           non_profit: 'Non-profit',
           pseudonymous: 'Pseudo&shy;nymous',
@@ -23,7 +23,7 @@
           centralised: 'Cen&shy;tralised',
           nothing_to_learn: 'Nothing to&nbsp;learn',
           open_source: 'Open source'
-        }[attribute].html_safe %></th>
+        }[attribute].html_safe, "\##{attribute}") %></th>
       <% end %>
     </tr>
   </thead>
@@ -48,3 +48,143 @@
   </tbody>
 </table>
 
+<div class="max-w-2xl m-auto p-4 prose">
+  <% section_classes = "border-l-4 my-3 pl-2" %>
+  <div class="<%= section_classes %>">
+    <h2 id="sso">
+      SSO
+    </h2>
+    <h3>
+      What does it mean?
+    </h3>
+    <p>
+      SSO is an abbreviation for Single Sign-On which basically means, that you can use the same login to authenticate everywhere that supports the provider.
+    </p>
+    <h3>
+      Why is it important?
+    </h3>
+    <p>
+      The alternative to SSO, is that you create a seperate login with a new password each place you want to sign in.
+    </p>
+  </div>
+  <div class="<%= section_classes %>">
+    <h2 id="private">
+      Private
+    </h2>
+    <h3>
+      What does it mean?
+    </h3>
+    <p>
+      Being private means that you personal identity is not stored or revealed to anyone. Not the provider. Not any relying party. Your privacy is guaranteed.
+    </p>
+    <h3>
+      Why is it important?
+    </h3>
+    <p>
+      In a world where more and more data are collected for permanent record, being able to authenticate without revealing any personal information will be desirable.
+    </p>
+  </div>
+  <div class="<%= section_classes %>">
+    <h2 id="nothing_to_learn">
+      Nothing to learn
+    </h2>
+    <h3>
+      What does it mean?
+    </h3>
+    <p>
+      In order to use the provider, there will be no new concepts you'll have to learn. If you've ever tried signing in with email and password, you're good to go.
+    </p>
+    <h3>
+      Why is it important?
+    </h3>
+    <p>
+      In order to get wide adoption, it is crucial that the entire population on the internet does not have to learn new concepts before they can use the solution.
+    </p>
+  </div>
+  <div class="<%= section_classes %>">
+    <h2 id="non_profit">
+      Non-profit
+    </h2>
+    <h3>
+      What does it mean?
+    </h3>
+    <p>
+      It means that the technology is not owned by a commercial entity.
+    </p>
+    <h3>
+      Why is it important?
+    </h3>
+    <p>
+      Authentication is all about trust. Everybody should be able to trust, that the interests of the authentication provider is aligned with the public, not with shareholders and profit.
+    </p>
+  </div>
+  <div class="<%= section_classes %>">
+    <h2 id="pseudonymous">
+      Pseudonymous
+    </h2>
+    <h3>
+      What does it mean?
+    </h3>
+    <p>
+      Being pseudonymous means that each relying party, will get their own unique and different identifier for you. Eg. example.com will know you as 'abc', while foo.com will know you as 'xyz'.
+    </p>
+    <h3>
+      Why is it important?
+    </h3>
+    <p>
+      This makes it impossible for relying parties to profile you across services using your identifier provided by the authentication provider.
+    </p>
+  </div>
+  <div class="<%= section_classes %>">
+    <h2 id="open_source">
+      Open source
+    </h2>
+    <h3>
+      What does it mean?
+    </h3>
+    <p>
+      All source code is available to read.
+    </p>
+    <h3>
+      Why is it important?
+    </h3>
+    <p>
+      As authentication if of public interest, the source code that runs the platform should be accessible for all to read.
+    </p>
+  </div>
+  <div class="<%= section_classes %>">
+    <h2 id="decentralised">
+      Decentralised
+    </h2>
+    <h3>
+      What does it mean?
+    </h3>
+    <p>
+      The solution has no central server that "knows everything". The user has to decide on which hardware the authentication should happen.
+    </p>
+    <h3>
+      Why is it important?
+    </h3>
+    <p>
+      Decentralising makes a solution more robust and less vulnerable to a wide range of attacks.
+    </p>
+  </div>
+  <div class="<%= section_classes %>">
+    <h2 id="centralised">
+      Centralised
+    </h2>
+    <h3>
+      What does it mean?
+    </h3>
+    <p>
+      A central authority takes responsibility for hosting and maintaining the solution.
+    </p>
+    <h3>
+      Why is it important?
+    </h3>
+    <p>
+      This relieves the user of the responsibility of providing or choosing which hardware the authentication should run on. It also allows for user friendly recovery of your account.
+    </p>
+  </div>
+
+</div>

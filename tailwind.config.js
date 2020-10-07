@@ -1,12 +1,17 @@
 module.exports = {
-  purge: [
-    './app/**/*rb'
-  ],
+  purge: {
+    mode: 'all',
+    content: [
+      './app/**/*rb'
+    ],
+  },
   theme: {
     extend: {},
   },
   variants: {
     padding: ['responsive', 'hover']
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography')
+  ],
 }
