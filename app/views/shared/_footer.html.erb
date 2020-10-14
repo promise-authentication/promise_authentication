@@ -4,7 +4,7 @@
       <p class="text-center text-secondary">
         <%= link_to t('.logged_in_as_html', email: current_user.email), dashboard_path %>
       </p>
-      <%= button_to t('.logout'), logout_path, method: :delete, class: "button small transparent mb-4 mt-1" %>
+      <%= button_to t('.logout'), logout_path, method: :delete, class: "button small transparent mb-4 mt-1 appearance-none" %>
     <% else %>
       <%= link_to t('.login'), login_path, class: "button small transparent mb-4 mt-1" %>
     <% end %>
