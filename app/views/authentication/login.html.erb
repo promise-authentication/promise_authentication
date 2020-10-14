@@ -61,7 +61,7 @@
         <p class="text-secondary text-sm text-right w-64">
           <%= t '.we_save_no_data_html' %>
         </p>
-        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2', tabindex: 1, data: { 'disable-with' => t('.signing_in_html') } %>
+        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2 appearance-none', tabindex: 1, data: { 'disable-with' => t('.signing_in_html') } %>
       </div>
       <% if relying_party %>
         <p class="mt-8 text-secondary  text-sm">

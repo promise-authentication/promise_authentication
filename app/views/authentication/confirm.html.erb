@@ -13,7 +13,7 @@
       <p class="text-secondary text-sm max-w-xs text-center mt-3">
         <%= t '.you_are_html', email: current_user.email, name: name %>
       </p>
-      <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center", autofocus: true do %>
+      <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center appearance-none", autofocus: true do %>
         <span class="text-center">
           <% if relying_party.supports_legacy_accounts? && current_user.data.id_for(relying_party.id).blank? %>
             <%= t('.create_account_html', relying_party_name: relying_party.name) %>
