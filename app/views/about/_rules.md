@@ -93,7 +93,7 @@ Any remarks from the accountant should be enclosed with the annual accounts.
 
 ### §7.3 Authorization to sign
 
-The chair of the board has authorisation to sign.
+The chair of the board has authorization to sign.
 
 ## §8 Changing the rules
 
