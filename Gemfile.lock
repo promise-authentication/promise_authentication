@@ -76,9 +76,9 @@ GEM
       device_detector
       geocoder (>= 1.4.5)
       safely_block (>= 0.2.1)
-    airbrake (11.0.0)
-      airbrake-ruby (~> 5.0)
-    airbrake-ruby (5.0.1)
+    airbrake (11.0.1)
+      airbrake-ruby (~> 5.1)
+    airbrake-ruby (5.1.0)
       rbtree3 (~> 0.5)
     amq-protocol (2.3.1)
     arkency-command_bus (0.4.0)
