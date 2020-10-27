@@ -85,7 +85,7 @@ GEM
       thread_safe
     bindata (2.4.7)
     bindex (0.8.1)
-    bootsnap (1.4.8)
+    bootsnap (1.4.9)
       msgpack (~> 1.0)
     bounded_context (1.1.1)
     builder (3.2.4)
