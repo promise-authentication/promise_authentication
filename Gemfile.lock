@@ -212,7 +212,7 @@ GEM
     rbnacl (7.1.1)
       ffi
     rbtree3 (0.6.0)
-    redcarpet (3.5.0)
+    redcarpet (3.5.1)
     regexp_parser (1.8.2)
     retries (0.0.5)
     ruby2_keywords (0.0.2)
