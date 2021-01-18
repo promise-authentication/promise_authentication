@@ -116,7 +116,7 @@ GEM
       faraday (>= 0.8)
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
-    ffi (1.13.1)
+    ffi (1.14.2)
     geocoder (1.6.4)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -132,7 +132,7 @@ GEM
       aes_key_wrap
       bindata
     jwt (2.2.2)
-    listen (3.3.3)
+    listen (3.4.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.7.0)
@@ -319,7 +319,7 @@ DEPENDENCIES
   jbuilder (~> 2.10)
   json-jwt
   jwt
-  listen (>= 3.0.5, < 3.4)
+  listen (>= 3.0.5, < 3.5)
   pg
   puma (~> 5.1)
   rails (~> 6.0.3)
