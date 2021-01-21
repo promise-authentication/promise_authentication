@@ -99,8 +99,37 @@ class Authentication::RelyingParty
     @name || id
   end
 
+  def local_hosts
+    ['127.0.0.1', /localhost$/]
+  end
+
+  def included?(array, value)
+    array.each do |str_or_reg|
+      if str_or_reg.is_a?(String)
+        return true if str_or_reg == value
+      else
+        return true if str_or_reg.match?(value)
+      end
+    end
+    return false
+  end
+
+  def local_host?(uri)
+    included?(local_hosts, uri.host)
+  end
+
   def allowed_redirect_domain_names
-    ((@allowed_redirect_domain_names || []) + [id, 'localhost', '127.0.0.1'])
+    ((@allowed_redirect_domain_names || []) + [id]+local_hosts)
+  end
+
+  def allowed_redirect_host?(uri)
+    included?(allowed_redirect_domain_names, uri.host)
+  end
+
+  def allowed_scheme?(uri)
+    allowed_schemes = ['https']
+    allowed_schemes << 'http' if local_host?(uri)
+    return allowed_schemes.include?(uri.scheme)
   end
 
   def name_html
@@ -115,10 +144,7 @@ class Authentication::RelyingParty
     url = login_configuration[:redirect_uri] || default_redirect_uri
     uri = URI.parse(url)
 
-    allowed_schemes = ['https']
-    allowed_schemes << 'http' if ["localhost", "127.0.0.1"].include?(uri.host)
-
-    if allowed_schemes.include?(uri.scheme) && allowed_redirect_domain_names.include?(uri.host)
+    if allowed_scheme?(uri) && allowed_redirect_host?(uri)
       new_query_ar = URI.decode_www_form(uri.query || '') << ['id_token', id_token]
       uri.query = URI.encode_www_form(new_query_ar)
       uri.to_s

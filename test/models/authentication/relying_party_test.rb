@@ -49,6 +49,8 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
         'https://example.com/foo',
         'https://example.com/authenticate',
         'http://localhost/world',
+        'http://hello.localhost/world',
+        'http://hello.localhost:3000/world',
         'https://sub.example.com/hello',
         'https://sub.example.com/world',
         'http://127.0.0.1:3000/hello',
