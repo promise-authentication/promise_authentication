@@ -89,7 +89,7 @@ GEM
       thread_safe
     bindata (2.4.7)
     bindex (0.8.1)
-    bootsnap (1.5.1)
+    bootsnap (1.6.0)
       msgpack (~> 1.0)
     bounded_context (1.3.0)
     builder (3.2.4)
@@ -151,7 +151,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
     minitest (5.14.3)
-    msgpack (1.3.3)
+    msgpack (1.4.1)
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
