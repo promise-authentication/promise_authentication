@@ -87,7 +87,7 @@ GEM
     amq-protocol (2.3.1)
     arkency-command_bus (0.4.0)
       thread_safe
-    bindata (2.4.7)
+    bindata (2.4.10)
     bindex (0.8.1)
     bootsnap (1.7.3)
       msgpack (~> 1.0)
