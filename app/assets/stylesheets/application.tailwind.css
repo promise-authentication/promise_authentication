@@ -197,9 +197,7 @@ html {
   /* MARKDOWN */
   .markdown {
     @apply leading-normal text-base;
-    @screen sm {
-      @apply px-8;
-    }
+    @apply sm:px-8;
     & > * + *, & li > p + p {
       @apply mt-3;
     }
@@ -255,9 +253,7 @@ html {
     }
     & ul, & ol {
       @apply pl-5;
-      @screen sm {
-        @apply pl-10;
-      }
+      @apply sm:pl-10;
     }
     & ul {
       @apply list-disc;
