@@ -5,6 +5,7 @@ class Authentication::RelyingParty
 
   attr_accessor :id, :name, :logo_url, :locale
   attr_accessor :allowed_redirect_domain_names
+  attr_accessor :allowed_redirect_uris
   attr_accessor :admin_user_ids
   attr_accessor :legacy_account_authentication_url, :legacy_account_forgot_password_url
 
@@ -140,11 +141,15 @@ class Authentication::RelyingParty
     "https://#{id}/authenticate"
   end
 
+  def allowed_uri?(uri)
+    @allowed_redirect_uris&.include?(uri.to_s)
+  end
+
   def redirect_uri(id_token:, login_configuration:)
     url = login_configuration[:redirect_uri] || default_redirect_uri
     uri = URI.parse(url)
 
-    if allowed_scheme?(uri) && allowed_redirect_host?(uri)
+    if allowed_uri?(uri) || (allowed_scheme?(uri) && allowed_redirect_host?(uri))
       new_query_ar = URI.decode_www_form(uri.query || '') << ['id_token', id_token]
       uri.query = URI.encode_www_form(new_query_ar)
       uri.to_s

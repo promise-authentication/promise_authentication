@@ -39,12 +39,16 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
       allowed_redirect_domain_names: [
         'sub.example.com',
         '87.52.27.24'
+      ],
+      allowed_redirect_uris: [
+        "exp://192.168.50.185:19000/authenticate",
       ]
     }.to_json
     @described_class.stub :fetch, response do
       @relying_party = Authentication::RelyingParty.find('example.com')
 
       [
+        "exp://192.168.50.185:19000/authenticate",
         'https://example.com/authenticate?email=jam@bar.com',
         'https://example.com/foo',
         'https://example.com/authenticate',
