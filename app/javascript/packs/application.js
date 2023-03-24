@@ -8,7 +8,6 @@ require("turbolinks").start()
 // require("@rails/activestorage").start()
 // require("channels")
 
-// import '../css/markdown.scss'
 // import '../css/tailwind.css'
 // import '../css/input.scss'
 // import '../css/buttons.scss'

@@ -5,10 +5,8 @@
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
-    "@tailwindcss/typography": "^0.2.0",
     "chart.js": "^2.9.3",
     "chartkick": "^3.2.0",
-    "tailwindcss": "^1.8.12",
     "turbolinks": "^5.2.0",
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.1"
