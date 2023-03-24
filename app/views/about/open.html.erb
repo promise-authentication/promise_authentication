@@ -1,7 +1,3 @@
-<%= content_for :head do %>
-  <%= javascript_pack_tag 'charts', 'data-turbolinks-track': 'reload' %>
-<% end %>
-
 <h1 class="text-xl font-black text-center">
   Open by design
 </h1>
@@ -16,7 +12,6 @@
 <h2 class="">
   Vistors on promiseauthentication.org:
 </h2>
-<%= line_chart Ahoy::Visit.where("started_at > ?", 1.month.ago).group_by_day(:started_at).count %>
 <p>
   This is based on anonymized data. There are no cookies used for tracking and IPs are masked to for example 8.8.4.4 becomes 8.8.4.0. Here is the latest visitor (might be you):
 </p>
@@ -25,8 +20,7 @@
 <h2 class="">
   JWTs generated:
 </h2>
-<%= line_chart Statistics::SignInEvent.where("created_at > ?", 1.month.ago).group_by_day(:created_at).count %>
 <p>
   This is based on anonymized data. Here is an example:
 </p>
-<pre><code><%= JSON.pretty_generate Statistics::SignInEvent.last.attributes %></code></pre>
+<pre><code><%= JSON.pretty_generate Statistics::SignInEvent.last&.attributes %></code></pre>
