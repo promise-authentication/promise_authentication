@@ -94,3 +94,5 @@ gem "webmock", "~> 3.12"
 # gem "matrix", "~> 0.4.2"
 
 gem "tailwindcss-rails", "~> 2.0"
+
+gem "sass-rails", "~> 6.0"
