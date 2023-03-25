@@ -8,7 +8,10 @@ class Authentication::IdToken
   end
 
   def to_s
-    JWT.encode(payload, self.class.current.private_key, 'ES512').encode('utf-8')
+    cert = self.class.current
+    jwk = cert.public_key.to_jwk
+    kid = jwk["kid"]
+    JWT.encode(payload, self.class.current.private_key, 'ES512', kid: kid).encode('utf-8')
   end
 
   def self.parse(string)
