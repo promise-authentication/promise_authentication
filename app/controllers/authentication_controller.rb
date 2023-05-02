@@ -1,5 +1,5 @@
 class AuthenticationController < ApplicationController
-  before_action :require_signed_id, except: [:login, :authenticate]
+  before_action :require_signed_id, except: [:login, :authenticate, :logout]
 
   def login
     old_flash = flash.to_h
