@@ -32,7 +32,11 @@ class AuthenticationController < ApplicationController
 
   def logout
     do_logout!
-    redirect_to login_path(login_configuration)
+    if params[:redirect_to]
+      redirect_to params[:redirect_to]
+    else
+      redirect_to login_path(login_configuration)
+    end
   end
 
   def go_to
