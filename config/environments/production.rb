@@ -62,10 +62,10 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "promise_authentication_production"
 
   ActionMailer::Base.smtp_settings = {
-    :user_name => ENV['SENDGRID_USERNAME'],
-    :password => ENV['SENDGRID_PASSWORD'],
+    :user_name => ENV['SMTP_USERNAME'],
+    :password => ENV['SMTP_PASSWORD'],
     :domain => 'promiseauthentication.org',
-    :address => 'smtp.sendgrid.net',
+    :address => ENV['SMTP_ADDRESS'],
     :port => 587,
     :authentication => :plain,
     :enable_starttls_auto => true
