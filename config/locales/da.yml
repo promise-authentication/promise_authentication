@@ -53,7 +53,7 @@ da:
       we_save_no_data_html: Din e-mail og password bliver ikke gemt så <em>nogen</em> kan læse dem.
       forgot_password: Glemt password?
       remember_me: Husk mig
-      go_on: Videre
+      go_on: Opret eller login
       signing_in_html: 'Logger ind&hellip;'
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
   passwords:
