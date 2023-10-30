@@ -8,17 +8,17 @@ class Authentication::Vault
   def self.personal_data(user_id, vault_key)
     personal_data!(user_id, vault_key)
   rescue RbNaCl::CryptoError, ActiveRecord::RecordNotFound
-    return nil
+    nil
   end
 
   def self.personal_data!(user_id, vault_key)
-    encrypted = Authentication::VaultContent.
-      find(user_id).
-      encrypted_personal_data
+    encrypted = Authentication::VaultContent
+                .find(user_id)
+                .encrypted_personal_data
 
-    decrypted = Authentication::Vault.
-      new(key: vault_key).
-      decrypt encrypted
+    decrypted = Authentication::Vault
+                .new(key: vault_key)
+                .decrypt encrypted
 
     Authentication::PersonalData.new(decrypted)
   end
@@ -34,15 +34,13 @@ class Authentication::Vault
     # Size of digest to compute in bytes (default 64)
     digest_size = 32
 
-    output_key_material = RbNaCl::PasswordHash.scrypt(
-      password.b, 
+    RbNaCl::PasswordHash.scrypt(
+      password.b,
       salt,
       opslimit,
       memlimit,
       digest_size
     )
-
-    output_key_material
   end
 
   def encrypt(data)
@@ -58,5 +56,4 @@ class Authentication::Vault
   def box
     @box ||= RbNaCl::SimpleBox.from_secret_key(key)
   end
-
 end

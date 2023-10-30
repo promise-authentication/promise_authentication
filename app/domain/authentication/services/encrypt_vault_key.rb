@@ -23,8 +23,7 @@ module Authentication::Services::EncryptVaultKey
       off_site_public_key_base64: key.public_key
     )
 
-    return Base64.strict_encode64(vault_key_cipher).encode('utf-8'),
-      key_pair_id
+    [Base64.strict_encode64(vault_key_cipher).encode('utf-8'),
+     key_pair_id]
   end
 end
-

@@ -1,4 +1,4 @@
-<%= link_to 'javascript:history.go(-1);', class: "fixed inset-0 m-2 mb-16 bg-uniq rounded-lg text-white overflow-scroll shadow" do %>
+<%= link_to 'javascript:history.go(-1);', class: "fixed inset-0 m-2 mb-16 bg-uniq rounded-lg text-white overflow-scroll shadow flex flex-col items-center justify-center" do %>
   <button class="text-2xl fixed top-0 right-0 mr-6 mt-4 text-white leading-none" aria-label="Close this box here">
     ×
   </button>
@@ -31,8 +31,8 @@
   </div>
 <% end %>
 
-<div class="fixed bottom-0 right-0 p-2 w-1/2 mr-8 flex items-end justify-end">
-  <p class="text-right mr-1 text-sm mb-1">
+<div class="fixed bottom-0 right-0 p-2 mr-8 flex items-end justify-end">
+  <p class="text-right mr-1 text-sm mb-1.5">
     <span class="whitespace-no-wrap">You unique combination of a letter/number</span> <span class="whitespace-no-wrap">and color will always show here</span>
   </p>
   <p class="mb-1">
