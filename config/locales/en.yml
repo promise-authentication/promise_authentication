@@ -28,6 +28,13 @@ en:
   authentication:
     header:
       sign_in_with_html: Sign in with %{name}
+    confirm_email:
+      account_created: Account created
+      lets_confirm_that_email_html: Your e-mail <strong>will not be stored</strong> anywhere. This means we wont be able to help you recover your account in any way. So please make sure you provided the right e-mail.
+      label: "Please confirm your e-mail by writing it again:"
+      alert: Please write your e-mail address in the text field.
+      go_on: Confirm e-mail
+      going: ...
     confirm:
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
       you_are_html: You are signed in as <strong>%{email}</strong>.

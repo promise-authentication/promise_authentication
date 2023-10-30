@@ -84,7 +84,11 @@ class AuthenticationController < ApplicationController
       session[:email] = params[:email]
 
       flash[:slide_class] = 'a-slide-in-from-right'
-      redirect_to confirm_path(login_configuration)
+      if @auth_request.newly_created_account
+        redirect_to confirm_email_path(login_configuration)
+      else
+        redirect_to confirm_path(login_configuration)
+      end
     else
       flash[:remember_me] = params[:remember_me]
       if @auth_request.errors.include?(:email)

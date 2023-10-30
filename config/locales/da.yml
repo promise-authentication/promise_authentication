@@ -32,6 +32,13 @@ da:
   authentication:
     header:
       sign_in_with_html: Log ind med %{name}
+    confirm_email:
+      account_created: Din konto er nu oprettet
+      lets_confirm_that_email_html: Da din <strong>e-mail ikke bliver gemt</strong> nogle steder, er det ikke muligt for os at finde dig frem via e-mail. Det er derfor vigtigt at du har registreret dig med den rigtige e-mail.
+      label: "Bekræft din e-mail ved at skrive den igen:"
+      alert: Udfyld din mail for at bekræfte den.
+      go_on: Videre
+      going: ...
     confirm:
       sign_in_on_html: "Gå til <strong>%{relying_party_name}</strong>"
       you_are_html: Du er logget ind som <strong>%{email}</strong>.

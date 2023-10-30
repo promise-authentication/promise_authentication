@@ -176,6 +176,13 @@
     }
   }
 
+  .button.disabled {
+    @apply !bg-gray-500 !text-white;
+    &:hover {
+      @apply !bg-gray-600 !shadow-none;
+    }
+  }
+
   .button.external {
     @apply bg-red-600 text-white;
     &:hover {
