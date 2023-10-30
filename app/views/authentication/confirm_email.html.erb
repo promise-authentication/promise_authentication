@@ -34,25 +34,34 @@
     </div>
 
     <script>
-      let path = "<%= confirm_path(login_configuration) %>";
-      let emailToVerify = "<%= current_user.email %>";
-      let emailInput = document.getElementById("confirm_email");
-      let confirmButton = document.getElementById("confirm_button");
-
-      emailInput.addEventListener("input", function(event) {
-        if(emailInput.value == emailToVerify) {
-          confirmButton.classList.remove("disabled");
-          confirmButton.href = path;
+      function ready(fn) {
+        if (document.readyState !== 'loading') {
+          fn();
         } else {
-          confirmButton.classList.add("disabled");
-          confirmButton.href = "javascript:alert('<%= t('.alert') %>')";
+          document.addEventListener('DOMContentLoaded', fn);
         }
-      });
+      }
+      ready(function() {
+        let path = "<%= confirm_path(login_configuration) %>";
+        let emailToVerify = "<%= current_user.email %>";
+        let emailInput = document.getElementById("confirm_email");
+        let confirmButton = document.getElementById("confirm_button");
 
-      emailInput.addEventListener("keyup", function(event) {
-        if (event.key === 'Enter' || event.keyCode === 13) {
-          confirmButton.click();
-        }
+        emailInput.addEventListener("input", function(event) {
+          if(emailInput.value == emailToVerify) {
+            confirmButton.classList.remove("disabled");
+            confirmButton.href = path;
+          } else {
+            confirmButton.classList.add("disabled");
+            confirmButton.href = "javascript:alert('<%= t('.alert') %>')";
+          }
+        });
+
+        emailInput.addEventListener("keyup", function(event) {
+          if (event.key === 'Enter' || event.keyCode === 13) {
+            confirmButton.click();
+          }
+        });
       });
     </script>
   </div>
