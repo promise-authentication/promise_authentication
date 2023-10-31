@@ -7,7 +7,7 @@ class Authentication::VaultKeysForRecoveryTest < ActiveSupport::TestCase
     authentication = Authentication::Services::Authenticate.new(
       email: email,
       password: 'secret'
-    ).call!
+    ).register!(email_confirmation: email)
 
     user_id = authentication.user_id
 

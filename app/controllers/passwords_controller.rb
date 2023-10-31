@@ -14,11 +14,11 @@ class PasswordsController < ApplicationController
 
       redirect_to login_path
     else
-      if change_request.errors.include?(:current_password)
-        @current_password_message = change_request.errors.full_messages_for(:current_password).first
-      else
-        @current_password_message = I18n.t('fill_both')
-      end
+      @current_password_message = if change_request.errors.include?(:current_password)
+                                    change_request.errors.full_messages_for(:current_password).first
+                                  else
+                                    I18n.t('fill_both')
+                                  end
     end
   rescue Authentication::Password::NotMatching
     @current_password_message = I18n.t('password_not_matching')
@@ -26,9 +26,8 @@ class PasswordsController < ApplicationController
   end
 
   def recover
-    ::Authentication::Services::SendRecoveryMail.new(params.permit(:email).merge({locale: I18n.locale})).call
+    ::Authentication::Services::SendRecoveryMail.new(params.permit(:email).merge({ locale: I18n.locale })).call
 
     redirect_to wait_password_path
   end
-
 end

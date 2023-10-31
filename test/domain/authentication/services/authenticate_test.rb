@@ -33,10 +33,8 @@ class Authentication::Services::AuthenticateTest < ActiveSupport::TestCase
 
   test 'it will create a new if no existing' do
     Authentication::Services::Authenticate::Existing.stub :call, nil do
-      Authentication::Services::Authenticate::Register.stub :call, 'world' do
-        @request.call!
-        assert_equal @request.user_id, 'world'
-      end
+      @request.call!
+      assert_nil @request.user_id
     end
   end
 end

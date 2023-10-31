@@ -3,7 +3,7 @@
 <% end %>
 
 <%= content_for :body do %>
-  <%= form_tag authenticate_path(login_configuration), remote: true, class: 'w-full' do %>
+  <%= form_tag authenticate_path(login_configuration), class: 'w-full' do %>
     <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10 pt-8">
       <% if relying_party&.logo_data %>
         <%= image_tag(relying_party.logo_data, class: 'relying-party-logo') %>
@@ -52,7 +52,7 @@
         <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-primary font-bold' : 'text-secondary '}" %>
       </label>
       <label class="flex justify-start items-center w-full cursor-pointer pb-2">
-        <%= check_box_tag :remember_me, nil, flash[:remember_me], tabindex: 1 %>
+        <%= check_box_tag :remember_me, nil, flash[:remember_me], tabindex: 1, class: "rounded" %>
         <span class="ml-2">
           <%= t(".remember_me") %>
         </span>

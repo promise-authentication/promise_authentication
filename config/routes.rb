@@ -31,7 +31,6 @@ Rails.application.routes.draw do
   get    'logout', to: 'authentication#logout'
   delete 'relogin', to: 'authentication#relogin', as: 'relogin'
   get    'confirm', to: 'authentication#confirm', as: 'confirm'
-  get    'confirm_email', to: 'authentication#confirm_email', as: 'confirm_email'
   post   'authenticate', to: 'authentication#authenticate', as: 'authenticate'
   get    'authenticate', to: 'authentication#login'
   post   'go_to', to: 'authentication#go_to', as: 'go_to'

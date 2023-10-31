@@ -24,7 +24,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication with no relying party' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
+    post authenticate_url, params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
@@ -48,7 +48,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   test 'authentication with relying party' do
     Authentication::RelyingParty.stub :fetch, nil do
       post authenticate_url,
-           params: { email: 'hello@world.com', password: 'secret', client_id: 'party.com', remember_me: 1 }
+        params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', client_id: 'party.com', remember_me: 1 }
     end
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
@@ -67,15 +67,20 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'cookie login persists' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
+    post authenticate_url, params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
     get login_url
     assert_response :redirect
   end
 
   test 'showing email after login' do
     Authentication::RelyingParty.stub :fetch, nil do
-      post authenticate_url, params: { email: 'hello@world.com', password: 'secret', client_id: 'party.com' }
-      assert_redirected_to confirm_email_path(client_id: 'party.com')
+      post authenticate_url, params: {
+        email: 'hello@world.com',
+        email_confirmation: "hello@world.com",
+        password: 'secret',
+        client_id: 'party.com'
+      }
+      assert_redirected_to confirm_path(client_id: 'party.com')
 
       get confirm_path(client_id: 'party.com')
       assert_response :success
@@ -94,10 +99,12 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :id, relying_party_id
     relying_party.expect :id, relying_party_id
     relying_party.expect :knows_legacy_account?, true, [email]
+    relying_party.expect :knows_legacy_account?, true, [email]
+    relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
     relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
 
     Authentication::RelyingParty.stub :find, relying_party do
-      post authenticate_url, params: { email: email, password: password, client_id: relying_party_id, remember_me: 1 }
+      post authenticate_url, params: { email: email, email_confirmation: email, password: password, client_id: relying_party_id, remember_me: 1 }
 
       jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
       user_id = jar.encrypted[:user_id]
@@ -111,7 +118,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
       assert_mock relying_party
 
-      assert_redirected_to confirm_email_path(client_id: relying_party_id)
+      assert_redirected_to confirm_path(client_id: relying_party_id)
     end
   end
 
@@ -121,7 +128,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party_id = 'example.com'
 
     # Create existing account
-    post authenticate_url, params: { email: email, password: password }
+    post authenticate_url, params: { email: email, email_confirmation: email, password: password }
 
     relying_party = Minitest::Mock.new
     relying_party.expect :locale, nil
@@ -152,7 +159,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     email = 'hello@world.com'
     password = 'secr2t'
     relying_party_id = 'example.com'
-    post authenticate_url, params: { email: email, password: password }
+    post authenticate_url, params: { email: email, email_confirmation: email, password: password }
     assert_response :redirect
 
     Authentication::RelyingParty.stub :fetch, nil do

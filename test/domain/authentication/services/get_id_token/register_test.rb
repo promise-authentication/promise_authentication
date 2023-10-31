@@ -8,7 +8,7 @@ class Authentication::Services::GetIdToken::RegisterTest < ActiveSupport::TestCa
     authentication = Authentication::Services::Authenticate.new(
       email: @email, 
       password: @password
-    ).call!
+    ).register!(email_confirmation: @email)
     @user_id = authentication.user_id
     @vault_key = authentication.vault_key
 

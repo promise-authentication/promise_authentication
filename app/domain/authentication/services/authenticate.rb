@@ -1,9 +1,11 @@
 class Authentication::Services::Authenticate
   include ActiveModel::Model
 
+  EmailConfirmationError = Class.new(StandardError)
+
   attr_writer :email
-  attr_accessor :password, :relying_party_id
-  attr_reader :user_id, :vault_key, :newly_created_account
+  attr_accessor :password, :relying_party_id, :exisiting_account
+  attr_reader :user_id, :vault_key, :existing_account, :should_confirm_email
 
   validates :email, :password, presence: true
 
@@ -19,27 +21,33 @@ class Authentication::Services::Authenticate
     Authentication::RelyingParty.find(relying_party_id)
   end
 
-  def call!
+  def existing!
     @user_id, @vault_key = Existing.call(email, password)
-    if @user_id
-      @newly_created_account = false
-    else
+    @existing_account = !!@user_id
+  end
 
-      legacy_account_user_id = nil
-      if relying_party&.knows_legacy_account?(email)
-        legacy_account_user_id = relying_party.legacy_account_user_id_for(
-          email,
-          password
-        )
-      end
-
-      @user_id, @vault_key = Register.call(email: email,
-                                           password: password,
-                                           relying_party_id: relying_party&.id,
-                                           legacy_account_user_id: legacy_account_user_id,
-                                           relying_party_knows_password: legacy_account_user_id.present?)
-      @newly_created_account = true
-    end
+  def call!
+    existing!
     self
+  end
+
+  def register!(email_confirmation:)
+    raise EmailConfirmationError if email != email_confirmation
+
+    @user_id, @vault_key = Register.call(email: email,
+                                         password: password,
+                                         relying_party_id: relying_party&.id,
+                                         legacy_account_user_id: legacy_account_user_id,
+                                         relying_party_knows_password: legacy_account_user_id.present?)
+    self
+  end
+
+  def legacy_account_user_id
+    return unless relying_party&.knows_legacy_account?(email)
+
+    relying_party.legacy_account_user_id_for(
+      email,
+      password
+    )
   end
 end

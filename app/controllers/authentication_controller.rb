@@ -1,5 +1,5 @@
 class AuthenticationController < ApplicationController
-  before_action :require_signed_id, except: [:login, :authenticate, :logout]
+  before_action :require_signed_id, except: %i[login authenticate logout]
 
   def login
     old_flash = flash.to_h
@@ -9,19 +9,15 @@ class AuthenticationController < ApplicationController
     end
 
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
-    if logged_in?
-      redirect_to confirm_path(login_configuration)
-    end
+    return unless logged_in?
+
+    redirect_to confirm_path(login_configuration)
   end
 
   def confirm
-    if relying_party.blank?
-      if params[:redirect_to]
-        redirect_to params[:redirect_to]
-      else
-        redirect_to dashboard_path
-      end
-    end
+    return unless relying_party.blank?
+
+    redirect_to params[:redirect_to] || dashboard_path
   end
 
   def relogin
@@ -32,17 +28,13 @@ class AuthenticationController < ApplicationController
 
   def logout
     do_logout!
-    if params[:redirect_uri]
-      redirect_to params[:redirect_uri]
-    else
-      redirect_to login_path(login_configuration)
-    end
+    redirect_to params[:redirect_uri] || login_path(login_configuration)
   end
 
   def go_to
     if relying_party.present?
       id_token = Authentication::Services::GetIdToken.new(
-        user_id: current_user.id, 
+        user_id: current_user.id,
         relying_party_id: relying_party.id,
         vault_key: current_user.vault_key,
         nonce: login_configuration[:nonce]
@@ -51,7 +43,7 @@ class AuthenticationController < ApplicationController
       Statistics::SignInEvent.create(
         token_id: id_token.jti,
         user_id: id_token.sub,
-        relying_party_id: id_token.aud,
+        relying_party_id: id_token.aud
       )
 
       redirect_to relying_party.redirect_uri(
@@ -65,6 +57,17 @@ class AuthenticationController < ApplicationController
     end
   end
 
+  def do_sign_in
+    if params[:remember_me].present?
+      cookies.encrypted.permanent[:user_id] = @auth_request.user_id
+      cookies.encrypted.permanent[:vault_key_base64] = @auth_request.vault_key_base64
+      cookies.encrypted.permanent[:email] = params[:email]
+    end
+    session[:user_id] = @auth_request.user_id
+    session[:vault_key_base64] = @auth_request.vault_key_base64
+    session[:email] = params[:email]
+  end
+
   def authenticate
     do_logout!
 
@@ -72,23 +75,11 @@ class AuthenticationController < ApplicationController
     @auth_request.relying_party_id = relying_party&.id
 
     if @auth_request.valid?
-      @auth_request.call!
-
-      if params[:remember_me]
-        cookies.encrypted.permanent[:user_id]  = @auth_request.user_id
-        cookies.encrypted.permanent[:vault_key_base64] = @auth_request.vault_key_base64
-        cookies.encrypted.permanent[:email] = params[:email]
-      end
-      session[:user_id]  = @auth_request.user_id
-      session[:vault_key_base64] = @auth_request.vault_key_base64
-      session[:email] = params[:email]
+      @auth_request.existing! || @auth_request.register!(email_confirmation: params[:email_confirmation])
+      do_sign_in
 
       flash[:slide_class] = 'a-slide-in-from-right'
-      if @auth_request.newly_created_account
-        redirect_to confirm_email_path(login_configuration)
-      else
-        redirect_to confirm_path(login_configuration)
-      end
+      redirect_to confirm_path(login_configuration)
     else
       flash[:remember_me] = params[:remember_me]
       if @auth_request.errors.include?(:email)
@@ -99,6 +90,13 @@ class AuthenticationController < ApplicationController
       flash[:email] = @auth_request.email
       redirect_to login_path(login_configuration)
     end
+  rescue Authentication::Services::Authenticate::EmailConfirmationError
+    @remember_me = params[:remember_me]
+    @email = params[:email]
+    @password = params[:password]
+    flash.now[:slide_class] = 'a-slide-in-from-right'
+    flash.now[:email_confirmation_message] = t('.confirmation_not_matching') if params[:email_confirmation].present?
+    render action: :confirm_email
   rescue Authentication::Password::NotMatching
     flash[:remember_me] = params[:remember_me]
     flash[:email] = @auth_request.email

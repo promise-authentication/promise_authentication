@@ -1,3 +1,2 @@
 class DocumentationController < ApplicationController
 end
-

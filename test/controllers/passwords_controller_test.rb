@@ -4,7 +4,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   test 'changing password' do
     @email = 'hello@example.com'
     @old_password = 'old'
-    post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
+    post '/authenticate', params: { email: @email, email_confirmation: @email, password: @old_password, remember_me: 1 }
     assert cookies[:user_id]
     assert cookies[:vault_key_base64]
 
@@ -35,7 +35,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
       email: @email,
       password: @old_password
     )
-    auth.call!
+    auth.register!(email_confirmation: auth.email)
 
     assert_emails 1 do
       post '/password/recover', params: { email: @email }

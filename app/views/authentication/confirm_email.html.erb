@@ -3,66 +3,40 @@
 <% end %>
 
 <%= content_for :body do %>
-  <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10 pt-8">
-    <svg class="text-green-500 w-10 h-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-      stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round"
-        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
+  <%= form_tag authenticate_path(login_configuration), class: 'w-full' do %>
+    <%= hidden_field_tag :email, @email %>
+    <%= hidden_field_tag :password, @password %>
+    <%= hidden_field_tag :remember_me, @remember_me %>
 
-    <h2 class="text-2xl pt-4 text-primary font-bold">
-      <%= t('.account_created') %>
-    </h2>
-    <p class="mt-8 text-secondary text-sm">
-      <%= t '.lets_confirm_that_email_html' %>
-    </p>
-    <label class="w-full mt-8">
-      <p class="input-label">
-        <%= t '.label' %>
+    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10 pt-8">
+      <svg class="text-green-500 w-10 h-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25" />
+          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+
+      <h2 class="text-2xl pt-4 text-primary font-bold">
+        <%= t('.title') %>
+      </h2>
+      <p class="mt-8 text-secondary text-sm">
+        <%= t '.lets_confirm_that_email_html' %>
       </p>
-      <%= email_field_tag :email, nil, class: 'login-input', placeholder: current_user.email, autofocus: true, tabindex: 1, id: "confirm_email" %>
-    </label>
-    <div class="flex w-full flex-col justify-end items-end">
-      <%= link_to "javascript:alert('#{t '.alert'}')", id: "confirm_button", class: "button disabled self-end primary my-10 flex items-center justify-center appearance-none" do %>
-        <span class="text-center">
-          <%= t('.go_on') %>
-        </span>
-        <span class="ml-3">
-          &rarr;
-        </span>
-      <% end %>
+      <label class="w-full mt-8">
+        <% if flash[:email_confirmation_message].present? %>
+          <p class="input-label font-bold">
+            <%= flash[:email_confirmation_message] %>
+          </p>
+        <% else %>
+          <p class="input-label">
+            <%= t '.label' %>
+          </p>
+        <% end %>
+        <%= email_field_tag :email_confirmation, nil, class: 'login-input', placeholder: @email, autofocus: true, tabindex: 1, id: "confirm_email" %>
+      </label>
+      <div class="flex w-full flex-row justify-between items-center my-10">
+        <%= link_to t('.start_over_html'), login_path(login_configuration), class: "text-gray-500" %>
+        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary appearance-none', tabindex: 1, data: { 'disable-with' => t('.confirming_html') } %>
+      </div>
     </div>
-
-    <script>
-      function ready(fn) {
-        if (document.readyState !== 'loading') {
-          fn();
-        } else {
-          document.addEventListener('DOMContentLoaded', fn);
-        }
-      }
-      ready(function() {
-        let path = "<%= confirm_path(login_configuration) %>";
-        let emailToVerify = "<%= current_user.email %>";
-        let emailInput = document.getElementById("confirm_email");
-        let confirmButton = document.getElementById("confirm_button");
-
-        emailInput.addEventListener("input", function(event) {
-          if(emailInput.value == emailToVerify) {
-            confirmButton.classList.remove("disabled");
-            confirmButton.href = path;
-          } else {
-            confirmButton.classList.add("disabled");
-            confirmButton.href = "javascript:alert('<%= t('.alert') %>')";
-          }
-        });
-
-        emailInput.addEventListener("keyup", function(event) {
-          if (event.key === 'Enter' || event.keyCode === 13) {
-            confirmButton.click();
-          }
-        });
-      });
-    </script>
-  </div>
+  <% end %>
 <% end %>

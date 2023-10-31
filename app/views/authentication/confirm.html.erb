@@ -33,7 +33,7 @@
         <span class="text-secondary">
           <%= t '.not_you_html', email: current_user.email %>
         </span>
-        <%= button_to t('.logout'), relogin_path(login_configuration), method: :delete, remote: true, class: "button transparent small mt-2" %>
+        <%= button_to t('.logout'), relogin_path(login_configuration), method: :delete, class: "button transparent small mt-2" %>
       </div>
 
 

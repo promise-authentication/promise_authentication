@@ -7,7 +7,8 @@ class Authentication::Services::ChangePasswordTest < ActiveSupport::TestCase
       email: 'hello@world.dk',
       password: @old_password
     )
-    @authentication.call!
+    @authentication.register!(email_confirmation: @authentication.email)
+    assert @authentication.user_id
     @user_id = @authentication.user_id
     @vault_key = @authentication.vault_key
 
@@ -21,7 +22,7 @@ class Authentication::Services::ChangePasswordTest < ActiveSupport::TestCase
   end
 
   test 'is should be valid' do
-    assert @request.valid?
+    assert @request.valid?, @request.errors.full_messages
   end
 
   test 'it fails if not knowing current vault' do
