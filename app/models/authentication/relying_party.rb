@@ -142,7 +142,7 @@ class Authentication::RelyingParty
   end
 
   def allowed_uri?(uri)
-    @allowed_redirect_uris&.include?(uri.to_s)
+    @allowed_redirect_uris&.include?(uri.to_s.split("?").first)
   end
 
   def redirect_uri(id_token:, login_configuration:)

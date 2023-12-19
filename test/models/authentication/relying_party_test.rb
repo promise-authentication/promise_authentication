@@ -41,14 +41,15 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
         '87.52.27.24'
       ],
       allowed_redirect_uris: [
-        "exp://192.168.50.185:19000/authenticate",
+        'exp://192.168.50.185:19000/authenticate'
       ]
     }.to_json
     @described_class.stub :fetch, response do
       @relying_party = Authentication::RelyingParty.find('example.com')
 
       [
-        "exp://192.168.50.185:19000/authenticate",
+        'exp://192.168.50.185:19000/authenticate',
+        'exp://192.168.50.185:19000/authenticate?andThen=/hello',
         'https://example.com/authenticate?email=jam@bar.com',
         'https://example.com/foo',
         'https://example.com/authenticate',
@@ -60,28 +61,26 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
         'http://127.0.0.1:3000/hello',
         'http://localhost:3000/hello',
         'https://localhost:3000/hello',
-        'https://87.52.27.24/hello',
+        'https://87.52.27.24/hello'
       ].each do |conf|
         result = @relying_party.redirect_uri(id_token: 'a', login_configuration: {
-          redirect_uri: conf
-        })
+                                               redirect_uri: conf
+                                             })
         conf_parsed = URI.parse(conf)
         result_parsed = URI.parse(result)
         assert_equal conf_parsed.host, result_parsed.host
       end
 
-
       [
         'http://example.com',
-        'https://bar.example.com',
+        'https://bar.example.com'
       ].each do |url|
         assert_raise @described_class::InvalidRedirectUri do
           @relying_party.redirect_uri(id_token: 'a', login_configuration: {
-            redirect_uri: url
-          })
+                                        redirect_uri: url
+                                      })
         end
       end
-
     end
   end
 
