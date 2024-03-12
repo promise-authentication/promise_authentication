@@ -33,9 +33,10 @@ da:
     header:
       sign_in_with_html: Log ind med %{name}
     confirm_email:
-      title: Bekræft din e-mail
-      lets_confirm_that_email_html: Da din <strong>e-mail ikke bliver gemt</strong> nogle steder, er det ikke muligt for os at finde dig frem via e-mail. Det er derfor vigtigt at du har registreret dig med den rigtige e-mail.
-      label: "Bekræft din e-mail ved at skrive den igen:"
+      title: Gentag din e-mail
+      lets_confirm_that_email_html: Da din <strong>e-mail ikke bliver gemt</strong> nogle steder, er det ikke muligt for os at finde dig frem via e-mail. Det er derfor vigtigt at du har registreret dig med den rigtige e-mail. Skriv din e-mail (%{email}) igen herunder.
+      label: "Gentag din e-mail:"
+      placeholder: "Skriv din e-mail igen her..."
       alert: Udfyld din mail for at bekræfte den.
       go_on: Videre
       confirming_html: 'Bekræfter e-mail&hellip;'

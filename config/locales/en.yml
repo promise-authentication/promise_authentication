@@ -30,8 +30,9 @@ en:
       sign_in_with_html: Sign in with %{name}
     confirm_email:
       title: Confirm your e-mail
-      lets_confirm_that_email_html: Your e-mail <strong>will not be stored</strong> anywhere. This means we wont be able to help you recover your account in any way. So please make sure you provided the right e-mail.
+      lets_confirm_that_email_html: Your e-mail <strong>will not be stored</strong> anywhere. This means we wont be able to help you recover your account in any way. So please make sure you provided the right e-mail. To confirm your e-mail (%{email}), please write it again in the text field below.
       label: "Please confirm your e-mail by writing it again:"
+      placeholder: "Repeat your e-mail here..."
       alert: Please write your e-mail address in the text field.
       go_on: Confirm e-mail
       confirming_html: 'Confirming e-mail&hellip;'

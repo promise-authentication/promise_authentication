@@ -19,7 +19,7 @@
         <%= t('.title') %>
       </h2>
       <p class="mt-8 text-secondary text-sm">
-        <%= t '.lets_confirm_that_email_html' %>
+        <%= t '.lets_confirm_that_email_html', email: @email %>
       </p>
       <label class="w-full mt-8">
         <% if flash[:email_confirmation_message].present? %>
@@ -31,7 +31,7 @@
             <%= t '.label' %>
           </p>
         <% end %>
-        <%= email_field_tag :email_confirmation, nil, class: 'login-input', placeholder: @email, autofocus: true, tabindex: 1, id: "confirm_email" %>
+        <%= email_field_tag :email_confirmation, nil, class: 'login-input', placeholder: t('.placeholder'), autofocus: true, tabindex: 1, id: "confirm_email" %>
       </label>
       <div class="flex w-full flex-row justify-between items-center my-10">
         <%= link_to t('.start_over_html'), login_path(login_configuration), class: "text-gray-500" %>
