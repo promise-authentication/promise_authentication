@@ -78,6 +78,6 @@ module AuthenticatedConcern
   end
 
   def login_configuration
-    params.permit(:client_id, :redirect_uri, :nonce, :redirect_to)
+    params.permit(:client_id, :redirect_uri, :nonce, :redirect_to, :prompt)
   end
 end

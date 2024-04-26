@@ -72,6 +72,14 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  test 'cookie login overruled with prompt=login' do
+    post authenticate_url, params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
+
+    url = login_url(prompt: 'login')
+    get url
+    assert_response :success
+  end
+
   test 'showing email after login' do
     Authentication::RelyingParty.stub :fetch, nil do
       post authenticate_url, params: {

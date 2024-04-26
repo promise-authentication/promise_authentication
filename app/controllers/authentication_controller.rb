@@ -2,6 +2,10 @@ class AuthenticationController < ApplicationController
   before_action :require_signed_id, except: %i[login authenticate logout]
 
   def login
+    if(login_configuration[:prompt] == 'login')
+      do_logout!
+    end
+
     old_flash = flash.to_h
     reset_session
     old_flash.each do |k, v|
