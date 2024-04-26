@@ -2,7 +2,7 @@ class AuthenticationController < ApplicationController
   before_action :require_signed_id, except: %i[login authenticate logout]
 
   def login
-    if(login_configuration[:prompt] == 'login')
+    if(logged_in? && (login_configuration[:prompt] == 'login'))
       do_logout!
     end
 
