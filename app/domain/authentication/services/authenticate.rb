@@ -10,7 +10,7 @@ class Authentication::Services::Authenticate
   validates :email, :password, presence: true
 
   def email
-    @email&.downcase
+    clean_email(@email)
   end
 
   def vault_key_base64
@@ -31,8 +31,12 @@ class Authentication::Services::Authenticate
     self
   end
 
+  def clean_email(email)
+    email&.strip&.downcase
+  end
+
   def register!(email_confirmation:)
-    raise EmailConfirmationError if email != email_confirmation
+    raise EmailConfirmationError if email != clean_email(email_confirmation)
 
     @user_id, @vault_key = Register.call(email: email,
                                          password: password,
