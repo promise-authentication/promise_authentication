@@ -78,6 +78,7 @@ en:
     wait:
       header: ✅
       description: You will recieve an e-mail with instructions for resetting your password.
+      back: Back
   recoveries:
     index:
       header: Reset password

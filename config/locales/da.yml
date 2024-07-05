@@ -82,6 +82,7 @@ da:
     wait:
       header: ✅
       description: Du vil modtage en e-mail, som du kan bruge til at nulstille dit password.
+      back: Tilbage
   recoveries:
     index:
       header: Nulstil password

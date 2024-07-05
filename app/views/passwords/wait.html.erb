@@ -13,6 +13,10 @@
     <p class="text-secondary text-sm max-w-xs text-center mt-4">
       <%= t '.description', name: name %>
     </p>
+
+    <p class="mt-10">
+      <%= link_to '&larr; '.html_safe + t('.back'), login_path(login_configuration), class: 'button primary' %>
+    </p>
   </div>
 <% end %>
 

@@ -58,6 +58,6 @@ class PasswordsController < ApplicationController
 
     ::Authentication::Services::SendRecoveryMail.new(args).call
 
-    redirect_to wait_password_path
+    redirect_to wait_password_path(login_configuration)
   end
 end
