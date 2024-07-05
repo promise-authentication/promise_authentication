@@ -49,27 +49,6 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to wait_password_path
   end
 
-  # test 'recovering password when with turnstile' do
-  #   @email = 'hello@example.com'
-  #   @old_password = 'old'
-  #   auth = Authentication::Services::Authenticate.new(
-  #     email: @email,
-  #     password: @old_password
-  #   )
-  #   auth.register!(email_confirmation: auth.email)
-  #
-  #   assert_emails 1 do
-  #     post '/password/recover', params: { email: @email, :"cf-turnstile-response" => "hello" }
-  #     token = Authentication::RecoveryToken.where(user_id: auth.user_id).last.token
-  #     email = ActionMailer::Base.deliveries.first
-  #     assert_includes email.to, @email
-  #     assert_includes email.html_part.body.to_s, token
-  #     assert_includes email.text_part.body.to_s, token
-  #     assert_includes email.subject.to_s, 'Promise'
-  #   end
-  #   assert_redirected_to wait_password_path
-  # end
-
   test 'recovering password when mail present and there is a client id' do
     @email = 'hello@example.com'
     @old_password = 'old'
