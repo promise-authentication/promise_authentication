@@ -26,12 +26,12 @@ class PasswordsController < ApplicationController
   end
 
   def recover
-    if Rails.env.production?
+    if Rails.env.production? || (Rails.env.test? && params[:"cf-turnstile-response"].present?)
       turnstile_token = params.fetch("cf-turnstile-response")
 
       # Now validate the token with the Turnstile service
       url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
-      response = HTTParty.post(url, body: {
+      response = Faraday.post(url, {
         secret: ENV['PROMISE_CLOUDFLARE_TURNSTILE_SECRET_KEY'],
         response: turnstile_token
       })
