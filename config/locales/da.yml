@@ -96,7 +96,9 @@ da:
       link_text: Gå til Promise
     recover_password:
       subject: Nulstil password på Promise
+      subject_with_client: "%{client} - Nulstil password på Promise"
       link_text: Klik her for at nulstille password
+      explain: "I forbindelse med at du er igang med at logge ind på %{client}, har du bedt om at få nulstillet dit password. Hvis det ikke er dig, kan du bare ignorere denne mail."
 
 
 

@@ -13,12 +13,19 @@ class PasswordMailer < ApplicationMailer
   def recover_password
     @email = params[:email]
     @token = params[:token]
+    @relying_party_name = params[:relying_party_name]
+
+    if @relying_party_name
+      subject = I18n.t('password_mailer.recover_password.subject_with_client', client: @relying_party_name)
+    else
+      subject = I18n.t('password_mailer.recover_password.subject')
+    end
 
     @url = token_recoveries_url(token_id: @token, locale: I18n.locale)
 
     mail(
       to: @email,
-      subject: I18n.t('password_mailer.recover_password.subject')
+      subject: subject
     )
   end
 end

@@ -44,8 +44,44 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
       assert_includes email.to, @email
       assert_includes email.html_part.body.to_s, token
       assert_includes email.text_part.body.to_s, token
+      assert_includes email.subject.to_s, 'Promise'
     end
     assert_redirected_to wait_password_path
   end
-end
 
+  test 'recovering password when mail present and there is a client id' do
+    @email = 'hello@example.com'
+    @old_password = 'old'
+    auth = Authentication::Services::Authenticate.new(
+      email: @email,
+      password: @old_password
+    )
+    auth.register!(email_confirmation: auth.email)
+
+    relying_party_id = 'example.com'
+    relying_party = Minitest::Mock.new
+    relying_party.expect :knows_legacy_account?, false, []
+    relying_party.expect :id, relying_party_id
+    relying_party.expect :locale, nil
+    relying_party.expect :name, "Sandbox"
+    # I'm not sure why this is needed: ~AL
+    relying_party.expect :is_a?, false, [Hash]
+    relying_party.expect :is_a?, false, [Array]
+
+    Authentication::RelyingParty.stub :find, relying_party do
+      assert_emails 1 do
+        post '/password/recover', params: { email: @email, client_id: relying_party_id }
+        token = Authentication::RecoveryToken.where(user_id: auth.user_id).last.token
+        email = ActionMailer::Base.deliveries.first
+        assert_includes email.to, @email
+        assert_includes email.subject.to_s, 'Sandbox'
+        assert_includes email.subject.to_s, 'Promise'
+        assert_includes email.html_part.body.to_s, token
+        assert_includes email.text_part.body.to_s, token
+        assert_includes email.html_part.body.to_s, 'Sandbox'
+        assert_includes email.text_part.body.to_s, 'Sandbox'
+      end
+      assert_redirected_to wait_password_path
+    end
+  end
+end

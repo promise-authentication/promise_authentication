@@ -26,7 +26,37 @@ class PasswordsController < ApplicationController
   end
 
   def recover
-    ::Authentication::Services::SendRecoveryMail.new(params.permit(:email).merge({ locale: I18n.locale })).call
+    if Rails.env.production?
+      turnstile_token = params.fetch("cf-turnstile-response")
+
+      # Now validate the token with the Turnstile service
+      url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
+      response = HTTParty.post(url, body: {
+        secret: ENV['PROMISE_CLOUDFLARE_TURNSTILE_SECRET_KEY'],
+        response: turnstile_token
+      })
+
+      outcome = JSON.parse(response.body)
+      if outcome['success'] != true
+        Rails.logger.error "Cloudflare Turnstile failed with response: #{outcome.response}"
+        Rails.logger.error "Cloudflare Turnstile failed with outcome: #{outcome.inspect}"
+        flash[:error] = I18n.t('fill_email')
+        return render action: 'new'
+      end
+    end
+
+    email = params.fetch(:email)
+    if email.blank?
+      flash[:error] = I18n.t('fill_email')
+      return render action: 'new'
+    end
+
+    args = params.permit(:email).merge({
+                                         locale: I18n.locale,
+                                         relying_party: relying_party
+                                       })
+
+    ::Authentication::Services::SendRecoveryMail.new(args).call
 
     redirect_to wait_password_path
   end

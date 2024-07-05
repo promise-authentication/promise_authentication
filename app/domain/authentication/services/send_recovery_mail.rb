@@ -1,7 +1,7 @@
 class Authentication::Services::SendRecoveryMail
   include ActiveModel::Model
 
-  attr_accessor :email, :locale
+  attr_accessor :email, :locale, :relying_party
 
   def call
     current_user_id = Authentication::HashedEmail.user_id_for_cleartext(email)
@@ -14,7 +14,7 @@ class Authentication::Services::SendRecoveryMail
         token: token,
         user_id: current_user_id
       )
-      PasswordMailer.with(token: token, email: email, locale: locale).recover_password.deliver_now
+      PasswordMailer.with(token: token, email: email, locale: locale, relying_party_name: relying_party&.name).recover_password.deliver_now
     end
   end
 end
