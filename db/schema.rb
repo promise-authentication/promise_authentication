@@ -12,9 +12,6 @@
 
 ActiveRecord::Schema.define(version: 2020_05_18_145122) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
     t.integer "user_id"

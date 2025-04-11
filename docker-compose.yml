@@ -1,20 +1,14 @@
-services:
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5439:5432"
+networks:
+  promise-network:
+    external: true
 
+services:
   web:
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bin/dev"
+    command: bash -c "bundle exec rails db:prepare; rm -f tmp/pids/server.pid && bin/dev"
     stdin_open: true
     environment:
-      DATABASE_URL: postgres://postgres:password@db:5432/promise_authentication_development
+      PROMISE_KEY_REGISTRY_API_ROOT: http://promise_kms:3000/api/secret
       RAILS_ENV: development
       NODE_ENV: development
       RAILS_BIND: 0.0.0.0
@@ -25,7 +19,9 @@ services:
     ports:
       - "3003:3000"
     depends_on:
-      - db
+      - rabbitmq
+    networks:
+      - promise-network
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -37,6 +33,8 @@ services:
       - RABBITMQ_DEFAULT_PASS=guest
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - promise-network
 
 volumes:
   postgres_data:

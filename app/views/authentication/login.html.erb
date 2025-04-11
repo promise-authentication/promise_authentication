@@ -3,65 +3,81 @@
 <% end %>
 
 <%= content_for :body do %>
+  <script>
+    function toggleDescription() {
+      document.getElementById('promise_description').classList.remove('hidden');
+      document.getElementById('promise_description').classList.toggle('a-in');
+      document.getElementById('promise_description').classList.toggle('a-out');
+    }
+  </script>
+
   <%= form_tag authenticate_path(login_configuration), class: 'w-full' do %>
-    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10 pt-8">
+    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10 pt-6">
+      <div class="flex flex-row justify-between border-b pb-3 mb-5 w-full items-center">
+        <h2 class="text-2xl text-primary font-bold">
+          <%= relying_party&.name ? t('.login_at', name: relying_party.name) : t('.login') %>
+        </h2>
+        <a href="javascript:void(toggleDescription());" class="flex flex-row items-center space-x-1">
+          <%= image_tag('logo.png', class: 'h-4') %>
+          <span class=" bg-clip-text text-transparent bg-gradient-to-t from-blue-900 to-blue-500 tracking-tight text-base font-bold">
+            Promise
+          </span>
+        </a>
+      </div>
       <% if relying_party&.logo_data %>
         <%= image_tag(relying_party.logo_data, class: 'relying-party-logo') %>
       <% end %>
-      <h2 class="text-2xl pt-4 text-primary font-bold">
-        <%= relying_party&.name || t('.login') %>
-      </h2>
-      <script>
-        function toggleDescription() {
-          document.getElementById('promise_description').classList.remove('hidden');
-          document.getElementById('promise_description').classList.toggle('a-in');
-          document.getElementById('promise_description').classList.toggle('a-out');
-        }
-      </script>
       <a href="javascript:void(toggleDescription());" class="block text-primary max-w-xs text-center mt-4">
         <%= t '.enter_credentials_html', name: name %>
         <% if relying_party %>
           <svg class="h-5 mb-1 inline-block" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
         <% end %>
       </a>
-      <% if relying_party %>
-        <a href="javascript:void(toggleDescription());" id="promise_description" class="hidden a-out rounded bg-gray-200 overflow-hidden">
-          <span class="block m-4">
-            <%= t '.description_html', name: name, relying_party: relying_party.name %>
-          </span>
+      <div class="w-full flex flex-col bg-blue-50 px-4 rounded-lg mt-6 pb-4 shadow relative">
+        <a href="javascript:void(toggleDescription());" class="absolute w-8 h-8 rounded-full bg-blue-50 -top-3 left-1/2 -translate-x-1/2 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+          </svg>
         </a>
-      <% end %>
-      <label class="w-full mt-8">
-        <p class="input-label">
-          E-mail
-        </p>
-        <%= email_field_tag :email, @auth_request.email, class: 'login-input', autofocus: !flash[:password_message].present?, placeholder: flash[:email_message], tabindex: 1 %>
-      </label>
-      <label class="mt-3 w-full">
-        <% if flash[:password_message].present? %>
-          <p class="input-label font-bold">
-            <%= flash[:password_message] %>
-          </p>
-          <%= password_field_tag :password, nil, class: "login-input", autofocus: true, tabindex: 1 %>
-        <% else %>
-          <p class="input-label">
-            Password
-          </p>
-          <%= password_field_tag :password, nil, class: "login-input", tabindex: 1 %>
+        <% if relying_party %>
+          <a href="javascript:void(toggleDescription());" id="promise_description" class="hidden a-out overflow-hidden">
+            <span class="block mt-10">
+              <%= t '.description_html', name: name, relying_party: relying_party.name %>
+            </span>
+          </a>
         <% end %>
-        <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-primary font-bold' : 'text-secondary '}" %>
-      </label>
-      <label class="flex justify-start items-center w-full cursor-pointer pb-2">
-        <%= check_box_tag :remember_me, nil, flash[:remember_me], tabindex: 1, class: "rounded" %>
-        <span class="ml-2">
-          <%= t(".remember_me") %>
-        </span>
-      </label>
-      <div class="flex w-full flex-col justify-end items-end">
-        <p class="text-secondary text-sm text-right w-64">
-          <%= t '.we_save_no_data_html' %>
-        </p>
-        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2 appearance-none', tabindex: 1, data: { 'disable-with' => t('.signing_in_html') } %>
+        <label class="w-full mt-8">
+          <p class="input-label">
+            E-mail
+          </p>
+          <%= email_field_tag :email, @auth_request.email, class: 'login-input', autofocus: !flash[:password_message].present?, placeholder: flash[:email_message], tabindex: 1 %>
+        </label>
+        <label class="mt-3 w-full">
+          <% if flash[:password_message].present? %>
+            <p class="input-label font-bold">
+              <%= flash[:password_message] %>
+            </p>
+            <%= password_field_tag :password, nil, class: "login-input", autofocus: true, tabindex: 1 %>
+          <% else %>
+            <p class="input-label">
+              Password
+            </p>
+            <%= password_field_tag :password, nil, class: "login-input", tabindex: 1 %>
+          <% end %>
+          <%= link_to t('.forgot_password'), new_password_path(login_configuration), class: "float-right text-sm mt-1 #{flash[:password_message] ? 'text-primary font-bold' : 'text-secondary '}" %>
+        </label>
+        <label class="flex justify-start items-center w-full cursor-pointer pb-2">
+          <%= check_box_tag :remember_me, nil, flash[:remember_me], tabindex: 1, class: "rounded" %>
+          <span class="ml-2">
+            <%= t(".remember_me") %>
+          </span>
+        </label>
+        <div class="flex w-full flex-col justify-end items-end">
+          <p class="text-secondary text-sm text-right w-64">
+            <%= t '.we_save_no_data_html' %>
+          </p>
+          <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2 appearance-none', tabindex: 1, data: { 'disable-with' => t('.signing_in_html') } %>
+        </div>
       </div>
       <% if relying_party %>
         <p class="mt-8 text-secondary  text-sm">

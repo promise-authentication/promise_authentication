@@ -57,6 +57,7 @@ da:
     login:
       sign_in_with_html: Log ind med %{name}
       login: Log ind
+      login_at: Log ind på %{name}
       enter_credentials_html: Angiv den e-mail og det password du vil logge ind med.
       description_html: "%{relying_party} bruger <strong>%{name}</strong> til at logge ind. <strong>%{name}</strong> er ikke tilknyttet %{relying_party} på andre måder og vil ikke dele nogle personlige oplysninger med dem. Den e-mail og det password du angiver her, vil udelukkende blive brugt til at identificere dig overfor <strong>%{name}</strong>."
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
