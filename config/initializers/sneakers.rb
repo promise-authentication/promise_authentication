@@ -3,7 +3,7 @@ require 'sneakers'
 
 Sneakers.configure(
   handler: Sneakers::Handlers::Maxretry,
-  amqp: ENV['CLOUDAMQP_URL'] || 'amqp://guest:guest@localhost:5672',
+  amqp: ENV['CLOUDAMQP_URL'] || 'amqp://guest:guest@rabbitmq:5672',
   prefetch: 1,
   threads: 1,
   workers: 1,
