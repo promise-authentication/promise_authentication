@@ -39,8 +39,11 @@ ENV RAILS_SERVE_STATIC_FILES=true
 # Install yarn packages
 RUN yarn install
 
+RUN bundle exec rails assets:precompile
+RUN bundle exec rails db:prepare
+
 # Expose port 3000
 EXPOSE 3000
 
 # Start the server
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+CMD ["bin/dev"]
