@@ -53,7 +53,7 @@ en:
     login:
       sign_in_with_html: Sign in with %{name}
       login: Sign in
-      login_at: Sign in to %{name}
+      login_at_html: Sign in to <span class="whitespace-nowrap">%{name}</span>
       enter_credentials_html: Enter the e-mail and password you want to sign in with.
       description_html: "%{relying_party} uses <strong>%{name}</strong> as a sign in provider. <strong>%{name}</strong> is not affiliated with %{relying_party} and will share no personal information with them. The e-mail and password you provide here will only be used to sign in to <strong>%{name}</strong>."
       redirect_to_dashboard: You will be redirected to your dashboard.
