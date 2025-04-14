@@ -24,7 +24,8 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication with no relying party' do
-    post authenticate_url, params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
+    post authenticate_url,
+         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
@@ -48,7 +49,8 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   test 'authentication with relying party' do
     Authentication::RelyingParty.stub :fetch, nil do
       post authenticate_url,
-        params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', client_id: 'party.com', remember_me: 1 }
+           params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret',
+                     client_id: 'party.com', remember_me: 1 }
     end
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
@@ -67,13 +69,15 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'cookie login persists' do
-    post authenticate_url, params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
+    post authenticate_url,
+         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
     get login_url
     assert_response :redirect
   end
 
   test 'cookie login overruled with prompt=login' do
-    post authenticate_url, params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
+    post authenticate_url,
+         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
 
     url = login_url(prompt: 'login')
     get url
@@ -84,7 +88,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     Authentication::RelyingParty.stub :fetch, nil do
       post authenticate_url, params: {
         email: 'hello@world.com',
-        email_confirmation: "hello@world.com",
+        email_confirmation: 'hello@world.com',
         password: 'secret',
         client_id: 'party.com'
       }
@@ -112,7 +116,9 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
 
     Authentication::RelyingParty.stub :find, relying_party do
-      post authenticate_url, params: { email: email, email_confirmation: email, password: password, client_id: relying_party_id, remember_me: 1 }
+      post authenticate_url,
+           params: { email: email, email_confirmation: email, password: password, client_id: relying_party_id,
+                     remember_me: 1 }
 
       jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
       user_id = jar.encrypted[:user_id]

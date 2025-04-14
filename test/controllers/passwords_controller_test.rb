@@ -63,7 +63,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :knows_legacy_account?, false, []
     relying_party.expect :id, relying_party_id
     relying_party.expect :locale, nil
-    relying_party.expect :name, "Sandbox"
+    relying_party.expect :name, 'Sandbox'
     # I'm not sure why this is needed: ~AL
     relying_party.expect :is_a?, false, [Hash]
     relying_party.expect :is_a?, false, [Array]
@@ -81,7 +81,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
         assert_includes email.html_part.body.to_s, 'Sandbox'
         assert_includes email.text_part.body.to_s, 'Sandbox'
       end
-      assert_redirected_to wait_password_path
+      assert_redirected_to wait_password_path(client_id: relying_party_id)
     end
   end
 end

@@ -361,10 +361,6 @@ GEM
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)
-    spring (2.1.1)
-    spring-watcher-listen (2.0.1)
-      listen (>= 2.7, < 4.0)
-      spring (>= 1.2, < 3.0)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -461,8 +457,6 @@ DEPENDENCIES
   retries
   selenium-webdriver
   sneakers (= 2.12.0)
-  spring
-  spring-watcher-listen (~> 2.0.0)
   sprockets-rails
   sqlite3
   tailwindcss-rails (= 2.0.25)
