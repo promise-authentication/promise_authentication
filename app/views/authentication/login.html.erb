@@ -12,8 +12,8 @@
   </script>
 
   <%= form_tag authenticate_path(login_configuration), class: 'w-full' do %>
-    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10 pt-6">
-      <div class="flex flex-row justify-between border-b pb-3 mb-5 w-full items-center">
+    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
+      <div class="flex flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
         <h2 class="text-base sm:text-lg text-primary font-bold leading-none">
           <%= relying_party&.name ? t('.login_at_html', name: relying_party.name) : t('.login') %>
         </h2>
