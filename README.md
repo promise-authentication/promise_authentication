@@ -1,24 +1,17 @@
-# README
+# Running locally:
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+We're using Docker. To run the app locally, you need to have Docker installed.
 
-Things you may want to cover:
+Make sure you have the network:
 
-* Ruby version
+```bash
+docker network create promise-network
+```
 
-* System dependencies
+Then, run the following command to start the app:
 
-* Configuration
+```bash
+docker compose up -d --build
+```
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Also make sure the KMS is running. You can find that here: https://github.com/promise-authentication/promise_key_registry

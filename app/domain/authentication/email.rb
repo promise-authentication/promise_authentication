@@ -12,12 +12,12 @@ class Authentication::Email
     raise AlreadyClaimed if @claimed
 
     apply Authentication::Events::EmailClaimed.new(data: {
-      user_id: user_id,
-      hashed_email: @hashed_email
-    })
+                                                     user_id: user_id,
+                                                     hashed_email: @hashed_email
+                                                   })
   end
 
-  def apply_email_claimed(event)
+  def apply_email_claimed(_event)
     @claimed = true
   end
 end
