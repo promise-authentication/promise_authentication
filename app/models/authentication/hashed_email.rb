@@ -8,7 +8,10 @@ class Authentication::HashedEmail < ApplicationRecord
     # To avoid collisions, the assumption is, that if we
     # are unlucky enough to get a collision in one algorithm,
     # we should not be so unlucky that it also collides in the other...
-    # I'm sure, though, that I will be proven wrong at some point.
+    # I'm sure, though, that I will be proven wrong at some point. ~AL
+    # 20250415: That was a stupid assumption. If we get a collision in SHA256,
+    # that collision will carry over to BLAKE2b as well. That is the whole idea
+    # of hashing. Same string, same hash. Sorry. ~AL
     sha = RbNaCl::Hash.sha256(email)
     blake = RbNaCl::Hash.blake2b(email)
     binary = sha + blake

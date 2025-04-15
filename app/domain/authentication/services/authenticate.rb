@@ -5,7 +5,7 @@ class Authentication::Services::Authenticate
 
   attr_writer :email
   attr_accessor :password, :relying_party_id, :exisiting_account
-  attr_reader :user_id, :vault_key, :existing_account, :should_confirm_email
+  attr_reader :user_id, :vault_key, :existing_account
 
   validates :email, :password, presence: true
 

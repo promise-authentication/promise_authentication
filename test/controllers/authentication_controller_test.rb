@@ -6,7 +6,6 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select 'input#email'
-    assert_select 'input#password'
   end
 
   test 'the login screen with relying party' do
@@ -14,7 +13,6 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select 'input#email'
-    assert_select 'input#password'
     assert_select 'h2', 'Sign in'
   end
 
@@ -63,14 +61,23 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'session login resets' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
+    post authenticate_url,
+         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret' }
+    assert_redirected_to confirm_path
+
     get login_url
     assert_response :success
+
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    user_id = jar.encrypted[:user_id]
+    assert_nil user_id
   end
 
   test 'cookie login persists' do
     post authenticate_url,
          params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
+    assert_redirected_to confirm_path
+
     get login_url
     assert_response :redirect
   end
@@ -78,6 +85,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   test 'cookie login overruled with prompt=login' do
     post authenticate_url,
          params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
+    assert_redirected_to confirm_path
 
     url = login_url(prompt: 'login')
     get url

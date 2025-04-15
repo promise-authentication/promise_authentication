@@ -22,7 +22,9 @@
         </p>
         <%= email_field_tag :email, nil, class: "login-input", autofocus: true, required: true %>
       </label>
-      <div class="cf-turnstile mt-4" data-theme="light" data-sitekey="<%= ENV.fetch('PROMISE_CLOUDFLARE_TURNSTILE_SITE_KEY', "3x00000000000000000000FF") %>"></div>
+      <div class="mt-4">
+        <%= turnstile_tag_html %>
+      </div>
       <div class="flex w-full justify-end items-center mt-6">
         <%= link_to '&larr; '.html_safe + t('.cancel'), login_path(login_configuration), class: 'text-secondary pr-3' %>
         <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary self-end' %>
