@@ -15,7 +15,7 @@ module Authentication::Services::Authenticate::Register
       ).execute!
 
       data = Authentication::PersonalData.new
-      if(relying_party_id.present? && legacy_account_user_id.present?)
+      if relying_party_id.present? && legacy_account_user_id.present?
         data.add_id legacy_account_user_id, relying_party_id
       end
 
@@ -32,7 +32,6 @@ module Authentication::Services::Authenticate::Register
       ).call
     end
 
-    return new_user_id, vault_key
+    [new_user_id, vault_key]
   end
-
 end

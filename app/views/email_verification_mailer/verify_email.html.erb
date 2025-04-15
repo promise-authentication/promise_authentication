@@ -1,0 +1,22 @@
+<p style="font-family:sans-serif;">
+  <% if @relying_party_name %>
+    <%= t('.explain_with_relying_party', client: @relying_party_name) %>
+  <% else %>
+    <%= t('.explain_without_relying_party', client: @relying_party_name) %>
+  <% end %>
+</p>
+
+<p style="margin: 0;padding:0;font-family:sans-serif;">
+  <%= t('.code') %>
+</p>
+
+<p style="margin:0;margin-top: 3px; padding:10px;font-size:2em;font-family:monospace;background-color:#EEE;text-align:center;user-select: all;letter-spacing:0.1em;">
+  <%= @code %>
+</p>
+
+<p style="margin:0;margin-top: 30px; padding:0;font-size:1.1em;font-family:sans-serif;">
+  <%= t('.what_is_promise.title') %>
+</p>
+<p style="margin:0;margin-top: 3px; padding:0;font-family:sans-serif;">
+  <%= t('.what_is_promise.body') %>
+</p>

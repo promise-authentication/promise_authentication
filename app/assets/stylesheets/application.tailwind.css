@@ -7,7 +7,7 @@
 }
 
 .text-secondary {
-  @apply text-gray-700;
+  @apply text-gray-500;
 }
 
 .relying-party-logo {

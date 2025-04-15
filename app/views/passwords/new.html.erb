@@ -20,13 +20,13 @@
         <p class="input-label">
           <%= t '.email' %>
         </p>
-        <%= email_field_tag :email, nil, class: "login-input", autofocus: true, required: true %>
+        <%= email_field_tag :email, registration_configuration[:email], class: "login-input", autofocus: true, required: true %>
       </label>
       <div class="mt-4">
         <%= turnstile_tag_html %>
       </div>
       <div class="flex w-full justify-end items-center mt-6">
-        <%= link_to '&larr; '.html_safe + t('.cancel'), login_path(login_configuration), class: 'text-secondary pr-3' %>
+        <%= link_to '&larr; '.html_safe + t('.cancel'), login_path(registration_configuration), class: 'text-secondary pr-3' %>
         <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary self-end' %>
       </div>
     </div>

@@ -7,7 +7,7 @@ class Authentication::Services::ChangePasswordTest < ActiveSupport::TestCase
       email: 'hello@world.dk',
       password: @old_password
     )
-    @authentication.register!(email_confirmation: @authentication.email)
+    @authentication.register!
     assert @authentication.user_id
     @user_id = @authentication.user_id
     @vault_key = @authentication.vault_key

@@ -22,8 +22,10 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication with no relying party' do
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+
     post authenticate_url,
-         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
+         params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
@@ -35,7 +37,13 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'logout' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
+
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert jar.encrypted[:user_id]
+
     delete logout_url
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
@@ -46,8 +54,9 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
   test 'authentication with relying party' do
     Authentication::RelyingParty.stub :fetch, nil do
+      Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
       post authenticate_url,
-           params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret',
+           params: { email: 'hello@world.com', password: 'secret',
                      client_id: 'party.com', remember_me: 1 }
     end
 
@@ -60,43 +69,12 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert Authentication::Vault.personal_data(user_id, vault_key)
   end
 
-  test 'session login resets' do
-    post authenticate_url,
-         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret' }
-    assert_redirected_to confirm_path
-
-    get login_url
-    assert_response :success
-
-    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
-    user_id = jar.encrypted[:user_id]
-    assert_nil user_id
-  end
-
-  test 'cookie login persists' do
-    post authenticate_url,
-         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
-    assert_redirected_to confirm_path
-
-    get login_url
-    assert_response :redirect
-  end
-
-  test 'cookie login overruled with prompt=login' do
-    post authenticate_url,
-         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
-    assert_redirected_to confirm_path
-
-    url = login_url(prompt: 'login')
-    get url
-    assert_response :success
-  end
-
   test 'showing email after login' do
     Authentication::RelyingParty.stub :fetch, nil do
+      Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+
       post authenticate_url, params: {
         email: 'hello@world.com',
-        email_confirmation: 'hello@world.com',
         password: 'secret',
         client_id: 'party.com'
       }
@@ -124,8 +102,10 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
 
     Authentication::RelyingParty.stub :find, relying_party do
+      Authentication::Services::Authenticate.new(email: email, password: password).register!
+
       post authenticate_url,
-           params: { email: email, email_confirmation: email, password: password, client_id: relying_party_id,
+           params: { email: email, password: password, client_id: relying_party_id,
                      remember_me: 1 }
 
       jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
@@ -150,7 +130,8 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party_id = 'example.com'
 
     # Create existing account
-    post authenticate_url, params: { email: email, email_confirmation: email, password: password }
+    Authentication::Services::Authenticate.new(email: email, password: password).register!
+    post authenticate_url, params: { email: email, password: password }
 
     relying_party = Minitest::Mock.new
     relying_party.expect :locale, nil
@@ -181,7 +162,9 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     email = 'hello@world.com'
     password = 'secr2t'
     relying_party_id = 'example.com'
-    post authenticate_url, params: { email: email, email_confirmation: email, password: password }
+    Authentication::Services::Authenticate.new(email: email, password: password).register!
+
+    post authenticate_url, params: { email: email, password: password }
     assert_response :redirect
 
     Authentication::RelyingParty.stub :fetch, nil do

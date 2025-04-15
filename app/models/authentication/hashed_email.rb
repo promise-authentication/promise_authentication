@@ -1,3 +1,6 @@
+# This class should only be used for claimed and verified
+# emails.
+
 class Authentication::HashedEmail < ApplicationRecord
   validates :user_id, presence: true
 
@@ -16,7 +19,7 @@ class Authentication::HashedEmail < ApplicationRecord
     blake = RbNaCl::Hash.blake2b(email)
     binary = sha + blake
 
-    return Base64.strict_encode64(binary).encode('utf-8')
+    Base64.strict_encode64(binary).encode('utf-8')
   end
 
   def self.user_id_for_cleartext(email)
@@ -24,6 +27,6 @@ class Authentication::HashedEmail < ApplicationRecord
 
     find(id).user_id
   rescue ActiveRecord::RecordNotFound
-    return nil
+    nil
   end
 end

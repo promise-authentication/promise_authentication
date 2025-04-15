@@ -1,6 +1,10 @@
 module Authentication::Services::Authenticate::Existing
   module_function
 
+  def known?(cleartext_email)
+    !!Authentication::HashedEmail.user_id_for_cleartext(cleartext_email)
+  end
+
   def call(email, password)
     current_user_id = Authentication::HashedEmail.user_id_for_cleartext(email)
 

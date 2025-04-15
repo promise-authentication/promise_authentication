@@ -10,13 +10,11 @@ class Authentication::Services::Authenticate::RegisterTest < ActiveSupport::Test
   end
 
   test 'when nothing there' do
-    user_id, vault_key = @described_class.(
-      email: @email,
-      password: @password
-    )
+    user_id, vault_key = @described_class.call(email: @email,
+                                               password: @password)
 
     assert_raises Authentication::Email::AlreadyClaimed do
-      @described_class.(email: @email, password: @password)
+      @described_class.call(email: @email, password: @password)
     end
 
     assert Authentication::Password.find(user_id).match!(@password)
@@ -31,4 +29,3 @@ class Authentication::Services::Authenticate::RegisterTest < ActiveSupport::Test
     assert personal_data
   end
 end
-

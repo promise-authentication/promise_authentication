@@ -29,9 +29,50 @@ da:
       explain_choosing: Log ind på en af dine applikationer her.
       no_relying_parties: Du har endnu ikke nogle applikationer tilknyttet
       go_to_rp: Fortsæt til %{name}
+  registrations:
+    new:
+      login: Log ind
+      login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
+      enter_credentials_html: Angiv den e-mail du vil logge ind med.
+      description_html: "%{relying_party} bruger <strong>%{name}</strong> til at logge ind. <strong>%{name}</strong> er ikke tilknyttet %{relying_party} på andre måder og vil ikke dele nogle personlige oplysninger med dem. Den e-mail og det password du angiver her, vil udelukkende blive brugt til at identificere dig overfor <strong>%{name}</strong>."
+      redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
+      we_save_no_data_html: Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
+      go_on: Videre
+      signing_in_html: 'Øjeblik&hellip;'
+      no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
+    verify_human:
+      login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
+      go_on: Videre
+      cancel: Tilbage
+    verify_email:
+      title: Check din indbakke
+      we_sent_you_an_email: Vi har %{at} sendt dig en e-mail på %{email} med en kode. Indtast venligst koden herunder.
+      we_resent_you_an_email: Koden du skrev, var desværre forkert. Vi har %{at} sendt en ny mail til %{email} med en ny kode. Indtast venligst koden herunder.
+      code: Kode fra e-mail
+      caps_or_not: Vi gør ikke forskel på store og små bogtaver.
+      go_on: Videre
+      cancel: Tilbage
+    create_password:
+      login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
+      create_account: Angiv det password du vil bruge til at logge ind med %{email} fremover.
+      go_on: Log ind
+      we_save_no_data_html: Dit password bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
+      remember_me: Husk mig
+      cancel: Tilbage
   authentication:
-    header:
-      sign_in_with_html: Log ind med %{name}
+    verify_password:
+      login: Log ind
+      login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
+      enter_credentials_html: Angiv dit password.
+      description_html: "%{relying_party} bruger <strong>%{name}</strong> til at logge ind. <strong>%{name}</strong> er ikke tilknyttet %{relying_party} på andre måder og vil ikke dele nogle personlige oplysninger med dem. Den e-mail og det password du angiver her, vil udelukkende blive brugt til at identificere dig overfor <strong>%{name}</strong>."
+      redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
+      we_save_no_data_html: Dit e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
+      forgot_password: Glemt password?
+      remember_me: Husk mig
+      go_on: Log ind
+      cancel: Tilbage
+      signing_in_html: 'Logger ind&hellip;'
+      no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
     confirm_email:
       title: Gentag din e-mail
       lets_confirm_that_email_html: Da din <strong>e-mail ikke bliver gemt</strong> nogle steder, er det ikke muligt for os at finde dig frem via e-mail. Det er derfor vigtigt at du har registreret dig med den rigtige e-mail. Skriv din e-mail (%{email}) igen herunder.
@@ -54,21 +95,8 @@ da:
     authenticate:
       password_not_correct: 'Forkert password. Prøv igen'
       confirmation_not_matching: "Du har ikke skrevet den samme mail to gange. Prøv igen."
-    login:
-      sign_in_with_html: Log ind med %{name}
-      login: Log ind
-      login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
-      enter_credentials_html: Angiv den e-mail og det password du vil logge ind med.
-      description_html: "%{relying_party} bruger <strong>%{name}</strong> til at logge ind. <strong>%{name}</strong> er ikke tilknyttet %{relying_party} på andre måder og vil ikke dele nogle personlige oplysninger med dem. Den e-mail og det password du angiver her, vil udelukkende blive brugt til at identificere dig overfor <strong>%{name}</strong>."
-      redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
-      we_save_no_data_html: Din e-mail og password bliver ikke gemt så <em>nogen</em> kan læse dem.
-      forgot_password: Glemt password?
-      remember_me: Husk mig
-      go_on: Opret eller login
-      signing_in_html: 'Logger ind&hellip;'
-      no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
   passwords:
-    show:
+    edit:
       header: Skift password
       description: Her sætter du et nyt password til at logge ind på %{name}.
       go_on: Skift password
@@ -90,6 +118,15 @@ da:
       description: Efter dit password er nulstillet, vil du blive bedt om at logge ind igen.
       new_password: Nyt password
       go_on: Videre
+  email_verification_mailer:
+    verify_email:
+      subject: "Din kode: %{code}"
+      explain_with_relying_party: "Du er igang med at logge ind på %{client}, som bruger Promise til at logge ind. Du skal bruge koden herunder til at bekræfte din e-mail overfor Promise."
+      explain_without_relying_party: For at kunne oprette din konto på Promise, skal du bekræfte din e-mail. Du skal bruge koden til at bekræfte din e-mail.
+      code: "Din kode:"
+      what_is_promise:
+        title: Hvad er Promise?
+        body: "Promise er en login-løsning, som gør det muligt at logge ind på forskellige applikationer uden at skulle oprette en konto hos hver enkelt. Du kan på sigt bruge din Promise-konto til at logge ind på mange forskellige tjenester."
   password_mailer:
     unknown_mail:
       subject: Nultil password for ukendt mail

@@ -14,7 +14,7 @@ module TurnstileConcern
   end
 
   def pre_validated?
-    !Rails.env.production? && params[:"cf-turnstile-response"].blank?
+    !Rails.env.production? && params[:"cf-turnstile-response"].nil?
   end
 
   def token_is_valid?

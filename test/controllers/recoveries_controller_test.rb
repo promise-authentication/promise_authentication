@@ -7,7 +7,7 @@ class RecoveriesControllerTest < ActionDispatch::IntegrationTest
     auth = Authentication::Services::Authenticate.new(
       email: email,
       password: 'secret'
-    ).register!(email_confirmation: email)
+    ).register!
 
     user_id = auth.user_id
 

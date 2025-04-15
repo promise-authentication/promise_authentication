@@ -4,7 +4,8 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   test 'changing password' do
     @email = 'hello@example.com'
     @old_password = 'old'
-    post '/authenticate', params: { email: @email, email_confirmation: @email, password: @old_password, remember_me: 1 }
+    Authentication::Services::Authenticate.new(email: @email, password: @old_password).register!
+    post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
     assert cookies[:user_id]
     assert cookies[:vault_key_base64]
 
@@ -35,7 +36,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
       email: @email,
       password: @old_password
     )
-    auth.register!(email_confirmation: auth.email)
+    auth.register!
 
     assert_emails 1 do
       post '/password/recover', params: { email: @email }
@@ -56,7 +57,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
       email: @email,
       password: @old_password
     )
-    auth.register!(email_confirmation: auth.email)
+    auth.register!
 
     relying_party_id = 'example.com'
     relying_party = Minitest::Mock.new

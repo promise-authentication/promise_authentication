@@ -1,21 +1,8 @@
 class AuthenticationController < ApplicationController
-  before_action :require_signed_id, except: %i[login authenticate logout]
+  before_action :require_signed_id, except: %i[verify_password authenticate logout]
 
-  def login
-    if(logged_in? && (login_configuration[:prompt] == 'login'))
-      do_logout!
-    end
-
-    old_flash = flash.to_h
-    reset_session
-    old_flash.each do |k, v|
-      flash.now[k] = v
-    end
-
+  def password
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
-    return unless logged_in?
-
-    redirect_to confirm_path(login_configuration)
   end
 
   def confirm
@@ -61,17 +48,6 @@ class AuthenticationController < ApplicationController
     end
   end
 
-  def do_sign_in
-    if params[:remember_me].present?
-      cookies.encrypted.permanent[:user_id] = @auth_request.user_id
-      cookies.encrypted.permanent[:vault_key_base64] = @auth_request.vault_key_base64
-      cookies.encrypted.permanent[:email] = params[:email]
-    end
-    session[:user_id] = @auth_request.user_id
-    session[:vault_key_base64] = @auth_request.vault_key_base64
-    session[:email] = params[:email]
-  end
-
   def authenticate
     do_logout!
 
@@ -79,8 +55,8 @@ class AuthenticationController < ApplicationController
     @auth_request.relying_party_id = relying_party&.id
 
     if @auth_request.valid?
-      @auth_request.existing! || @auth_request.register!(email_confirmation: params[:email_confirmation])
-      do_sign_in
+      @auth_request.existing!
+      do_sign_in(@auth_request)
 
       flash[:slide_class] = 'a-slide-in-from-right'
       redirect_to confirm_path(login_configuration)
@@ -92,19 +68,12 @@ class AuthenticationController < ApplicationController
         flash[:password_message] = @auth_request.errors.full_messages_for(:password).first
       end
       flash[:email] = @auth_request.email
-      redirect_to login_path(login_configuration)
+      redirect_to verify_password_path(registration_configuration)
     end
-  rescue Authentication::Services::Authenticate::EmailConfirmationError
-    @remember_me = params[:remember_me]
-    @email = params[:email]
-    @password = params[:password]
-    flash.now[:slide_class] = 'a-slide-in-from-right'
-    flash.now[:email_confirmation_message] = t('.confirmation_not_matching') if params[:email_confirmation].present?
-    render action: :confirm_email
   rescue Authentication::Password::NotMatching
     flash[:remember_me] = params[:remember_me]
     flash[:email] = @auth_request.email
     flash[:password_message] = t('.password_not_correct')
-    redirect_to login_path(login_configuration)
+    redirect_to verify_password_path(registration_configuration)
   end
 end

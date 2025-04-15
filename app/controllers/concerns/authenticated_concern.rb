@@ -5,6 +5,7 @@ module AuthenticatedConcern
     helper_method :logged_in?
     helper_method :current_user
     helper_method :login_configuration
+    helper_method :registration_configuration
   end
 
   def require_signed_id
@@ -19,24 +20,22 @@ module AuthenticatedConcern
   end
 
   def current_user
-    @current_user ||= begin
-                        OpenStruct.new({
-                          email: current_user_email,
-                          id: current_user_id,
-                          data: current_user_personal_data,
-                          vault_key: current_user_vault_key,
-                          unique: OpenStruct.new({
-                            color: unique_color,
-                            character: unique_character
-                          })
-                        })
-                      end
+    @current_user ||= OpenStruct.new({
+                                       email: current_user_email,
+                                       id: current_user_id,
+                                       data: current_user_personal_data,
+                                       vault_key: current_user_vault_key,
+                                       unique: OpenStruct.new({
+                                                                color: unique_color,
+                                                                character: unique_character
+                                                              })
+                                     })
   end
 
   def current_user_personal_data
     return nil unless current_user_vault_key.present?
 
-    @personal_data ||= -> do
+    @personal_data ||= lambda do
       Authentication::Vault.personal_data(current_user_id, current_user_vault_key)
     end.call
   end
@@ -70,6 +69,17 @@ module AuthenticatedConcern
     something_unique&.character
   end
 
+  def do_sign_in(auth_request)
+    if params[:remember_me].present?
+      cookies.encrypted.permanent[:user_id] = auth_request.user_id
+      cookies.encrypted.permanent[:vault_key_base64] = auth_request.vault_key_base64
+      cookies.encrypted.permanent[:email] = params[:email]
+    end
+    session[:user_id] = auth_request.user_id
+    session[:vault_key_base64] = auth_request.vault_key_base64
+    session[:email] = params[:email]
+  end
+
   def do_logout!
     reset_session
     cookies.delete :user_id
@@ -79,5 +89,10 @@ module AuthenticatedConcern
 
   def login_configuration
     params.permit(:client_id, :redirect_uri, :nonce, :redirect_to, :prompt)
+  end
+
+  def registration_configuration(*args)
+    list = %i[email email_verification_code remember_me].reject { |item| args.include?(item) }
+    login_configuration.merge params.permit(list)
   end
 end

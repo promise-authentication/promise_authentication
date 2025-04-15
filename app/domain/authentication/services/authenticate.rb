@@ -35,9 +35,7 @@ class Authentication::Services::Authenticate
     email&.strip&.downcase
   end
 
-  def register!(email_confirmation:)
-    raise EmailConfirmationError if email != clean_email(email_confirmation)
-
+  def register!
     @user_id, @vault_key = Register.call(email: email,
                                          password: password,
                                          relying_party_id: relying_party&.id,

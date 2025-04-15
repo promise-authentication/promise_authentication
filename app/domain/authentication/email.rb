@@ -6,6 +6,7 @@ class Authentication::Email
   def initialize(hashed_email)
     @hashed_email = hashed_email
     @claimed = false
+    @validated = false
   end
 
   def claim(user_id:)
