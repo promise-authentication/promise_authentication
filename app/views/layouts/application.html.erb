@@ -33,6 +33,10 @@
     </style>
 
     <%= content_for?(:head) ? yield(:head) : nil %>
+
+    <script>
+      window.LocalTime.config.locale = '<%= I18n.locale %>';
+    </script>
   </head>
   <body class="text-primary">
     <%= content_for?(:content) ? yield(:content) : yield %>

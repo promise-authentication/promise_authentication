@@ -96,4 +96,8 @@ LocalTime.config.i18n["da"] = {
   }
 }
 LocalTime.start()
-LocalTime.config.locale = navigator.language || navigator.userLanguage || "en";
+
+// Hack-time:
+// We need to set the locale in app/views/layouts/application.html.erb:37
+// so that the correct locale is used when rendering the page.
+window.LocalTime = LocalTime
