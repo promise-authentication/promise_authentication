@@ -50,7 +50,7 @@ en:
     verify_email:
       title: Check your inbox
       we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong> with a code. Please provide the code below.
-      we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to %{email} at %{at} with a new code. Please provide the code below.
+      we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new code. Please provide the code below.
       code: Code from e-mail
       caps_or_not: We do not care about upper or lower case letters.
       go_on: Go

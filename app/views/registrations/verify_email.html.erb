@@ -28,7 +28,7 @@
           <p class="input-label">
             <%= t '.code' %>
           </p>
-          <%= text_field_tag :email_verification_code, registration_configuration[:email_verification_code], autocomplete: "off", data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'login-input', autofocus: true, required: true, tabindex: 1 %>
+          <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'login-input', autofocus: true, required: true, tabindex: 1 %>
           <p class="text-secondary text-xs mt-1">
             <%= t '.caps_or_not' %>
           </p>
