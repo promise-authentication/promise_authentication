@@ -34,6 +34,8 @@ class Authentication::Services::PrepareEmailForValidation
         code: code,
         relying_party_name: relying_party&.name
       ).verify_email.deliver_now
+
+      verifier
     end
   end
 end

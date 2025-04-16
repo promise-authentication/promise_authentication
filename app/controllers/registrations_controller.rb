@@ -26,6 +26,7 @@ class RegistrationsController < ApplicationController
   end
 
   def verify_human
+    return redirect_to confirm_path(login_configuration) if logged_in?
     return unless request.post?
 
     pass_turnstile!
@@ -43,6 +44,11 @@ class RegistrationsController < ApplicationController
   def verify_email
     @code = email_verifier.verifier
 
+    if @code.nil?
+      return redirect_to(confirm_path(login_configuration)) if logged_in?
+
+      return redirect_to login_path(registration_configuration)
+    end
     return unless request.post?
 
     if verify_email_verification_code!
@@ -59,6 +65,7 @@ class RegistrationsController < ApplicationController
   end
 
   def create_password
+    return redirect_to confirm_path(login_configuration) if logged_in?
     return unless request.post?
     return unless params[:password].strip.present?
     return unless verify_email_verification_code!
@@ -68,6 +75,7 @@ class RegistrationsController < ApplicationController
 
       # Now we can register the user
       @auth_request = ::Authentication::Services::Authenticate.new params.permit(:email, :password)
+      @auth_request.email_verified_at = Time.zone.now
       @auth_request.relying_party_id = relying_party&.id
 
       return unless @auth_request.valid?
