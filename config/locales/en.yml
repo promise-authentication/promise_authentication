@@ -33,20 +33,22 @@ en:
       description_html: "%{relying_party} uses <strong>%{name}</strong> as a sign in provider. <strong>%{name}</strong> is not affiliated with %{relying_party} and will share no personal information with them. The e-mail and password you provide here will only be used to sign in to <strong>%{name}</strong>."
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Go
-      signing_in_html: 'Please wait&hellip;'
+      going_html: 'Please wait&hellip;'
       we_save_no_data_html: Your e-mail will <em class="whitespace-nowrap">not be saved</em> in a readable format.
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
     verify_human:
       login_at_html: Sign in to <span class="whitespace-nowrap">%{name}</span>
       go_on: Go
+      going_html: 'Please wait&hellip;'
       cancel: Back
     verify_email:
       title: Check your inbox
-      we_sent_you_an_email: We sent you an e-mail on %{email} with a code. Please provide to code below.
-      we_resent_you_an_email: The code you provided was wrong. We sent you a new e-mail on %{email} with a new code. Please provide the code below.
+      we_sent_you_an_email_html: We sent you an e-mail at %{at} to %{email} with a code. Please provide to code below.
+      we_resent_you_an_email_html: The code you provided was wrong. We sent you a new e-mail at %{at} to %{email} with a new code. Please provide the code below.
       code: Code from e-mail
       caps_or_not: We do not care about upper or lower case letters.
       go_on: Go
+      going_html: 'Verifying&hellip;'
       cancel: Back
     create_password:
       login_at_html: Sign in to <span class="whitespace-nowrap">%{name}</span>
@@ -54,6 +56,7 @@ en:
       remember_me: Remember me
       we_save_no_data_html: Your password will <em class="whitespace-nowrap">not be saved</em> in a readable format.
       go_on: Sign in
+      going_html: 'Signing in&hellip;'
       cancel: Back
   authentication:
     verify_password:
@@ -64,7 +67,7 @@ en:
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Sign in
       cancel: Back
-      signing_in_html: 'Signing in&hellip;'
+      going_html: 'Signing in&hellip;'
       forgot_password: Forgot password?
       remember_me: Remember me
       we_save_no_data_html: Your e-mail will <em class="whitespace-nowrap">not be saved</em> in a readable format.

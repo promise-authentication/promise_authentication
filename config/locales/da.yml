@@ -38,24 +38,27 @@ da:
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data_html: Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
       go_on: Videre
-      signing_in_html: 'Øjeblik&hellip;'
+      going_html: 'Øjeblik&hellip;'
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
     verify_human:
       login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
       go_on: Videre
+      going_html: 'Øjeblik&hellip;'
       cancel: Tilbage
     verify_email:
       title: Check din indbakke
-      we_sent_you_an_email: Vi har %{at} sendt dig en e-mail på %{email} med en kode. Indtast venligst koden herunder.
-      we_resent_you_an_email: Koden du skrev, var desværre forkert. Vi har %{at} sendt en ny mail til %{email} med en ny kode. Indtast venligst koden herunder.
+      we_sent_you_an_email_html: Vi har %{at} sendt dig en e-mail på %{email} med en kode. Indtast venligst koden herunder.
+      we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har %{at} sendt en ny mail til %{email} med en ny kode. Indtast venligst koden herunder.
       code: Kode fra e-mail
       caps_or_not: Vi gør ikke forskel på store og små bogtaver.
       go_on: Videre
+      going_html: 'Verificerer&hellip;'
       cancel: Tilbage
     create_password:
       login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
       create_account: Angiv det password du vil bruge til at logge ind med %{email} fremover.
       go_on: Log ind
+      going_html: 'Logger ind&hellip;'
       we_save_no_data_html: Dit password bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
       remember_me: Husk mig
       cancel: Tilbage
@@ -71,7 +74,7 @@ da:
       remember_me: Husk mig
       go_on: Log ind
       cancel: Tilbage
-      signing_in_html: 'Logger ind&hellip;'
+      going_html: 'Logger ind&hellip;'
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
     confirm_email:
       title: Gentag din e-mail

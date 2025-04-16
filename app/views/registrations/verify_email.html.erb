@@ -14,11 +14,11 @@
       </div>
       <% if flash[:resent_code] %>
         <div class="block bg-red-800 text-white p-3 rounded max-w-xs text-center mt-4">
-          <%= t '.we_resent_you_an_email', email: registration_configuration[:email], at: l(@code.created_at, format: :long) %>
+          <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
         </div>
       <% else %>
         <div class="block text-primary max-w-xs text-center mt-4">
-          <%= t '.we_sent_you_an_email', email: registration_configuration[:email], at: l(@code.created_at, format: :long) %>
+          <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
         </div>
       <% end %>
       <div class="w-full flex flex-col mt-6 pb-4">
@@ -33,7 +33,7 @@
         </label>
         <div class="flex w-full justify-end items-center mt-6">
           <%= link_to '&larr; '.html_safe + t('.cancel'), new_registration_path(registration_configuration), class: 'text-secondary pr-3' %>
-          <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary self-end' %>
+          <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } %>
         </div>
       </div>
     </div>
