@@ -74,7 +74,7 @@ da:
     verify_password:
       login: Log ind
       login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
-      enter_credentials_html: Angiv det password du oprettede til din konto på Promise.
+      enter_credentials_html: Angiv det password du oprettede til <strong>%{email}</strong> på Promise.
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data_html: Dit e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
       forgot_password: Glemt password?

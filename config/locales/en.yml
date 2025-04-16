@@ -70,7 +70,7 @@ en:
     verify_password:
       login: Sign in
       login_at_html: Sign in to <span class="whitespace-nowrap">%{name}</span>
-      enter_credentials_html: Enter your password you created for your account on Promise.
+      enter_credentials_html: Enter your password you created for <strong>%{email}</strong> on Promise.
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Sign in
       cancel: Back
