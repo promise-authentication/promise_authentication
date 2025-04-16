@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_15_120323) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_16_072534) do
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
     t.integer "user_id"
@@ -56,6 +56,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_15_120323) do
     t.string "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "email_verified_at"
   end
 
   create_table "authentication_key_pairs", id: :string, force: :cascade do |t|

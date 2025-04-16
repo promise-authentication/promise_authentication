@@ -15,11 +15,20 @@ class Authentication::HashedEmail < ApplicationRecord
     # 20250415: That was a stupid assumption. If we get a collision in SHA256,
     # that collision will carry over to BLAKE2b as well. That is the whole idea
     # of hashing. Same string, same hash. Sorry. ~AL
+    # 20250415: Well, maybe not THAT stupid. The way we do it here, actually
+    # makes it less likely to get a collision. We do not, as I previously
+    # thought, base one hash on the other. We should be good. ~AL
     sha = RbNaCl::Hash.sha256(email)
     blake = RbNaCl::Hash.blake2b(email)
     binary = sha + blake
 
     Base64.strict_encode64(binary).encode('utf-8')
+  end
+
+  def self.find_by_cleartext(email)
+    id = from_cleartext(email)
+
+    find_by(id: id)
   end
 
   def self.user_id_for_cleartext(email)

@@ -4,7 +4,7 @@ class Authentication::Services::Authenticate
   EmailConfirmationError = Class.new(StandardError)
 
   attr_writer :email
-  attr_accessor :password, :relying_party_id, :exisiting_account
+  attr_accessor :password, :relying_party_id, :exisiting_account, :email_verified_at
   attr_reader :user_id, :vault_key, :existing_account
 
   validates :email, :password, presence: true
@@ -40,6 +40,7 @@ class Authentication::Services::Authenticate
                                          password: password,
                                          relying_party_id: relying_party&.id,
                                          legacy_account_user_id: legacy_account_user_id,
+                                         email_verified_at: email_verified_at,
                                          relying_party_knows_password: legacy_account_user_id.present?)
     self
   end

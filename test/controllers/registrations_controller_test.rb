@@ -68,6 +68,10 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
       assert_equal 'hello@world.com', email
       assert Authentication::Vault.personal_data(user_id, vault_key)
+
+      # And we record that the email was verified
+      hashed_email = Authentication::HashedEmail.find_by_cleartext('hello@world.com')
+      assert hashed_email.email_verified_at
     end
   end
 
