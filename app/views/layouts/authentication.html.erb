@@ -4,12 +4,24 @@
 
 <%= content_for :content do %>
   <div class="flex flex-col sm:min-h-screen pb-4 sm:justify-center">
-    <div class="sm:pt-2 sm:px-2 sm:flex-grow flex flex-col justify-center">
-      <div class="flex items-center">
-        <div class="w-full flex items-center flex-col sm:m-auto sm:max-w-md sm:rounded-xl sm:border sm:align-center sm:shadow-lg overflow-hidden">
+    <div class="sm:pt-12 sm:px-2 sm:flex-grow flex flex-col justify-center">
+      <div class="relative flex items-center">
+        <% if relying_party %>
+          <div class="absolute z-0 rounded-full bg-white w-[80px] h-[80px] sm:-top-[40px] sm:border sm:shadow left-1/2 -translate-x-1/2">
+          </div>
+          <div class="absolute z-20 rounded-full bg-white top-0 sm:-top-[39px] w-[78px] h-[78px] left-1/2 -translate-x-1/2 flex flex-row items-center justify-center">
+            <% if relying_party&.logo_data %>
+              <%= image_tag(relying_party.logo_data, class: 'w-10 h-10') %>
+            <% end %>
+          </div>
+        <% end %>
+        <div class="pb-10 px-6 sm:px-10 relative z-10 mt-8 sm:mt-0 w-full bg-white flex items-center flex-col sm:m-auto sm:max-w-md sm:rounded-xl sm:border sm:align-center sm:shadow-lg ">
           <div id="main" class="w-full <%= flash[:slide_class] %>">
             <%= yield :body %>
           </div>
+          <% if relying_party %>
+            <%= render partial: "toggable_description" %>
+          <% end %>
         </div>
       </div>
     </div>

@@ -127,9 +127,13 @@ class AboutController < ApplicationController
     @auth = Authentication::Services::Authenticate.new(
       email: @email,
       password: @password,
-      relying_party_id: 'example.com'
+      relying_party_id: 'oase.app'
     )
-    @auth.call!
+    begin
+      @auth.register!
+    rescue Authentication::Email::AlreadyClaimed
+      @auth.existing!
+    end
 
     @id_token = Authentication::Services::GetIdToken.new(
       user_id: @auth.user_id, 

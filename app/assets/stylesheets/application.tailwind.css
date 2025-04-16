@@ -23,7 +23,7 @@
   }
 
   .input-label {
-    @apply text-gray-700 text-sm mb-1;
+    @apply text-gray-800 font-bold text-base mb-1;
   }
 
   /* Path: application.components.css */

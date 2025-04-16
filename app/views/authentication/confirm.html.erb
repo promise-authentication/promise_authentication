@@ -1,41 +1,38 @@
 <%= content_for :body do %>
-    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10 pt-8">
-      <% if relying_party&.logo_data %>
-        <%= image_tag(relying_party.logo_data, class: 'relying-party-logo') %>
-      <% end %>
-      <h2 class="text-2xl pt-4 text-center leading-tight">
-        <%= t '.sign_in_on_html', relying_party_name: relying_party.name %>
-      </h2>
-      <p class="text-secondary text-sm max-w-xs text-center mt-3">
-        <%= t '.you_are_html', email: current_user.email, name: name %>
-      </p>
-      <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center appearance-none", autofocus: true do %>
-        <span class="text-center">
-          <% if relying_party.supports_legacy_accounts? && current_user.data.id_for(relying_party.id).blank? %>
-            <%= t('.create_account_html', relying_party_name: relying_party.name) %>
-          <% else %>
-            <%= t('.go_to_html', relying_party_name: relying_party.name) %>
-          <% end %>
-        </span>
-        <span class="ml-3">
-          &rarr;
-        </span>
-      <% end %>
+  <div class="w-full flex items-center flex-col pt-8">
+    <h2 class="text-2xl pt-4 text-center leading-tight">
+      <%= t '.sign_in_on_html', relying_party_name: relying_party.name %>
+    </h2>
+    <p class="text-secondary text-sm max-w-xs text-center mt-3">
+      <%= t '.you_are_html', email: current_user.email, name: name %>
+    </p>
+    <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center appearance-none", autofocus: true do %>
+      <span class="text-center">
+        <% if relying_party.supports_legacy_accounts? && current_user.data.id_for(relying_party.id).blank? %>
+          <%= t('.create_account_html', relying_party_name: relying_party.name) %>
+        <% else %>
+          <%= t('.go_to_html', relying_party_name: relying_party.name) %>
+        <% end %>
+      </span>
+      <span class="ml-3">
+        &rarr;
+      </span>
+    <% end %>
 
-      <% if relying_party.supports_legacy_accounts? && current_user.data.id_for(relying_party.id).blank? %>
-      <% end %>
+    <% if relying_party.supports_legacy_accounts? && current_user.data.id_for(relying_party.id).blank? %>
+    <% end %>
 
-      <div class="flex flex-col items-center">
-        <span class="text-secondary">
-          <%= t '.not_you_html', email: current_user.email %>
-        </span>
-        <%= button_to t('.logout'), relogin_path(login_configuration), method: :delete, class: "button transparent small mt-2" %>
-      </div>
-
-
-      <% id = current_user.data.id_for(relying_party.id) %>
-      <p class="mt-8 text-secondary text-sm" style="cursor:help;" title="<%= id.present? ? t('.your_id', id: id, relying_party_name: relying_party.name) : t('.no_id_yet', relying_party_name: relying_party.name) %>">
-        <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
-      </p>
+    <div class="flex flex-col items-center">
+      <span class="text-secondary">
+        <%= t '.not_you_html', email: current_user.email %>
+      </span>
+      <%= button_to t('.logout'), relogin_path(login_configuration), method: :delete, class: "button transparent small mt-2" %>
     </div>
+
+
+    <% id = current_user.data.id_for(relying_party.id) %>
+    <p class="mt-8 text-secondary text-sm" style="cursor:help;" title="<%= id.present? ? t('.your_id', id: id, relying_party_name: relying_party.name) : t('.no_id_yet', relying_party_name: relying_party.name) %>">
+      <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
+    </p>
+  </div>
 <% end %>

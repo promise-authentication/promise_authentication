@@ -25,7 +25,8 @@ da:
       meta_description: "%{name} is a single-sign-on pure identity provider."
   application:
     toggable_description:
-      description_html: "%{relying_party} bruger <strong>%{name}</strong> til at logge ind. <strong>%{name}</strong> er ikke tilknyttet %{relying_party} på andre måder og vil ikke dele nogle personlige oplysninger med dem. Den e-mail og det password du angiver her, vil udelukkende blive brugt til at identificere dig overfor <strong>%{name}</strong>."
+      what_is: Hvad er Promise?
+      description_html: "Promise er en single-sign-on-løsning, som gør det muligt at logge ind på forskellige applikationer uden at skulle oprette en konto hos hver enkelt. Du kan på sigt bruge din Promise-konto til at logge ind på mange forskellige tjenester."
   humans:
     show:
       choose_application: Vælg applikation
@@ -36,20 +37,23 @@ da:
     new:
       login: Log ind
       login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
-      enter_credentials_html: Angiv den e-mail du vil logge ind med.
+      enter_credentials_html: "%{name} bruger Promise til at logge ind. Angiv den e-mail du vil logge ind på Promise med."
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data_html: Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
       go_on: Videre
       going_html: 'Øjeblik&hellip;'
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
     verify_human:
-      login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
-      go_on: Videre
+      title: Bekræft e-mail
+      description: For at kunne logge ind, skal du første oprette en bruger.
+      description_html: For at logge ind på <span class="whitespace-nowrap">%{name}</span>, skal du først oprette dig her på Promise.
+      confirm_email_html: Vi sender nu en kode til <strong>%{email}</strong> for at sikre, at det er den rigtige mail.
+      go_on: Send kode
       going_html: 'Øjeblik&hellip;'
       cancel: Tilbage
     verify_email:
       title: Check din indbakke
-      we_sent_you_an_email_html: Vi har %{at} sendt dig en e-mail på %{email} med en kode. Indtast venligst koden herunder.
+      we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med en kode. Indtast venligst koden herunder.
       we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har %{at} sendt en ny mail til %{email} med en ny kode. Indtast venligst koden herunder.
       code: Kode fra e-mail
       caps_or_not: Vi gør ikke forskel på store og små bogtaver.
@@ -57,18 +61,20 @@ da:
       going_html: 'Verificerer&hellip;'
       cancel: Tilbage
     create_password:
-      login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
-      create_account: Angiv det password du vil bruge til at logge ind med %{email} fremover.
+      title: Opret password
+      create_account_html: Opret det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> på Promise fremover.
+      new_password: Nyt password
       go_on: Log ind
       going_html: 'Logger ind&hellip;'
       we_save_no_data_html: Dit password bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
       remember_me: Husk mig
       cancel: Tilbage
+      no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
   authentication:
     verify_password:
       login: Log ind
       login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
-      enter_credentials_html: Angiv dit password.
+      enter_credentials_html: Angiv det password du oprettede til din konto på Promise.
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data_html: Dit e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
       forgot_password: Glemt password?

@@ -1,6 +1,6 @@
 <%= content_for :body do %>
   <%= form_tag verify_email_registrations_path(registration_configuration(:email_verification_code)), class: 'w-full flex-1' do %>
-    <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
+    <div class="w-full flex items-center flex-col">
       <div class="flex flex-1 flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
         <h2 class="text-base sm:text-lg text-primary font-bold leading-none">
           <%= t('.title') %>
@@ -12,27 +12,29 @@
           </span>
         </a>
       </div>
-      <% if flash[:resent_code] %>
-        <div class="block bg-red-800 text-white p-3 rounded max-w-xs text-center mt-4">
-          <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
-        </div>
-      <% else %>
-        <div class="block text-primary max-w-xs text-center mt-4">
-          <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
-        </div>
-      <% end %>
-      <div class="w-full flex flex-col mt-6 pb-4">
+      <div class="w-full mt-4">
+        <% if flash[:resent_code] %>
+          <div class="bg-red-800 text-white p-3 rounded">
+            <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+          </div>
+        <% else %>
+          <div class="block text-primary">
+            <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+          </div>
+        <% end %>
+      </div>
+      <div class="w-full flex flex-col mt-10 pb-4">
         <label class="w-full">
           <p class="input-label">
             <%= t '.code' %>
           </p>
-          <%= text_field_tag :email_verification_code, nil, autocomplete: "off", data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'login-input', autofocus: true, required: true, tabindex: 1 %>
+          <%= text_field_tag :email_verification_code, registration_configuration[:email_verification_code], autocomplete: "off", data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'login-input', autofocus: true, required: true, tabindex: 1 %>
           <p class="text-secondary text-xs mt-1">
             <%= t '.caps_or_not' %>
           </p>
         </label>
         <div class="flex w-full justify-end items-center mt-6">
-          <%= link_to '&larr; '.html_safe + t('.cancel'), new_registration_path(registration_configuration), class: 'text-secondary pr-3' %>
+          <%= back_to(registration_configuration(:email_verification_code)) do |args| new_registration_path(args) end %>
           <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } %>
         </div>
       </div>
