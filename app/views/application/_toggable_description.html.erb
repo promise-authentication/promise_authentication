@@ -1,0 +1,16 @@
+
+<script>
+  function toggleDescription() {
+    document.getElementById('promise_description').classList.remove('hidden');
+    document.getElementById('promise_description').classList.toggle('a-in');
+    document.getElementById('promise_description').classList.toggle('a-out');
+  }
+</script>
+
+<% if relying_party %>
+  <a href="javascript:void(toggleDescription());" id="promise_description" class="hidden a-out overflow-hidden">
+    <span class="block mt-10">
+      <%= t '.description_html', name: name, relying_party: relying_party.name %>
+    </span>
+  </a>
+<% end %>

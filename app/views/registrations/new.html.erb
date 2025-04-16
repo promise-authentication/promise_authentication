@@ -1,12 +1,4 @@
 <%= content_for :body do %>
-  <script>
-    function toggleDescription() {
-      document.getElementById('promise_description').classList.remove('hidden');
-      document.getElementById('promise_description').classList.toggle('a-in');
-      document.getElementById('promise_description').classList.toggle('a-out');
-    }
-  </script>
-
   <%= form_tag registrations_path(registration_configuration(:email)), class: 'w-full' do %>
     <div class="w-full flex items-center flex-col pb-10 px-6 sm:px-10">
       <div class="flex flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
@@ -35,13 +27,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
           </svg>
         </a>
-        <% if relying_party %>
-          <a href="javascript:void(toggleDescription());" id="promise_description" class="hidden a-out overflow-hidden">
-            <span class="block mt-10">
-              <%= t '.description_html', name: name, relying_party: relying_party.name %>
-            </span>
-          </a>
-        <% end %>
+        <%= render partial: "toggable_description" %>
         <label class="w-full mt-8">
           <p class="input-label">
             E-mail

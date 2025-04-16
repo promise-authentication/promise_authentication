@@ -19,6 +19,9 @@ en:
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on identity provider."
+  application:
+    toggable_description:
+      description_html: "%{relying_party} uses <strong>%{name}</strong> as a sign in provider. <strong>%{name}</strong> is not affiliated with %{relying_party} and will share no personal information with them. The e-mail and password you provide here will only be used to sign in to <strong>%{name}</strong>."
   humans:
     show:
       choose_application: Choose application
@@ -30,7 +33,6 @@ en:
       login: Sign in
       login_at_html: Sign in to <span class="whitespace-nowrap">%{name}</span>
       enter_credentials_html: Enter the e-mail you want to sign in with.
-      description_html: "%{relying_party} uses <strong>%{name}</strong> as a sign in provider. <strong>%{name}</strong> is not affiliated with %{relying_party} and will share no personal information with them. The e-mail and password you provide here will only be used to sign in to <strong>%{name}</strong>."
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Go
       going_html: 'Please wait&hellip;'
@@ -63,7 +65,6 @@ en:
       login: Sign in
       login_at_html: Sign in to <span class="whitespace-nowrap">%{name}</span>
       enter_credentials_html: Enter your password.
-      description_html: "%{relying_party} uses <strong>%{name}</strong> as a sign in provider. <strong>%{name}</strong> is not affiliated with %{relying_party} and will share no personal information with them. The e-mail and password you provide here will only be used to sign in to <strong>%{name}</strong>."
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Sign in
       cancel: Back
