@@ -49,7 +49,7 @@ da:
       description_html: For at logge ind på <span class="whitespace-nowrap">%{name}</span>, skal du først oprette dig her på Promise.
       confirm_email_html: Vi sender nu en kode til <strong>%{email}</strong> for at sikre, at det er den rigtige mail.
       go_on: Send kode
-      going_html: 'Øjeblik&hellip;'
+      going_html: 'Sender&hellip;'
       cancel: Tilbage
     verify_email:
       title: Check din indbakke

@@ -34,7 +34,7 @@
           </p>
         </label>
         <div class="flex w-full justify-end items-center mt-6">
-          <%= back_to(registration_configuration(:email_verification_code)) do |args| new_registration_path(args) end %>
+          <%= back_to(registration_configuration(:email_verification_code), data: {turbolinks: false}) do |args| verify_human_registrations_path(args) end %>
           <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } %>
         </div>
       </div>

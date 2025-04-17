@@ -45,7 +45,7 @@ en:
       description_html: To sign in to <span class="whitespace-nowrap">%{name}</span>, you need to create an account here on Promise first.
       confirm_email_html: We will send a code to <strong>%{email}</strong> to verify that this is the right e-mail.
       go_on: Send code
-      going_html: 'Please wait&hellip;'
+      going_html: 'Sending&hellip;'
       cancel: Back
     verify_email:
       title: Check your inbox

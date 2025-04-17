@@ -6,10 +6,13 @@ module BackToConcern
     helper_method :back_to
   end
 
-  def back_to(params)
+  def back_to(params, *args)
     with_back = params.merge(back: true)
     url = yield with_back if block_given?
-    helpers.link_to '&larr; '.html_safe + t('.cancel'), url, class: 'text-secondary pr-3'
+    arguments = {
+      class: 'text-secondary pr-3'
+    }.merge(args.first || {})
+    helpers.link_to('&larr; '.html_safe + t('.cancel'), url, arguments)
   end
 
   def move_back
