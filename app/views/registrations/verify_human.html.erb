@@ -2,7 +2,7 @@
   <%= form_tag verify_human_registrations_path(registration_configuration), class: 'w-full flex-1' do %>
     <div class="w-full flex items-center flex-col">
       <div class="flex flex-1 flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
-        <h2 class="text-base sm:text-lg text-primary font-bold leading-none">
+        <h2 class="text-lg text-primary font-bold leading-none">
           <%= t('.title', email: registration_configuration[:email]) %>
         </h2>
         <a href="javascript:void(toggleDescription());" class="flex flex-row items-center space-x-1">
@@ -13,7 +13,7 @@
         </a>
       </div>
       <% if relying_party %>
-        <p class="w-full block text-primary mt-4">
+        <p class="w-full block text-primary">
           <%= t('.description_html', name: relying_party.name) %>
         </p>
       <% end %>
@@ -25,7 +25,7 @@
           <%= turnstile_tag_html %>
         </div>
         <div class="flex w-full justify-end items-center mt-0">
-          <%= back_to(registration_configuration) do |args| verify_email_registrations_path(args) end %>
+          <%= back_to(registration_configuration) do |args| new_registration_path(args) end %>
           <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } %>
         </div>
       </div>

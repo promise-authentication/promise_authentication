@@ -2,7 +2,7 @@
   <%= form_tag verify_email_registrations_path(registration_configuration(:email_verification_code)), class: 'w-full flex-1' do %>
     <div class="w-full flex items-center flex-col">
       <div class="flex flex-1 flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
-        <h2 class="text-base sm:text-lg text-primary font-bold leading-none">
+        <h2 class="text-lg text-primary font-bold leading-none">
           <%= t('.title') %>
         </h2>
         <a href="javascript:void(toggleDescription());" class="flex flex-row items-center space-x-1">
@@ -12,7 +12,7 @@
           </span>
         </a>
       </div>
-      <div class="w-full mt-4">
+      <div class="w-full">
         <% if flash[:resent_code] %>
           <div class="bg-red-800 text-white p-3 rounded">
             <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
@@ -23,7 +23,7 @@
           </div>
         <% end %>
       </div>
-      <div class="w-full flex flex-col mt-10 pb-4">
+      <div class="w-full flex flex-col mt-6 pb-4">
         <label class="w-full">
           <p class="input-label">
             <%= t '.code' %>
