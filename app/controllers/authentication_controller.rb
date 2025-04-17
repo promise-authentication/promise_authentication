@@ -67,12 +67,9 @@ class AuthenticationController < ApplicationController
       else
         flash[:password_message] = @auth_request.errors.full_messages_for(:password).first
       end
-      flash[:email] = @auth_request.email
       redirect_to verify_password_path(registration_configuration)
     end
   rescue Authentication::Password::NotMatching
-    flash[:remember_me] = params[:remember_me]
-    flash[:email] = @auth_request.email
     flash[:password_message] = t('.password_not_correct')
     redirect_to verify_password_path(registration_configuration)
   end
