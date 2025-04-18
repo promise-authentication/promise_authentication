@@ -41,9 +41,9 @@ en:
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
     verify_human:
       title: Verify e-mail
-      description: To be able to sign in, you need to create an account first.
-      description_html: To sign in to <span class="whitespace-nowrap">%{name}</span>, you need to create an account here on Promise first.
-      confirm_email_html: We will send a code to <strong>%{email}</strong> to verify that this is the right e-mail.
+      description: Before we go on, we need to verify your e-mail.
+      description_html: Before we send you on to <span class="whitespace-nowrap">%{name}</span>, we need to verify your e-mail.
+      confirm_email_html: We will send a code to <strong>%{email}</strong>.
       go_on: Send code
       going_html: 'Sending&hellip;'
       cancel: Back
@@ -58,7 +58,7 @@ en:
       cancel: Back
     create_password:
       title: Create password
-      create_account_html: Provide the password you want to use with <span class="font-bold">%{email}</span> on Promise.
+      create_account_html: Provide the password you want to use with <span class="font-bold">%{email}</span>.
       new_password: New password
       password_error:
         blank: Please provide a password.

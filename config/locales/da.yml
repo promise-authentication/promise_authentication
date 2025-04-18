@@ -45,9 +45,9 @@ da:
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
     verify_human:
       title: Bekræft e-mail
-      description: For at kunne logge ind, skal du første oprette en bruger.
-      description_html: For at logge ind på <span class="whitespace-nowrap">%{name}</span>, skal du først oprette dig her på Promise.
-      confirm_email_html: Vi sender nu en kode til <strong>%{email}</strong> for at sikre, at det er den rigtige mail.
+      description: Inden vi går videre, skal vi lige have bekræftet din e-mail.
+      description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet din e-mail.
+      confirm_email_html: Vi sender en kode til <strong>%{email}</strong>.
       go_on: Send kode
       going_html: 'Sender&hellip;'
       cancel: Tilbage
@@ -62,7 +62,7 @@ da:
       cancel: Tilbage
     create_password:
       title: Vælg password
-      create_account_html: Skriv det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> på Promise fremover.
+      create_account_html: Skriv det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> fremover.
       new_password: Password
       confirm_password: Gentag password
       password_error:
