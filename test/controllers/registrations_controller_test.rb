@@ -46,7 +46,12 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
     # If I provide almost blank password:
     post create_password_registrations_url(email: 'hello@world.com', email_verification_code: new_code.code,
-                                           password: ' ')
+                                           password: ' ', password_confirmation: ' ')
+    assert_response :success
+
+    # If they don't match
+    post create_password_registrations_url(email: 'hello@world.com', email_verification_code: new_code.code,
+                                           password: 'a', password_confirmation: 'b')
     assert_response :success
 
     # If I provide a good password and a client id
@@ -55,6 +60,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
         email: 'hello@world.com',
         email_verification_code: new_code.code,
         password: 'secret',
+        password_confirmation: 'secret',
         client_id: 'oase.app',
         remember_me: 1
       )

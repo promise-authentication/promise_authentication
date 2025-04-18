@@ -14,7 +14,7 @@
       </div>
       <div class="w-full">
         <% if flash[:resent_code] %>
-          <div class="bg-red-800 text-white p-3 rounded">
+          <div class="bg-red-500 text-white p-3 rounded">
             <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
           </div>
         <% else %>

@@ -67,7 +67,8 @@ class RegistrationsController < ApplicationController
   def create_password
     return redirect_to confirm_path(login_configuration) if logged_in?
     return unless request.post?
-    return unless params[:password].strip.present?
+    return flash[:password_error] = 'blank' unless params[:password].strip.present?
+    return flash[:password_error] = 'not_matching' unless params[:password] == params[:password_confirmation]
     return unless verify_email_verification_code!
 
     ActiveRecord::Base.transaction do

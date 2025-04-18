@@ -61,9 +61,13 @@ da:
       going_html: 'Verificerer&hellip;'
       cancel: Tilbage
     create_password:
-      title: Opret password
-      create_account_html: Opret det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> på Promise fremover.
-      new_password: Nyt password
+      title: Vælg password
+      create_account_html: Skriv det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> på Promise fremover.
+      new_password: Password
+      confirm_password: Gentag password
+      password_error:
+        blank: Udfyld venligst password.
+        not_matching: Password matcher ikke.
       go_on: Log ind
       going_html: 'Logger ind&hellip;'
       we_save_no_data_html: Dit password bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.

@@ -60,6 +60,9 @@ en:
       title: Create password
       create_account_html: Provide the password you want to use with <span class="font-bold">%{email}</span> on Promise.
       new_password: New password
+      password_error:
+        blank: Please provide a password.
+        not_matching: Password not matching.
       remember_me: Remember me
       we_save_no_data_html: Your password will <em class="whitespace-nowrap">not be saved</em> in a readable format.
       go_on: Sign in
