@@ -26,7 +26,7 @@ da:
   application:
     toggable_description:
       what_is: Hvad er Promise?
-      description_html: "Promise er en single-sign-on-løsning, som gør det muligt at logge ind på forskellige applikationer uden at skulle oprette en konto hos hver enkelt. Du kan på sigt bruge din Promise-konto til at logge ind på mange forskellige tjenester."
+      description_html: "Promise er en single-sign-on-løsning, som gør det muligt at logge ind på forskellige applikationer uden at skulle oprette en konto hos hver enkelt. Du kan på sigt bruge din Promise-konto til at logge ind på mange forskellige tjenester. Promise kan kontaktes på mail@promiseauthentication.org."
   humans:
     show:
       choose_application: Vælg applikation

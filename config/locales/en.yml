@@ -22,7 +22,7 @@ en:
   application:
     toggable_description:
       what_is: What is Promise?
-      description_html: "Promise is a single-sign-on identity provider. This means you can potentially use Promise to sign in to any of your connected applications. Promise will not store your personal information anywhere. Not even your e-mail."
+      description_html: "Promise is a single-sign-on identity provider. This means you can potentially use Promise to sign in to any of your connected applications. Promise will not store your personal information anywhere. Not even your e-mail. You can contact Promise on mail@promiseauthentication.org."
   humans:
     show:
       choose_application: Choose application
