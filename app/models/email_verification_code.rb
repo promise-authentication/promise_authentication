@@ -1,6 +1,6 @@
 class EmailVerificationCode < ApplicationRecord
   module HumanReadableCode
-    ALPHABET = 'ABCDEFGHKMNPQRSTUVWXYZ23456789'.freeze
+    ALPHABET = 'abcdefghkmnpqrstuvwxyz23456789'.freeze
     def self.generate(range)
       # The length should be a random number in the range
       length = range.to_a.sample(1, random: SecureRandom).first
