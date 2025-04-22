@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   delete 'relogin', to: 'authentication#relogin', as: 'relogin'
   get    'confirm', to: 'authentication#confirm', as: 'confirm'
   post   'authenticate', to: 'authentication#authenticate', as: 'authenticate'
-  get    'authenticate', to: 'authentication#login'
+  get    'authenticate', to: 'registrations#new' # Here for legacy reasons
   post   'go_to', to: 'authentication#go_to', as: 'go_to'
 
 
