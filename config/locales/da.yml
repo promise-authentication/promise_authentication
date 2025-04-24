@@ -57,6 +57,7 @@ da:
       we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst koden herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
       code: Kode fra e-mail
       caps_or_not: Vi gør ikke forskel på store og små bogtaver.
+      send_new_code: Send ny kode
       go_on: Videre
       going_html: 'Verificerer&hellip;'
       cancel: Tilbage

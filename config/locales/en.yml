@@ -53,6 +53,7 @@ en:
       we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new code. Please provide the code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
       code: Code from e-mail
       caps_or_not: We do not care about upper or lower case letters.
+      send_new_code: Send new code
       go_on: Go
       going_html: 'Verifying&hellip;'
       cancel: Back

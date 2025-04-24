@@ -17,11 +17,17 @@ class RegistrationsController < ApplicationController
 
   def create
     flash[:slide_class] = 'a-slide-in-from-right'
+    email = registration_configuration[:email]
 
-    if ::Authentication::Services::Authenticate::Existing.known?(registration_configuration[:email])
+    if ::Authentication::Services::Authenticate::Existing.known?(email)
       redirect_to verify_password_path(registration_configuration)
     else
-      redirect_to verify_human_registrations_path(registration_configuration)
+      code = EmailVerificationCode.find_by_cleartext(email)
+      if code
+        redirect_to verify_email_registrations_path(registration_configuration)
+      else
+        redirect_to verify_human_registrations_path(registration_configuration)
+      end
     end
   end
 

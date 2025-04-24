@@ -19,7 +19,24 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to verify_password_url(email: 'hello@world.com')
   end
 
+  test 'redirect to code if mail sent' do
+    post verify_human_registrations_url, params: { email: 'hello@world.com' }
+    post registrations_url, params: { email: 'hello@world.com' }
+    assert_redirected_to verify_email_registrations_url(email: 'hello@world.com')
+  end
+
+  # test 'redirect to create password if e-mail is verified' do
+  #   post verify_human_registrations_url, params: { email: 'hello@world.com' }
+  #   code = EmailVerificationCode.find_by_cleartext('hello@world.com')
+  #   post verify_email_registrations_url(email: 'hello@world.com', email_verification_code: code.code)
+  #
+  #   post registrations_url, params: { email: 'hello@world.com' }
+  #   assert_redirected_to create_password_registrations_url(email: 'hello@world.com',
+  #                                                          email_verification_code: code.code)
+  # end
+
   test 'the flow from human verification' do
+    # If no code given
     post verify_human_registrations_url, params: { email: 'hello@world.com' }
     assert_redirected_to verify_email_registrations_url(email: 'hello@world.com')
 
