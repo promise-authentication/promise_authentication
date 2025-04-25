@@ -1,4 +1,3 @@
-<%= image_tag(admin_relying_party.logo_data, alt: "#{admin_relying_party.name}", class: "w-20 m-auto") if admin_relying_party.logo_data.present? %>
 
 <h1>
   <% if admin_relying_party.id == 'example.com' %>
@@ -152,7 +151,7 @@
     ['admin_user_ids', 'Array<String>', '["a", "b"]', "An array of user IDs you want to have admin access here on #{name}."],
     ['allowed_redirect_domain_names', 'Array<String>', "[\"a.#{admin_relying_party.id}\"]", "A list of domain names that #{name} will allow as <code>redirect_uri</code>. This list does not have to include the default <code>redirect_uri</code>. Also be aware that <code>localhost</code> and <code>127.0.0.1</code> is allowed by default, so no need to add that. You can also provide IP addresses."],
     ['locale', 'String', '"da"', 'The locale preferred, if the user has not chosen a locale. Currently "da" and "en" are supported.'],
-    ['logo_url', 'String', "\"https://#{admin_relying_party.id}/logo.png\"", 'An URL for a logo. Will be shown to users on sign in screens. The logo will be downloaded on the server and sent to the client as Base64 encoded data. This is to protect the user from potential tracking.'],
+    ['logo_url', 'String', "\"https://#{admin_relying_party.id}/logo.png\"", 'An URL for a logo. Will be shown to users on sign in screens. The logo will be downloaded on the server and sent to the client as Base64 encoded data. This is to protect the user from potential tracking and other malicious stuff. The logo must be less than 1MB and the correct HTTP headers should be present on both GET and HEAD. I.e. content-length and content-type.'],
     ['name', 'String', '"Nice app"', 'The name of the app or service. Will be shown on login screens.'],
   ].each do |row| %>
   <div class="<%= cycle('bg-gray-200', 'bg-gray-100') %> -ml-3 -mr-3 p-3 m-0">
@@ -176,6 +175,13 @@
   we get
 </p>
 <pre><code><%= raw JSON.pretty_generate(admin_relying_party.well_knowns) %></code></pre>
+
+<% if admin_relying_party.logo_data.present? %>
+  <p>
+    Here's the logo that <%= admin_relying_party.name %> provided:
+  </p>
+<%= image_tag(admin_relying_party.logo_data, alt: "#{admin_relying_party.name}", class: "w-20") %>
+<% end %>
 
 <p>
   <%= name %> caches the JSON based on the HTTP headers:
