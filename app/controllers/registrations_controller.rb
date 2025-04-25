@@ -45,6 +45,9 @@ class RegistrationsController < ApplicationController
     redirect_to verify_email_registrations_path(registration_configuration)
   rescue TurnstileConcern::NotPassedError
     render action: :verify_human
+  rescue Net::SMTPFatalError => e
+    @smtp_error = e
+    render action: :new
   end
 
   def verify_email

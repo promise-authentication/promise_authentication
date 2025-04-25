@@ -19,7 +19,7 @@
           <%= locale_name %>
         </span>
       <% else %>
-        <%= link_to locale_name, url_for( params.clone.permit!.merge(locale: locale, only_path: true )), class: "text-secondary block p-3" %>
+        <%= link_to locale_name, url_for( params.clone.permit!.merge(locale: locale, only_path: true )), class: "text-secondary block p-3", data: {turbolinks: false} %>
       <% end %>
   <% end %>
 </div>

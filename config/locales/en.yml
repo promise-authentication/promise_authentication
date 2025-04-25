@@ -34,6 +34,7 @@ en:
       login: Sign in
       login_at_html: Sign in to <span class="whitespace-nowrap">%{name}</span>
       enter_credentials_html: "%{name} uses Promise for signing in. Please provide the e-mail you want to sign in to Promise with."
+      we_could_not_send_email_html: "We could not send an e-mail to <strong>%{email}</strong>. Please check that you have provided the correct e-mail. Here is the message we got: <em class='font-mono'>%{message}</em>."
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Go
       going_html: 'Please wait&hellip;'

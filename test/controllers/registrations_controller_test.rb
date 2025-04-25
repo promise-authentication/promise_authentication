@@ -35,6 +35,19 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   #                                                          email_verification_code: code.code)
   # end
 
+  test 'handle wrong email' do
+    email = 'hello@gmail.dk'
+    # Let's mock the email sending:
+    mock = Minitest::Mock.new
+    mock.expect(:generate_and_send_verification_code!, nil) do
+      raise Net::SMTPFatalError, 'Hello'
+    end
+    Authentication::Services::PrepareEmailForValidation.stub :new, mock do
+      post verify_human_registrations_url, params: { email: email }
+    end
+    assert_response :success
+  end
+
   test 'the flow from human verification' do
     # If no code given
     post verify_human_registrations_url, params: { email: 'hello@world.com' }

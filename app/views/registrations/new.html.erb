@@ -24,6 +24,13 @@
           </svg>
         </p>
         <label class="w-full mt-8">
+          <div class="w-full mb-2">
+            <% if @smtp_error %>
+              <div class="bg-red-500 text-white text-sm p-3 rounded">
+                <%= t '.we_could_not_send_email_html', email: registration_configuration[:email], message: @smtp_error.message %>
+              </div>
+            <% end %>
+          </div>
           <p class="input-label">
             E-mail
           </p>
