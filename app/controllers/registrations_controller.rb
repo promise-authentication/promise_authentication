@@ -48,6 +48,9 @@ class RegistrationsController < ApplicationController
   rescue Net::SMTPFatalError => e
     @smtp_error = e
     render action: :new
+  rescue Net::SMTPServerBusy => e
+    @smtp_error = e
+    render action: :new
   end
 
   def verify_email
