@@ -19,6 +19,18 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to verify_password_url(email: 'hello@world.com')
   end
 
+  test 'redirect to password if known and now upcase' do
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+    post registrations_url, params: { email: 'Hello@world.com' }
+    assert_redirected_to verify_password_url(email: 'Hello@world.com')
+  end
+
+  test 'redirect to password if known and then upcase' do
+    Authentication::Services::Authenticate.new(email: 'Hello@world.com', password: 'secret').register!
+    post registrations_url, params: { email: 'hello@world.com' }
+    assert_redirected_to verify_password_url(email: 'hello@world.com')
+  end
+
   test 'redirect to code if mail sent' do
     post verify_human_registrations_url, params: { email: 'hello@world.com' }
     post registrations_url, params: { email: 'hello@world.com' }
