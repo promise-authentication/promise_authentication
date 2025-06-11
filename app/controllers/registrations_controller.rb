@@ -72,7 +72,7 @@ class RegistrationsController < ApplicationController
       redirect_to create_password_registrations_path(registration_configuration)
     else
       # If the code is invalid, we send the mail, with a new code
-      email_verifier.generate_and_send_verification_code!
+      email_verifier.generate_and_send_verification_code!(old_code: @code.code)
       @code = email_verifier.verifier
       flash.now[:resent_code] = true
       render action: :verify_email

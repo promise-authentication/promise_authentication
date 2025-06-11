@@ -14,4 +14,10 @@ class EmailVerificationCodeTest < ActiveSupport::TestCase
              "Length should be between 2 and 6 but #{generated} is #{generated.length}"
     end
   end
+
+  test 'human readable code with fixed length' do
+    klass = @described_class::HumanReadableCode
+    generated = klass.generate(4..4)
+    assert_equal generated.length, 4
+  end
 end

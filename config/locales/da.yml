@@ -55,8 +55,9 @@ da:
     verify_email:
       title: Check din indbakke
       we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med en kode. Indtast venligst koden herunder.
-      we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst koden herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
-      code: Kode fra e-mail
+      we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
+      code: Kode fra e-mail (starter med "%{code_start}")
+      help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.
       caps_or_not: Vi gør ikke forskel på store og små bogtaver.
       send_new_code: Send ny kode
       go_on: Videre

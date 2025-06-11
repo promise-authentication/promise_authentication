@@ -25,7 +25,7 @@ class Authentication::Services::PrepareEmailForValidationTest < ActiveSupport::T
     assert_includes email.body.encoded, code.code
 
     # When I call it again, it should reset and send new mail
-    inst.generate_and_send_verification_code!
+    inst.generate_and_send_verification_code!(old_code: code.code)
     new_code = EmailVerificationCode.last
     assert_equal EmailVerificationCode.count, 1
     assert_equal EmailVerificationCode.find_by_cleartext('hello@world.com').code, new_code.code

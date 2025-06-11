@@ -18,10 +18,18 @@ class Authentication::Services::PrepareEmailForValidation
     @verifier = nil
   end
 
-  def generate_and_send_verification_code!
+  def generate_and_send_verification_code!(old_code: nil)
     reset!
     hashed_email = Authentication::HashedEmail.from_cleartext(email)
-    code = EmailVerificationCode::HumanReadableCode.generate(2..3)
+    code = EmailVerificationCode::HumanReadableCode.generate(4..4)
+
+    # If an old code is provided, we need to make sure the new code
+    # has a different first character to avoid confusion.
+    if old_code
+      while code[0] == old_code[0]
+        code = EmailVerificationCode::HumanReadableCode.generate(4..4)
+      end
+    end
 
     ActiveRecord::Base.transaction do
       EmailVerificationCode.create!(
