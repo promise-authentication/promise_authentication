@@ -28,7 +28,7 @@
           <p class="input-label">
             <%= t '.code', code_start: @code.code.first %>
           </p>
-          <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", placeholder: "#{@code.code.first}...", pattern: "#{@code.code.first}.{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'login-input', autofocus: true, required: true, tabindex: 1 %>
+          <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", placeholder: "#{@code.code.first}...", pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'login-input', autofocus: true, required: true, tabindex: 1 %>
           <p class="text-secondary text-xs mt-1">
             <%= t '.caps_or_not' %>
           </p>
