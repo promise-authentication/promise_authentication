@@ -32,6 +32,10 @@ da:
       choose_application: Vælg applikation
       explain_choosing: Log ind på en af dine applikationer her.
       no_relying_parties: Du har endnu ikke nogle applikationer tilknyttet
+      copy_to_clipboard: Kopier dit unikke ID
+      your_unique_id: Dit unikke ID
+      id_copied_to_clipboard: Dit unikke ID er blevet kopieret til din udklipsholder.
+      id_not_copied_to_clipboard: Dit unikke ID kunne ikke kopieres til din udklipsholder. Kopier det venligst manuelt.
       go_to_rp: Fortsæt til %{name}
   registrations:
     new:

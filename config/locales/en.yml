@@ -28,6 +28,10 @@ en:
       choose_application: Choose application
       explain_choosing: Login to any of your connected applications.
       no_relying_parties: You have no connected applications yet
+      copy_to_clipboard: Copy your unique ID
+      your_unique_id: Your unique ID
+      id_copied_to_clipboard: Your unique ID has been copied to your clipboard.
+      id_not_copied_to_clipboard: Your unique ID could not be copied to your clipboard. Please copy it manually.
       go_to_rp: Go to %{name}
   registrations:
     new:
