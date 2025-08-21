@@ -29,6 +29,7 @@
     <%= link_to name, root_path %> - 2025
     <% if logged_in? && !relying_party %>
       - <%= link_to t('.change_password'), edit_password_path, class: 'underline' %>
+      - <%= link_to t('.change_email'), edit_email_path, class: 'underline' %>
     <% end %>
   </span>
 </footer>

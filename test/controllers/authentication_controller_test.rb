@@ -21,6 +21,12 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  test 'authentication with non existing email' do
+    post authenticate_url,
+         params: { email: 'hello@world.com', password: 'secret' }
+    assert_response :unauthorized
+  end
+
   test 'authentication with no relying party' do
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
 
