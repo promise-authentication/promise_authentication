@@ -20,6 +20,7 @@ da:
       logout: Log ud
       login: Log ind
       change_password: Skift password
+      change_email: Skift e-mail
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on pure identity provider."
@@ -116,6 +117,12 @@ da:
     authenticate:
       password_not_correct: 'Forkert password. Prøv igen'
       confirmation_not_matching: "Du har ikke skrevet den samme mail to gange. Prøv igen."
+  emails:
+    edit:
+      header: Skift e-mail
+      description: Her vælger du en ny e-mail som du vil logge ind med på %{name}.
+      go_on: Skift e-mail
+      new_email: Ny e-mail
   passwords:
     edit:
       header: Skift password
