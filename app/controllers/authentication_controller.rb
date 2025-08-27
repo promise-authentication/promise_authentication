@@ -1,4 +1,5 @@
 class AuthenticationController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:authenticate]
   before_action :require_signed_id, except: %i[verify_password authenticate logout]
 
   def password
