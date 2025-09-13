@@ -59,8 +59,7 @@ class AuthenticationController < ApplicationController
       @auth_request.existing!
       do_sign_in(@auth_request)
 
-      flash[:slide_class] = 'a-slide-in-from-right'
-      redirect_to confirm_path(login_configuration)
+      go_to
     else
       flash[:remember_me] = params[:remember_me]
       if @auth_request.errors.include?(:email)

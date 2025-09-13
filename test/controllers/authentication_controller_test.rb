@@ -53,6 +53,8 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication with relying party' do
+    Trust::Certificate.generate_key_pair!
+
     Authentication::RelyingParty.stub :fetch, nil do
       Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
       post authenticate_url,
@@ -70,15 +72,19 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'showing email after login' do
+    Trust::Certificate.generate_key_pair!
+
     Authentication::RelyingParty.stub :fetch, nil do
       Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
 
       post authenticate_url, params: {
         email: 'hello@world.com',
         password: 'secret',
-        client_id: 'party.com'
+        client_id: 'party.com',
+        remember_me: 1
       }
-      assert_redirected_to confirm_path(client_id: 'party.com')
+      # It will redirect to the relying party
+      assert_redirected_to %r(\Ahttps://party.com/authenticate)
 
       get confirm_path(client_id: 'party.com')
       assert_response :success
@@ -100,6 +106,12 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :knows_legacy_account?, true, [email]
     relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
     relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
+    relying_party.expect :present?, true
+    relying_party.expect :id, relying_party_id
+    relying_party.expect :redirect_uri, 'https://example.com/hello' do |kwargs|
+      kwargs[:id_token].is_a?(Authentication::IdToken) && 
+      kwargs[:login_configuration].is_a?(ActionController::Parameters)
+    end
 
     Authentication::RelyingParty.stub :find, relying_party do
       Authentication::Services::Authenticate.new(email: email, password: password).register!
@@ -120,11 +132,13 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
       assert_mock relying_party
 
-      assert_redirected_to confirm_path(client_id: relying_party_id)
+      assert_redirected_to 'https://example.com/hello'
     end
   end
 
   test 'relying party with legacy accounts and an existing account' do
+    Trust::Certificate.generate_key_pair!
+
     email = 'hello@world.com'
     password = 'secr2t'
     relying_party_id = 'example.com'
@@ -136,6 +150,12 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party = Minitest::Mock.new
     relying_party.expect :locale, nil
     relying_party.expect :id, relying_party_id
+    relying_party.expect :present?, true
+    relying_party.expect :id, relying_party_id
+    relying_party.expect :redirect_uri, 'https://example.com/hello' do |kwargs|
+      kwargs[:id_token].is_a?(Authentication::IdToken) && 
+      kwargs[:login_configuration].is_a?(ActionController::Parameters)
+    end
 
     Authentication::RelyingParty.stub :find, relying_party do
       post authenticate_url, params: { email: email, password: password, client_id: relying_party_id, remember_me: 1 }
@@ -144,7 +164,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
       user_id = jar.encrypted[:user_id]
       vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
       personal_data = Authentication::Vault.personal_data(user_id, vault_key)
-      assert_nil personal_data.id_for(relying_party_id)
+      assert personal_data.id_for(relying_party_id)
 
       # It will record that the password is knowns by relying party
       event = Rails.configuration.event_store.read.of_type(Authentication::Events::PasswordSet).last
@@ -152,7 +172,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
       assert_mock relying_party
 
-      assert_redirected_to confirm_path(client_id: relying_party_id)
+      assert_redirected_to 'https://example.com/hello'
     end
   end
 

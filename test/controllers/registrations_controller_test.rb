@@ -127,7 +127,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
     post authenticate_url,
          params: { email: 'hello@world.com', password: 'secret' }
-    assert_redirected_to confirm_path
+    assert_redirected_to %r(\Ahttp://www.example.com/me)
 
     get login_url
     assert_response :success
@@ -141,7 +141,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
     post authenticate_url,
          params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
-    assert_redirected_to confirm_path
+    assert_redirected_to %r(\Ahttp://www.example.com/me)
 
     get login_url
     assert_response :redirect
@@ -151,7 +151,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
     post authenticate_url,
          params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
-    assert_redirected_to confirm_path
+    assert_redirected_to %r(\Ahttp://www.example.com/me)
 
     url = login_url(prompt: 'login')
     get url
