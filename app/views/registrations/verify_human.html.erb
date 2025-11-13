@@ -22,11 +22,19 @@
       </p>
       <div class="w-full flex flex-col mt-6 pb-4">
         <div class="w-full h-24 flex items-center justify-end">
+            <script>
+              function onSuccess(token) {
+                document.getElementById('submit_button').disabled = false;
+                // Remove class that makes it look disabled
+                document.getElementById('submit_button').classList.remove('opacity-50');
+                document.getElementById('submit_button').classList.remove('scale-0');
+              }
+            </script>
           <%= turnstile_tag_html %>
         </div>
         <div class="flex w-full justify-end items-center mt-0">
           <%= back_to(registration_configuration) do |args| new_registration_path(args) end %>
-          <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } %>
+          <%= submit_tag (t('.go_on')+' &rarr;').html_safe, disabled: true, class: 'button primary opacity-50 scale-0 transition-all', tabindex: 1, data: { 'disable-with' => t('.going_html') }, id: "submit_button" %>
         </div>
       </div>
     </div>

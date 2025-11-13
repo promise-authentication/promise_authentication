@@ -53,7 +53,7 @@ da:
       description: Inden vi går videre, skal vi lige have bekræftet din e-mail.
       description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet din e-mail.
       confirm_email_html: Vi sender en kode til <strong>%{email}</strong>.
-      go_on: Send kode
+      go_on: Videre
       going_html: 'Sender&hellip;'
       cancel: Tilbage
     verify_email:
