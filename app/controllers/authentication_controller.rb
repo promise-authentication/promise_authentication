@@ -56,19 +56,18 @@ class AuthenticationController < ApplicationController
     @auth_request.relying_party_id = relying_party&.id
 
     if @auth_request.valid?
-      if @auth_request.existing!
-        do_sign_in(@auth_request)
+      @auth_request.existing!
+      do_sign_in(@auth_request)
 
-        go_to
+      go_to
+    else
+      flash[:remember_me] = params[:remember_me]
+      if @auth_request.errors.include?(:email)
+        flash[:email_message] = @auth_request.errors.full_messages_for(:email).first
       else
-        flash[:remember_me] = params[:remember_me]
-        if @auth_request.errors.include?(:email)
-          flash[:email_message] = @auth_request.errors.full_messages_for(:email).first
-        else
-          flash[:password_message] = @auth_request.errors.full_messages_for(:password).first
-        end
-        redirect_to verify_password_path(registration_configuration)
+        flash[:password_message] = @auth_request.errors.full_messages_for(:password).first
       end
+      redirect_to verify_password_path(registration_configuration)
     end
   rescue Authentication::Password::NotMatching
     flash[:password_message] = t('.password_not_correct')
