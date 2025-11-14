@@ -46,6 +46,18 @@ class Authentication::Services::ChangeEmailTest < ActiveSupport::TestCase
 
   test 'it works if the email is not already claimed' do
     @request.call
+
+    # Events
+    claim_event = Rails.configuration.event_store.read.of_type(Authentication::Events::EmailClaimed).last
+    unclaim_event = Rails.configuration.event_store.read.of_type(Authentication::Events::EmailUnclaimed).last
+
+    assert_equal claim_event.data[:user_id], @user_id
+    assert_equal claim_event.data[:hashed_email], @hashed_email
+
+    assert_equal unclaim_event.data[:user_id], @user_id
+    assert_equal unclaim_event.data[:hashed_email], Authentication::HashedEmail.from_cleartext(@old_email)
+
+    # Read models
     hashed = Authentication::HashedEmail.find_by_user_id(@user_id)
     assert hashed
     assert_equal hashed.id, @hashed_email
