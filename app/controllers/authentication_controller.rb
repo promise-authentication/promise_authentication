@@ -56,10 +56,13 @@ class AuthenticationController < ApplicationController
     @auth_request.relying_party_id = relying_party&.id
 
     if @auth_request.valid?
-      @auth_request.existing!
-      do_sign_in(@auth_request)
+      if @auth_request.existing!
+        do_sign_in(@auth_request)
 
-      go_to
+        go_to
+      else
+        redirect_to login_path(registration_configuration)
+      end
     else
       flash[:remember_me] = params[:remember_me]
       if @auth_request.errors.include?(:email)
