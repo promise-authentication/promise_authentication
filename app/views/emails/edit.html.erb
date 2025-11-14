@@ -14,17 +14,10 @@
         <%= t '.description', name: name %>
       </p>
       <label class="mt-3 w-full">
-        <% if @new_email_message.present? %>
-          <p class="input-label font-bold">
-            <%= @new_email_message %>
-          </p>
-          <%= email_field_tag :new_email, nil, class: "login-input", autofocus: true %>
-        <% else %>
-          <p class="input-label">
-            <%= t '.new_email' %>
-          </p>
-          <%= email_field_tag :new_email, nil, class: "login-input" %>
-        <% end %>
+        <p class="input-label">
+          <%= t '.email' %>
+        </p>
+        <%= email_field_tag :email, registration_configuration[:email], class: "login-input", autofocus: true %>
       </label>
       <div class="flex w-full justify-end items-center mt-6">
         <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary self-end' %>

@@ -2,6 +2,8 @@ en:
   locale_name: English
   password_not_matching: Wrong password. Please try again
   fill_both: Please provide all
+  email_already_claimed: This e-mail is already in use. Please provide another e-mail.
+  email_changed: E-mail changed successfully.
   activemodel:
     attributes:
       email: E-mail

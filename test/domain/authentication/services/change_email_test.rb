@@ -1,10 +1,11 @@
 require 'test_helper'
 
-class Authentication::Services::ChangePasswordTest < ActiveSupport::TestCase
+class Authentication::Services::ChangeEmailTest < ActiveSupport::TestCase
   setup do
     @old_password = 'secret'
+    @old_email = 'hello@world.dk'
     @authentication = Authentication::Services::Authenticate.new(
-      email: 'hello@world.dk',
+      email: @old_email,
       password: @old_password
     )
     @authentication.register!
@@ -23,7 +24,8 @@ class Authentication::Services::ChangePasswordTest < ActiveSupport::TestCase
     @request = Authentication::Services::ChangeEmail.new(
       user_id: @user_id,
       confirmation_code: @code.code,
-      new_email: @new_email
+      from_email: @old_email,
+      to_email: @new_email
     )
   end
 
@@ -47,5 +49,7 @@ class Authentication::Services::ChangePasswordTest < ActiveSupport::TestCase
     hashed = Authentication::HashedEmail.find_by_user_id(@user_id)
     assert hashed
     assert_equal hashed.id, @hashed_email
+
+    assert Authentication::HashedEmail.count == 1
   end
 end

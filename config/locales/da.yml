@@ -2,6 +2,8 @@ da:
   locale_name: Dansk
   password_not_matching: Forkert password. Prøv igen
   fill_both: Udfyld venligst alle felter
+  email_already_claimed: Denne e-mail er allerede i brug. Prøv at logge ind i stedet.
+  email_changed: Din e-mail er blevet ændret.
   activemodel:
     attributes:
       authentication/services/authenticate:
@@ -123,6 +125,17 @@ da:
       description: Her vælger du en ny e-mail som du vil logge ind med på %{name}.
       go_on: Skift e-mail
       new_email: Ny e-mail
+    verify:
+      title: Check din indbakke
+      we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med en kode. Indtast venligst koden herunder.
+      we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
+      code: Kode fra e-mail (starter med "%{code_start}")
+      help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.
+      caps_or_not: Vi gør ikke forskel på store og små bogtaver.
+      send_new_code: Send ny kode
+      go_on: Videre
+      going_html: 'Verificerer&hellip;'
+      cancel: Tilbage
   passwords:
     edit:
       header: Skift password
