@@ -14,7 +14,7 @@ class EmailsControllerTest < ActionDispatch::IntegrationTest
     # I can not use the new email to authenticate
     post '/authenticate', params: { email: @new_email, password: @old_password, remember_me: 1 }
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
-    assert_not_equal user_id, jar.encrypted[:user_id]
+    assert_nil jar.encrypted[:user_id]
 
     # I can still use the old email to authenticate
     post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
@@ -28,7 +28,7 @@ class EmailsControllerTest < ActionDispatch::IntegrationTest
     # I can not use the new email to authenticate
     post '/authenticate', params: { email: @new_email, password: @old_password, remember_me: 1 }
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
-    assert_not_equal user_id, jar.encrypted[:user_id]
+    assert_nil jar.encrypted[:user_id]
 
     # I can still use the old email to authenticate
     post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
@@ -59,7 +59,7 @@ class EmailsControllerTest < ActionDispatch::IntegrationTest
     # I can not use the old email to authenticate
     post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
-    assert_not_equal user_id, jar.encrypted[:user_id]
+    assert_nil jar.encrypted[:user_id]
 
   end
 

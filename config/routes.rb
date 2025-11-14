@@ -62,8 +62,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :email, only: %i[edit update]
-
   resources :tokens do
     resources :recoveries
   end

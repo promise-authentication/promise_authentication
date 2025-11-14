@@ -26,7 +26,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
          params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
     assert_redirected_to login_url(email: 'hello@world.com', remember_me: '1')
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
-    assert_equal nil, jar.encrypted[:user_id]
+    assert_nil jar.encrypted[:user_id]
   end
 
   test 'authentication with no relying party' do
