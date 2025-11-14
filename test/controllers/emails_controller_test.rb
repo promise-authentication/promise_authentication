@@ -88,6 +88,18 @@ class EmailsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @email, jar.encrypted[:email]
   end
 
+  test 'failing when no email provided' do
+    @email = 'hello@world.com'
+    @old_password = 'old'
+    Authentication::Services::Authenticate.new(email: @email, password: @old_password).register!
+
+    # Log in with the old email
+    post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
+
+    post '/email', params: { email: " " }
+    assert_redirected_to edit_email_path
+  end
+
   test 'failing when wrong code' do
     @email = 'hello@example.com'
     @new_email = 'hello@world.com'

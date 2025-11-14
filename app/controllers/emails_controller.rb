@@ -28,11 +28,15 @@ class EmailsController < ApplicationController
 
   def create
     if params[:email_verification_code].blank?
-      @email_verifier ||= Authentication::Services::PrepareEmailForValidation.new(
-        email: params[:email]
-      )
-      @email_verifier.generate_and_send_verification_code!
-      redirect_to verify_email_path(registration_configuration)
+      if params[:email].strip.blank?
+        redirect_to edit_email_path
+      else
+        @email_verifier ||= Authentication::Services::PrepareEmailForValidation.new(
+          email: params[:email]
+        )
+        @email_verifier.generate_and_send_verification_code!
+        redirect_to verify_email_path(registration_configuration)
+      end
     else
       change_request = ::Authentication::Services::ChangeEmail.new(
         from_email: current_user.email,
