@@ -1,5 +1,5 @@
 class EmailsController < ApplicationController
-  before_action :require_signed_id, only: [:create, :edit]
+  before_action :require_signed_id, only: %i[create edit]
 
   layout 'authentication'
 
@@ -42,17 +42,20 @@ class EmailsController < ApplicationController
       change_request.confirmation_code = params[:email_verification_code]
 
       if change_request.valid?
-        change_request.call
-
-        flash[:info] = I18n.t('email_changed')
-        update_email_in_session_and_cookies(registration_configuration[:email])
-        redirect_to dashboard_path
+        if change_request.call
+          flash[:info] = I18n.t('email_changed')
+          update_email_in_session_and_cookies(registration_configuration[:email])
+          redirect_to dashboard_path
+        elsif change_request.errors[:confirmation_code].present?
+          flash[:error] = I18n.t('invalid_email_verification_code')
+          redirect_to verify_email_path(registration_configuration)
+        else
+          flash[:error] = I18n.t('error_changing_email')
+          redirect_to dashboard_path
+        end
       else
-        @current_email_message = if change_request.errors.include?(:current_password)
-                                   change_request.errors.full_messages_for(:current_password).first
-                                 else
-                                   I18n.t('fill_both')
-                                 end
+        flash[:error] = I18n.t('error_changing_email')
+        redirect_to dashboard_path
       end
     end
   rescue Authentication::Email::AlreadyClaimed

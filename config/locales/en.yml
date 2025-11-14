@@ -4,6 +4,8 @@ en:
   fill_both: Please provide all
   email_already_claimed: This e-mail is already in use. Please provide another e-mail.
   email_changed: E-mail changed successfully.
+  invalid_email_verification_code: The e-mail verification code is invalid. Please try again.
+  error_changing_email: There was an error changing your e-mail. Please try again.
   activemodel:
     attributes:
       email: E-mail

@@ -4,6 +4,8 @@ da:
   fill_both: Udfyld venligst alle felter
   email_already_claimed: Denne e-mail er allerede i brug. Prøv at logge ind i stedet.
   email_changed: Din e-mail er blevet ændret.
+  invalid_email_verification_code: Koden er ikke korrekt. Prøv igen.
+  error_changing_email: Der skete en fejl under ændring af din e-mail. Prøv igen.
   activemodel:
     attributes:
       authentication/services/authenticate:

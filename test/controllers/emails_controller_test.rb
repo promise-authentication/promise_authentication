@@ -87,4 +87,28 @@ class EmailsControllerTest < ActionDispatch::IntegrationTest
     assert_equal user_id, jar.encrypted[:user_id]
     assert_equal @email, jar.encrypted[:email]
   end
+
+  test 'failing when wrong code' do
+    @email = 'hello@example.com'
+    @new_email = 'hello@world.com'
+    @old_password = 'old'
+    Authentication::Services::Authenticate.new(email: @email, password: @old_password).register!
+
+    # Log in with the old email
+    post '/authenticate', params: { email: @email, password: @old_password, remember_me: 1 }
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    user_id = jar.encrypted[:user_id]
+    assert_equal @email, jar.encrypted[:email]
+
+    post '/email', params: { email: @new_email }
+    assert_response :redirect
+
+    # When get the confirmation code from the email, I can use the new email
+    # code = EmailVerificationCode.find_by_cleartext(@new_email)
+    post '/email', params: { email: @new_email, email_verification_code: "a" }
+    assert_redirected_to verify_email_path(email: @new_email, email_verification_code: "a")
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert_equal user_id, jar.encrypted[:user_id]
+    assert_equal @email, jar.encrypted[:email]
+  end
 end
