@@ -42,6 +42,15 @@ class Authentication::Services::ChangeEmailTest < ActiveSupport::TestCase
     assert_raise Authentication::Email::AlreadyClaimed do
       @request.call
     end
+
+    # And you can not claim the old one (i.e. it was not unclaimed)
+    assert_raise Authentication::Email::AlreadyClaimed do
+      Authentication::Commands::ClaimEmail.new(
+        hashed_email: Authentication::HashedEmail.from_cleartext(@old_email),
+        user_id: "whatever",
+        email_verified_at: Time.zone.now
+      ).execute!
+    end
   end
 
   test 'it works if the email is not already claimed' do
