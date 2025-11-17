@@ -24,7 +24,9 @@
       </div>
       <div class="flex w-full justify-end items-center mt-6">
         <%= back_to(registration_configuration) do |args| login_path(args) end %>
-        <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary self-end' %>
+        <%= button_tag type: 'submit', class: 'button primary self-end' do %>
+          <%= t('.go_on') %><%= arrow_right %>
+        <% end %>
       </div>
     </div>
   <% end %>

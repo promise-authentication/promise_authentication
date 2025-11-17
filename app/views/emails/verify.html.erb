@@ -37,7 +37,9 @@
           <%= back_to(registration_configuration(:email_verification_code), data: {turbolinks: false}, text: t(".send_new_code"), class: "text-gray-500") do |args| edit_email_path(args) end %>
           <div class="flex flex-row justify-end items-center">
             <%= back_to(registration_configuration(), data: {turbolinks: false}) do |args| edit_email_path(args) end %>
-            <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } %>
+            <%= button_tag type: 'submit', class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
+              <%= t('.go_on') %><%= arrow_right %>
+            <% end %>
           </div>
         </div>
       </div>

@@ -102,7 +102,6 @@ en:
       alert: Please write your e-mail address in the text field.
       go_on: Confirm e-mail
       confirming_html: 'Confirming e-mail&hellip;'
-      start_over_html: '&larr; Go back'
     confirm:
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
       you_are_html: You are signed in as <strong>%{email}</strong>.
