@@ -12,7 +12,7 @@ module BackToConcern
     arguments = {
       class: 'text-secondary pr-3'
     }.merge(args.first || {})
-    text = arguments.delete(:text) || ('&larr; '.html_safe + t('.cancel'))
+    text = arguments.delete(:text) || (helpers.arrow_left + t('.cancel')).html_safe
     helpers.link_to(text, url, arguments)
   end
 

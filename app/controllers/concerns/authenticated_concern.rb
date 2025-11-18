@@ -80,6 +80,13 @@ module AuthenticatedConcern
     session[:email] = params[:email]
   end
 
+  def update_email_in_session_and_cookies(new_email)
+    cookies.encrypted[:email] = new_email if cookies.encrypted[:email].present?
+    return unless session[:email].present?
+
+    session[:email] = new_email
+  end
+
   def do_logout!
     reset_session
     cookies.delete :user_id

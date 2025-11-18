@@ -34,7 +34,9 @@
         </div>
         <div class="flex w-full justify-end items-center mt-0">
           <%= back_to(registration_configuration) do |args| new_registration_path(args) end %>
-          <%= submit_tag (t('.go_on')+' &rarr;').html_safe, disabled: true, class: 'button primary opacity-50 scale-0 transition-all', tabindex: 1, data: { 'disable-with' => t('.going_html') }, id: "submit_button" %>
+          <%= button_tag type: 'submit', disabled: true, class: 'button primary opacity-50 scale-0 transition-all', tabindex: 1, data: { 'disable-with' => t('.going_html') }, id: "submit_button" do %>
+            <%= t('.go_on') %><%= arrow_right %>
+          <% end %>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 <%= content_for :header do %>
   <%= image_tag('logo.png', class: 'h-4 m-3') %>
-  <h1 class="">
+  <h1 class="text-secondary">
     <%= name %>
   </h1>
 <% end %>
 <%= content_for :body do %>
-  <%= form_tag recover_password_path(login_configuration), class: 'w-full' do %>
+  <%= form_tag email_path, class: 'w-full' do %>
     <div class="w-full flex items-center flex-col">
       <h2 class="text-2xl pt-8">
         <%= t '.header' %>
@@ -17,13 +17,9 @@
         <p class="input-label">
           <%= t '.email' %>
         </p>
-        <%= email_field_tag :email, registration_configuration[:email], class: "login-input", autofocus: true, required: true %>
+        <%= email_field_tag :email, registration_configuration[:email], class: "login-input", autofocus: true %>
       </label>
-      <div class="mt-4">
-        <%= turnstile_tag_html %>
-      </div>
       <div class="flex w-full justify-end items-center mt-6">
-        <%= back_to(registration_configuration) do |args| login_path(args) end %>
         <%= button_tag type: 'submit', class: 'button primary self-end' do %>
           <%= t('.go_on') %><%= arrow_right %>
         <% end %>
@@ -31,4 +27,3 @@
     </div>
   <% end %>
 <% end %>
-

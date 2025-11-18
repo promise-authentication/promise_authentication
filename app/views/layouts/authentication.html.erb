@@ -1,5 +1,6 @@
 <%= content_for :content do %>
   <div class="flex flex-col sm:min-h-screen pb-4 sm:justify-center">
+    <%= render 'shared/flash_messages' %>
     <div class="sm:pt-12 sm:px-2 sm:flex-grow flex flex-col justify-center">
       <div class="relative flex items-center">
         <% if relying_party %>

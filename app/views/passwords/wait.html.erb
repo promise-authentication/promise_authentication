@@ -15,7 +15,9 @@
     </p>
 
     <p class="mt-10">
-      <%= link_to '&larr; '.html_safe + t('.back'), login_path(login_configuration), class: 'button primary' %>
+      <%= link_to login_path(login_configuration), class: 'button primary' do %>
+        <%= arrow_left %><%= t('.back') %>
+      <% end %>
     </p>
   </div>
 <% end %>
