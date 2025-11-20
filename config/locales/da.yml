@@ -50,7 +50,7 @@ da:
       we_could_not_send_email_html: "Vi kunne ikke sende en e-mail til <strong>%{email}</strong>. Tjek venligst at du har skrevet den rigtigt. Her er beskeden vi har fået: <em class='font-mono'>%{message}</em>."
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data_html: Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
-      did_you_mean_html: Mente du <strong>%{email}</strong>?
+      did_you_mean_html: Vi har rettet din mail fra %{old_email} til <strong>%{email}</strong>. Er det korrekt? Ellers kan du rette den igen og fortsætte.
       your_email_seems_invalid: Er du sikker på, at det er en gyldig e-mail?
       go_on: Videre
       going_html: 'Øjeblik&hellip;'
