@@ -34,11 +34,34 @@
           <p class="input-label">
             E-mail
           </p>
-          <%= email_field_tag :email, registration_configuration[:email], class: 'login-input', autofocus: true, required: true, tabindex: 1 %>
+          <%= email_field_tag :email, registration_configuration[:email], class: 'login-input' + (@email_validator&.valid? ? '' : ' with-error'), autofocus: true, required: true, tabindex: 1 %>
           <p class="text-secondary text-xs mt-1">
             <%= t '.we_save_no_data_html' %>
           </p>
+
         </label>
+        <% if @email_validator && !@email_validator&.valid? %>
+          <div class="w-full mt-2">
+            <%= hidden_field_tag :email_validation_shown_for, @email_validator.email %>
+            <% if @email_validator.hint? %>
+              <div class="bg-red-500 text-white text-sm p-3 rounded">
+                <p>
+                  <span class="">
+                    <%= t '.did_you_mean_html', email: @email_validator.replacement %>
+                  </span>
+                </p>
+              </div>
+            <% else %>
+              <div class="bg-yellow-700 text-white text-sm p-3 rounded">
+                <p>
+                  <span class="">
+                    <%= t '.your_email_seems_invalid' %>
+                  </span>
+                </p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
         <div class="mt-4 flex w-full flex-col justify-end items-end">
           <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2 appearance-none', tabindex: 1, data: { 'disable-with' => t('.going_html') } %>
         </div>

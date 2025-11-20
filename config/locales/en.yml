@@ -43,6 +43,8 @@ en:
       go_on: Go
       going_html: 'Please wait&hellip;'
       we_save_no_data_html: Your e-mail will <em class="whitespace-nowrap">not be saved</em> in a readable format.
+      did_you_mean_html: Did you mean <strong>%{email}</strong>?
+      your_email_seems_invalid: Are you sure this is a valid e-mail?
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
     verify_human:
       title: Verify e-mail

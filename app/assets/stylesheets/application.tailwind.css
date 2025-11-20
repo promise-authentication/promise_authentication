@@ -22,6 +22,10 @@
     @apply pl-3 py-3 shadow-sm w-full rounded border-gray-700 border-solid border;
   }
 
+  .login-input.with-error {
+    @apply border-red-500 shadow-red-200 outline-red-500 focus:border-red-500;
+  }
+
   .input-label {
     @apply text-gray-800 font-bold text-base mb-1;
   }

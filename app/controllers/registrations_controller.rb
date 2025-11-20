@@ -18,16 +18,23 @@ class RegistrationsController < ApplicationController
   def create
     flash[:slide_class] = 'a-slide-in-from-right'
     email = registration_configuration[:email]
+    @email_validator = EmailInquire.validate(email)
 
-    if ::Authentication::Services::Authenticate::Existing.known?(email)
-      redirect_to verify_password_path(registration_configuration)
-    else
-      code = EmailVerificationCode.find_by_cleartext(email)
-      if code
-        redirect_to verify_email_registrations_path(registration_configuration)
+    bypass_email_check = email == params[:email_validation_shown_for]
+
+    if @email_validator.valid? || bypass_email_check
+      if ::Authentication::Services::Authenticate::Existing.known?(email)
+        redirect_to verify_password_path(registration_configuration)
       else
-        redirect_to verify_human_registrations_path(registration_configuration)
+        code = EmailVerificationCode.find_by_cleartext(email)
+        if code
+          redirect_to verify_email_registrations_path(registration_configuration)
+        else
+          redirect_to verify_human_registrations_path(registration_configuration)
+        end
       end
+    else
+      render action: :new
     end
   end
 
