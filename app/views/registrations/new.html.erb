@@ -34,7 +34,7 @@
           <p class="input-label">
             E-mail
           </p>
-          <%= email_field_tag :email, registration_configuration[:email], class: 'login-input' + (@email_validator&.valid? ? '' : ' with-error'), autofocus: true, required: true, tabindex: 1 %>
+          <%= email_field_tag :email, registration_configuration[:email], class: 'login-input' + (!@email_validator || @email_validator.valid? ? '' : ' with-error'), autofocus: true, required: true, tabindex: 1 %>
           <p class="text-secondary text-xs mt-1">
             <%= t '.we_save_no_data_html' %>
           </p>
