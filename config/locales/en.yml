@@ -2,6 +2,10 @@ en:
   locale_name: English
   password_not_matching: Wrong password. Please try again
   fill_both: Please provide all
+  email_already_claimed: This e-mail is already in use. Please provide another e-mail.
+  email_changed: E-mail changed successfully.
+  invalid_email_verification_code: The e-mail verification code is invalid. Please try again.
+  error_changing_email: There was an error changing your e-mail. Please try again.
   activemodel:
     attributes:
       email: E-mail
@@ -16,6 +20,7 @@ en:
       logout: Sign out
       login: Sign in
       change_password: Change password
+      change_email: Change e-mail
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on identity provider."
@@ -99,7 +104,6 @@ en:
       alert: Please write your e-mail address in the text field.
       go_on: Confirm e-mail
       confirming_html: 'Confirming e-mail&hellip;'
-      start_over_html: '&larr; Go back'
     confirm:
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
       you_are_html: You are signed in as <strong>%{email}</strong>.
@@ -113,6 +117,23 @@ en:
     authenticate:
       password_not_correct: Password not matching. Try again
       confirmation_not_matching: "You have not provided the same e-mail twice. Please try again."
+  emails:
+    edit:
+      header: Change e-mail
+      description: Here you can change the e-mail you use for signing in to %{name}. Please note that you will have to verify your new e-mail before you can use it.
+      go_on: Change e-mail
+      new_email: New e-mail
+    verify:
+      title: Check your inbox
+      we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong> with a code. Please provide the code below.
+      we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new code. Please provide the code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
+      code: Code from e-mail (starting with "%{code_start}")
+      help: The code you need to provide starts with "%{code_start}" and consists of a total of %{code_length} letters or numbers.
+      caps_or_not: We do not care about upper or lower case letters.
+      send_new_code: Send new code
+      go_on: Go
+      going_html: 'Verifying&hellip;'
+      cancel: Back
   passwords:
     edit:
       header: Change password

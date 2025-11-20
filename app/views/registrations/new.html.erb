@@ -63,7 +63,9 @@
           </div>
         <% end %>
         <div class="mt-4 flex w-full flex-col justify-end items-end">
-          <%= submit_tag (t('.go_on')+' &rarr;').html_safe, class: 'button primary mt-2 appearance-none', tabindex: 1, data: { 'disable-with' => t('.going_html') } %>
+          <%= button_tag type: 'submit', class: 'button primary mt-2 appearance-none', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
+            <%= t('.go_on') %><%= arrow_right %>
+          <% end %>
         </div>
       </div>
       <% if relying_party %>

@@ -21,6 +21,14 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  test 'authentication with non existing email' do
+    post authenticate_url,
+         params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
+    assert_redirected_to login_url(email: 'hello@world.com', remember_me: '1')
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert_nil jar.encrypted[:user_id]
+  end
+
   test 'authentication with no relying party' do
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
 
