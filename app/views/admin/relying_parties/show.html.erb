@@ -28,14 +28,26 @@
   </div>
 <% end %>
 
+<p class="">
+  The following guide uses <code><%= admin_relying_party.id %></code> as <code>client_id</code>. Your <code>client_id</code> should be the shortest possible domain name you control.
+</p>
+
+<div class="rounded-xl border border-blue-200 px-3 pb-8 bg-blue-50">
+  <p class="">
+    See this guide for your <code>client_id</code>:
+  </p>
+  <%= form_tag admin_relying_parties_path, method: :get do %>
+    <%= text_field_tag :id, admin_relying_party.id, class: "rounded border-gray-400" %>
+    <%= submit_tag 'Go', class: 'ml-2 px-4 py-2 bg-blue-600 text-white rounded' %>
+  <% end %>
+  <p class="">
+    Your <code>client_id</code> should be the shortest possible domain name you control.
+  </p>
+</div>
+
 <p>
   <%= name %> uses a simplified version of the Implicit Flow in the protocol <%= link_to 'OpenID Connect (OIDC)', 'https://openid.net/specs/openid-connect-core-1_0.html' %>.
 </p>
-<% if admin_relying_party.id == 'example.com' %>
-  <p class="">
-    The following guide uses <code><%= admin_relying_party.id %></code> as <code>client_id</code>. Your <code>client_id</code> should be the shortest possible domain name you control.
-  </p>
-<% end %>
 
 <h2>
   Sign in users

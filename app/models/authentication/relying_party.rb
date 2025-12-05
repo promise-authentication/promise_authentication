@@ -57,7 +57,7 @@ class Authentication::RelyingParty
 
   def self.fetch(url)
     http_client.get(url)
-  rescue Faraday::SSLError, Faraday::ConnectionFailed
+  rescue Faraday::SSLError, Faraday::ConnectionFailed, Net::ReadTimeout
     nil
   end
 
