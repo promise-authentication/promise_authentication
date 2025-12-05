@@ -32,7 +32,7 @@
   The following guide uses <code><%= admin_relying_party.id %></code> as <code>client_id</code>. Your <code>client_id</code> should be the shortest possible domain name you control.
 </p>
 
-<div class="rounded-xl border border-blue-200 px-3 pb-8 bg-blue-50">
+<div class="rounded-xl border border-blue-200 px-3 pb-4 bg-blue-50">
   <p class="">
     See this guide for your <code>client_id</code>:
   </p>
@@ -41,7 +41,7 @@
     <%= submit_tag 'Go', class: 'ml-2 px-4 py-2 bg-blue-600 text-white rounded' %>
   <% end %>
   <p class="">
-    Your <code>client_id</code> should be the shortest possible domain name you control.
+    Your <code>client_id</code> should be the shortest possible domain name you control. For example: <%= link_to "oase.app", admin_relying_parties_path(id: 'oase.app'), class: "underline text-blue-700" %>.
   </p>
 </div>
 
