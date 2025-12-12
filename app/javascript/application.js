@@ -101,3 +101,30 @@ LocalTime.start()
 // We need to set the locale in app/views/layouts/application.html.erb:37
 // so that the correct locale is used when rendering the page.
 window.LocalTime = LocalTime
+
+// Password visibility toggle
+document.addEventListener('turbolinks:load', () => {
+  const togglePasswordVisibility = (button) => {
+    const passwordInput = button.closest('.password-field-wrapper').querySelector('input[type="password"], input[type="text"]');
+    const eyeIcon = button.querySelector('.eye-icon');
+    const eyeSlashIcon = button.querySelector('.eye-slash-icon');
+    
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      eyeIcon.classList.add('hidden');
+      eyeSlashIcon.classList.remove('hidden');
+    } else {
+      passwordInput.type = 'password';
+      eyeIcon.classList.remove('hidden');
+      eyeSlashIcon.classList.add('hidden');
+    }
+  };
+
+  // Attach click handlers to all password toggle buttons
+  document.querySelectorAll('.password-toggle').forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      togglePasswordVisibility(button);
+    });
+  });
+});

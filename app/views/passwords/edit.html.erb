@@ -18,12 +18,18 @@
           <p class="input-label font-bold">
             <%= @current_password_message %>
           </p>
-          <%= password_field_tag :current_password, nil, class: "login-input", autofocus: true %>
+          <div class="password-field-wrapper relative">
+            <%= password_field_tag :current_password, nil, class: "login-input pr-10", autofocus: true %>
+            <%= render 'shared/password_toggle' %>
+          </div>
         <% else %>
           <p class="input-label">
             <%= t '.current_password' %>
           </p>
-          <%= password_field_tag :current_password, nil, class: "login-input" %>
+          <div class="password-field-wrapper relative">
+            <%= password_field_tag :current_password, nil, class: "login-input pr-10" %>
+            <%= render 'shared/password_toggle' %>
+          </div>
         <% end %>
       </label>
       <label class="mt-3 w-full">
@@ -31,12 +37,18 @@
           <p class="input-label font-bold">
             <%= @new_password_message %>
           </p>
-          <%= password_field_tag :new_password, nil, class: "login-input", autofocus: true %>
+          <div class="password-field-wrapper relative">
+            <%= password_field_tag :new_password, nil, class: "login-input pr-10", autofocus: true %>
+            <%= render 'shared/password_toggle' %>
+          </div>
         <% else %>
           <p class="input-label">
             <%= t '.new_password' %>
           </p>
-          <%= password_field_tag :new_password, nil, class: "login-input" %>
+          <div class="password-field-wrapper relative">
+            <%= password_field_tag :new_password, nil, class: "login-input pr-10" %>
+            <%= render 'shared/password_toggle' %>
+          </div>
         <% end %>
       </label>
       <div class="flex w-full justify-end items-center mt-6">
