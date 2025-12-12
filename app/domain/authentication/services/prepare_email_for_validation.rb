@@ -6,7 +6,7 @@ class Authentication::Services::PrepareEmailForValidation
   def verifier
     @verifier = EmailVerificationCode.find_by_cleartext(email)
   rescue ActiveRecord::RecordNotFound
-    return nil
+    nil
   end
 
   def verify!(code)
@@ -25,11 +25,7 @@ class Authentication::Services::PrepareEmailForValidation
 
     # If an old code is provided, we need to make sure the new code
     # has a different first character to avoid confusion.
-    if old_code
-      while code[0] == old_code[0]
-        code = EmailVerificationCode::HumanReadableCode.generate(4..4)
-      end
-    end
+    code = EmailVerificationCode::HumanReadableCode.generate(4..4) while code[0] == old_code[0] if old_code
 
     ActiveRecord::Base.transaction do
       EmailVerificationCode.create!(
@@ -37,11 +33,22 @@ class Authentication::Services::PrepareEmailForValidation
         code: code
       )
 
-      EmailVerificationMailer.with(
-        email: email,
-        code: code,
-        relying_party_name: relying_party&.name
-      ).verify_email.deliver_now
+      retries = 0
+      max_retries = 3
+
+      begin
+        EmailVerificationMailer.with(
+          email: email,
+          code: code,
+          relying_party_name: relying_party&.name
+        ).verify_email.deliver_now
+      rescue Net::OpenTimeout, Net::ReadTimeout => e
+        retries += 1
+        raise e unless retries <= max_retries
+
+        sleep(retries * 2)
+        retry
+      end
 
       verifier
     end
