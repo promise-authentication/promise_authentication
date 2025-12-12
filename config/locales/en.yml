@@ -72,7 +72,7 @@ en:
       cancel: Back
     create_password:
       title: Create password
-      create_account_html: Provide the password you want to use with <span class="font-bold">%{email}</span>.
+      create_account_html: Create the password you want to use with <span class="font-bold">%{email}</span>.
       new_password: New password
       password_error:
         blank: Please provide a password.

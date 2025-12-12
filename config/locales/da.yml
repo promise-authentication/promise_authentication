@@ -76,7 +76,7 @@ da:
       cancel: Tilbage
     create_password:
       title: Vælg password
-      create_account_html: Skriv det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> fremover.
+      create_account_html: Opret det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> fremover.
       new_password: Password
       confirm_password: Gentag password
       password_error:
