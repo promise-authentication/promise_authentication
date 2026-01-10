@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'Promise <mail@promiseauthentication.org>'
+  default from: 'Promise <hello@promiseauthentication.org>'
   layout 'mailer'
 end
