@@ -47,11 +47,11 @@ Airbrake.configure do |c|
   # Airbrake. By default, all "password" attributes will have their contents
   # replaced.
   # https://github.com/airbrake/airbrake-ruby#blocklist_keys
-  # c.blocklist_keys = [/password/i, /authorization/i, /email/i]
+  c.blocklist_keys = [/password/i, /authorization/i, /email/i, /email_verification_code/i, /redirect_uri/i, /nonce/i, /secret/i, /token/i, /_key/i, /crypt/i, /salt/i, /certificate/i, /otp/i, /ssn/i]
 
   # Alternatively, you can integrate with Rails' filter_parameters.
   # Read more: https://goo.gl/gqQ1xS
-  c.blocklist_keys = Rails.application.config.filter_parameters
+  # c.blocklist_keys = Rails.application.config.filter_parameters
 end
 
 # A filter that collects request body information. Enable it if you are sure you
