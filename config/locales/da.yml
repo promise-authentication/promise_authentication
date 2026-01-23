@@ -164,7 +164,7 @@ da:
       go_on: Videre
   email_verification_mailer:
     verify_email:
-      subject: "Din kode: %{code}"
+      subject: "%{relying_party} - Din kode: %{code}"
       explain_with_relying_party: "Du er igang med at logge ind på %{client}, som bruger Promise til at logge ind. Du skal bruge koden herunder til at bekræfte din e-mail overfor Promise."
       explain_without_relying_party: For at kunne oprette din konto på Promise, skal du bekræfte din e-mail. Du skal bruge koden til at bekræfte din e-mail.
       code: "Din kode:"

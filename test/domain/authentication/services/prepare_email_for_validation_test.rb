@@ -6,10 +6,21 @@ class Authentication::Services::PrepareEmailForValidationTest < ActiveSupport::T
   end
 
   test 'it should be valid' do
-    inst = @described_class.new(
-      email: 'hello@world.com'
-    )
+    relying_party_id = 'world.com'
+    relying_party = Minitest::Mock.new
+    relying_party.expect :knows_legacy_account?, false, []
+    relying_party.expect :id, relying_party_id
+    relying_party.expect :locale, nil
+    relying_party.expect :name, 'RelyingPartyZ'
+    relying_party.expect :name, 'RelyingPartyZ'
+    # I'm not sure why this is needed: ~AL
+    relying_party.expect :is_a?, false, [Hash]
+    relying_party.expect :is_a?, false, [Array]
 
+    inst = @described_class.new(
+      email: 'hello@world.com',
+      relying_party: relying_party
+    )
     inst.generate_and_send_verification_code!
 
     code = EmailVerificationCode.last
@@ -23,6 +34,8 @@ class Authentication::Services::PrepareEmailForValidationTest < ActiveSupport::T
     email = ActionMailer::Base.deliveries.last
     assert_not_nil email
     assert_includes email.body.encoded, code.code
+    assert_equal email.subject, "RelyingPartyZ - Your code: #{code.code}"
+    assert_equal email.header['From'].value, 'RelyingPartyZ via Promise <hello@promiseauthentication.org>'
 
     # When I call it again, it should reset and send new mail
     inst.generate_and_send_verification_code!(old_code: code.code)

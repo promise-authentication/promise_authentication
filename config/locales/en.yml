@@ -159,7 +159,7 @@ en:
       go_on: Go on
   email_verification_mailer:
     verify_email:
-      subject: "Your code: %{code}"
+      subject: "%{relying_party} - Your code: %{code}"
       explain_with_relying_party: "You are trying to login to %{client}, which uses Promise for signing in. You need the code below to verify your e-mail with Promise."
       explain_without_relying_party: To create your account on Promise, you need to verify your e-mail. You will need the code to verify your e-mail.
       code: "Your code:"
