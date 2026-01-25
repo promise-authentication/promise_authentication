@@ -56,11 +56,11 @@ da:
       going_html: 'Øjeblik&hellip;'
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
     verify_human:
-      title: Bekræft e-mail
-      description: Inden vi går videre, skal vi lige have bekræftet din e-mail.
-      description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet din e-mail.
+      title: Er du et menneske?
+      description: Inden vi går videre, skal vi lige have bekræftet at du er et menneske.
+      description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet at du er et menneske.
       confirm_email_html: Vi sender en kode til <strong>%{email}</strong>.
-      go_on: Videre
+      go_on: Jeg er et menneske
       going_html: 'Sender&hellip;'
       cancel: Tilbage
     verify_email:

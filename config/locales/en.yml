@@ -52,11 +52,11 @@ en:
       your_email_seems_invalid: Are you sure this is a valid e-mail?
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
     verify_human:
-      title: Verify e-mail
-      description: Before we go on, we need to verify your e-mail.
-      description_html: Before we send you on to <span class="whitespace-nowrap">%{name}</span>, we need to verify your e-mail.
+      title: Are you a human?
+      description: Before we go on, we need to verify that you are a human being.
+      description_html: Before we send you on to <span class="whitespace-nowrap">%{name}</span>, we need to verify that you are a human being.
       confirm_email_html: We will send a code to <strong>%{email}</strong>.
-      go_on: Send code
+      go_on: I'm a human
       going_html: 'Sending&hellip;'
       cancel: Back
     verify_email:
