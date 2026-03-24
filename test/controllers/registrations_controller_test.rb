@@ -13,8 +13,40 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to verify_human_registrations_url(email: 'hello@world.com')
   end
 
+  test 'when e-mail validation fails' do
+    # If email validation fails
+    post registrations_url, params: { email: 'hello@example.com' }
+    # Show the form again
+    assert_response :success
+
+    # If you want to bypass it
+    post registrations_url, params: { email: 'hello@example.com', email_validation_shown_for: 'hello@example.com' }
+    assert_redirected_to verify_human_registrations_url(email: 'hello@example.com')
+
+    # If you change it
+    post registrations_url, params: { email: 'hello@gmail.com', email_validation_shown_for: 'hello@example.com' }
+    assert_redirected_to verify_human_registrations_url(email: 'hello@gmail.com')
+
+    # If you change the e-mail to something else, but also failing
+    post registrations_url, params: { email: 'hello@gmail.dk', email_validation_shown_for: 'hello@example.com' }
+    # Show the form again
+    assert_response :success
+  end
+
   test 'redirect to password if known' do
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+    post registrations_url, params: { email: 'hello@world.com' }
+    assert_redirected_to verify_password_url(email: 'hello@world.com')
+  end
+
+  test 'redirect to password if known and now upcase' do
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+    post registrations_url, params: { email: 'Hello@world.com' }
+    assert_redirected_to verify_password_url(email: 'Hello@world.com')
+  end
+
+  test 'redirect to password if known and then upcase' do
+    Authentication::Services::Authenticate.new(email: 'Hello@world.com', password: 'secret').register!
     post registrations_url, params: { email: 'hello@world.com' }
     assert_redirected_to verify_password_url(email: 'hello@world.com')
   end
@@ -115,7 +147,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
     post authenticate_url,
          params: { email: 'hello@world.com', password: 'secret' }
-    assert_redirected_to confirm_path
+    assert_redirected_to %r(\Ahttp://www.example.com/me)
 
     get login_url
     assert_response :success
@@ -129,7 +161,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
     post authenticate_url,
          params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
-    assert_redirected_to confirm_path
+    assert_redirected_to %r(\Ahttp://www.example.com/me)
 
     get login_url
     assert_response :redirect
@@ -139,7 +171,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
     post authenticate_url,
          params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
-    assert_redirected_to confirm_path
+    assert_redirected_to %r(\Ahttp://www.example.com/me)
 
     url = login_url(prompt: 'login')
     get url

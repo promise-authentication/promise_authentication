@@ -1,5 +1,5 @@
 <%= content_for :body do %>
-  <%= form_tag verify_email_registrations_path(registration_configuration(:email_verification_code)), class: 'w-full flex-1' do %>
+  <%= form_tag email_path(registration_configuration(:email_verification_code)), class: 'w-full flex-1' do %>
     <div class="w-full flex items-center flex-col">
       <div class="flex flex-1 flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
         <h2 class="text-lg text-primary font-bold leading-none">
@@ -34,9 +34,9 @@
           </p>
         </label>
         <div class="flex w-full justify-between items-center mt-6">
-          <%= back_to(registration_configuration(:email_verification_code), data: {turbolinks: false}, text: t(".send_new_code"), class: "text-gray-500") do |args| verify_human_registrations_path(args) end %>
+          <%= back_to(registration_configuration(:email_verification_code), data: {turbolinks: false}, text: t(".send_new_code"), class: "text-gray-500") do |args| edit_email_path(args) end %>
           <div class="flex flex-row justify-end items-center">
-            <%= back_to(registration_configuration(), data: {turbolinks: false}) do |args| new_registration_path(args) end %>
+            <%= back_to(registration_configuration(), data: {turbolinks: false}) do |args| edit_email_path(args) end %>
             <%= button_tag type: 'submit', class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
               <%= t('.go_on') %><%= arrow_right %>
             <% end %>

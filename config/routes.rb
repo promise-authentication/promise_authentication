@@ -48,6 +48,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :email, only: %i[create edit] do
+    collection do
+      get :verify
+      post :verify
+    end
+  end
+
   resource :password, only: %i[new edit show create] do
     member do
       post :recover

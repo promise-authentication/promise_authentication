@@ -9,6 +9,7 @@ gem 'rails_event_store', '1.3.0'
 gem 'rbnacl', '7.1.1'
 
 gem 'local_time'
+gem 'email_inquire' # For validating email addresses
 
 gem 'retries'
 

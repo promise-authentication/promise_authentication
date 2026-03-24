@@ -2,6 +2,10 @@ da:
   locale_name: Dansk
   password_not_matching: Forkert password. Prøv igen
   fill_both: Udfyld venligst alle felter
+  email_already_claimed: Denne e-mail er allerede i brug. Prøv at logge ind i stedet.
+  email_changed: Din e-mail er blevet ændret.
+  invalid_email_verification_code: Koden er ikke korrekt. Prøv igen.
+  error_changing_email: Der skete en fejl under ændring af din e-mail. Prøv igen.
   activemodel:
     attributes:
       authentication/services/authenticate:
@@ -20,6 +24,7 @@ da:
       logout: Log ud
       login: Log ind
       change_password: Skift password
+      change_email: Skift e-mail
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on pure identity provider."
@@ -32,6 +37,10 @@ da:
       choose_application: Vælg applikation
       explain_choosing: Log ind på en af dine applikationer her.
       no_relying_parties: Du har endnu ikke nogle applikationer tilknyttet
+      copy_to_clipboard: Kopier dit unikke ID
+      your_unique_id: Dit unikke ID
+      id_copied_to_clipboard: Dit unikke ID er blevet kopieret til din udklipsholder.
+      id_not_copied_to_clipboard: Dit unikke ID kunne ikke kopieres til din udklipsholder. Kopier det venligst manuelt.
       go_to_rp: Fortsæt til %{name}
   registrations:
     new:
@@ -41,22 +50,25 @@ da:
       we_could_not_send_email_html: "Vi kunne ikke sende en e-mail til <strong>%{email}</strong>. Tjek venligst at du har skrevet den rigtigt. Her er beskeden vi har fået: <em class='font-mono'>%{message}</em>."
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data_html: Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
+      did_you_mean_html: Vi har rettet din mail fra %{old_email} til <strong>%{email}</strong>. Er det korrekt? Ellers kan du rette den igen og fortsætte.
+      your_email_seems_invalid: Er du sikker på, at det er en gyldig e-mail?
       go_on: Videre
       going_html: 'Øjeblik&hellip;'
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
     verify_human:
-      title: Bekræft e-mail
-      description: Inden vi går videre, skal vi lige have bekræftet din e-mail.
-      description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet din e-mail.
+      title: Er du et menneske?
+      description: Inden vi går videre, skal vi lige have bekræftet at du er et menneske.
+      description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet at du er et menneske.
       confirm_email_html: Vi sender en kode til <strong>%{email}</strong>.
-      go_on: Send kode
+      go_on: Jeg er et menneske
       going_html: 'Sender&hellip;'
       cancel: Tilbage
     verify_email:
       title: Check din indbakke
       we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med en kode. Indtast venligst koden herunder.
-      we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst koden herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
-      code: Kode fra e-mail
+      we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
+      code: Kode fra e-mail (starter med "%{code_start}")
+      help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.
       caps_or_not: Vi gør ikke forskel på store og små bogtaver.
       send_new_code: Send ny kode
       go_on: Videre
@@ -64,7 +76,7 @@ da:
       cancel: Tilbage
     create_password:
       title: Vælg password
-      create_account_html: Skriv det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> fremover.
+      create_account_html: Opret det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> fremover.
       new_password: Password
       confirm_password: Gentag password
       password_error:
@@ -97,7 +109,6 @@ da:
       alert: Udfyld din mail for at bekræfte den.
       go_on: Videre
       confirming_html: 'Bekræfter e-mail&hellip;'
-      start_over_html: '&larr; Tilbage'
     confirm:
       sign_in_on_html: "Gå til <strong>%{relying_party_name}</strong>"
       you_are_html: Du er logget ind som <strong>%{email}</strong>.
@@ -111,6 +122,23 @@ da:
     authenticate:
       password_not_correct: 'Forkert password. Prøv igen'
       confirmation_not_matching: "Du har ikke skrevet den samme mail to gange. Prøv igen."
+  emails:
+    edit:
+      header: Skift e-mail
+      description: Her vælger du en ny e-mail som du vil logge ind med på %{name}.
+      go_on: Skift e-mail
+      new_email: Ny e-mail
+    verify:
+      title: Check din indbakke
+      we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med en kode. Indtast venligst koden herunder.
+      we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
+      code: Kode fra e-mail (starter med "%{code_start}")
+      help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.
+      caps_or_not: Vi gør ikke forskel på store og små bogtaver.
+      send_new_code: Send ny kode
+      go_on: Videre
+      going_html: 'Verificerer&hellip;'
+      cancel: Tilbage
   passwords:
     edit:
       header: Skift password
@@ -136,7 +164,7 @@ da:
       go_on: Videre
   email_verification_mailer:
     verify_email:
-      subject: "Din kode: %{code}"
+      subject: "%{relying_party} - Din kode: %{code}"
       explain_with_relying_party: "Du er igang med at logge ind på %{client}, som bruger Promise til at logge ind. Du skal bruge koden herunder til at bekræfte din e-mail overfor Promise."
       explain_without_relying_party: For at kunne oprette din konto på Promise, skal du bekræfte din e-mail. Du skal bruge koden til at bekræfte din e-mail.
       code: "Din kode:"
