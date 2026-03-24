@@ -18,4 +18,3 @@ class Authentication::Services::SendRecoveryMail
     end
   end
 end
-

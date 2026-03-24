@@ -4,8 +4,9 @@ module Authentication::EventListener
   def call(event)
     case event
     when Authentication::Events::EmailClaimed
-      email = Authentication::HashedEmail.find_or_initialize_by(id: event.data[:hashed_email])
-      email.user_id = event.data[:user_id]
+      email = Authentication::HashedEmail.find_or_initialize_by(user_id: event.data[:user_id])
+      email.email_verified_at = event.data[:email_verified_at]
+      email.id = event.data[:hashed_email]
       email.save
     when Authentication::Events::PasswordSet
       password = Authentication::Password.find_or_create_by(id: event.data[:user_id])
@@ -31,5 +32,3 @@ module Authentication::EventListener
     end
   end
 end
-
-

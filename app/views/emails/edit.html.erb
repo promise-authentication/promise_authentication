@@ -1,0 +1,29 @@
+<%= content_for :header do %>
+  <%= image_tag('logo.png', class: 'h-4 m-3') %>
+  <h1 class="text-secondary">
+    <%= name %>
+  </h1>
+<% end %>
+<%= content_for :body do %>
+  <%= form_tag email_path, class: 'w-full' do %>
+    <div class="w-full flex items-center flex-col">
+      <h2 class="text-2xl pt-8">
+        <%= t '.header' %>
+      </h2>
+      <p class="text-secondary text-sm max-w-xs text-center mt-4">
+        <%= t '.description', name: name %>
+      </p>
+      <label class="mt-3 w-full">
+        <p class="input-label">
+          <%= t '.email' %>
+        </p>
+        <%= email_field_tag :email, registration_configuration[:email], class: "login-input", autofocus: true %>
+      </label>
+      <div class="flex w-full justify-end items-center mt-6">
+        <%= button_tag type: 'submit', class: 'button primary self-end' do %>
+          <%= t('.go_on') %><%= arrow_right %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

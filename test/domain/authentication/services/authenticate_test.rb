@@ -24,7 +24,7 @@ class Authentication::Services::AuthenticateTest < ActiveSupport::TestCase
 
   test 'will lax-confirm email' do
     Authentication::Services::Authenticate::Register.stub :call, 'world' do
-      @request.register!(email_confirmation: ' Hello@world.dk')
+      @request.register!
       assert_equal @request.user_id, 'world'
     end
   end

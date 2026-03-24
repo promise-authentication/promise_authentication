@@ -1,0 +1,10 @@
+<% if @relying_party_name %>
+<%=- t('.explain_with_relying_party', client: @relying_party_name) %>
+<% else %>
+<%=- t('.explain_without_relying_party', client: @relying_party_name) %>
+<% end %>
+
+<%= t('.code') %> <%= @code %>
+
+<%= t('.what_is_promise.title') %>
+<%= t('.what_is_promise.body') %>

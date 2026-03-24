@@ -14,7 +14,7 @@ class Authentication::PasswordTest < ActiveSupport::TestCase
     cleartext = 'secret'
     digest = @described_class.digest_from(cleartext)
 
-    password = @described_class.create(id: user_id, digest: digest)
+    @described_class.create(id: user_id, digest: digest)
 
     assert @described_class.find(user_id).match!(cleartext)
     assert_not_equal digest, cleartext

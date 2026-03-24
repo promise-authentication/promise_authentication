@@ -6,7 +6,6 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select 'input#email'
-    assert_select 'input#password'
   end
 
   test 'the login screen with relying party' do
@@ -14,7 +13,6 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select 'input#email'
-    assert_select 'input#password'
     assert_select 'h2', 'Sign in'
   end
 
@@ -23,9 +21,19 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
-  test 'authentication with no relying party' do
+  test 'authentication with non existing email' do
     post authenticate_url,
-         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
+         params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
+    assert_redirected_to login_url(email: 'hello@world.com', remember_me: '1')
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert_nil jar.encrypted[:user_id]
+  end
+
+  test 'authentication with no relying party' do
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+
+    post authenticate_url,
+         params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
     user_id = jar.encrypted[:user_id]
@@ -37,7 +45,13 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'logout' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
+
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert jar.encrypted[:user_id]
+
     delete logout_url
 
     jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
@@ -47,9 +61,12 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'authentication with relying party' do
+    Trust::Certificate.generate_key_pair!
+
     Authentication::RelyingParty.stub :fetch, nil do
+      Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
       post authenticate_url,
-           params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret',
+           params: { email: 'hello@world.com', password: 'secret',
                      client_id: 'party.com', remember_me: 1 }
     end
 
@@ -62,37 +79,20 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert Authentication::Vault.personal_data(user_id, vault_key)
   end
 
-  test 'session login resets' do
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
-    get login_url
-    assert_response :success
-  end
-
-  test 'cookie login persists' do
-    post authenticate_url,
-         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
-    get login_url
-    assert_response :redirect
-  end
-
-  test 'cookie login overruled with prompt=login' do
-    post authenticate_url,
-         params: { email: 'hello@world.com', email_confirmation: 'hello@world.com', password: 'secret', remember_me: 1 }
-
-    url = login_url(prompt: 'login')
-    get url
-    assert_response :success
-  end
-
   test 'showing email after login' do
+    Trust::Certificate.generate_key_pair!
+
     Authentication::RelyingParty.stub :fetch, nil do
+      Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+
       post authenticate_url, params: {
         email: 'hello@world.com',
-        email_confirmation: 'hello@world.com',
         password: 'secret',
-        client_id: 'party.com'
+        client_id: 'party.com',
+        remember_me: 1
       }
-      assert_redirected_to confirm_path(client_id: 'party.com')
+      # It will redirect to the relying party
+      assert_redirected_to %r(\Ahttps://party.com/authenticate)
 
       get confirm_path(client_id: 'party.com')
       assert_response :success
@@ -114,10 +114,18 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :knows_legacy_account?, true, [email]
     relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
     relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
+    relying_party.expect :present?, true
+    relying_party.expect :id, relying_party_id
+    relying_party.expect :redirect_uri, 'https://example.com/hello' do |kwargs|
+      kwargs[:id_token].is_a?(Authentication::IdToken) && 
+      kwargs[:login_configuration].is_a?(ActionController::Parameters)
+    end
 
     Authentication::RelyingParty.stub :find, relying_party do
+      Authentication::Services::Authenticate.new(email: email, password: password).register!
+
       post authenticate_url,
-           params: { email: email, email_confirmation: email, password: password, client_id: relying_party_id,
+           params: { email: email, password: password, client_id: relying_party_id,
                      remember_me: 1 }
 
       jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
@@ -132,21 +140,30 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
       assert_mock relying_party
 
-      assert_redirected_to confirm_path(client_id: relying_party_id)
+      assert_redirected_to 'https://example.com/hello'
     end
   end
 
   test 'relying party with legacy accounts and an existing account' do
+    Trust::Certificate.generate_key_pair!
+
     email = 'hello@world.com'
     password = 'secr2t'
     relying_party_id = 'example.com'
 
     # Create existing account
-    post authenticate_url, params: { email: email, email_confirmation: email, password: password }
+    Authentication::Services::Authenticate.new(email: email, password: password).register!
+    post authenticate_url, params: { email: email, password: password }
 
     relying_party = Minitest::Mock.new
     relying_party.expect :locale, nil
     relying_party.expect :id, relying_party_id
+    relying_party.expect :present?, true
+    relying_party.expect :id, relying_party_id
+    relying_party.expect :redirect_uri, 'https://example.com/hello' do |kwargs|
+      kwargs[:id_token].is_a?(Authentication::IdToken) && 
+      kwargs[:login_configuration].is_a?(ActionController::Parameters)
+    end
 
     Authentication::RelyingParty.stub :find, relying_party do
       post authenticate_url, params: { email: email, password: password, client_id: relying_party_id, remember_me: 1 }
@@ -155,7 +172,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
       user_id = jar.encrypted[:user_id]
       vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
       personal_data = Authentication::Vault.personal_data(user_id, vault_key)
-      assert_nil personal_data.id_for(relying_party_id)
+      assert personal_data.id_for(relying_party_id)
 
       # It will record that the password is knowns by relying party
       event = Rails.configuration.event_store.read.of_type(Authentication::Events::PasswordSet).last
@@ -163,7 +180,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
 
       assert_mock relying_party
 
-      assert_redirected_to confirm_path(client_id: relying_party_id)
+      assert_redirected_to 'https://example.com/hello'
     end
   end
 
@@ -173,7 +190,9 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     email = 'hello@world.com'
     password = 'secr2t'
     relying_party_id = 'example.com'
-    post authenticate_url, params: { email: email, email_confirmation: email, password: password }
+    Authentication::Services::Authenticate.new(email: email, password: password).register!
+
+    post authenticate_url, params: { email: email, password: password }
     assert_response :redirect
 
     Authentication::RelyingParty.stub :fetch, nil do

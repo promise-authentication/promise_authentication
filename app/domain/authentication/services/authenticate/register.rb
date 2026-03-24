@@ -1,7 +1,7 @@
 module Authentication::Services::Authenticate::Register
   module_function
 
-  def call(email:, password:, relying_party_id: nil, legacy_account_user_id: nil, relying_party_knows_password: false)
+  def call(email:, password:, relying_party_id: nil, legacy_account_user_id: nil, relying_party_knows_password: false, email_verified_at: nil)
     new_user_id = SecureRandom.uuid
 
     hashed_email = Authentication::HashedEmail.from_cleartext(email)
@@ -11,11 +11,12 @@ module Authentication::Services::Authenticate::Register
     ActiveRecord::Base.transaction do
       Authentication::Commands::ClaimEmail.new(
         user_id: new_user_id,
-        hashed_email: hashed_email
+        hashed_email: hashed_email,
+        email_verified_at: email_verified_at
       ).execute!
 
       data = Authentication::PersonalData.new
-      if(relying_party_id.present? && legacy_account_user_id.present?)
+      if relying_party_id.present? && legacy_account_user_id.present?
         data.add_id legacy_account_user_id, relying_party_id
       end
 
@@ -32,7 +33,6 @@ module Authentication::Services::Authenticate::Register
       ).call
     end
 
-    return new_user_id, vault_key
+    [new_user_id, vault_key]
   end
-
 end
