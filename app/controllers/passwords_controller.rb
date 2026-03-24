@@ -22,7 +22,7 @@ class PasswordsController < ApplicationController
     end
   rescue Authentication::Password::NotMatching
     @current_password_message = I18n.t('password_not_matching')
-    render action: 'show'
+    render action: 'edit'
   end
 
   def recover

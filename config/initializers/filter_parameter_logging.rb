@@ -2,5 +2,5 @@
 
 # Configure sensitive parameters which will be filtered from the log file.
 Rails.application.config.filter_parameters += [
-  :password, :email, :passw, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn
+  :password, :email, :passw, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn, :redirect_uri
 ]

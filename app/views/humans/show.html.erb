@@ -5,6 +5,15 @@
   </h1>
 <% end %>
 <%= content_for :body do %>
+  <script>
+    function copy(text) {
+      navigator.clipboard.writeText(text).then(function() {
+        alert("<%= t '.id_copied_to_clipboard'  %>");
+      }, function(err) {
+        alert("<%= t '.id_not_copied_to_clipboard'  %>");
+      });
+    }
+  </script>
   <div class="w-full flex items-center flex-col">
     <h1 class="mt-8 text-2xl">
       <%= t '.choose_application' %>
@@ -12,17 +21,30 @@
     <p class="text-secondary text-sm max-w-xs text-center mt-1">
       <%= t '.explain_choosing' %>
     </p>
-    <% if @relying_parties.any? %>
-      <div class="w-full flex items-center flex-col pb-10 mt-8">
-        <% @relying_parties.each do |rp| %>
-          <%= link_to "https://#{rp.id}", title: t('.go_to_rp', name: rp.name), class: "py-3 border-b w-full hover:bg-gray-200 flex justify-center items-center", form_class: 'w-full' do %>
-            <% if rp.logo_data %>
-              <%= image_tag rp.logo_data, class: 'h-4 mr-2' %>
+    <% if @ids.any? %>
+      <div class="w-full flex items-center flex-col pb-10 mt-8 flex-1">
+        <% @ids.each do |client_id, my_id| %>
+          <% rp = Authentication::RelyingParty.find(client_id) %>
+          <div class="border-b w-full">
+            <%= link_to "https://#{client_id}", title: t('.go_to_rp', name: rp.name), class: "py-3 w-full hover:bg-gray-200 flex justify-center items-center", form_class: 'w-full' do %>
+              <% if rp.logo_data %>
+                <%= image_tag rp.logo_data, class: 'h-4 mr-2' %>
+              <% end %>
+              <span>
+                <%= rp.name %> &rarr;
+              </span>
             <% end %>
-            <span>
-              <%= rp.name %> &rarr;
-            </span>
-          <% end %>
+            <a href='javascript:copy("<%= "https://promiseauthentication.org|#{ my_id.keys.first }" %>");' class="w-full cursor-pointer flex flex-row items-center justify-between p-2">
+              <p class="text-xs text-gray-500 whitespace-nowrap">
+                <%= t '.your_unique_id' %>:
+              </p>
+              <input type="text" disabled class="text-xs p-2 rounded w-full select-all text-gray-500 border-0" value="<%= "https://promiseauthentication.org|#{ my_id.keys.first }" %>" />
+
+              <p title="<%= t '.copy_to_clipboard' %>" class="cursor-pointer" >
+                📋
+              </p>
+            </a>
+          </div>
         <% end %>
       </div>
     <% else %>
