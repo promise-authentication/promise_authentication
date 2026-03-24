@@ -6,6 +6,8 @@
     <p class="text-center mt-1">
       To get a sense of how this works, you can try signing in to <strong>Oase</strong> that uses Promise.
     </p>
-    <%= link_to ('Go to Oase &rarr;').html_safe, 'https://oase.app', class: "button oase mt-6", target: "_blank" %>
+    <%= link_to 'https://oase.app', class: "button oase mt-6", target: "_blank" do %>
+      Go to Oase <%= arrow_right %>
+    <% end %>
   </div>
 </div>

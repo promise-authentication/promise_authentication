@@ -6,6 +6,7 @@ class Authentication::HashedEmail < ApplicationRecord
 
   def self.from_cleartext(email)
     return nil if email.nil?
+    clean_email = email.strip.downcase
 
     # Double hashing:
     # To avoid collisions, the assumption is, that if we
@@ -18,8 +19,8 @@ class Authentication::HashedEmail < ApplicationRecord
     # 20250415: Well, maybe not THAT stupid. The way we do it here, actually
     # makes it less likely to get a collision. We do not, as I previously
     # thought, base one hash on the other. We should be good. ~AL
-    sha = RbNaCl::Hash.sha256(email)
-    blake = RbNaCl::Hash.blake2b(email)
+    sha = RbNaCl::Hash.sha256(clean_email)
+    blake = RbNaCl::Hash.blake2b(clean_email)
     binary = sha + blake
 
     Base64.strict_encode64(binary).encode('utf-8')
