@@ -14,5 +14,7 @@ class EmailVerificationCode < ApplicationRecord
     hashed = Authentication::HashedEmail.from_cleartext(email)
 
     find(hashed)
+  rescue ActiveRecord::RecordNotFound
+    return nil
   end
 end

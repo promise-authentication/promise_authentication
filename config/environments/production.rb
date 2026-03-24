@@ -66,7 +66,7 @@ Rails.application.configure do
     password: ENV['SMTP_PASSWORD'],
     domain: 'promiseauthentication.org',
     address: ENV['SMTP_ADDRESS'],
-    port: 587,
+    port: ENV['SMTP_PORT'],
     authentication: :plain,
     enable_starttls_auto: true
   }

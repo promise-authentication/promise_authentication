@@ -17,11 +17,24 @@ class RegistrationsController < ApplicationController
 
   def create
     flash[:slide_class] = 'a-slide-in-from-right'
+    email = registration_configuration[:email]
+    @email_validator = EmailInquire.validate(email)
 
-    if ::Authentication::Services::Authenticate::Existing.known?(registration_configuration[:email])
-      redirect_to verify_password_path(registration_configuration)
+    bypass_email_check = email == params[:email_validation_shown_for]
+
+    if @email_validator.valid? || bypass_email_check
+      if ::Authentication::Services::Authenticate::Existing.known?(email)
+        redirect_to verify_password_path(registration_configuration)
+      else
+        code = EmailVerificationCode.find_by_cleartext(email)
+        if code
+          redirect_to verify_email_registrations_path(registration_configuration)
+        else
+          redirect_to verify_human_registrations_path(registration_configuration)
+        end
+      end
     else
-      redirect_to verify_human_registrations_path(registration_configuration)
+      render action: :new
     end
   end
 
@@ -39,6 +52,15 @@ class RegistrationsController < ApplicationController
     redirect_to verify_email_registrations_path(registration_configuration)
   rescue TurnstileConcern::NotPassedError
     render action: :verify_human
+  rescue Net::SMTPFatalError => e
+    @smtp_error = e
+    render action: :new
+  rescue Net::SMTPSyntaxError => e
+    @smtp_error = e
+    render action: :new
+  rescue Net::SMTPServerBusy => e
+    @smtp_error = e
+    render action: :new
   end
 
   def verify_email
@@ -57,7 +79,7 @@ class RegistrationsController < ApplicationController
       redirect_to create_password_registrations_path(registration_configuration)
     else
       # If the code is invalid, we send the mail, with a new code
-      email_verifier.generate_and_send_verification_code!
+      email_verifier.generate_and_send_verification_code!(old_code: @code.code)
       @code = email_verifier.verifier
       flash.now[:resent_code] = true
       render action: :verify_email

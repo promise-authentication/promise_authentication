@@ -19,7 +19,7 @@
           <%= locale_name %>
         </span>
       <% else %>
-        <%= link_to locale_name, url_for( params.clone.permit!.merge(locale: locale, only_path: true )), class: "text-secondary block p-3" %>
+        <%= link_to locale_name, url_for( params.clone.permit!.merge(locale: locale, only_path: true )), class: "text-secondary block p-3", data: {turbolinks: false} %>
       <% end %>
   <% end %>
 </div>
@@ -29,6 +29,7 @@
     <%= link_to name, root_path %> - 2025
     <% if logged_in? && !relying_party %>
       - <%= link_to t('.change_password'), edit_password_path, class: 'underline' %>
+      - <%= link_to t('.change_email'), edit_email_path, class: 'underline' %>
     <% end %>
   </span>
 </footer>
