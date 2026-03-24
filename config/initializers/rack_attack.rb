@@ -23,5 +23,6 @@ Rack::Attack.throttle("registrations/ip", limit: 10, period: 1.minute) do |req|
 end
 
 Rack::Attack.throttled_responder = lambda do |_env|
-  [429, { "Content-Type" => "text/plain" }, ["Too many requests. Please try again later.\n"]]
+  html = Rails.public_path.join("429.html").read
+  [429, { "Content-Type" => "text/html" }, [html]]
 end
