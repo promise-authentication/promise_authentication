@@ -4,7 +4,7 @@ require 'ruby_event_store/mappers/transformation/serialization'
 module YAMLProxy
   def self.dump(value) = YAML.dump(value)
 
-  def self.load(serialized) = YAML.safe_load(serialized, permitted_classes: [Symbol, Time, Date, DateTime])
+  def self.load(serialized) = YAML.safe_load(serialized, permitted_classes: [Symbol, Time, Date, DateTime, ActiveSupport::TimeWithZone])
 end
 
 RubyEventStore::Mappers::Transformation::Serialization.class_eval do
