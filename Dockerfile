@@ -29,7 +29,7 @@ RUN gem install bundler:2.5.23 \
     && bundle config set --local without 'production'
 
 # Copy Gemfile and Gemfile.lock
-COPY Gemfile ./
+COPY Gemfile Gemfile.lock ./
 
 # Install dependencies
 RUN bundle install
