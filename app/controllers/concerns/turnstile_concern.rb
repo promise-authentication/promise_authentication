@@ -8,7 +8,7 @@ module TurnstileConcern
   end
 
   def turnstile_tag_html
-    "<div class=\"cf-turnstile\" data-theme=\"light\" data-sitekey=\"#{ENV.fetch(
+    "<div class=\"cf-turnstile\" data-callback=\"onSuccess\" data-theme=\"light\" data-sitekey=\"#{ENV.fetch(
       'PROMISE_CLOUDFLARE_TURNSTILE_SITE_KEY', '3x00000000000000000000FF'
     )}\"></div>".html_safe
   end
