@@ -22,6 +22,9 @@ gem 'color-generator'
 
 gem 'airbrake'
 
+# Rate limiting
+gem 'rack-attack'
+
 # For background processing powered by RabbitMQ
 gem 'sneakers', '2.12.0'
 
