@@ -92,6 +92,31 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
     assert @relying_party.valid?
   end
 
+  test 'http_client uses JSON serializer for cache' do
+    client = @described_class.http_client
+    cache_middleware = client.builder.handlers.find { |h| h.name.include?('HttpCache') }
+    assert cache_middleware, 'Expected http_cache middleware to be present'
+
+    # Verify JSON serializer by doing a real cached round-trip
+    url = 'https://cache-test.example.com/.well-known/promise.json'
+    body = { name: 'Test App' }.to_json
+
+    stub_request(:get, url)
+      .to_return(
+        status: 200,
+        body: body,
+        headers: { 'Cache-Control' => 'max-age=300', 'Content-Type' => 'application/json' }
+      )
+
+    # First request hits the stub
+    response1 = @described_class.fetch(url)
+    assert_equal body, response1.body
+
+    # Second request should be served from cache (no second stub hit)
+    response2 = @described_class.fetch(url)
+    assert_equal body, response2.body
+  end
+
   test 'authenticating legacy account' do
     @relying_party.legacy_account_authentication_url = 'https://hello.world'
     @relying_party.legacy_account_forgot_password_url = 'http://hello.world'
