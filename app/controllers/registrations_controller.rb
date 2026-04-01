@@ -61,6 +61,9 @@ class RegistrationsController < ApplicationController
   rescue Net::SMTPServerBusy => e
     @smtp_error = e
     render action: :new
+  rescue Net::OpenTimeout, Net::ReadTimeout => e
+    @smtp_error = e
+    render action: :new
   end
 
   def verify_email

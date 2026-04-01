@@ -2,14 +2,19 @@ en:
   locale_name: English
   password_not_matching: Wrong password. Please try again
   fill_both: Please provide all
+  fill_email: Please provide your e-mail
   email_already_claimed: This e-mail is already in use. Please provide another e-mail.
   email_changed: E-mail changed successfully.
   invalid_email_verification_code: The e-mail verification code is invalid. Please try again.
   error_changing_email: There was an error changing your e-mail. Please try again.
   activemodel:
     attributes:
-      email: E-mail
-      password: Password
+      authentication/services/authenticate:
+        email: E-mail
+        password: Password
+      authentication/services/change_password:
+        current_password: Current password
+        new_password: New password
     errors:
       messages:
         blank: goes here
@@ -74,6 +79,7 @@ en:
       title: Create password
       create_account_html: Create the password you want to use with <span class="font-bold">%{email}</span>.
       new_password: New password
+      confirm_password: Confirm password
       password_error:
         blank: Please provide a password.
         not_matching: Password not matching.
@@ -122,7 +128,7 @@ en:
       header: Change e-mail
       description: Here you can change the e-mail you use for signing in to %{name}. Please note that you will have to verify your new e-mail before you can use it.
       go_on: Change e-mail
-      new_email: New e-mail
+      email: New e-mail
     verify:
       title: Check your inbox
       we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong> with a code. Please provide the code below.
@@ -146,6 +152,8 @@ en:
       description: If you forgot your password to sign in to %{name}, you can request to reset it by providing your e-mail here. We will send you an e-mail containing a link that will allow you to reset your password.
       email: E-mail
       go_on: Reset password
+      cancel: Back
+    recover:
       cancel: Back
     wait:
       header: ✅

@@ -32,25 +32,25 @@ class Authentication::Services::PrepareEmailForValidation
         id: hashed_email,
         code: code
       )
-
-      retries = 0
-      max_retries = 3
-
-      begin
-        EmailVerificationMailer.with(
-          email: email,
-          code: code,
-          relying_party_name: relying_party&.name
-        ).verify_email.deliver_now
-      rescue Net::OpenTimeout, Net::ReadTimeout => e
-        retries += 1
-        raise e unless retries <= max_retries
-
-        sleep(retries * 2)
-        retry
-      end
-
-      verifier
     end
+
+    retries = 0
+    max_retries = 3
+
+    begin
+      EmailVerificationMailer.with(
+        email: email,
+        code: code,
+        relying_party_name: relying_party&.name
+      ).verify_email.deliver_now
+    rescue Net::OpenTimeout, Net::ReadTimeout => e
+      retries += 1
+      raise e unless retries <= max_retries
+
+      sleep(retries * 2)
+      retry
+    end
+
+    verifier
   end
 end

@@ -2,6 +2,7 @@ da:
   locale_name: Dansk
   password_not_matching: Forkert password. Prøv igen
   fill_both: Udfyld venligst alle felter
+  fill_email: Udfyld venligst din e-mail
   email_already_claimed: Denne e-mail er allerede i brug. Prøv at logge ind i stedet.
   email_changed: Din e-mail er blevet ændret.
   invalid_email_verification_code: Koden er ikke korrekt. Prøv igen.
@@ -127,7 +128,7 @@ da:
       header: Skift e-mail
       description: Her vælger du en ny e-mail som du vil logge ind med på %{name}.
       go_on: Skift e-mail
-      new_email: Ny e-mail
+      email: Ny e-mail
     verify:
       title: Check din indbakke
       we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med en kode. Indtast venligst koden herunder.
@@ -151,6 +152,8 @@ da:
       description: Hvis du har glemt dit password til at logge ind på %{name} kan du nulstille det ved at skrive din email herunder. Så sender vi en mail med et link som du kan bruge til at lave et nyt password.
       email: E-mail
       go_on: Nulstil password
+      cancel: Tilbage
+    recover:
       cancel: Tilbage
     wait:
       header: ✅
