@@ -51,6 +51,10 @@ da:
       we_could_not_send_email_html: "Vi kunne ikke sende en e-mail til <strong>%{email}</strong>. Tjek venligst at du har skrevet den rigtigt. Her er beskeden vi har fået: <em class='font-mono'>%{message}</em>."
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data_html: Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
+      what_email_question: Hvilken e-mail skal jeg bruge?
+      what_email_help: Brug den e-mail, der identificerer dig som menneske — din personlige. Undgå delte, arbejdsrelaterede eller rollebaserede adresser (som info@ eller team@). Du skal bruge denne e-mail hver gang du logger ind.
+      child_account_question: Jeg opretter en konto til mit barn
+      child_account_help_html: Brug <code class="bg-white px-1 rounded">ditnavn+barnetsnavn@gmail.com</code>-tricket. De fleste udbydere (Gmail, Outlook, iCloud, Fastmail og flere) ignorerer alt mellem <code>+</code> og <code>@</code>, så mailen lander stadig i din egen indbakke — men tæller som en unik e-mail her. På den måde kan du styre dit barns konto uden at oprette en ny mailkonto.
       did_you_mean_html: Vi har rettet din mail fra %{old_email} til <strong>%{email}</strong>. Er det korrekt? Ellers kan du rette den igen og fortsætte.
       your_email_seems_invalid: Er du sikker på, at det er en gyldig e-mail?
       go_on: Videre

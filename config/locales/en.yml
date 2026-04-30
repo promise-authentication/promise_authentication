@@ -53,6 +53,10 @@ en:
       go_on: Go
       going_html: 'Please wait&hellip;'
       we_save_no_data_html: Your e-mail will <em class="whitespace-nowrap">not be saved</em> in a readable format.
+      what_email_question: What e-mail should I use?
+      what_email_help: Use the e-mail that identifies you as a human being — your personal one. Avoid shared, work or role-based addresses (like info@ or team@). You will use this e-mail every time you sign in.
+      child_account_question: I'm creating an account for my child
+      child_account_help_html: Use the <code class="bg-white px-1 rounded">yourname+childsname@gmail.com</code> trick. Most providers (Gmail, Outlook, iCloud, Fastmail and more) ignore everything between the <code>+</code> and the <code>@</code>, so the e-mail still lands in your own inbox — but it counts as a unique e-mail here. That way you can manage your child's account without creating a separate mailbox.
       did_you_mean_html: We changed your email from %{old_email} to <strong>%{email}</strong>. Is that correct? Otherwise, please change it back, and continue.
       your_email_seems_invalid: Are you sure this is a valid e-mail?
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
