@@ -4,7 +4,7 @@ class Oauth2::TokenController < ApplicationController
   GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:token-exchange'.freeze
   ID_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:id_token'.freeze
   ACCESS_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:access_token'.freeze
-  ISSUER = 'https://promiseauthentication.org'.freeze
+  ISSUER = ENV.fetch('PROMISE_ISSUER', 'https://promiseauthentication.org').freeze
   ACCESS_TOKEN_TTL = 120
 
   def exchange
