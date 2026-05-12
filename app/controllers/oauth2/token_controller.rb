@@ -1,11 +1,16 @@
 class Oauth2::TokenController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:exchange]
+  skip_before_action :verify_authenticity_token, only: [:exchange, :preflight]
+  before_action :set_cors_headers, only: [:exchange, :preflight]
 
   GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:token-exchange'.freeze
   ID_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:id_token'.freeze
   ACCESS_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:access_token'.freeze
   ISSUER = ENV.fetch('PROMISE_ISSUER', 'https://promiseauthentication.org').freeze
   ACCESS_TOKEN_TTL = 120
+
+  def preflight
+    head :no_content
+  end
 
   def exchange
     return render_error('invalid_request', 'unsupported grant_type', status: :bad_request) unless params[:grant_type] == GRANT_TYPE
@@ -57,5 +62,15 @@ class Oauth2::TokenController < ApplicationController
 
   def render_error(code, description, status:)
     render json: { error: code, error_description: description }, status: status
+  end
+
+  def set_cors_headers
+    origin = request.headers['Origin']
+    return if origin.blank?
+    response.set_header('Access-Control-Allow-Origin', origin)
+    response.set_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    response.set_header('Access-Control-Allow-Headers', 'Content-Type, DPoP, Authorization')
+    response.set_header('Access-Control-Max-Age', '3600')
+    response.set_header('Vary', 'Origin')
   end
 end

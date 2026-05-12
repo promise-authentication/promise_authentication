@@ -75,5 +75,6 @@ Rails.application.routes.draw do
 
   namespace 'oauth2' do
     post 'token', to: 'token#exchange'
+    match 'token', to: 'token#preflight', via: [:options]
   end
 end
