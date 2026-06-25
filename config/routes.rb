@@ -59,6 +59,10 @@ Rails.application.routes.draw do
     member do
       post :recover
       get :wait
+      get :recover_code
+      post :recover_code
+      get :reset
+      post :reset
     end
   end
 

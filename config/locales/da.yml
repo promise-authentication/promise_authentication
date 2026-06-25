@@ -168,12 +168,27 @@ da:
       new_password: Nyt password
     new:
       header: Nulstil password
-      description: Hvis du har glemt dit password til at logge ind på %{name} kan du nulstille det ved at skrive din email herunder. Så sender vi en mail med et link som du kan bruge til at lave et nyt password.
+      description: Hvis du har glemt dit password til at logge ind på %{name}, kan du nulstille det her. Vi sender et link på e-mail eller en kode på SMS.
       email: E-mail
+      phone: Telefonnummer
+      tab_email: E-mail
+      tab_phone: Telefon
       go_on: Nulstil password
       cancel: Tilbage
     recover:
       cancel: Tilbage
+    recover_code:
+      header: Indtast koden
+      description: Vi har sendt en kode på SMS til %{phone}. Indtast den herunder for at nulstille dit password.
+      code: Kode fra SMS
+      caps_or_not: Vi gør ikke forskel på store og små bogstaver.
+      go_on: Videre
+      cancel: Tilbage
+    reset:
+      header: Nyt password
+      description: Vælg et nyt password til at logge ind på %{name}.
+      new_password: Nyt password
+      go_on: Skift password
     wait:
       header: ✅
       description: Du vil modtage en e-mail, som du kan bruge til at nulstille dit password.

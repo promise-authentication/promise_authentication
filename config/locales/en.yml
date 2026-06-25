@@ -168,12 +168,27 @@ en:
       new_password: New password
     new:
       header: Reset password
-      description: If you forgot your password to sign in to %{name}, you can request to reset it by providing your e-mail here. We will send you an e-mail containing a link that will allow you to reset your password.
+      description: If you forgot your password to sign in to %{name}, you can request to reset it here. We send a link by e-mail, or a code by SMS.
       email: E-mail
+      phone: Phone number
+      tab_email: E-mail
+      tab_phone: Phone
       go_on: Reset password
       cancel: Back
     recover:
       cancel: Back
+    recover_code:
+      header: Enter the code
+      description: We sent a code by SMS to %{phone}. Enter it below to reset your password.
+      code: Code from SMS
+      caps_or_not: We do not care about upper or lower case letters.
+      go_on: Continue
+      cancel: Back
+    reset:
+      header: New password
+      description: Choose a new password for signing in on %{name}.
+      new_password: New password
+      go_on: Change password
     wait:
       header: ✅
       description: You will recieve an e-mail with instructions for resetting your password.

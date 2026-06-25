@@ -20,6 +20,52 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert personal_data
   end
 
+  test 'recovering a password with a phone number uses an SMS code' do
+    Authentication::Services::SmsSender.reset!
+    phone = '+4520123456'
+    identifier = Authentication::Identifier.phone(phone)
+    auth = Authentication::Services::Authenticate.new(phone: phone, password: 'old')
+    auth.register!
+
+    # Request recovery by phone -> code by SMS, redirect to code entry
+    post '/password/recover', params: { phone: phone }
+    assert_redirected_to recover_code_password_path
+
+    code = VerificationCode.find_for(identifier)
+    assert code
+    sms = Authentication::Services::SmsSender.deliveries.last
+    assert_equal phone, sms[:to]
+    assert_includes sms[:body], code.code
+    assert_empty ActionMailer::Base.deliveries
+
+    # A wrong code re-renders
+    post '/password/recover_code', params: { verification_code: 'nope' }
+    assert_response :success
+
+    # The right code moves on to the reset form
+    post '/password/recover_code', params: { verification_code: code.code }
+    assert_redirected_to reset_password_path
+
+    # Set a new password
+    post '/password/reset', params: { new_password: 'brandnew' }
+    assert_redirected_to login_path
+
+    # Old password no longer works, the new one does
+    assert_raises Authentication::Password::NotMatching do
+      Authentication::Services::Authenticate::Existing.call(identifier, 'old')
+    end
+    uid, key = Authentication::Services::Authenticate::Existing.call(identifier, 'brandnew')
+    assert_equal auth.user_id, uid
+    assert key
+  end
+
+  test 'recovering with an unknown phone number reveals nothing and sends no SMS' do
+    Authentication::Services::SmsSender.reset!
+    post '/password/recover', params: { phone: '+4520000000' }
+    assert_redirected_to recover_code_password_path
+    assert_empty Authentication::Services::SmsSender.deliveries
+  end
+
   test 'recovering password when mail not present' do
     assert_emails 1 do
       post '/password/recover', params: { email: 'not@there.com' }

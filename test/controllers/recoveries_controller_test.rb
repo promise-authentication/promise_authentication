@@ -12,7 +12,7 @@ class RecoveriesControllerTest < ActionDispatch::IntegrationTest
     user_id = auth.user_id
 
     # Request the recovery
-    Authentication::Services::SendRecoveryMail.new(email: email).call
+    Authentication::Services::SendRecovery.new(identifier: Authentication::Identifier.email(email)).call
     token = Authentication::RecoveryToken.find_by_user_id(user_id).token
 
     # Get the view

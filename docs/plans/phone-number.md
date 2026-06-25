@@ -60,13 +60,13 @@ listener projects both event types into one unified read model.
 - [x] i18n: tabs, phone labels/help, SMS sent/resent copy, phone attribute name (en + da)
 - [x] Tests: phone signup → SMS code → password → sign-in; phone login; invalid-phone re-render. Full suite green: 116 runs, 0 failures.
 
-### Chunk 4 — Password recovery via SMS code
-- [ ] Generalize `SendRecoveryMail` → `SendRecovery`: email=link (unchanged), phone=code; mint `RecoveryToken` server-side + issue `VerificationCode`; SMS the code; stash identifier hash in session; don't leak unknown numbers
-- [ ] New "enter recovery code" page (generalized from verify-code view); skip `passwords/wait` for phone
-- [ ] `RecoveriesController#ensure_recoverable`: resolve token from session (phone) or `params[:token_id]` (email link); `RecoverySetPassword` unchanged
-- [ ] Routes: phone recovery-code entry/verify actions on `password` resource
-- [ ] `passwords/new`: Email | Phone toggle
-- [ ] Tests: phone recovery end-to-end
+### Chunk 4 — Password recovery via SMS code ✅
+- [x] `SendRecoveryMail` → `SendRecovery`: email=link (unchanged), phone=code; mints `RecoveryToken` server-side + issues a `VerificationCode` delivered by SMS; doesn't reveal unknown phone numbers
+- [x] Phone flow lives in `PasswordsController`: `recover` branches; new `recover_code` (enter SMS code → unlocks token into session) and `reset` (set new password from session token) actions + views. Token never leaves the server for phone; `RecoverySetPassword` unchanged
+- [x] Email recovery untouched (link → `RecoveriesController`)
+- [x] Routes: `recover_code` + `reset` members on `password`
+- [x] `passwords/new`: Email | Phone toggle; new `recover_code`/`reset` views; i18n (en + da)
+- [x] Tests: phone recovery end-to-end (SMS code → reset → sign in with new password), unknown-number reveals nothing; updated recoveries test to `SendRecovery`. Full suite green: 118 runs, 0 failures.
 
 ### Chunk 5 — Change identifier on dashboard
 - [ ] Generalize `ChangeEmail` → `ChangeIdentifier`; `EmailsController` identifier-aware
