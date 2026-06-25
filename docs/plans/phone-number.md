@@ -68,10 +68,11 @@ listener projects both event types into one unified read model.
 - [x] `passwords/new`: Email | Phone toggle; new `recover_code`/`reset` views; i18n (en + da)
 - [x] Tests: phone recovery end-to-end (SMS code → reset → sign in with new password), unknown-number reveals nothing; updated recoveries test to `SendRecovery`. Full suite green: 118 runs, 0 failures.
 
-### Chunk 5 — Change identifier on dashboard
-- [ ] Generalize `ChangeEmail` → `ChangeIdentifier`; `EmailsController` identifier-aware
-- [ ] Views: dashboard identifier change supports phone
-- [ ] Tests
+### Chunk 5 — Change identifier on dashboard ✅
+- [x] `ChangeEmail` → `ChangeIdentifier` (claims/unclaims email or phone); `ChangeEmail` kept as a shim for the existing test
+- [x] `EmailsController` identifier-aware (from = current identifier, to = entered email/phone; verifies via mail or SMS)
+- [x] Views: `emails/edit` gets the Email | Phone toggle; `emails/verify` channel-aware copy; footer link relabelled "Change sign-in" (en + da)
+- [x] Tests: `ChangeIdentifier` (email→phone + wrong code); controller integration changing e-mail→phone end-to-end. Full suite green: 121 runs, 0 failures.
 
 ---
 

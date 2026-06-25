@@ -28,7 +28,7 @@ en:
       logout: Sign out
       login: Sign in
       change_password: Change password
-      change_email: Change e-mail
+      change_email: Change sign-in
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on identity provider."
@@ -144,15 +144,22 @@ en:
       confirmation_not_matching: "You have not provided the same e-mail twice. Please try again."
   emails:
     edit:
-      header: Change e-mail
-      description: Here you can change the e-mail you use for signing in to %{name}. Please note that you will have to verify your new e-mail before you can use it.
-      go_on: Change e-mail
+      header: Change sign-in
+      description: Here you can change the e-mail or phone number you use for signing in to %{name}. You will have to verify the new one before you can use it.
+      go_on: Change
       email: New e-mail
+      phone: New phone number
+      tab_email: E-mail
+      tab_phone: Phone
     verify:
       title: Check your inbox
+      title_sms: Check your messages
       we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong> with a code. Please provide the code below.
       we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new code. Please provide the code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
+      we_sent_you_an_sms_html: We sent you a code by SMS at <em>%{at}</em> to <strong>%{phone}</strong>. Please provide the code below.
+      we_resent_you_an_sms_html: The code you provided was incorrect. We have sent a new code by SMS to <em>%{phone}</em> at <strong>%{at}</strong>. Please provide the code below.
       code: Code from e-mail (starting with "%{code_start}")
+      code_sms: Code from SMS (starting with "%{code_start}")
       help: The code you need to provide starts with "%{code_start}" and consists of a total of %{code_length} letters or numbers.
       caps_or_not: We do not care about upper or lower case letters.
       send_new_code: Send new code

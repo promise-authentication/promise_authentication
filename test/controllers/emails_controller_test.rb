@@ -88,6 +88,42 @@ class EmailsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @email, jar.encrypted[:email]
   end
 
+  test 'changing from an e-mail to a phone number' do
+    Authentication::Services::SmsSender.reset!
+    email = 'hello@world.com'
+    phone = '+4520123456'
+    password = 'old'
+    Authentication::Services::Authenticate.new(email: email, password: password).register!
+    post '/authenticate', params: { email: email, password: password, remember_me: 1 }
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    user_id = jar.encrypted[:user_id]
+
+    # Request the change to a phone number -> code by SMS
+    post '/email', params: { phone: phone }
+    assert_response :redirect
+    code = VerificationCode.find_for(Authentication::Identifier.phone(phone))
+    assert code
+    assert_equal phone, Authentication::Services::SmsSender.deliveries.last[:to]
+
+    # Confirm with the SMS code
+    post '/email', params: { phone: phone, email_verification_code: code.code }
+    assert_redirected_to dashboard_path
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert_equal user_id, jar.encrypted[:user_id]
+    assert_equal phone, jar.encrypted[:identifier]
+    assert_equal 'phone', jar.encrypted[:identifier_type]
+    assert_nil jar.encrypted[:email]
+
+    # Sign in with the phone works; the old e-mail no longer does
+    post '/authenticate', params: { phone: phone, password: password, remember_me: 1 }
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert_equal user_id, jar.encrypted[:user_id]
+
+    post '/authenticate', params: { email: email, password: password, remember_me: 1 }
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert_nil jar.encrypted[:user_id]
+  end
+
   test 'failing when no email provided' do
     @email = 'hello@world.com'
     @old_password = 'old'

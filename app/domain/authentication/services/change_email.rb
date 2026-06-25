@@ -1,35 +1,14 @@
-class Authentication::Services::ChangeEmail
-  include ActiveModel::Model
+# Backwards-compatible e-mail-to-e-mail wrapper around ChangeIdentifier.
+class Authentication::Services::ChangeEmail < Authentication::Services::ChangeIdentifier
+  attr_accessor :from_email, :to_email
 
-  attr_accessor :user_id, :confirmation_code, :from_email, :to_email
+  validates :from_email, :to_email, presence: true
 
-  validates :user_id, :confirmation_code, :from_email, :to_email, presence: true
+  def from_identifier
+    Authentication::Identifier.email(from_email)
+  end
 
-  def call
-    # Verify the confirmation code
-    verifier = Authentication::Services::PrepareEmailForValidation.new(
-      email: to_email
-    )
-    if verifier.verify!(confirmation_code)
-      # First claim the new one
-      Authentication::Commands::ClaimEmail.new(
-        hashed_email: Authentication::HashedEmail.from_cleartext(to_email),
-        user_id: user_id,
-        email_verified_at: Time.zone.now
-      ).execute!
-      # Then unclaim the old one
-      Authentication::Commands::UnclaimEmail.new(
-        hashed_email: Authentication::HashedEmail.from_cleartext(from_email),
-        user_id: user_id
-      ).execute!
-
-      # Optionally, reset the verification code after successful change
-      verifier.reset!
-
-      true
-    else
-      errors.add(:confirmation_code, 'is invalid')
-      false
-    end
+  def to_identifier
+    Authentication::Identifier.email(to_email)
   end
 end

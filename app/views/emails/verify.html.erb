@@ -3,7 +3,7 @@
     <div class="w-full flex items-center flex-col">
       <div class="flex flex-1 flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
         <h2 class="text-lg text-primary font-bold leading-none">
-          <%= t('.title') %>
+          <%= signup_identifier&.phone? ? t('.title_sms') : t('.title') %>
         </h2>
         <a href="javascript:void(toggleDescription());" class="flex flex-row items-center space-x-1">
           <%= image_tag('logo.png', class: 'h-4') %>
@@ -15,18 +15,26 @@
       <div class="w-full">
         <% if flash[:resent_code] %>
           <div class="bg-red-500 text-white p-3 rounded">
-            <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+            <% if signup_identifier&.phone? %>
+              <%= t '.we_resent_you_an_sms_html', phone: registration_configuration[:phone], at: local_time(@code.created_at, format: :long) %>
+            <% else %>
+              <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+            <% end %>
           </div>
         <% else %>
           <div class="block text-primary">
-            <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+            <% if signup_identifier&.phone? %>
+              <%= t '.we_sent_you_an_sms_html', phone: registration_configuration[:phone], at: local_time(@code.created_at, format: :long) %>
+            <% else %>
+              <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+            <% end %>
           </div>
         <% end %>
       </div>
       <div class="w-full flex flex-col mt-6 pb-4">
         <label class="w-full">
           <p class="input-label">
-            <%= t '.code', code_start: @code.code.first %>
+            <%= signup_identifier&.phone? ? t('.code_sms', code_start: @code.code.first) : t('.code', code_start: @code.code.first) %>
           </p>
           <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", placeholder: "#{@code.code.first}...", pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'login-input', autofocus: true, required: true, tabindex: 1 %>
           <p class="text-secondary text-xs mt-1">

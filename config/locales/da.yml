@@ -28,7 +28,7 @@ da:
       logout: Log ud
       login: Log ind
       change_password: Skift password
-      change_email: Skift e-mail
+      change_email: Skift login
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on pure identity provider."
@@ -144,15 +144,22 @@ da:
       confirmation_not_matching: "Du har ikke skrevet den samme mail to gange. Prøv igen."
   emails:
     edit:
-      header: Skift e-mail
-      description: Her vælger du en ny e-mail som du vil logge ind med på %{name}.
-      go_on: Skift e-mail
+      header: Skift login
+      description: Her kan du ændre den e-mail eller det telefonnummer du logger ind med på %{name}. Du skal bekræfte det nye, før du kan bruge det.
+      go_on: Skift
       email: Ny e-mail
+      phone: Nyt telefonnummer
+      tab_email: E-mail
+      tab_phone: Telefon
     verify:
       title: Check din indbakke
+      title_sms: Check dine beskeder
       we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med en kode. Indtast venligst koden herunder.
       we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
+      we_sent_you_an_sms_html: Vi har <em>%{at}</em> sendt dig en kode på SMS til <strong>%{phone}</strong>. Indtast venligst koden herunder.
+      we_resent_you_an_sms_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny kode på SMS til <strong>%{phone}</strong>. Indtast venligst den nye kode herunder.
       code: Kode fra e-mail (starter med "%{code_start}")
+      code_sms: Kode fra SMS (starter med "%{code_start}")
       help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.
       caps_or_not: Vi gør ikke forskel på store og små bogtaver.
       send_new_code: Send ny kode
