@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_25_090000) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_25_090100) do
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
     t.integer "user_id"
@@ -111,12 +111,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_25_090000) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "email_verification_codes", id: :string, force: :cascade do |t|
-    t.string "code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "event_store_events", id: { type: :string, limit: 36 }, force: :cascade do |t|
     t.string "event_type", null: false
     t.binary "metadata"
@@ -152,5 +146,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_25_090000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["expires_at"], name: "index_trust_certificates_on_expires_at"
+  end
+
+  create_table "verification_codes", id: :string, force: :cascade do |t|
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 end

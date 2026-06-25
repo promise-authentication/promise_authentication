@@ -7,6 +7,8 @@ en:
   email_changed: E-mail changed successfully.
   invalid_email_verification_code: The e-mail verification code is invalid. Please try again.
   error_changing_email: There was an error changing your e-mail. Please try again.
+  sms:
+    verification_code: "%{code} is your %{relying_party} verification code. Sign in with Promise."
   activemodel:
     attributes:
       authentication/services/authenticate:

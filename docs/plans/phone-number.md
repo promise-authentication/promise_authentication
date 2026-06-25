@@ -41,13 +41,14 @@ listener projects both event types into one unified read model.
 - [x] Data migration: backfill existing `authentication_hashed_emails` rows as `identifier_type: 'email'`, then drop old table (reversible `down`)
 - [x] Tests: `identifier_test` (incl. phone E.164 + collision), `hashed_identifier_test`. Full suite green: 98 runs, 0 failures.
 
-### Chunk 2 — SMS infra + generalized verification
-- [ ] `Authentication::Services::SmsSender` wrapping MessageBird, with SMTP-style retry/backoff; no-op/collector in test
-- [ ] Generalize `email_verification_codes` → `verification_codes` model keyed by identifier hash
-- [ ] Generalize `PrepareEmailForValidation` → `PrepareIdentifierForValidation`: route delivery (mailer for email, SmsSender for phone)
-- [ ] `Phone` aggregate + `PhoneClaimed`/`PhoneUnclaimed` events + `ClaimPhone`/`UnclaimPhone` commands
-- [ ] `EventListener`: handle phone events; project both email + phone into `authentication_hashed_identifiers`
-- [ ] Tests: SmsSender (stubbed), verification routing, listener projection
+### Chunk 2 — SMS infra + generalized verification ✅
+- [x] `Authentication::Services::SmsSender` wrapping MessageBird, SMTP-style retry/backoff; `:test` delivery collector (default outside production, like ActionMailer); `MESSAGEBIRD_API_KEY`/`MESSAGEBIRD_ORIGINATOR` env
+- [x] Generalize `email_verification_codes` → `verification_codes` (`VerificationCode` model + `find_for(identifier)`); `EmailVerificationCode` kept as shim subclass
+- [x] Generalize `PrepareEmailForValidation` → `PrepareIdentifierForValidation`: routes delivery (mailer for email, SmsSender for phone); `PrepareEmailForValidation` kept as shim subclass
+- [x] `Phone` aggregate + `PhoneClaimed`/`PhoneUnclaimed` events + `ClaimPhone`/`UnclaimPhone` commands
+- [x] `EventListener`: handle `PhoneClaimed`; project both email + phone into `authentication_hashed_identifiers`
+- [x] i18n `sms.verification_code` (en + da)
+- [x] Tests: SmsSender, verification routing (email→mail, phone→SMS), `VerificationCode.find_for`, ClaimPhone projection. Full suite green: 113 runs, 0 failures.
 
 ### Chunk 3 — Signup & login with phone
 - [ ] `Authenticate` + `Register` + `Existing`: use `Identifier` value object; claim phone when type=phone

@@ -1,20 +1,8 @@
-class EmailVerificationCode < ApplicationRecord
-  module HumanReadableCode
-    ALPHABET = 'abcdefghkmnpqrstuvwxyz23456789'.freeze
-    def self.generate(range)
-      # The length should be a random number in the range
-      length = range.to_a.sample(1, random: SecureRandom).first
-      # The code should be a random string of the given length
-      # sampled from the alphabet
-      Array.new(length) { ALPHABET.chars.sample(1, random: SecureRandom).first }.join
-    end
-  end
-
+# Backwards-compatible shim for the e-mail-specific lookup. Shares the
+# verification_codes table with its parent. New code should use
+# VerificationCode.find_for(identifier).
+class EmailVerificationCode < VerificationCode
   def self.find_by_cleartext(email)
-    hashed = Authentication::HashedEmail.from_cleartext(email)
-
-    find(hashed)
-  rescue ActiveRecord::RecordNotFound
-    return nil
+    find_for(Authentication::Identifier.email(email))
   end
 end
