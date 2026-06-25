@@ -3,8 +3,10 @@
 #
 # Delivery method:
 #   :messagebird - really send (default in production)
-#   :test        - collect into .deliveries instead of sending (default
-#                  everywhere else, mirroring ActionMailer test delivery)
+#   :logger      - log the message (incl. the code) so you can read it from
+#                  the server output while developing (default in development)
+#   :test        - collect into .deliveries instead of sending (default in
+#                  test, mirroring ActionMailer test delivery)
 class Authentication::Services::SmsSender
   include ActiveModel::Model
 
@@ -16,7 +18,11 @@ class Authentication::Services::SmsSender
     attr_writer :delivery_method
 
     def delivery_method
-      @delivery_method ||= Rails.env.production? ? :messagebird : :test
+      @delivery_method ||= case Rails.env
+                           when 'production' then :messagebird
+                           when 'test' then :test
+                           else :logger
+                           end
     end
 
     def deliveries
@@ -38,6 +44,9 @@ class Authentication::Services::SmsSender
     case self.class.delivery_method
     when :test
       self.class.deliveries << { to: to, body: body }
+    when :logger
+      self.class.deliveries << { to: to, body: body }
+      Rails.logger.info("[SmsSender] To #{to}: #{body}")
     when :messagebird
       deliver!
     else
