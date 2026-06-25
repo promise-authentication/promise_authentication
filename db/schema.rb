@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_16_072534) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_25_090000) do
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
     t.integer "user_id"
@@ -52,11 +52,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_16_072534) do
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
   end
 
-  create_table "authentication_hashed_emails", id: :string, force: :cascade do |t|
+  create_table "authentication_hashed_identifiers", id: :string, force: :cascade do |t|
     t.string "user_id"
+    t.string "identifier_type", default: "email", null: false
+    t.datetime "verified_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "email_verified_at"
+    t.index ["user_id"], name: "index_authentication_hashed_identifiers_on_user_id"
   end
 
   create_table "authentication_key_pairs", id: :string, force: :cascade do |t|

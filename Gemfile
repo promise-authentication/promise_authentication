@@ -10,6 +10,10 @@ gem 'rbnacl', '7.1.1'
 
 gem 'local_time'
 gem 'email_inquire' # For validating email addresses
+gem 'phonelib' # For validating and normalising phone numbers (E.164)
+
+# SMS delivery (verification & recovery codes for phone identifiers)
+gem 'messagebird-rest', require: 'messagebird'
 
 gem 'retries'
 

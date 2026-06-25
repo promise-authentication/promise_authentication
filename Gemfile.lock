@@ -216,6 +216,8 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
+    messagebird-rest (5.0.0)
+      jwt (< 4)
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
@@ -250,6 +252,7 @@ GEM
     nokogiri (1.18.7-x86_64-linux-musl)
       racc (~> 1.4)
     pg (1.5.9)
+    phonelib (0.10.22)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -454,7 +457,9 @@ DEPENDENCIES
   jwt
   listen
   local_time
+  messagebird-rest
   pg
+  phonelib
   puma
   rails (~> 8)
   rails_event_store (= 1.3.0)
