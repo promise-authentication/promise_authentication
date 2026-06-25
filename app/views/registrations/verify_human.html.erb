@@ -18,7 +18,11 @@
         </p>
       <% end %>
       <p class="mt-2 w-full">
-        <%= t('.confirm_email_html', email: registration_configuration[:email]) %>
+        <% if signup_identifier&.phone? %>
+          <%= t('.confirm_sms_html', phone: registration_configuration[:phone]) %>
+        <% else %>
+          <%= t('.confirm_email_html', email: registration_configuration[:email]) %>
+        <% end %>
       </p>
       <div class="w-full flex flex-col mt-6 pb-4">
         <div class="w-full h-24 flex items-center justify-end">

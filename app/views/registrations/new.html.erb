@@ -1,5 +1,5 @@
 <%= content_for :body do %>
-  <%= form_tag registrations_path(registration_configuration(:email)), class: 'w-full' do %>
+  <%= form_tag registrations_path(registration_configuration(:email, :phone)), class: 'w-full' do %>
     <div class="w-full flex items-center flex-col">
       <div class="flex flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
         <h2 class="text-lg text-primary font-bold leading-none">
@@ -17,69 +17,104 @@
           <%= t '.enter_credentials_html', name: relying_party&.name || name %>
         </p>
       <% end %>
-      <div class="w-full flex flex-col bg-blue-50 px-4 rounded-lg mt-6 pb-4 shadow relative">
-        <p class="absolute w-8 h-8 rounded-full bg-blue-50 -top-3 left-1/2 -translate-x-1/2 flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-blue-700/20">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-          </svg>
-        </p>
-        <label class="w-full mt-8">
-          <div class="w-full mb-2">
-            <% if @smtp_error %>
-              <div class="bg-red-500 text-white text-sm p-3 rounded">
-                <%= t '.we_could_not_send_email_html', email: registration_configuration[:email], message: @smtp_error.message %>
-              </div>
-            <% end %>
-          </div>
-          <p class="input-label">
-            E-mail
-          </p>
-          <%= email_field_tag :email, @email_validator&.replacement || registration_configuration[:email], class: 'login-input' + (!@email_validator || @email_validator.valid? ? '' : ' with-error'), autofocus: true, required: true, tabindex: 1 %>
-          <p class="text-secondary text-xs mt-1">
-            <%= t '.we_save_no_data_html' %>
-          </p>
 
-        </label>
-        <details class="mt-3 text-sm text-secondary">
-          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-            </svg>
-            <%= t '.what_email_question' %>
-          </summary>
-          <p class="mt-2 text-xs pl-7"><%= t '.what_email_help' %></p>
-        </details>
-        <details class="mt-2 text-sm text-secondary">
-          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-            </svg>
-            <%= t '.child_account_question' %>
-          </summary>
-          <p class="mt-2 text-xs pl-7"><%= t '.child_account_help_html' %></p>
-        </details>
-        <% if @email_validator && !@email_validator&.valid? %>
-          <div class="w-full mt-2">
-            <%= hidden_field_tag :email_validation_shown_for, @email_validator.email %>
-            <% if @email_validator.hint? %>
-              <div class="bg-red-500 text-white text-sm p-3 rounded">
-                <p>
-                  <span class="">
-                    <%= t '.did_you_mean_html', old_email: registration_configuration[:email], email: @email_validator.replacement %>
-                  </span>
-                </p>
-              </div>
-            <% else %>
+      <div class="w-full flex flex-row mt-6 mb-0 -mb-px" role="tablist">
+        <button type="button" id="tab-email" onclick="selectIdentifier('email')" class="identifier-tab flex-1 py-2 text-center text-sm font-bold border-b-2 border-blue-700 text-blue-900">
+          <%= t '.tab_email' %>
+        </button>
+        <button type="button" id="tab-phone" onclick="selectIdentifier('phone')" class="identifier-tab flex-1 py-2 text-center text-sm border-b-2 border-transparent text-secondary">
+          <%= t '.tab_phone' %>
+        </button>
+      </div>
+
+      <div class="w-full flex flex-col bg-blue-50 px-4 rounded-lg rounded-tl-none mt-0 pb-4 shadow relative">
+        <div id="panel-email" class="w-full">
+          <label class="w-full mt-8 block">
+            <div class="w-full mb-2">
+              <% if @smtp_error %>
+                <div class="bg-red-500 text-white text-sm p-3 rounded">
+                  <%= t '.we_could_not_send_email_html', email: registration_configuration[:email], message: @smtp_error.message %>
+                </div>
+              <% end %>
+            </div>
+            <p class="input-label">
+              E-mail
+            </p>
+            <%= email_field_tag :email, @email_validator&.replacement || registration_configuration[:email], id: 'email', class: 'login-input' + (!@email_validator || @email_validator.valid? ? '' : ' with-error'), autofocus: true, tabindex: 1 %>
+            <p class="text-secondary text-xs mt-1">
+              <%= t '.we_save_no_data_html' %>
+            </p>
+          </label>
+          <details class="mt-3 text-sm text-secondary">
+            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+              </svg>
+              <%= t '.what_email_question' %>
+            </summary>
+            <p class="mt-2 text-xs pl-7"><%= t '.what_email_help' %></p>
+          </details>
+          <details class="mt-2 text-sm text-secondary">
+            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+              </svg>
+              <%= t '.child_account_question' %>
+            </summary>
+            <p class="mt-2 text-xs pl-7"><%= t '.child_account_help_html' %></p>
+          </details>
+          <% if @email_validator && !@email_validator&.valid? %>
+            <div class="w-full mt-2">
+              <%= hidden_field_tag :email_validation_shown_for, @email_validator.email %>
+              <% if @email_validator.hint? %>
+                <div class="bg-red-500 text-white text-sm p-3 rounded">
+                  <p>
+                    <span class="">
+                      <%= t '.did_you_mean_html', old_email: registration_configuration[:email], email: @email_validator.replacement %>
+                    </span>
+                  </p>
+                </div>
+              <% else %>
+                <div class="bg-yellow-700 text-white text-sm p-3 rounded">
+                  <p>
+                    <span class="">
+                      <%= t '.your_email_seems_invalid' %>
+                    </span>
+                  </p>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <div id="panel-phone" class="w-full hidden">
+          <label class="w-full mt-8 block">
+            <p class="input-label">
+              <%= t '.phone_label' %>
+            </p>
+            <%= telephone_field_tag :phone, registration_configuration[:phone], id: 'phone', class: 'login-input' + (@phone_invalid ? ' with-error' : ''), autocomplete: 'tel', disabled: true, tabindex: 1 %>
+            <p class="text-secondary text-xs mt-1">
+              <%= t '.we_save_no_phone_html' %>
+            </p>
+          </label>
+          <% if @phone_invalid %>
+            <div class="w-full mt-2">
               <div class="bg-yellow-700 text-white text-sm p-3 rounded">
-                <p>
-                  <span class="">
-                    <%= t '.your_email_seems_invalid' %>
-                  </span>
-                </p>
+                <p><%= t '.your_phone_seems_invalid' %></p>
               </div>
-            <% end %>
-          </div>
-        <% end %>
+            </div>
+          <% end %>
+          <details class="mt-3 text-sm text-secondary">
+            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+              </svg>
+              <%= t '.what_phone_question' %>
+            </summary>
+            <p class="mt-2 text-xs pl-7"><%= t '.what_phone_help' %></p>
+          </details>
+        </div>
+
         <div class="mt-4 flex w-full flex-col justify-end items-end">
           <%= button_tag type: 'submit', class: 'button primary mt-2 appearance-none', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
             <%= t('.go_on') %><%= arrow_right %>
@@ -92,5 +127,41 @@
         </p>
       <% end %>
     </div>
+  <% end %>
+
+  <script>
+    function selectIdentifier(type) {
+      var isPhone = type === 'phone';
+      var emailPanel = document.getElementById('panel-email');
+      var phonePanel = document.getElementById('panel-phone');
+      var emailInput = document.getElementById('email');
+      var phoneInput = document.getElementById('phone');
+      var emailTab = document.getElementById('tab-email');
+      var phoneTab = document.getElementById('tab-phone');
+
+      emailPanel.classList.toggle('hidden', isPhone);
+      phonePanel.classList.toggle('hidden', !isPhone);
+
+      // Only the active field should be submitted.
+      emailInput.disabled = isPhone;
+      phoneInput.disabled = !isPhone;
+
+      emailTab.classList.toggle('font-bold', !isPhone);
+      emailTab.classList.toggle('border-blue-700', !isPhone);
+      emailTab.classList.toggle('text-blue-900', !isPhone);
+      emailTab.classList.toggle('border-transparent', isPhone);
+      emailTab.classList.toggle('text-secondary', isPhone);
+
+      phoneTab.classList.toggle('font-bold', isPhone);
+      phoneTab.classList.toggle('border-blue-700', isPhone);
+      phoneTab.classList.toggle('text-blue-900', isPhone);
+      phoneTab.classList.toggle('border-transparent', !isPhone);
+      phoneTab.classList.toggle('text-secondary', !isPhone);
+
+      (isPhone ? phoneInput : emailInput).focus();
+    }
+  </script>
+  <% if signup_identifier&.phone? %>
+    <script>selectIdentifier('phone');</script>
   <% end %>
 <% end %>

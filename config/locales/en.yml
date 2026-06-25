@@ -13,6 +13,7 @@ en:
     attributes:
       authentication/services/authenticate:
         email: E-mail
+        phone: Phone number
         password: Password
       authentication/services/change_password:
         current_password: Current password
@@ -61,20 +62,32 @@ en:
       child_account_help_html: If your child doesn't have their own e-mail, you can use the <code class="bg-white px-1 rounded">yourname+childsname@gmail.com</code> trick. Most providers (Gmail, Outlook, iCloud, Fastmail and more) ignore everything between the <code>+</code> and the <code>@</code>, so the e-mail still lands in your own inbox — but it counts as a unique e-mail here. That way you can manage your child's account without creating a separate mailbox.
       did_you_mean_html: We changed your email from %{old_email} to <strong>%{email}</strong>. Is that correct? Otherwise, please change it back, and continue.
       your_email_seems_invalid: Are you sure this is a valid e-mail?
+      tab_email: E-mail
+      tab_phone: Phone
+      phone_label: Phone number
+      we_save_no_phone_html: Your phone number will <em class="whitespace-nowrap">not be saved</em> in a readable format.
+      what_phone_question: What phone number should I use?
+      what_phone_help: Use your personal mobile number. You will use it every time you sign in, and we send you a code by SMS to confirm it is yours.
+      your_phone_seems_invalid: Are you sure this is a valid phone number?
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
     verify_human:
       title: Are you a human?
       description: Before we go on, we need to verify that you are a human being.
       description_html: Before we send you on to <span class="whitespace-nowrap">%{name}</span>, we need to verify that you are a human being.
       confirm_email_html: We will send a code to <strong>%{email}</strong>.
+      confirm_sms_html: We will send a code by SMS to <strong>%{phone}</strong>.
       go_on: I'm a human
       going_html: 'Sending&hellip;'
       cancel: Back
     verify_email:
       title: Check your inbox
+      title_sms: Check your messages
       we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong> with a code. Please provide the code below.
       we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new code. Please provide the code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
+      we_sent_you_an_sms_html: We sent you a code by SMS at <em>%{at}</em> to <strong>%{phone}</strong>. Please provide the code below.
+      we_resent_you_an_sms_html: The code you provided was incorrect. We have sent a new code by SMS to <em>%{phone}</em> at <strong>%{at}</strong>. Please provide the code below.
       code: Code from e-mail (starting with "%{code_start}")
+      code_sms: Code from SMS (starting with "%{code_start}")
       help: The code you need to provide starts with "%{code_start}" and consists of a total of %{code_length} letters or numbers.
       caps_or_not: We do not care about upper or lower case letters.
       send_new_code: Send new code

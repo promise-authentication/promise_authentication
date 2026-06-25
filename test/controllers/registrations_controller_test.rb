@@ -143,6 +143,81 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'the signup flow with a phone number' do
+    Authentication::Services::SmsSender.reset!
+    phone = '+4520123456'
+    identifier = Authentication::Identifier.phone(phone)
+
+    # Identify with a phone number -> turnstile
+    post registrations_url, params: { phone: phone }
+    assert_redirected_to verify_human_registrations_url(phone: phone)
+
+    # Pass turnstile -> a code is sent by SMS (not e-mail)
+    post verify_human_registrations_url, params: { phone: phone }
+    assert_redirected_to verify_email_registrations_url(phone: phone)
+    assert_empty ActionMailer::Base.deliveries
+
+    code = VerificationCode.find_for(identifier)
+    assert code
+    sms = Authentication::Services::SmsSender.deliveries.last
+    assert_equal phone, sms[:to]
+    assert_includes sms[:body], code.code
+
+    # A wrong code sends a new one
+    post verify_email_registrations_url(phone: phone, email_verification_code: 'wrong')
+    assert_response :success
+    new_code = VerificationCode.find_for(identifier)
+    assert_not_equal code.code, new_code.code
+
+    # The correct code moves on to the password step
+    post verify_email_registrations_url(phone: phone, email_verification_code: new_code.code)
+    assert_redirected_to create_password_registrations_url(phone: phone, email_verification_code: new_code.code)
+
+    # Create a password and get signed in
+    Authentication::RelyingParty.stub :fetch, nil do
+      post create_password_registrations_url(
+        phone: phone,
+        email_verification_code: new_code.code,
+        password: 'secret',
+        password_confirmation: 'secret',
+        remember_me: 1
+      )
+      assert_redirected_to confirm_path
+
+      jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+      user_id = jar.encrypted[:user_id]
+      assert_equal phone, jar.encrypted[:identifier]
+      assert_equal 'phone', jar.encrypted[:identifier_type]
+      assert_nil jar.encrypted[:email]
+
+      vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
+      assert Authentication::Vault.personal_data(user_id, vault_key)
+
+      # The phone is recorded as a verified identifier
+      record = Authentication::HashedIdentifier.find_by_identifier(identifier)
+      assert_equal 'phone', record.identifier_type
+      assert record.verified_at
+    end
+  end
+
+  test 'logging in with a phone number' do
+    phone = '+4520123456'
+    Authentication::Services::Authenticate.new(phone: phone, password: 'secret').register!
+
+    post authenticate_url, params: { phone: phone, password: 'secret', remember_me: 1 }
+    assert_redirected_to %r(\Ahttp://www.example.com/me)
+
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert jar.encrypted[:user_id]
+    assert_equal phone, jar.encrypted[:identifier]
+    assert_equal 'phone', jar.encrypted[:identifier_type]
+  end
+
+  test 'an invalid phone number re-renders the form' do
+    post registrations_url, params: { phone: '123' }
+    assert_response :success
+  end
+
   test 'session login resets' do
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
     post authenticate_url,

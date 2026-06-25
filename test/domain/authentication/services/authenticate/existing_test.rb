@@ -16,7 +16,7 @@ class Authentication::Services::Authenticate::ExistingTest < ActiveSupport::Test
   end
 
   test 'when something there' do
-    Authentication::HashedEmail.stub :user_id_for_cleartext, 'uid' do
+    Authentication::HashedIdentifier.stub :user_id_for, 'uid' do
       mock = Minitest::Mock.new
       mock.expect :match!, true, [@password]
       mock.expect :vault_key_salt, Authentication::Vault.generate_salt
@@ -31,7 +31,7 @@ class Authentication::Services::Authenticate::ExistingTest < ActiveSupport::Test
   end
 
   test 'when something there it knows' do
-    Authentication::HashedEmail.stub :user_id_for_cleartext, 'uid' do
+    Authentication::HashedIdentifier.stub :user_id_for, 'uid' do
       assert @described_class.known?(@email)
     end
   end

@@ -50,15 +50,15 @@ listener projects both event types into one unified read model.
 - [x] i18n `sms.verification_code` (en + da)
 - [x] Tests: SmsSender, verification routing (email→mail, phone→SMS), `VerificationCode.find_for`, ClaimPhone projection. Full suite green: 113 runs, 0 failures.
 
-### Chunk 3 — Signup & login with phone
-- [ ] `Authenticate` + `Register` + `Existing`: use `Identifier` value object; claim phone when type=phone
-- [ ] `RegistrationsController`: identifier-aware create/verify/create_password; branch validation (EmailInquire vs Phonelib; keep "did you mean" for email only)
-- [ ] Session (`AuthenticatedConcern`): store `:identifier` + `:identifier_type`; `current_user.identifier`/`.identifier_type`; keep `.email` back-compat
-- [ ] `registration_configuration`: permit `:identifier`/`:identifier_type`/`:verification_code` (fallback to old params)
-- [ ] `AuthenticationController#authenticate`: identifier-aware login
-- [ ] Views: Email | Phone toggle on `registrations/new`; generalize `verify_email` copy
-- [ ] i18n: phone labels, SMS-sent copy, phone-invalid errors (da + en)
-- [ ] Tests: phone signup → SMS code → password → login (controller/integration)
+### Chunk 3 — Signup & login with phone ✅
+- [x] `Authenticate` (email/phone, presence-only login validation) + `Register` (claims phone or email) + `Existing` (accepts Identifier or legacy string)
+- [x] `RegistrationsController`: identifier-aware create/verify_human/verify_email/create_password; phone→Phonelib, email→EmailInquire ("did you mean" kept for email); email path still uses `PrepareEmailForValidation` (preserves the SMTP-error stub)
+- [x] Session (`AuthenticatedConcern`): store `:identifier`/`:identifier_type` (+`:email` for back-compat); `current_user.identifier`/`.identifier_type`; `logged_in?` keys off identifier; logout clears new keys
+- [x] `registration_configuration`: permit `:phone`; `signup_identifier` helper builds the Identifier from params
+- [x] `AuthenticationController#authenticate`: accepts `:phone`, surfaces email/phone validation errors
+- [x] Views: Email | Phone toggle on `registrations/new` (JS enables only the active field); phone-aware copy in verify_human/verify_email/create_password/verify_password; confirm + footer show `current_user.identifier`
+- [x] i18n: tabs, phone labels/help, SMS sent/resent copy, phone attribute name (en + da)
+- [x] Tests: phone signup → SMS code → password → sign-in; phone login; invalid-phone re-render. Full suite green: 116 runs, 0 failures.
 
 ### Chunk 4 — Password recovery via SMS code
 - [ ] Generalize `SendRecoveryMail` → `SendRecovery`: email=link (unchanged), phone=code; mint `RecoveryToken` server-side + issue `VerificationCode`; SMS the code; stash identifier hash in session; don't leak unknown numbers

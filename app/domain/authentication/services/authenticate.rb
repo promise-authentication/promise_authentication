@@ -3,14 +3,43 @@ class Authentication::Services::Authenticate
 
   EmailConfirmationError = Class.new(StandardError)
 
-  attr_writer :email
-  attr_accessor :password, :relying_party_id, :exisiting_account, :email_verified_at
+  attr_writer :email, :phone
+  attr_accessor :password, :relying_party_id, :exisiting_account, :verified_at
   attr_reader :user_id, :vault_key, :existing_account
 
-  validates :email, :password, presence: true
+  validates :password, presence: true
+  validate :identifier_must_be_present
 
+  # The identifier the user is authenticating with. A phone number takes
+  # precedence when both are (somehow) supplied.
+  def identifier
+    if @phone.present?
+      Authentication::Identifier.phone(@phone)
+    else
+      Authentication::Identifier.email(@email)
+    end
+  end
+
+  def identifier_type
+    identifier.type
+  end
+
+  # Back-compat: the cleaned e-mail (nil for phone identifiers).
   def email
-    clean_email(@email)
+    return nil unless identifier.email?
+
+    identifier.value
+  end
+
+  def phone
+    return nil unless identifier.phone?
+
+    identifier.value
+  end
+
+  # Back-compat alias used by the registration flow.
+  def email_verified_at=(time)
+    self.verified_at = time
   end
 
   def vault_key_base64
@@ -22,7 +51,7 @@ class Authentication::Services::Authenticate
   end
 
   def existing!
-    @user_id, @vault_key = Existing.call(email, password)
+    @user_id, @vault_key = Existing.call(identifier, password)
     @existing_account = !!@user_id
   end
 
@@ -31,26 +60,30 @@ class Authentication::Services::Authenticate
     self
   end
 
-  def clean_email(email)
-    email&.strip&.downcase
-  end
-
   def register!
-    @user_id, @vault_key = Register.call(email: email,
+    @user_id, @vault_key = Register.call(identifier: identifier,
                                          password: password,
                                          relying_party_id: relying_party&.id,
                                          legacy_account_user_id: legacy_account_user_id,
-                                         email_verified_at: email_verified_at,
+                                         verified_at: verified_at,
                                          relying_party_knows_password: legacy_account_user_id.present?)
     self
   end
 
   def legacy_account_user_id
-    return unless relying_party&.knows_legacy_account?(email)
+    return unless identifier.email? && relying_party&.knows_legacy_account?(identifier.value)
 
     relying_party.legacy_account_user_id_for(
-      email,
+      identifier.value,
       password
     )
+  end
+
+  private
+
+  # Login only requires a present identifier; format validation for new
+  # sign-ups happens in the controller (EmailInquire / Phonelib).
+  def identifier_must_be_present
+    errors.add(identifier.type, :blank) if identifier.value.blank?
   end
 end

@@ -1,19 +1,13 @@
 module Authentication::Services::Authenticate::Register
   module_function
 
-  def call(email:, password:, relying_party_id: nil, legacy_account_user_id: nil, relying_party_knows_password: false, email_verified_at: nil)
+  def call(identifier:, password:, relying_party_id: nil, legacy_account_user_id: nil, relying_party_knows_password: false, verified_at: nil)
     new_user_id = SecureRandom.uuid
-
-    hashed_email = Authentication::HashedEmail.from_cleartext(email)
 
     vault_key = nil
 
     ActiveRecord::Base.transaction do
-      Authentication::Commands::ClaimEmail.new(
-        user_id: new_user_id,
-        hashed_email: hashed_email,
-        email_verified_at: email_verified_at
-      ).execute!
+      claim_identifier(identifier, new_user_id, verified_at)
 
       data = Authentication::PersonalData.new
       if relying_party_id.present? && legacy_account_user_id.present?
@@ -34,5 +28,21 @@ module Authentication::Services::Authenticate::Register
     end
 
     [new_user_id, vault_key]
+  end
+
+  def claim_identifier(identifier, user_id, verified_at)
+    if identifier.phone?
+      Authentication::Commands::ClaimPhone.new(
+        user_id: user_id,
+        hashed_phone: identifier.digest,
+        phone_verified_at: verified_at
+      ).execute!
+    else
+      Authentication::Commands::ClaimEmail.new(
+        user_id: user_id,
+        hashed_email: identifier.digest,
+        email_verified_at: verified_at
+      ).execute!
+    end
   end
 end

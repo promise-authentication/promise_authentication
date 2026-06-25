@@ -52,7 +52,7 @@ class AuthenticationController < ApplicationController
   def authenticate
     do_logout!
 
-    @auth_request = ::Authentication::Services::Authenticate.new params.permit(:email, :password)
+    @auth_request = ::Authentication::Services::Authenticate.new params.permit(:email, :phone, :password)
     @auth_request.relying_party_id = relying_party&.id
 
     if @auth_request.valid?
@@ -65,8 +65,10 @@ class AuthenticationController < ApplicationController
       end
     else
       flash[:remember_me] = params[:remember_me]
-      if @auth_request.errors.include?(:email)
-        flash[:email_message] = @auth_request.errors.full_messages_for(:email).first
+      identifier_message = (@auth_request.errors.full_messages_for(:email) +
+                            @auth_request.errors.full_messages_for(:phone)).first
+      if identifier_message
+        flash[:email_message] = identifier_message
       else
         flash[:password_message] = @auth_request.errors.full_messages_for(:password).first
       end

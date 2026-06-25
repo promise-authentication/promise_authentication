@@ -4,7 +4,7 @@
       <%= t '.sign_in_on_html', relying_party_name: relying_party.name %>
     </h2>
     <p class="text-secondary text-sm max-w-xs text-center mt-3">
-      <%= t '.you_are_html', email: current_user.email, name: name %>
+      <%= t '.you_are_html', email: current_user.identifier, name: name %>
     </p>
     <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center appearance-none", autofocus: true do %>
       <span class="text-center">
@@ -24,7 +24,7 @@
 
     <div class="flex flex-col items-center">
       <span class="text-secondary">
-        <%= t '.not_you_html', email: current_user.email %>
+        <%= t '.not_you_html', email: current_user.identifier %>
       </span>
       <%= button_to t('.logout'), relogin_path(login_configuration), method: :delete, class: "button transparent small mt-2" %>
     </div>

@@ -13,6 +13,7 @@ da:
     attributes:
       authentication/services/authenticate:
         email: E-mail
+        phone: Telefonnummer
         password: Password
       authentication/services/change_password:
         current_password: Nuværende password
@@ -59,6 +60,13 @@ da:
       child_account_help_html: Hvis dit barn ikke har sin egen e-mail, kan du bruge <code class="bg-white px-1 rounded">ditnavn+barnetsnavn@gmail.com</code>-tricket. De fleste udbydere (Gmail, Outlook, iCloud, Fastmail og flere) ignorerer alt mellem <code>+</code> og <code>@</code>, så mailen lander stadig i din egen indbakke — men tæller som en unik e-mail her. På den måde kan du styre dit barns konto uden at oprette en ny mailkonto.
       did_you_mean_html: Vi har rettet din mail fra %{old_email} til <strong>%{email}</strong>. Er det korrekt? Ellers kan du rette den igen og fortsætte.
       your_email_seems_invalid: Er du sikker på, at det er en gyldig e-mail?
+      tab_email: E-mail
+      tab_phone: Telefon
+      phone_label: Telefonnummer
+      we_save_no_phone_html: Dit telefonnummer bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
+      what_phone_question: Hvilket telefonnummer skal jeg bruge?
+      what_phone_help: Brug dit personlige mobilnummer. Du skal bruge det hver gang du logger ind, og vi sender dig en kode på SMS for at bekræfte at det er dit.
+      your_phone_seems_invalid: Er du sikker på, at det er et gyldigt telefonnummer?
       go_on: Videre
       going_html: 'Øjeblik&hellip;'
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
@@ -67,14 +75,19 @@ da:
       description: Inden vi går videre, skal vi lige have bekræftet at du er et menneske.
       description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet at du er et menneske.
       confirm_email_html: Vi sender en kode til <strong>%{email}</strong>.
+      confirm_sms_html: Vi sender en kode på SMS til <strong>%{phone}</strong>.
       go_on: Jeg er et menneske
       going_html: 'Sender&hellip;'
       cancel: Tilbage
     verify_email:
       title: Check din indbakke
+      title_sms: Check dine beskeder
       we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med en kode. Indtast venligst koden herunder.
       we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
+      we_sent_you_an_sms_html: Vi har <em>%{at}</em> sendt dig en kode på SMS til <strong>%{phone}</strong>. Indtast venligst koden herunder.
+      we_resent_you_an_sms_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny kode på SMS til <strong>%{phone}</strong>. Indtast venligst den nye kode herunder.
       code: Kode fra e-mail (starter med "%{code_start}")
+      code_sms: Kode fra SMS (starter med "%{code_start}")
       help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.
       caps_or_not: Vi gør ikke forskel på store og små bogtaver.
       send_new_code: Send ny kode
