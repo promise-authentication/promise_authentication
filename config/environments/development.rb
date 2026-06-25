@@ -32,6 +32,10 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  # Run background jobs in-process locally so we don't need RabbitMQ/Sneakers
+  # (e.g. ahoy visit tracking) just to click through the app.
+  config.active_job.queue_adapter = :async
+
   ActionMailer::Base.smtp_settings = {
     :user_name => ENV['PROMISE_SENDGRID_USERNAME'],
     :password => ENV['PROMISE_SENDGRID_PASSWORD'],
