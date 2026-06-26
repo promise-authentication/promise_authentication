@@ -1,0 +1,19 @@
+<%# Android WebOTP: read the one-time code from the incoming SMS and submit. %>
+<%# iOS autofills via the autocomplete="one-time-code" attribute, no JS needed. %>
+<script>
+  (function () {
+    if (!('OTPCredential' in window)) return;
+
+    var input = document.querySelector('input[autocomplete="one-time-code"]');
+    if (!input) return;
+
+    navigator.credentials.get({ otp: { transport: ['sms'] } })
+      .then(function (otp) {
+        if (!otp || !otp.code) return;
+        input.value = otp.code;
+        var form = input.form;
+        if (form) { form.requestSubmit ? form.requestSubmit() : form.submit(); }
+      })
+      .catch(function () { /* dismissed, unsupported, or no SMS — ignore */ });
+  })();
+</script>

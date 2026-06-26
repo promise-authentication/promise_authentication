@@ -71,6 +71,14 @@ class Authentication::Services::PrepareIdentifierForValidation
       code: code,
       relying_party: relying_party&.name.presence || 'Promise'
     )
+    # Domain-bound one-time-code line so iOS/Android can autofill the code
+    # from the SMS (WebOTP). Must be the last line: "@domain #code".
+    body += "\n@#{self.class.otp_domain} ##{code}"
+
     Authentication::Services::SmsSender.new(to: identifier.value, body: body).call
+  end
+
+  def self.otp_domain
+    ENV.fetch('PROMISE_OTP_DOMAIN', 'promiseauthentication.org')
   end
 end

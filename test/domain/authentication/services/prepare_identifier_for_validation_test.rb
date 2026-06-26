@@ -28,6 +28,9 @@ class Authentication::Services::PrepareIdentifierForValidationTest < ActiveSuppo
     sms = Authentication::Services::SmsSender.deliveries.last
     assert_equal '+4520123456', sms[:to]
     assert_includes sms[:body], code.code
+    # Domain-bound one-time-code line for iOS/Android SMS autofill (WebOTP),
+    # which must be the last line of the message.
+    assert_equal "@promiseauthentication.org ##{code.code}", sms[:body].lines.last.strip
   end
 
   test 'verify! is case insensitive and rejects wrong/blank codes' do
