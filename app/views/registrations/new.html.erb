@@ -92,7 +92,7 @@
             <p class="input-label">
               <%= t '.phone_label' %>
             </p>
-            <%= telephone_field_tag :phone, registration_configuration[:phone], id: 'phone', class: 'login-input' + (@phone_invalid ? ' with-error' : ''), autocomplete: 'tel', disabled: true, tabindex: 1 %>
+            <%= render 'shared/phone_field', value: registration_configuration[:phone], invalid: @phone_invalid %>
             <p class="text-secondary text-xs mt-1">
               <%= t '.we_save_no_phone_html' %>
             </p>

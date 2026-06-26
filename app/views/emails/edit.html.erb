@@ -34,7 +34,7 @@
         <p class="input-label">
           <%= t '.phone' %>
         </p>
-        <%= telephone_field_tag :phone, registration_configuration[:phone], id: 'phone', class: "login-input", autocomplete: 'tel', disabled: true %>
+        <%= render 'shared/phone_field', value: registration_configuration[:phone] %>
       </label>
 
       <div class="flex w-full justify-end items-center mt-6">

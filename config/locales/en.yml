@@ -22,6 +22,8 @@ en:
       messages:
         blank: goes here
   shared:
+    phone_field:
+      country_code: Country code
     footer:
       created_by: Created by Anders Lemke-Holstein
       logged_in_as_html: You are signed in as <strong>%{email}</strong>

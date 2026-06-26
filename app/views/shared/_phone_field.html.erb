@@ -1,0 +1,26 @@
+<% invalid = local_assigns.fetch(:invalid, false) %>
+<div class="flex gap-2 w-full">
+  <select id="phone-country" aria-label="<%= t('shared.phone_field.country_code') %>" class="login-input flex-none w-24 px-2">
+    <%= options_for_select(phone_country_options, phone_default_dial_code) %>
+  </select>
+  <%= telephone_field_tag :phone, local_assigns[:value], id: 'phone', class: 'login-input flex-1' + (invalid ? ' with-error' : ''), autocomplete: 'tel', disabled: true, tabindex: 1 %>
+</div>
+<script>
+  // Prepend the selected country dial code to the typed number on submit,
+  // unless the user already typed a full international number (starts with +).
+  (function () {
+    if (window.__phoneComposeBound) return;
+    window.__phoneComposeBound = true;
+    document.addEventListener('submit', function (e) {
+      var form = e.target;
+      if (!form || !form.querySelector) return;
+      var input = form.querySelector('#phone');
+      var select = form.querySelector('#phone-country');
+      if (!input || input.disabled || !select) return; // phone tab not active
+      var value = (input.value || '').trim();
+      if (value && value.charAt(0) !== '+') {
+        input.value = select.value + ' ' + value;
+      }
+    }, true);
+  })();
+</script>

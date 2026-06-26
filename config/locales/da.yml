@@ -22,6 +22,8 @@ da:
       messages:
         blank: udfyldes her
   shared:
+    phone_field:
+      country_code: Landekode
     footer:
       created_by: Lavet af Anders Lemke-Holstein
       logged_in_as_html: Du er logget ind som <strong>%{email}</strong>
