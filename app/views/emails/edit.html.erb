@@ -14,28 +14,11 @@
         <%= t '.description', name: name %>
       </p>
 
-      <div class="w-full flex flex-row mt-6 -mb-px" role="tablist">
-        <button type="button" id="tab-email" onclick="selectIdentifier('email')" class="flex-1 py-2 text-center text-sm font-bold border-b-2 border-blue-700 text-blue-900">
-          <%= t '.tab_email' %>
-        </button>
-        <button type="button" id="tab-phone" onclick="selectIdentifier('phone')" class="flex-1 py-2 text-center text-sm border-b-2 border-transparent text-secondary">
-          <%= t '.tab_phone' %>
-        </button>
+      <div class="mt-6 w-full">
+        <%= render 'shared/identifier_field',
+              value: (registration_configuration[:phone].presence || registration_configuration[:email]),
+              initial_type: (signup_identifier&.phone? ? 'phone' : 'email') %>
       </div>
-
-      <label id="panel-email" class="mt-4 w-full block">
-        <p class="input-label">
-          <%= t '.email' %>
-        </p>
-        <%= email_field_tag :email, registration_configuration[:email], id: 'email', class: "login-input", autofocus: true %>
-      </label>
-
-      <label id="panel-phone" class="mt-4 w-full hidden">
-        <p class="input-label">
-          <%= t '.phone' %>
-        </p>
-        <%= render 'shared/phone_field', value: registration_configuration[:phone] %>
-      </label>
 
       <div class="flex w-full justify-end items-center mt-6">
         <%= button_tag type: 'submit', class: 'button primary self-end' do %>
@@ -44,29 +27,4 @@
       </div>
     </div>
   <% end %>
-
-  <script>
-    function selectIdentifier(type) {
-      var isPhone = type === 'phone';
-      document.getElementById('panel-email').classList.toggle('hidden', isPhone);
-      document.getElementById('panel-phone').classList.toggle('hidden', !isPhone);
-      document.getElementById('email').disabled = isPhone;
-      document.getElementById('phone').disabled = !isPhone;
-
-      var emailTab = document.getElementById('tab-email');
-      var phoneTab = document.getElementById('tab-phone');
-      emailTab.classList.toggle('font-bold', !isPhone);
-      emailTab.classList.toggle('border-blue-700', !isPhone);
-      emailTab.classList.toggle('text-blue-900', !isPhone);
-      emailTab.classList.toggle('border-transparent', isPhone);
-      emailTab.classList.toggle('text-secondary', isPhone);
-      phoneTab.classList.toggle('font-bold', isPhone);
-      phoneTab.classList.toggle('border-blue-700', isPhone);
-      phoneTab.classList.toggle('text-blue-900', isPhone);
-      phoneTab.classList.toggle('border-transparent', !isPhone);
-      phoneTab.classList.toggle('text-secondary', !isPhone);
-
-      (isPhone ? document.getElementById('phone') : document.getElementById('email')).focus();
-    }
-  </script>
 <% end %>

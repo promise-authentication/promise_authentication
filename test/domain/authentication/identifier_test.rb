@@ -44,6 +44,13 @@ class Authentication::IdentifierTest < ActiveSupport::TestCase
     assert_equal a, b
   end
 
+  test 'unparseable phone numbers normalise by stripping all whitespace' do
+    spaced = @described_class.phone('00 00 00')
+    refute spaced.valid?, 'precondition: should not be a valid number'
+    assert_equal '000000', spaced.value
+    assert_equal @described_class.phone('000000').digest, spaced.digest
+  end
+
   test 'phone and e-mail digests do not collide' do
     refute_equal @described_class.email('hello@example.com').digest,
                  @described_class.phone('+4520123456').digest

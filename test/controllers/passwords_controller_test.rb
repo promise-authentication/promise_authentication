@@ -81,7 +81,9 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
 
   test 'recovering with an unknown phone number reveals nothing and sends no SMS' do
     Authentication::Services::SmsSender.reset!
-    post '/password/recover', params: { phone: '+4520000000' }
+    # A valid-format but unregistered number: it must look the same as a known
+    # one (redirect to the code screen) while sending no SMS.
+    post '/password/recover', params: { phone: '+4520123450' }
     assert_redirected_to recover_code_password_path
     assert_empty Authentication::Services::SmsSender.deliveries
   end

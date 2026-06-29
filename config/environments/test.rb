@@ -13,6 +13,11 @@ Rails.application.configure do
   # preloads Rails for running tests, you may have to set it to true.
   config.eager_load = false
 
+  # Background jobs run over RabbitMQ/Sneakers in production (set globally in
+  # application.rb). Tests must not need a broker, so capture jobs in-memory
+  # instead — mirrors the :async override development uses.
+  config.active_job.queue_adapter = :test
+
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {

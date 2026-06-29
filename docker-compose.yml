@@ -5,10 +5,12 @@ networks:
 services:
   web:
     build: .
-    command: bash -c "bundle exec rails db:prepare; rm -f tmp/pids/server.pid && bin/dev"
+    command: bash -c "bundle check || bundle install; bundle exec rails db:prepare; rm -f tmp/pids/server.pid && bin/dev"
     stdin_open: true
     environment:
-      PROMISE_KEY_REGISTRY_API_ROOT: http://promise_kms:3000/api/secret
+      # Leave PROMISE_KEY_REGISTRY_API_ROOT unset in local dev so the on-disk
+      # fake Key Registry (config/initializers/dev_key_registry.rb) is used and
+      # no separate KMS service is required. Set it to a real KMS URL when needed.
       RAILS_ENV: development
       NODE_ENV: development
       RAILS_BIND: 0.0.0.0

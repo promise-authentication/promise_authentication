@@ -29,7 +29,10 @@ class PasswordsController < ApplicationController
     pass_turnstile!
 
     identifier = signup_identifier
-    if identifier.nil?
+    # E-mail recovery stays lenient (an unknown address just gets the "unknown"
+    # mail), but an invalid phone number would dead-end on the SMS code screen
+    # with no code ever sent, so reject it up front.
+    if identifier.nil? || (identifier.phone? && !identifier.valid?)
       flash[:error] = I18n.t('fill_email')
       return render action: 'new'
     end

@@ -22,6 +22,8 @@ da:
       messages:
         blank: udfyldes her
   shared:
+    identifier_field:
+      label: E-mail eller telefon
     phone_field:
       country_code: Landekode
     footer:

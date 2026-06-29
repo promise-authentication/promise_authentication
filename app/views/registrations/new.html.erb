@@ -18,102 +18,80 @@
         </p>
       <% end %>
 
-      <div class="w-full flex flex-row mt-6 mb-0 -mb-px" role="tablist">
-        <button type="button" id="tab-email" onclick="selectIdentifier('email')" class="identifier-tab flex-1 py-2 text-center text-sm font-bold border-b-2 border-blue-700 text-blue-900">
-          <%= t '.tab_email' %>
-        </button>
-        <button type="button" id="tab-phone" onclick="selectIdentifier('phone')" class="identifier-tab flex-1 py-2 text-center text-sm border-b-2 border-transparent text-secondary">
-          <%= t '.tab_phone' %>
-        </button>
-      </div>
-
-      <div class="w-full flex flex-col bg-blue-50 px-4 rounded-lg rounded-tl-none mt-0 pb-4 shadow relative">
-        <div id="panel-email" class="w-full">
-          <label class="w-full mt-8 block">
-            <div class="w-full mb-2">
-              <% if @smtp_error %>
-                <div class="bg-red-500 text-white text-sm p-3 rounded">
-                  <%= t '.we_could_not_send_email_html', email: registration_configuration[:email], message: @smtp_error.message %>
-                </div>
-              <% end %>
-            </div>
-            <p class="input-label">
-              E-mail
-            </p>
-            <%= email_field_tag :email, @email_validator&.replacement || registration_configuration[:email], id: 'email', class: 'login-input' + (!@email_validator || @email_validator.valid? ? '' : ' with-error'), autofocus: true, tabindex: 1 %>
-            <p class="text-secondary text-xs mt-1">
-              <%= t '.we_save_no_data_html' %>
-            </p>
-          </label>
-          <details class="mt-3 text-sm text-secondary">
-            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-              </svg>
-              <%= t '.what_email_question' %>
-            </summary>
-            <p class="mt-2 text-xs pl-7"><%= t '.what_email_help' %></p>
-          </details>
-          <details class="mt-2 text-sm text-secondary">
-            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-              </svg>
-              <%= t '.child_account_question' %>
-            </summary>
-            <p class="mt-2 text-xs pl-7"><%= t '.child_account_help_html' %></p>
-          </details>
-          <% if @email_validator && !@email_validator&.valid? %>
-            <div class="w-full mt-2">
-              <%= hidden_field_tag :email_validation_shown_for, @email_validator.email %>
-              <% if @email_validator.hint? %>
-                <div class="bg-red-500 text-white text-sm p-3 rounded">
-                  <p>
-                    <span class="">
-                      <%= t '.did_you_mean_html', old_email: registration_configuration[:email], email: @email_validator.replacement %>
-                    </span>
-                  </p>
-                </div>
-              <% else %>
-                <div class="bg-yellow-700 text-white text-sm p-3 rounded">
-                  <p>
-                    <span class="">
-                      <%= t '.your_email_seems_invalid' %>
-                    </span>
-                  </p>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-
-        <div id="panel-phone" class="w-full hidden">
-          <label class="w-full mt-8 block">
-            <p class="input-label">
-              <%= t '.phone_label' %>
-            </p>
-            <%= render 'shared/phone_field', value: registration_configuration[:phone], invalid: @phone_invalid %>
-            <p class="text-secondary text-xs mt-1">
-              <%= t '.we_save_no_phone_html' %>
-            </p>
-          </label>
-          <% if @phone_invalid %>
-            <div class="w-full mt-2">
-              <div class="bg-yellow-700 text-white text-sm p-3 rounded">
-                <p><%= t '.your_phone_seems_invalid' %></p>
+      <% phone_initial = signup_identifier&.phone? %>
+      <div class="w-full flex flex-col bg-blue-50 px-4 rounded-lg mt-6 pb-4 shadow relative">
+        <div class="w-full mt-8">
+          <% if @smtp_error %>
+            <div class="js-when-email w-full mb-2">
+              <div class="bg-red-500 text-white text-sm p-3 rounded">
+                <%= t '.we_could_not_send_email_html', email: registration_configuration[:email], message: @smtp_error.message %>
               </div>
             </div>
           <% end %>
-          <details class="mt-3 text-sm text-secondary">
-            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-              </svg>
-              <%= t '.what_phone_question' %>
-            </summary>
-            <p class="mt-2 text-xs pl-7"><%= t '.what_phone_help' %></p>
-          </details>
+
+          <%= render 'shared/identifier_field',
+                value: (registration_configuration[:phone].presence || @email_validator&.replacement || registration_configuration[:email]),
+                invalid: (@phone_invalid || (@email_validator.present? && !@email_validator.valid?)),
+                initial_type: (signup_identifier&.phone? ? 'phone' : 'email') %>
+
+          <p class="text-secondary text-xs mt-1 js-when-email<%= ' hidden' if phone_initial %>">
+            <%= t '.we_save_no_data_html' %>
+          </p>
+          <p class="text-secondary text-xs mt-1 js-when-phone<%= ' hidden' unless phone_initial %>">
+            <%= t '.we_save_no_phone_html' %>
+          </p>
         </div>
+
+        <% if @email_validator && !@email_validator&.valid? %>
+          <div class="js-when-email w-full mt-2">
+            <%= hidden_field_tag :email_validation_shown_for, @email_validator.email %>
+            <% if @email_validator.hint? %>
+              <div class="bg-red-500 text-white text-sm p-3 rounded">
+                <p><span><%= t '.did_you_mean_html', old_email: registration_configuration[:email], email: @email_validator.replacement %></span></p>
+              </div>
+            <% else %>
+              <div class="bg-yellow-700 text-white text-sm p-3 rounded">
+                <p><span><%= t '.your_email_seems_invalid' %></span></p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <% if @phone_invalid %>
+          <div class="js-when-phone w-full mt-2">
+            <div class="bg-yellow-700 text-white text-sm p-3 rounded">
+              <p><%= t '.your_phone_seems_invalid' %></p>
+            </div>
+          </div>
+        <% end %>
+
+        <details class="mt-3 text-sm text-secondary js-when-email<%= ' hidden' if phone_initial %>">
+          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+            </svg>
+            <%= t '.what_email_question' %>
+          </summary>
+          <p class="mt-2 text-xs pl-7"><%= t '.what_email_help' %></p>
+        </details>
+        <details class="mt-3 text-sm text-secondary js-when-phone<%= ' hidden' unless phone_initial %>">
+          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+            </svg>
+            <%= t '.what_phone_question' %>
+          </summary>
+          <p class="mt-2 text-xs pl-7"><%= t '.what_phone_help' %></p>
+        </details>
+        <details class="mt-2 text-sm text-secondary js-when-email<%= ' hidden' if phone_initial %>">
+          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+            </svg>
+            <%= t '.child_account_question' %>
+          </summary>
+          <p class="mt-2 text-xs pl-7"><%= t '.child_account_help_html' %></p>
+        </details>
 
         <div class="mt-4 flex w-full flex-col justify-end items-end">
           <%= button_tag type: 'submit', class: 'button primary mt-2 appearance-none', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
@@ -127,41 +105,5 @@
         </p>
       <% end %>
     </div>
-  <% end %>
-
-  <script>
-    function selectIdentifier(type) {
-      var isPhone = type === 'phone';
-      var emailPanel = document.getElementById('panel-email');
-      var phonePanel = document.getElementById('panel-phone');
-      var emailInput = document.getElementById('email');
-      var phoneInput = document.getElementById('phone');
-      var emailTab = document.getElementById('tab-email');
-      var phoneTab = document.getElementById('tab-phone');
-
-      emailPanel.classList.toggle('hidden', isPhone);
-      phonePanel.classList.toggle('hidden', !isPhone);
-
-      // Only the active field should be submitted.
-      emailInput.disabled = isPhone;
-      phoneInput.disabled = !isPhone;
-
-      emailTab.classList.toggle('font-bold', !isPhone);
-      emailTab.classList.toggle('border-blue-700', !isPhone);
-      emailTab.classList.toggle('text-blue-900', !isPhone);
-      emailTab.classList.toggle('border-transparent', isPhone);
-      emailTab.classList.toggle('text-secondary', isPhone);
-
-      phoneTab.classList.toggle('font-bold', isPhone);
-      phoneTab.classList.toggle('border-blue-700', isPhone);
-      phoneTab.classList.toggle('text-blue-900', isPhone);
-      phoneTab.classList.toggle('border-transparent', !isPhone);
-      phoneTab.classList.toggle('text-secondary', !isPhone);
-
-      (isPhone ? phoneInput : emailInput).focus();
-    }
-  </script>
-  <% if signup_identifier&.phone? %>
-    <script>selectIdentifier('phone');</script>
   <% end %>
 <% end %>

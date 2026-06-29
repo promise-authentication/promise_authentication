@@ -22,6 +22,30 @@ class PhoneHelperTest < ActionView::TestCase
     assert_includes dials, '+1'  # US/CA
   end
 
+  test 'the localized country name leads each label so native typeahead can match it' do
+    I18n.with_locale(:en) do
+      label, dial = phone_country_options.find { |(l, _)| l.start_with?('United Kingdom') }
+      assert_equal '+44', dial
+      assert_equal 'United Kingdom 🇬🇧 +44', label
+    end
+
+    I18n.with_locale(:da) do
+      label, dial = phone_country_options.find { |(_, d)| d == '+49' }
+      assert_equal 'Tyskland 🇩🇪 +49', label
+      assert_equal '+49', dial
+    end
+  end
+
+  test 'non-default options are sorted alphabetically by name' do
+    names = phone_country_options.drop(1).map { |(label, _)| label }
+    assert_equal names, names.sort_by(&:downcase)
+  end
+
+  test 'country_name falls back to an override for codes the countries gem lacks' do
+    assert_equal 'Kosovo', country_name('XK')
+    assert_includes phone_country_options.map(&:first).join("\n"), 'Kosovo'
+  end
+
   test 'flag emoji is derived from the ISO code' do
     assert_equal '🇩🇰', country_flag_emoji('DK')
     assert_equal '🇬🇧', country_flag_emoji('GB')

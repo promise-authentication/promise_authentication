@@ -11,6 +11,7 @@ gem 'rbnacl', '7.1.1'
 gem 'local_time'
 gem 'email_inquire' # For validating email addresses
 gem 'phonelib' # For validating and normalising phone numbers (E.164)
+gem 'countries' # Localized ISO-3166 country names for the dial-code selector
 
 # SMS delivery (verification & recovery codes for phone identifiers)
 gem 'messagebird-rest', require: 'messagebird'
@@ -86,11 +87,11 @@ group :development do
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
+  # Adds support for Capybara system testing and selenium driver.
+  # The driver itself is resolved by Selenium Manager (built into
+  # selenium-webdriver), so no separate webdrivers gem is needed.
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

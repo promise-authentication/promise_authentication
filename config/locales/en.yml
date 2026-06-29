@@ -22,6 +22,8 @@ en:
       messages:
         blank: goes here
   shared:
+    identifier_field:
+      label: E-mail or phone
     phone_field:
       country_code: Country code
     footer:

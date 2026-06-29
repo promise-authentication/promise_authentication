@@ -16,10 +16,13 @@ class Authentication::Services::ChangeIdentifier
       return false
     end
 
-    # First claim the new one
-    claim(to_identifier)
-    # Then unclaim the old one
-    unclaim(from_identifier)
+    # Claim the new identifier and release the old one atomically, so a failure
+    # can never leave the user with both (or neither) claimed. RailsEventStore
+    # uses the same connection, so the claim/unclaim events roll back together.
+    ActiveRecord::Base.transaction do
+      claim(to_identifier)
+      unclaim(from_identifier)
+    end
 
     # Reset the verification code after a successful change
     verifier.reset!

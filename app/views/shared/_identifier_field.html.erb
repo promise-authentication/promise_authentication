@@ -1,0 +1,130 @@
+<%# A single "smart" identifier field: one text input that accepts either an
+    e-mail or a phone number. It auto-detects which is being typed, reveals the
+    country-code selector only for national phone numbers (a full +number is
+    self-contained), and on submit routes the value to the :email or :phone
+    param so the server keeps receiving exactly one of them — replacing the old
+    e-mail/phone tab bar.
+
+    Locals:
+      value:        prefilled value (e.g. on a server re-render after an error)
+      invalid:      add the error styling to the input (default false)
+      initial_type: 'email' or 'phone' — the state to render on load (default 'email')
+
+    Views can mark surrounding blocks (hints, help, errors) with the classes
+    `js-when-email` / `js-when-phone` and they will be shown for the matching
+    type. The visible input is the :email field by default, so the form still
+    submits an e-mail when JavaScript is unavailable. %>
+<% initial_type = local_assigns.fetch(:initial_type, 'email') %>
+<% invalid = local_assigns.fetch(:invalid, false) %>
+<%# When prefilling a phone number, split it so the dial code lives in the
+    selector and only the national part is in the field — showing the dial code
+    once (in the selector) instead of inline in the text box. A full +number is
+    split via Phonelib; a national number just shows the default dial code. %>
+<% raw_value = local_assigns[:value].to_s %>
+<% field_value = raw_value %>
+<% selected_dial = phone_default_dial_code %>
+<% show_country = false %>
+<% if initial_type == 'phone' %>
+  <% if raw_value.strip.start_with?('+') %>
+    <% parsed = Phonelib.parse(raw_value) %>
+    <% if parsed.valid? %>
+      <% selected_dial = "+#{parsed.country_code}" %>
+      <% field_value = parsed.e164.delete_prefix(selected_dial) %>
+      <% show_country = true %>
+    <% end %>
+  <% else %>
+    <% show_country = true %>
+  <% end %>
+<% end %>
+<label for="email" class="input-label block"><%= t('shared.identifier_field.label') %></label>
+<div class="flex gap-2 w-full">
+  <%# Collapsed, the selector shows just the flag + dial ("🇩🇰 +45"); the full
+      "Danmark 🇩🇰 +45" labels are restored while the list is open so the native
+      typeahead can still match the country name (see the script below). %>
+  <select id="phone-country" aria-label="<%= t('shared.phone_field.country_code') %>" tabindex="-1"
+          class="login-input flex-none w-28 px-2<%= ' hidden' unless show_country %>">
+    <%= options_for_select(phone_country_options, selected_dial) %>
+  </select>
+  <%= text_field_tag :email, field_value,
+        id: 'email',
+        class: 'login-input flex-1' + (invalid ? ' with-error' : ''),
+        autocomplete: 'username',
+        autofocus: true,
+        tabindex: 1,
+        inputmode: (initial_type == 'phone' ? 'tel' : 'email') %>
+</div>
+<%= hidden_field_tag :phone, nil, id: 'identifier-phone', disabled: true %>
+
+<script>
+  (function () {
+    var input = document.getElementById('email');
+    if (!input || input.dataset.identifierBound) return;
+    input.dataset.identifierBound = '1';
+
+    var country = document.getElementById('phone-country');
+    var phoneHidden = document.getElementById('identifier-phone');
+    var form = input.form;
+
+    // Show the full "Name 🇩🇰 +45" label while the list is open (so the native
+    // typeahead can match the country name), but collapse to just the flag +
+    // dial once closed — the name is redundant next to the chosen flag.
+    if (country) {
+      var opts = country.options;
+      for (var i = 0; i < opts.length; i++) {
+        var full = opts[i].textContent;
+        opts[i].dataset.full = full;
+        var flag = full.match(/\uD83C[\uDDE6-\uDDFF]/); // first regional-indicator (flag) char
+        opts[i].dataset.short = flag ? full.slice(flag.index) : full;
+      }
+      var setLabels = function (key) {
+        for (var j = 0; j < opts.length; j++) opts[j].textContent = opts[j].dataset[key];
+      };
+      country.addEventListener('mousedown', function () { setLabels('full'); }); // opening via mouse
+      country.addEventListener('focus', function () { setLabels('full'); });     // opening via keyboard
+      country.addEventListener('change', function () { setLabels('short'); });
+      country.addEventListener('blur', function () { setLabels('short'); });
+      setLabels('short');
+    }
+
+    // 'email' | 'phone-local' (needs a dial code) | 'phone-intl' (full +number)
+    function classify(value) {
+      var v = (value || '').trim();
+      if (v === '' || v.indexOf('@') !== -1) return 'email'; // empty / has @ → e-mail
+      if (!/^[+0-9][0-9\s()\-./]*$/.test(v)) return 'email'; // not phone-shaped
+      return v.charAt(0) === '+' ? 'phone-intl' : 'phone-local';
+    }
+
+    function reflect(value) {
+      var kind = classify(value);
+      var isPhone = kind.indexOf('phone') === 0;
+      // The selector is only relevant for a national number.
+      if (country) country.classList.toggle('hidden', kind !== 'phone-local');
+      input.setAttribute('inputmode', isPhone ? 'tel' : 'email');
+      document.querySelectorAll('.js-when-email').forEach(function (el) { el.classList.toggle('hidden', isPhone); });
+      document.querySelectorAll('.js-when-phone').forEach(function (el) { el.classList.toggle('hidden', !isPhone); });
+    }
+
+    input.addEventListener('input', function () { reflect(input.value); });
+
+    if (form) {
+      form.addEventListener('submit', function () {
+        var kind = classify(input.value);
+        if (kind.indexOf('phone') !== 0) return; // leave it to submit as the :email param
+
+        // Prepend the selected dial code for a national number; a +number is sent as-is.
+        var v = input.value.trim();
+        phoneHidden.value = (kind === 'phone-local' && country) ? country.value + ' ' + v : v;
+        phoneHidden.disabled = false;
+        input.disabled = true; // don't also submit a bogus :email
+      }, true);
+    }
+
+    // Run once the whole form is parsed: this inline script sits above the
+    // hint/help blocks, which wouldn't exist yet if we reflected immediately.
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { reflect(input.value); });
+    } else {
+      reflect(input.value);
+    }
+  })();
+</script>

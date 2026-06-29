@@ -102,7 +102,10 @@ class Authentication::Identifier
       raw.strip.downcase
     when :phone
       parsed = Phonelib.parse(raw)
-      parsed.valid? ? parsed.e164 : raw.strip
+      # Valid numbers become canonical E.164. For anything Phonelib can't parse
+      # we still strip all whitespace so the same input always yields the same
+      # digest, regardless of how spaces were entered or composed client-side.
+      parsed.valid? ? parsed.e164 : raw.gsub(/\s+/, '')
     end
   end
 end
