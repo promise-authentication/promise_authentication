@@ -63,7 +63,7 @@ class PasswordsController < ApplicationController
 
     if verifier.verify!(params[:verification_code])
       user_id = Authentication::HashedIdentifier.user_id_for(@identifier)
-      token = Authentication::RecoveryToken.where(user_id: user_id).last
+      token = Authentication::RecoveryToken.active.where(user_id: user_id).last
 
       if token
         verifier.reset!

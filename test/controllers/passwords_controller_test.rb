@@ -59,6 +59,26 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert key
   end
 
+  test 'too many wrong SMS codes burns the code and blocks the reset' do
+    Authentication::Services::SmsSender.reset!
+    phone = '+4520123456'
+    identifier = Authentication::Identifier.phone(phone)
+    Authentication::Services::Authenticate.new(phone: phone, password: 'old').register!
+
+    post '/password/recover', params: { phone: phone }
+    code = VerificationCode.find_for(identifier)
+
+    VerificationCode::MAX_ATTEMPTS.times do
+      post '/password/recover_code', params: { verification_code: 'nope' }
+      assert_response :success
+    end
+
+    # The code is now burned: even the correct value no longer unlocks the reset.
+    assert_nil VerificationCode.find_for(identifier)
+    post '/password/recover_code', params: { verification_code: code.code }
+    assert_response :success
+  end
+
   test 'recovering with an unknown phone number reveals nothing and sends no SMS' do
     Authentication::Services::SmsSender.reset!
     post '/password/recover', params: { phone: '+4520000000' }

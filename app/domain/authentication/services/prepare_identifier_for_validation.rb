@@ -10,10 +10,9 @@ class Authentication::Services::PrepareIdentifierForValidation
   end
 
   def verify!(code)
-    current = verifier
-    return false if current.nil? || code.blank?
-
-    current.code.casecmp?(code.to_s.strip)
+    # Expiry and the wrong-guess attempt cap live on the model so every caller
+    # (e-mail and phone) is hardened the same way.
+    verifier&.verify(code) || false
   end
 
   def reset!

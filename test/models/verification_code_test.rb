@@ -31,4 +31,40 @@ class VerificationCodeTest < ActiveSupport::TestCase
 
     assert_equal 'wxyz', EmailVerificationCode.find_by_cleartext('hello@world.com').code
   end
+
+  test 'verify matches the right code, case-insensitively' do
+    code = @described_class.create!(id: 'x', code: 'abcd')
+
+    assert code.verify('abcd')
+    assert code.verify('ABCD')
+    assert code.verify(' abcd ')
+  end
+
+  test 'verify counts wrong guesses and burns the code after MAX_ATTEMPTS' do
+    code = @described_class.create!(id: 'x', code: 'abcd')
+
+    (@described_class::MAX_ATTEMPTS - 1).times { assert_not code.verify('zzzz') }
+    assert_equal @described_class::MAX_ATTEMPTS - 1, code.attempts
+
+    assert_not code.verify('zzzz') # the final allowed guess burns the code
+    assert_not @described_class.exists?('x')
+  end
+
+  test 'verify rejects an expired code' do
+    code = @described_class.create!(id: 'x', code: 'abcd')
+
+    travel(@described_class::EXPIRES_AFTER + 1.minute) do
+      assert_not code.verify('abcd')
+    end
+  end
+
+  test 'find_for ignores and cleans up an expired code' do
+    identifier = Authentication::Identifier.phone('+4520123456')
+    @described_class.create!(id: identifier.digest, code: 'abcd')
+
+    travel(@described_class::EXPIRES_AFTER + 1.minute) do
+      assert_nil @described_class.find_for(identifier)
+    end
+    assert_not @described_class.exists?(identifier.digest)
+  end
 end

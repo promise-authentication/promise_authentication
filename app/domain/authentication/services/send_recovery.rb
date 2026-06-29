@@ -43,6 +43,9 @@ class Authentication::Services::SendRecovery
   end
 
   def create_token(user_id)
+    # A fresh recovery attempt invalidates any earlier one, so stale tokens
+    # (and old reset links) don't accumulate or stay usable.
+    Authentication::RecoveryToken.where(user_id: user_id).delete_all
     token = SecureRandom.uuid
     Authentication::RecoveryToken.create(token: token, user_id: user_id)
     token

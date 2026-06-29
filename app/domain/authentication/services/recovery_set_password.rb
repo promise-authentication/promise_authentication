@@ -6,6 +6,8 @@ class Authentication::Services::RecoverySetPassword
 
   def call!
     recovery_token = Authentication::RecoveryToken.find_by_token(token)
+    return if recovery_token.nil? || recovery_token.expired?
+
     user_id = recovery_token.user_id
 
     recovery = Authentication::VaultKeysForRecovery.find(user_id)
