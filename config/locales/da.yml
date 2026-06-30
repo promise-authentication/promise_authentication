@@ -23,7 +23,8 @@ da:
         blank: udfyldes her
   shared:
     identifier_field:
-      label: E-mail eller telefon
+      label_email: E-mail
+      label_phone: Telefonnummer
     phone_field:
       country_code: Landekode
     footer:
@@ -54,14 +55,14 @@ da:
     new:
       login: Log ind
       login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
-      enter_credentials_html: "%{name} bruger Promise til at logge ind. Angiv den e-mail du vil logge ind på Promise med."
+      relying_party_intro_html: "%{name} bruger Promise til at logge ind."
       we_could_not_send_email_html: "Vi kunne ikke sende en e-mail til <strong>%{email}</strong>. Tjek venligst at du har skrevet den rigtigt. Her er beskeden vi har fået: <em class='font-mono'>%{message}</em>."
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data_html: Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
       what_email_question: Hvilken e-mail skal jeg bruge?
       what_email_help: Brug den e-mail, der identificerer dig som menneske — din personlige. Undgå delte, arbejdsrelaterede eller rollebaserede adresser (som info@ eller team@). Du skal bruge denne e-mail hver gang du logger ind.
-      child_account_question: Jeg opretter en konto til mit barn
-      child_account_help_html: Hvis dit barn ikke har sin egen e-mail, kan du bruge <code class="bg-white px-1 rounded">ditnavn+barnetsnavn@gmail.com</code>-tricket. De fleste udbydere (Gmail, Outlook, iCloud, Fastmail og flere) ignorerer alt mellem <code>+</code> og <code>@</code>, så mailen lander stadig i din egen indbakke — men tæller som en unik e-mail her. På den måde kan du styre dit barns konto uden at oprette en ny mailkonto.
+      child_account_question: Jeg opretter et login til mit barn
+      child_account_help_html: Hvis dit barn ikke har sin egen e-mail, kan du bruge <code class="bg-white px-1 rounded">ditnavn+barnetsnavn@gmail.com</code>-tricket. De fleste udbydere (Gmail, Outlook, iCloud, Fastmail og flere) ignorerer alt mellem <code>+</code> og <code>@</code>, så mailen lander stadig i din egen indbakke — men tæller som en unik e-mail her. På den måde kan du styre dit barns login uden at oprette en ny mailkonto.
       did_you_mean_html: Vi har rettet din mail fra %{old_email} til <strong>%{email}</strong>. Er det korrekt? Ellers kan du rette den igen og fortsætte.
       your_email_seems_invalid: Er du sikker på, at det er en gyldig e-mail?
       tab_email: E-mail
@@ -69,11 +70,35 @@ da:
       phone_label: Telefonnummer
       we_save_no_phone_html: Dit telefonnummer bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
       what_phone_question: Hvilket telefonnummer skal jeg bruge?
-      what_phone_help: Brug dit personlige mobilnummer. Du skal bruge det hver gang du logger ind, og vi sender dig en kode på SMS for at bekræfte at det er dit.
+      what_phone_help: Brug dit personlige mobilnummer — det der er dit. Du skal bruge det hver gang du logger ind.
       your_phone_seems_invalid: Er du sikker på, at det er et gyldigt telefonnummer?
       go_on: Videre
       going_html: 'Øjeblik&hellip;'
+      back: Tilbage
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
+    choose:
+      title: Opret dit login
+      prompt: Hvordan vil du logge ind?
+      with_email: Fortsæt med e-mail
+      with_phone: Fortsæt med telefonnummer
+      already_user: Jeg har allerede et login
+    intro:
+      lead: "Sådan kommer det til at foregå:"
+      step1_email_title: Du vælger din e-mail
+      step1_phone_title: Du vælger dit telefonnummer
+      step2_title: Vi sender dig en bekræftelseskode
+      step2_email: Den kommer på e-mail — du indtaster den for at bevise, at adressen er din.
+      step2_phone: Den kommer på SMS — du indtaster den for at bevise, at nummeret er dit.
+      step3_title: Du opretter et password
+      step3_body: Vælg et password, så er du logget ind.
+      step4_title: Du bliver sendt tilbage til %{name}
+      step4_body: Så er du klar — du fortsætter, hvor du slap.
+      privacy_email_html: 'Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format, og bliver ikke delt med andre.'
+      privacy_email_rp_html: 'Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format, og bliver ikke delt med %{name} eller andre.'
+      privacy_phone_html: 'Dit telefonnummer bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format, og bliver ikke delt med andre.'
+      privacy_phone_rp_html: 'Dit telefonnummer bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format, og bliver ikke delt med %{name} eller andre.'
+      continue: Fortsæt
+      back: Tilbage
     verify_human:
       title: Er du et menneske?
       description: Inden vi går videre, skal vi lige have bekræftet at du er et menneske.

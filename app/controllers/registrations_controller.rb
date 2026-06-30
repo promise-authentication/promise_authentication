@@ -18,9 +18,9 @@ class RegistrationsController < ApplicationController
       flash.now[k] = v
     end
 
-    return unless logged_in?
+    return redirect_to confirm_path(login_configuration) if logged_in?
 
-    redirect_to confirm_path(login_configuration)
+    render registration_step
   end
 
   def create
@@ -101,6 +101,21 @@ class RegistrationsController < ApplicationController
   end
 
   private
+
+  # Sign-up is a three-step GET funnel, all served by #new and told apart by
+  # query params so the flow stays stateless and back-navigable:
+  #   :choose — pick e-mail or phone (or "Sign in" to skip straight to the form)
+  #   :intro  — explain which identifier to pick (carries ?type=email|phone)
+  #   :new    — the identifier form itself (?step=form), preselected to :type
+  # A deep link that already carries an :email/:phone (e.g. a failed sign-in
+  # bounce) jumps past the funnel straight to the form.
+  def registration_step
+    return :new if params[:step] == 'form'
+    return :new if params[:email].present? || params[:phone].present?
+    return :intro if params[:type].present?
+
+    :choose
+  end
 
   def create_with_email
     email = registration_configuration[:email]

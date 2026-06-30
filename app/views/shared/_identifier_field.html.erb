@@ -36,7 +36,10 @@
     <% show_country = true %>
   <% end %>
 <% end %>
-<label for="email" class="input-label block"><%= t('shared.identifier_field.label') %></label>
+<%# Two labels, one per type, toggled by reflect() like the surrounding hints so
+    the label tracks the chosen type (and any later auto-shift). %>
+<label for="email" class="input-label block js-when-email<%= ' hidden' if initial_type == 'phone' %>"><%= t('shared.identifier_field.label_email') %></label>
+<label for="email" class="input-label block js-when-phone<%= ' hidden' unless initial_type == 'phone' %>"><%= t('shared.identifier_field.label_phone') %></label>
 <div class="flex gap-2 w-full">
   <%# Collapsed, the selector shows just the flag + dial ("🇩🇰 +45"); the full
       "Danmark 🇩🇰 +45" labels are restored while the list is open so the native
@@ -51,6 +54,7 @@
         autocomplete: 'username',
         autofocus: true,
         tabindex: 1,
+        data: { initial_type: initial_type },
         inputmode: (initial_type == 'phone' ? 'tel' : 'email') %>
 </div>
 <%= hidden_field_tag :phone, nil, id: 'identifier-phone', disabled: true %>
@@ -64,6 +68,10 @@
     var country = document.getElementById('phone-country');
     var phoneHidden = document.getElementById('identifier-phone');
     var form = input.form;
+    // The server may pre-select the phone view (e.g. the user chose the phone
+    // path in the sign-up funnel). An empty field looks like an e-mail to
+    // classify(), so honour this until they actually type something.
+    var initialType = input.dataset.initialType || 'email';
 
     // Show the full "Name 🇩🇰 +45" label while the list is open (so the native
     // typeahead can match the country name), but collapse to just the flag +
@@ -96,6 +104,9 @@
 
     function reflect(value) {
       var kind = classify(value);
+      // Empty + phone-preselected → show the national phone view (with the
+      // country selector), not the default e-mail view.
+      if ((value || '').trim() === '' && initialType === 'phone') kind = 'phone-local';
       var isPhone = kind.indexOf('phone') === 0;
       // The selector is only relevant for a national number.
       if (country) country.classList.toggle('hidden', kind !== 'phone-local');

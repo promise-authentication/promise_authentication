@@ -1,0 +1,57 @@
+<%# Step 1 of the sign-up funnel: choose whether to sign up with an e-mail or a
+    phone number. Each choice carries ?type= to the intro step. Returning users
+    take the de-emphasised "Sign in" link, which skips the funnel and drops them
+    straight on the identifier form (?step=form) — routing there still detects a
+    known identifier and sends them to the password screen. %>
+<%= content_for :body do %>
+  <div class="w-full flex items-center flex-col">
+    <div class="flex flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
+      <h2 class="text-lg text-primary font-bold leading-none">
+        <%= t '.title' %>
+      </h2>
+      <a href="javascript:void(toggleDescription());" class="flex flex-row items-center space-x-1">
+        <%= image_tag('logo.png', class: 'h-4') %>
+        <span class="bg-clip-text text-transparent bg-gradient-to-t from-blue-900 to-blue-500 tracking-tight text-base font-bold">
+          Promise
+        </span>
+      </a>
+    </div>
+
+    <% if relying_party %>
+      <p class="block text-primary w-full">
+        <%= t 'registrations.new.relying_party_intro_html', name: relying_party&.name %>
+      </p>
+    <% end %>
+
+    <div class="w-full flex flex-col bg-blue-50 px-4 py-6 rounded-lg mt-6 shadow">
+      <p class="text-primary font-bold"><%= t '.prompt' %></p>
+      <div class="flex flex-col gap-3 mt-4">
+        <%= link_to login_path(login_configuration.merge(type: 'email')), class: 'button primary appearance-none flex items-center justify-center gap-2' do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+          <%= t '.with_email' %><%= arrow_right %>
+        <% end %>
+        <%= link_to login_path(login_configuration.merge(type: 'phone')), class: 'button primary appearance-none flex items-center justify-center gap-2' do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+          </svg>
+          <%= t '.with_phone' %><%= arrow_right %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="w-full mt-8 text-center">
+      <%= link_to login_path(login_configuration.merge(step: 'form')),
+            class: 'text-sm text-secondary hover:text-primary inline-flex items-center' do %>
+        <span class="underline"><%= t '.already_user' %></span><%= arrow_right %>
+      <% end %>
+    </div>
+
+    <% if relying_party %>
+      <p class="mt-8 text-secondary text-sm">
+        <%= t 'registrations.new.no_sharing_html', relying_party_name: relying_party.name %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

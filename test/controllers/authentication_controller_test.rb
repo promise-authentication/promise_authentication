@@ -2,18 +2,29 @@ require 'test_helper'
 
 class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   test 'the login screen' do
-    get login_url
+    # The sign-up funnel now lands on the choose step; ?step=form is the
+    # identifier form itself (where returning users sign in).
+    get login_url(step: 'form')
     assert_response :success
 
     assert_select 'input#email'
   end
 
   test 'the login screen with relying party' do
-    get login_url, params: { relying_party_id: 'example.com' }
+    get login_url(step: 'form'), params: { relying_party_id: 'example.com' }
     assert_response :success
 
     assert_select 'input#email'
     assert_select 'h2', 'Sign in'
+  end
+
+  test 'the funnel lands on the choose step' do
+    get login_url
+    assert_response :success
+
+    assert_select 'a', text: /Continue with e-mail/
+    assert_select 'a', text: /Continue with phone/
+    assert_select 'input#email', false
   end
 
   test 'authenticating with nothing' do

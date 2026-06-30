@@ -16,7 +16,7 @@ class IdentifierFieldTest < ApplicationSystemTestCase
   end
 
   test 'the country selector and help text follow what is typed' do
-    visit login_path
+    visit login_path(step: 'form')
 
     # E-mail by default: no country selector, e-mail help showing.
     assert_selector '#phone-country', visible: :hidden
@@ -50,7 +50,7 @@ class IdentifierFieldTest < ApplicationSystemTestCase
   end
 
   test 'a typed e-mail is submitted as the e-mail identifier' do
-    visit login_path
+    visit login_path(step: 'form')
     fill_in 'email', with: @email
     find("button[type='submit']").click
 
@@ -59,7 +59,7 @@ class IdentifierFieldTest < ApplicationSystemTestCase
   end
 
   test 'a typed national number is composed and submitted as the phone identifier' do
-    visit login_path
+    visit login_path(step: 'form')
     fill_in 'email', with: '20123456' # default region is +45
     assert_selector '#phone-country', visible: :visible
     find("button[type='submit']").click
@@ -67,5 +67,22 @@ class IdentifierFieldTest < ApplicationSystemTestCase
     # Reaching the password screen proves the value was routed to :phone and the
     # phone account was found — an e-mail of "20123456" would never match.
     assert_current_path verify_password_path, ignore_query: true
+  end
+
+  test 'the phone path of the funnel preselects the phone view on the form' do
+    visit login_path(locale: 'en') # pin copy so the text assertions below are stable
+
+    # Step 1: choose the phone path.
+    click_on 'Continue with phone'
+
+    # Step 2: the intro explains which number to use and reassures about storage.
+    assert_text "Here's what's going to happen"
+    assert_text 'You choose your phone number'
+    assert_text 'is never shared with anyone'
+    click_on 'Continue'
+
+    # Step 3: the form opens preselected to phone — the selector is already shown.
+    assert_selector '#phone-country', visible: :visible
+    assert_selector '.js-when-phone', visible: :visible
   end
 end

@@ -1,9 +1,22 @@
+<%# Reached two ways: through the sign-up funnel (?type= is set → frame it as
+    account creation) or via the "Sign in" shortcut / a deep link (→ "Sign in").
+    A hidden :type round-trips so the framing survives a validation re-render. %>
+<% signup = params[:type].present? %>
 <%= content_for :body do %>
   <%= form_tag registrations_path(registration_configuration(:email, :phone)), class: 'w-full' do %>
+    <%= hidden_field_tag :type, params[:type] if signup %>
     <div class="w-full flex items-center flex-col">
       <div class="flex flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
         <h2 class="text-lg text-primary font-bold leading-none">
-          <%= relying_party&.name ? t('.login_at_html', name: relying_party.name) : t('.login') %>
+          <%# Sign-up funnel → "Create your sign-in" (not tied to a relying party);
+              the returning-user / deep-link path keeps the "Sign in" framing. %>
+          <% if signup %>
+            <%= t 'registrations.choose.title' %>
+          <% elsif relying_party&.name %>
+            <%= t '.login_at_html', name: relying_party.name %>
+          <% else %>
+            <%= t '.login' %>
+          <% end %>
         </h2>
         <a href="javascript:void(toggleDescription());" class="flex flex-row items-center space-x-1">
           <%= image_tag('logo.png', class: 'h-4') %>
@@ -14,11 +27,11 @@
       </div>
       <% if relying_party %>
         <p class="block text-primary w-full">
-          <%= t '.enter_credentials_html', name: relying_party&.name || name %>
+          <%= t '.relying_party_intro_html', name: relying_party&.name || name %>
         </p>
       <% end %>
 
-      <% phone_initial = signup_identifier&.phone? %>
+      <% phone_initial = params[:type] == 'phone' || signup_identifier&.phone? %>
       <div class="w-full flex flex-col bg-blue-50 px-4 rounded-lg mt-6 pb-4 shadow relative">
         <div class="w-full mt-8">
           <% if @smtp_error %>
@@ -32,7 +45,7 @@
           <%= render 'shared/identifier_field',
                 value: (registration_configuration[:phone].presence || @email_validator&.replacement || registration_configuration[:email]),
                 invalid: (@phone_invalid || (@email_validator.present? && !@email_validator.valid?)),
-                initial_type: (signup_identifier&.phone? ? 'phone' : 'email') %>
+                initial_type: (params[:type].presence || (signup_identifier&.phone? ? 'phone' : 'email')) %>
 
           <p class="text-secondary text-xs mt-1 js-when-email<%= ' hidden' if phone_initial %>">
             <%= t '.we_save_no_data_html' %>
@@ -65,35 +78,11 @@
           </div>
         <% end %>
 
-        <details class="mt-3 text-sm text-secondary js-when-email<%= ' hidden' if phone_initial %>">
-          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-            </svg>
-            <%= t '.what_email_question' %>
-          </summary>
-          <p class="mt-2 text-xs pl-7"><%= t '.what_email_help' %></p>
-        </details>
-        <details class="mt-3 text-sm text-secondary js-when-phone<%= ' hidden' unless phone_initial %>">
-          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-            </svg>
-            <%= t '.what_phone_question' %>
-          </summary>
-          <p class="mt-2 text-xs pl-7"><%= t '.what_phone_help' %></p>
-        </details>
-        <details class="mt-2 text-sm text-secondary js-when-email<%= ' hidden' if phone_initial %>">
-          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-            </svg>
-            <%= t '.child_account_question' %>
-          </summary>
-          <p class="mt-2 text-xs pl-7"><%= t '.child_account_help_html' %></p>
-        </details>
-
-        <div class="mt-4 flex w-full flex-col justify-end items-end">
+        <div class="mt-4 flex w-full flex-row justify-between items-center">
+          <%# The "what should I use?" guidance now lives on the intro step; from
+              the form you can step back to revisit it (or switch identifier). %>
+          <%= link_to t('.back'), login_path(login_configuration.merge(type: params[:type])),
+                class: 'text-sm text-secondary underline hover:text-primary' %>
           <%= button_tag type: 'submit', class: 'button primary mt-2 appearance-none', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
             <%= t('.go_on') %><%= arrow_right %>
           <% end %>

@@ -2,7 +2,9 @@ require 'test_helper'
 
 class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test 'the login screen' do
-    get new_registration_url
+    # ?step=form is the identifier form; the bare entry now lands on the funnel's
+    # choose step (covered in AuthenticationControllerTest).
+    get new_registration_url(step: 'form')
     assert_response :success
 
     assert_select 'input#email'
