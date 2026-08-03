@@ -50,9 +50,11 @@ da:
       enter_credentials_html: "%{name} bruger Promise til at logge ind. Angiv den e-mail du vil logge ind på Promise med."
       we_could_not_send_email_html: "Vi kunne ikke sende en e-mail til <strong>%{email}</strong>. Tjek venligst at du har skrevet den rigtigt. Her er beskeden vi har fået: <em class='font-mono'>%{message}</em>."
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
+      email_label: Din personlige e-mail
+      email_label_help_html: Brug den e-mail, du regner med at <strong>beholde resten af livet</strong> — ikke en arbejds-, skole- eller studiemail.
       we_save_no_data_html: Din e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
-      what_email_question: Hvilken e-mail skal jeg bruge?
-      what_email_help: Brug den e-mail, der identificerer dig som menneske — din personlige. Undgå delte, arbejdsrelaterede eller rollebaserede adresser (som info@ eller team@). Du skal bruge denne e-mail hver gang du logger ind.
+      what_email_question: Hvorfor skal det være min personlige e-mail?
+      what_email_help: Din e-mail er det, der identificerer dig som menneske her, og du skal bruge den hver gang du logger ind. Arbejds-, skole- og studiemails bliver taget fra dig, når du skifter job eller bliver færdig, og delte eller rollebaserede adresser (som info@ eller team@) tilhører en organisation og ikke dig — den dag du mister adgangen til den indbakke, kan du ikke længere modtage din login-kode. Du kan skifte e-mail senere, mens du er logget ind, men da vi aldrig gemmer den i et læsbart format, kan vi ikke hjælpe dig med at få kontoen tilbage, hvis du mister adgangen først. Så vælg den e-mail, der følger dig hele livet.
       child_account_question: Jeg opretter en konto til mit barn
       child_account_help_html: Hvis dit barn ikke har sin egen e-mail, kan du bruge <code class="bg-white px-1 rounded">ditnavn+barnetsnavn@gmail.com</code>-tricket. De fleste udbydere (Gmail, Outlook, iCloud, Fastmail og flere) ignorerer alt mellem <code>+</code> og <code>@</code>, så mailen lander stadig i din egen indbakke — men tæller som en unik e-mail her. På den måde kan du styre dit barns konto uden at oprette en ny mailkonto.
       did_you_mean_html: Vi har rettet din mail fra %{old_email} til <strong>%{email}</strong>. Er det korrekt? Ellers kan du rette den igen og fortsætte.
