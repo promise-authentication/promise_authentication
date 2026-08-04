@@ -32,7 +32,10 @@
             <% end %>
           </div>
           <p class="input-label">
-            E-mail
+            <%= t '.email_label' %>
+          </p>
+          <p class="text-secondary text-xs mb-2">
+            <%= t '.email_label_help_html' %>
           </p>
           <%= email_field_tag :email, @email_validator&.replacement || registration_configuration[:email], class: 'login-input' + (!@email_validator || @email_validator.valid? ? '' : ' with-error'), autofocus: true, required: true, tabindex: 1 %>
           <p class="text-secondary text-xs mt-1">
