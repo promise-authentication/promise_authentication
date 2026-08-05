@@ -6,6 +6,7 @@ en:
   email_already_claimed: This e-mail is already in use. Please provide another e-mail.
   email_changed: E-mail changed successfully.
   invalid_email_verification_code: The e-mail verification code is invalid. Please try again.
+  magic_link_invalid: This link is no longer valid. Please use the newest e-mail we sent you, or start over.
   error_changing_email: There was an error changing your e-mail. Please try again.
   activemodel:
     attributes:
@@ -177,6 +178,9 @@ en:
       explain_with_relying_party: "You are trying to login to %{client}, which uses Promise for signing in. You need the code below to verify your e-mail with Promise."
       explain_without_relying_party: To create your account on Promise, you need to verify your e-mail. You will need the code to verify your e-mail.
       code: "Your code:"
+      magic_link_button: "Confirm my e-mail"
+      magic_link_intro: "Click the link below to confirm your e-mail and continue:"
+      magic_link_or_code: "Or enter this code where you were signing up:"
       what_is_promise:
         title: What is Promise?
         body: "Promise is a single-sign-on identity provider. This means you can potentially use Promise to sign in to any of your connected applications. Promise will not store your personal information anywhere. Not even your e-mail."

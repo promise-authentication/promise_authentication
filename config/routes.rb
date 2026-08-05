@@ -37,6 +37,8 @@ Rails.application.routes.draw do
   post   'go_to', to: 'authentication#go_to', as: 'go_to'
 
 
+  get 'registrations/magic/:token', to: 'registrations#magic', as: 'magic_registration', constraints: { token: %r{[^/]+} }
+
   resources :registrations, only: %i[new create] do
     collection do
       get :verify_human

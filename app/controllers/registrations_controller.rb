@@ -89,12 +89,34 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  def magic
+    payload = MagicLink.redeem(params[:token])
+
+    if payload.nil?
+      flash[:error] = I18n.t('magic_link_invalid')
+      return redirect_to login_path
+    end
+
+    configuration = payload.slice('email', 'client_id', 'redirect_uri', 'nonce', 'redirect_to', 'prompt')
+
+    code = EmailVerificationCode.find_by_cleartext(payload['email'])
+    if code.nil? || code.code.upcase != payload['code'].to_s.upcase
+      # A newer code has been issued (or registration already finished).
+      # verify_email knows how to handle both.
+      flash[:error] = I18n.t('magic_link_invalid')
+      return redirect_to verify_email_registrations_path(configuration)
+    end
+
+    flash[:slide_class] = 'a-slide-in-from-right'
+    redirect_to create_password_registrations_path(configuration.merge('email_verification_code' => code.code))
+  end
+
   def create_password
     return redirect_to confirm_path(login_configuration) if logged_in?
     return unless request.post?
     return flash[:password_error] = 'blank' unless params[:password].strip.present?
     return flash[:password_error] = 'not_matching' unless params[:password] == params[:password_confirmation]
-    return unless verify_email_verification_code!
+    return handle_stale_verification_code unless verify_email_verification_code!
 
     ActiveRecord::Base.transaction do
       email_verifier.reset!
@@ -122,7 +144,20 @@ class RegistrationsController < ApplicationController
   def email_verifier
     @email_verifier ||= Authentication::Services::PrepareEmailForValidation.new(
       email: registration_configuration[:email],
-      relying_party: relying_party
+      relying_party: relying_party,
+      login_configuration: login_configuration.to_h
     )
+  end
+
+  # The code in the params no longer matches — most likely a stale magic
+  # link, or the code was regenerated in another tab. Send a fresh code
+  # and let the user pick up from the verify_email step.
+  def handle_stale_verification_code
+    current_code = email_verifier.verifier
+    if current_code
+      email_verifier.generate_and_send_verification_code!(old_code: current_code.code)
+      flash[:resent_code] = true
+    end
+    redirect_to verify_email_registrations_path(registration_configuration(:email_verification_code))
   end
 end
