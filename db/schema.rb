@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_08_05_000000) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_05_000001) do
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
     t.integer "user_id"
@@ -113,6 +113,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_05_000000) do
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "resend_count", default: 0, null: false
   end
 
   create_table "event_store_events", id: { type: :string, limit: 36 }, force: :cascade do |t|

@@ -6,7 +6,9 @@ da:
   email_already_claimed: Denne e-mail er allerede i brug. Prøv at logge ind i stedet.
   email_changed: Din e-mail er blevet ændret.
   invalid_email_verification_code: Koden er ikke korrekt. Prøv igen.
-  magic_link_invalid: Linket er ikke længere gyldigt. Brug den nyeste e-mail, vi har sendt dig, eller start forfra.
+  magic_link_invalid: Linket er ikke længere gyldigt. Fortsæt herunder for at få en ny kode.
+  magic_link_superseded: Linket er fra en ældre e-mail. Brug koden fra den nyeste e-mail, vi har sendt dig.
+  too_many_codes_sent: Der er sendt for mange koder til denne e-mail. Brug “Send ny kode” for at få en ny.
   error_changing_email: Der skete en fejl under ændring af din e-mail. Prøv igen.
   activemodel:
     attributes:
@@ -74,6 +76,7 @@ da:
     verify_email:
       title: Check din indbakke
       we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med en kode. Indtast venligst koden herunder.
+      link_hint: Du kan trykke på knappen i e-mailen — eller indtaste koden her.
       we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med en ny kode. Indtast venligst den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
       code: Kode fra e-mail (starter med "%{code_start}")
       help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.
@@ -179,8 +182,9 @@ da:
       explain_without_relying_party: For at kunne oprette din konto på Promise, skal du bekræfte din e-mail. Du skal bruge koden til at bekræfte din e-mail.
       code: "Din kode:"
       magic_link_button: "Bekræft min e-mail"
+      magic_link_button_with_client: "Fortsæt til %{client}"
       magic_link_intro: "Klik på linket herunder for at bekræfte din e-mail og fortsætte:"
-      magic_link_or_code: "Eller indtast denne kode, der hvor du var ved at oprette dig:"
+      magic_link_or_code: "Er du ved at oprette dig på en anden enhed? Så indtast denne kode dér i stedet:"
       what_is_promise:
         title: Hvad er Promise?
         body: "Promise er en login-løsning, som gør det muligt at logge ind på forskellige applikationer uden at skulle oprette en konto hos hver enkelt. Du kan på sigt bruge din Promise-konto til at logge ind på mange forskellige tjenester."

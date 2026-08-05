@@ -21,9 +21,10 @@ class MagicLinkFlowTest < ActionDispatch::IntegrationTest
   def magic_path_from_mail
     mail = ActionMailer::Base.deliveries.last
     text = mail.text_part.body.to_s
-    url = text[%r{https?://\S+/registrations/magic/\S+}]
+    url = text[%r{https?://\S+/registrations/magic\?token=\S+}]
     assert url, 'expected the mail to contain a magic link'
-    URI.parse(url).path
+    uri = URI.parse(url)
+    "#{uri.path}?#{uri.query}"
   end
 
   test 'the mail contains a magic link that lands on create_password' do
@@ -48,7 +49,7 @@ class MagicLinkFlowTest < ActionDispatch::IntegrationTest
   end
 
   test 'an unknown or tampered token redirects to login' do
-    get "/registrations/magic/#{SecureRandom.hex(16)}.#{SecureRandom.urlsafe_base64(32)}"
+    get magic_registration_path(token: "#{SecureRandom.hex(16)}.#{SecureRandom.urlsafe_base64(32)}")
 
     assert_redirected_to login_path
     assert_equal I18n.t('magic_link_invalid'), flash[:error]
@@ -66,11 +67,51 @@ class MagicLinkFlowTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('magic_link_invalid'), flash[:error]
   end
 
+  test 'link and code expire together' do
+    send_verification_mail!
+    path = magic_path_from_mail
+    expired = (EmailVerificationCode::TTL + 1.minute).ago
+    EmailVerificationCode.find_by_cleartext(EMAIL).update!(created_at: expired)
+    MagicLink.last.update!(created_at: expired)
+
+    get path
+    assert_redirected_to login_path
+    assert_equal I18n.t('magic_link_invalid'), flash[:error]
+
+    assert_nil EmailVerificationCode.active_for_cleartext(EMAIL)
+  end
+
+  test 'an expired but undeleted code lets the user restart with context intact' do
+    send_verification_mail!
+    path = magic_path_from_mail
+    EmailVerificationCode.find_by_cleartext(EMAIL).update!(
+      created_at: (EmailVerificationCode::TTL + 1.minute).ago
+    )
+
+    get path
+
+    assert_redirected_to login_path(LOGIN_CONFIGURATION.merge('email' => EMAIL))
+    assert_equal I18n.t('magic_link_invalid'), flash[:error]
+  end
+
+  test 'wrong codes only trigger a limited number of resent mails' do
+    send_verification_mail!
+    max = Authentication::Services::PrepareEmailForValidation::MAX_RESENDS
+
+    (max + 3).times do
+      post verify_email_registrations_path(email: EMAIL, email_verification_code: '????')
+      assert_response :success
+    end
+
+    # 1 initial mail + at most MAX_RESENDS resends, then it stops
+    assert_equal 1 + max, ActionMailer::Base.deliveries.size
+  end
+
   test 'the change-email flow does not get a magic link' do
     send_verification_mail!(login_configuration: nil)
 
     mail = ActionMailer::Base.deliveries.last
-    assert_no_match %r{/registrations/magic/}, mail.text_part.body.to_s
-    assert_no_match %r{/registrations/magic/}, mail.html_part.body.to_s
+    assert_no_match %r{/registrations/magic}, mail.text_part.body.to_s
+    assert_no_match %r{/registrations/magic}, mail.html_part.body.to_s
   end
 end

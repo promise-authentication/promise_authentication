@@ -1,12 +1,15 @@
 class Authentication::Services::PrepareEmailForValidation
   include ActiveModel::Model
 
+  # After this many resends for the same pending registration, the user
+  # has to go through "send new code" (Turnstile) again. Keeps the
+  # wrong-code resend paths from being usable for mail bombing.
+  MAX_RESENDS = 5
+
   attr_accessor :email, :relying_party, :login_configuration
 
   def verifier
-    @verifier = EmailVerificationCode.find_by_cleartext(email)
-  rescue ActiveRecord::RecordNotFound
-    nil
+    @verifier = EmailVerificationCode.active_for_cleartext(email)
   end
 
   def verify!(code)
@@ -15,14 +18,24 @@ class Authentication::Services::PrepareEmailForValidation
     verifier.code.upcase == code.upcase
   end
 
+  def can_resend?
+    current = EmailVerificationCode.find_by_cleartext(email)
+    current.nil? || current.resend_count < MAX_RESENDS
+  end
+
   def reset!
-    verifier&.destroy
+    EmailVerificationCode.find_by_cleartext(email)&.destroy
     MagicLink.reset_for!(Authentication::HashedEmail.from_cleartext(email))
     @verifier = nil
   end
 
   def generate_and_send_verification_code!(old_code: nil)
+    resend_count = old_code ? EmailVerificationCode.find_by_cleartext(email)&.resend_count.to_i + 1 : 0
+
     reset!
+    EmailVerificationCode.sweep_expired!
+    MagicLink.sweep_expired!
+
     hashed_email = Authentication::HashedEmail.from_cleartext(email)
     code = EmailVerificationCode::HumanReadableCode.generate(4..4)
 
@@ -35,7 +48,8 @@ class Authentication::Services::PrepareEmailForValidation
     ActiveRecord::Base.transaction do
       EmailVerificationCode.create!(
         id: hashed_email,
-        code: code
+        code: code,
+        resend_count: resend_count
       )
 
       # Only the registration flow gets a magic link — the change-email

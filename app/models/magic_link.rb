@@ -6,7 +6,8 @@
 # itself — so neither the e-mail in transit nor our database exposes the
 # login configuration on its own.
 class MagicLink < ApplicationRecord
-  TTL = 1.hour
+  # Shared with the code so the whole verification mail expires at once.
+  TTL = EmailVerificationCode::TTL
 
   class << self
     # Returns the token to embed in the emailed link.
@@ -40,6 +41,10 @@ class MagicLink < ApplicationRecord
 
     def reset_for!(hashed_email)
       where(hashed_email: hashed_email).destroy_all
+    end
+
+    def sweep_expired!
+      where('created_at < ?', TTL.ago).delete_all
     end
 
     private

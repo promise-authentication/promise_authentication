@@ -9,7 +9,7 @@
 <% if @magic_link_url %>
   <p style="margin:30px 0;text-align:center;">
     <a href="<%= @magic_link_url %>" style="display:inline-block;padding:12px 24px;border-radius:10px;background-color:#1e3a8a;color:#FFFFFF;font-family:sans-serif;font-weight:bold;text-decoration:none;">
-      <%= t('.magic_link_button') %>
+      <%= @relying_party_name ? t('.magic_link_button_with_client', client: @relying_party_name) : t('.magic_link_button') %>
     </a>
   </p>
 <% end %>

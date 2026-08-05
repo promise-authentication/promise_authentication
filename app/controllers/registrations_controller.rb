@@ -26,7 +26,7 @@ class RegistrationsController < ApplicationController
       if ::Authentication::Services::Authenticate::Existing.known?(email)
         redirect_to verify_password_path(registration_configuration)
       else
-        code = EmailVerificationCode.find_by_cleartext(email)
+        code = EmailVerificationCode.active_for_cleartext(email)
         if code
           redirect_to verify_email_registrations_path(registration_configuration)
         else
@@ -80,11 +80,14 @@ class RegistrationsController < ApplicationController
       # If the code is valid, redirect to the passwords page
       flash[:slide_class] = 'a-slide-in-from-right'
       redirect_to create_password_registrations_path(registration_configuration)
-    else
+    elsif email_verifier.can_resend?
       # If the code is invalid, we send the mail, with a new code
       email_verifier.generate_and_send_verification_code!(old_code: @code.code)
       @code = email_verifier.verifier
       flash.now[:resent_code] = true
+      render action: :verify_email
+    else
+      flash.now[:error] = I18n.t('too_many_codes_sent')
       render action: :verify_email
     end
   end
@@ -99,11 +102,19 @@ class RegistrationsController < ApplicationController
 
     configuration = payload.slice('email', 'client_id', 'redirect_uri', 'nonce', 'redirect_to', 'prompt')
 
-    code = EmailVerificationCode.find_by_cleartext(payload['email'])
-    if code.nil? || code.code.upcase != payload['code'].to_s.upcase
-      # A newer code has been issued (or registration already finished).
-      # verify_email knows how to handle both.
+    code = EmailVerificationCode.active_for_cleartext(payload['email'])
+
+    if code.nil?
+      # The code has expired or registration already finished. The payload
+      # decrypted, so we can at least restore the flow with the e-mail
+      # prefilled and the relying-party context intact.
       flash[:error] = I18n.t('magic_link_invalid')
+      return redirect_to login_path(configuration)
+    end
+
+    if code.code.upcase != payload['code'].to_s.upcase
+      # A newer code has been issued since this mail was sent.
+      flash[:error] = I18n.t('magic_link_superseded')
       return redirect_to verify_email_registrations_path(configuration)
     end
 
@@ -154,9 +165,13 @@ class RegistrationsController < ApplicationController
   # and let the user pick up from the verify_email step.
   def handle_stale_verification_code
     current_code = email_verifier.verifier
-    if current_code
+    if current_code.nil?
+      # nothing to resend against — verify_email will route onwards
+    elsif email_verifier.can_resend?
       email_verifier.generate_and_send_verification_code!(old_code: current_code.code)
       flash[:resent_code] = true
+    else
+      flash[:error] = I18n.t('too_many_codes_sent')
     end
     redirect_to verify_email_registrations_path(registration_configuration(:email_verification_code))
   end

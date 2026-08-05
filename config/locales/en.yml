@@ -6,7 +6,9 @@ en:
   email_already_claimed: This e-mail is already in use. Please provide another e-mail.
   email_changed: E-mail changed successfully.
   invalid_email_verification_code: The e-mail verification code is invalid. Please try again.
-  magic_link_invalid: This link is no longer valid. Please use the newest e-mail we sent you, or start over.
+  magic_link_invalid: That link is no longer valid. Continue below to get a new code.
+  magic_link_superseded: That link is from an older e-mail. Use the code from the newest e-mail we sent you.
+  too_many_codes_sent: Too many codes have been sent to this e-mail. Use “Send new code” to request a fresh one.
   error_changing_email: There was an error changing your e-mail. Please try again.
   activemodel:
     attributes:
@@ -74,6 +76,7 @@ en:
     verify_email:
       title: Check your inbox
       we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong> with a code. Please provide the code below.
+      link_hint: You can tap the button in the e-mail — or enter the code here.
       we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new code. Please provide the code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
       code: Code from e-mail (starting with "%{code_start}")
       help: The code you need to provide starts with "%{code_start}" and consists of a total of %{code_length} letters or numbers.
@@ -179,8 +182,9 @@ en:
       explain_without_relying_party: To create your account on Promise, you need to verify your e-mail. You will need the code to verify your e-mail.
       code: "Your code:"
       magic_link_button: "Confirm my e-mail"
+      magic_link_button_with_client: "Continue to %{client}"
       magic_link_intro: "Click the link below to confirm your e-mail and continue:"
-      magic_link_or_code: "Or enter this code where you were signing up:"
+      magic_link_or_code: "Signing up on another device? Enter this code there instead:"
       what_is_promise:
         title: What is Promise?
         body: "Promise is a single-sign-on identity provider. This means you can potentially use Promise to sign in to any of your connected applications. Promise will not store your personal information anywhere. Not even your e-mail."

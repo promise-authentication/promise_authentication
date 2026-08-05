@@ -37,7 +37,9 @@ Rails.application.routes.draw do
   post   'go_to', to: 'authentication#go_to', as: 'go_to'
 
 
-  get 'registrations/magic/:token', to: 'registrations#magic', as: 'magic_registration', constraints: { token: %r{[^/]+} }
+  # The token is a query parameter (not a path segment) so it gets
+  # redacted from request logs via filter_parameters.
+  get 'registrations/magic', to: 'registrations#magic', as: 'magic_registration'
 
   resources :registrations, only: %i[new create] do
     collection do
