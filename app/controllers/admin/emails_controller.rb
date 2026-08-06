@@ -25,7 +25,7 @@ class Admin::EmailsController < ApplicationController
   private
 
   def authenticate_relying_party
-    unless params[:secret_key] == relying_party.secret_key_base64
+    unless ActiveSupport::SecurityUtils.secure_compare(params[:secret_key].to_s, relying_party.secret_key_base64)
       head :forbidden
     end
   end
