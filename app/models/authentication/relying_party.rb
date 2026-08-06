@@ -49,7 +49,7 @@ class Authentication::RelyingParty
 
   def self.http_client
     Faraday.new do |builder|
-      builder.use :http_cache, store: Rails.cache, logger: Rails.logger, serializer: Marshal
+      builder.use :http_cache, store: Rails.cache, logger: Rails.logger, serializer: JSON
       builder.use FaradayMiddleware::FollowRedirects
       builder.adapter Faraday.default_adapter
     end
@@ -150,7 +150,7 @@ class Authentication::RelyingParty
   end
 
   def name_html
-    name.gsub(' ', '&nbsp').html_safe
+    ERB::Util.html_escape(name).gsub(' ', '&nbsp;').html_safe
   end
 
   def default_redirect_uri

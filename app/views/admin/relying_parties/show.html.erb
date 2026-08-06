@@ -186,7 +186,7 @@
 <p>
   we get
 </p>
-<pre><code><%= raw JSON.pretty_generate(admin_relying_party.well_knowns) %></code></pre>
+<pre><code><%= JSON.pretty_generate(admin_relying_party.well_knowns) %></code></pre>
 
 <% if admin_relying_party.logo_data.present? %>
   <p>
@@ -199,7 +199,7 @@
   <%= name %> caches the JSON based on the HTTP headers:
 </p>
 
-<pre><code><%= raw JSON.pretty_generate(admin_relying_party.http_headers || {}) %></code></pre>
+<pre><code><%= JSON.pretty_generate(admin_relying_party.http_headers || {}) %></code></pre>
 
 <p>
   The configuration is needed everytime we show a sign in screen for <%= admin_relying_party.name %> to a user, so allowing <%= name %> to cache it seems sensible.
