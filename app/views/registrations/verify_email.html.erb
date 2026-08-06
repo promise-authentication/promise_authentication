@@ -25,11 +25,44 @@
             <%= t '.press_link_html' %>
           </p>
         <% end %>
-        <%# Mirrors the code box in the e-mail (first character only) so the
-            right mail is recognizable at a glance. %>
-        <p class="mt-3 rounded-lg bg-gray-200 py-2 px-4 font-mono text-3xl text-center tracking-widest text-gray-800 select-none" aria-hidden="true">
-          <%= @code.code.first %><span class="text-gray-400"><%= '•' * (@code.code.length - 1) %></span>
-        </p>
+        <%# Miniature of the actual e-mail — sender, subject, button and the
+            masked code box — reusing the mailer's locale keys so it always
+            matches what actually lands in the inbox. The cursor overlay
+            points at the button to press. %>
+        <% mockup_client = relying_party&.name %>
+        <% mockup_masked_rest = '•' * (@code.code.length - 1) %>
+        <div class="relative mt-4 w-full rounded-xl border border-dashed border-gray-400 bg-gray-100 p-3 pt-4 pointer-events-none select-none" aria-hidden="true">
+          <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gray-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+            <%= t '.mockup_badge' %>
+          </span>
+          <div class="w-full rounded-lg border border-gray-300 shadow-sm overflow-hidden bg-white">
+          <div class="bg-gray-50 border-b border-gray-200 px-4 py-2">
+            <p class="text-xs text-gray-500 truncate">
+              <%= t '.mockup_from' %>
+              <span class="text-gray-700"><%= EmailVerificationMailer.from_name_for(relying_party_name: mockup_client) %> &lt;<%= EmailVerificationMailer::FROM_ADDRESS %>&gt;</span>
+            </p>
+            <p class="text-sm font-semibold text-gray-800 truncate">
+              <%= t '.mockup_subject' %>
+              <%= EmailVerificationMailer.subject_for(code: "#{@code.code.first}#{mockup_masked_rest}", relying_party_name: mockup_client) %>
+            </p>
+          </div>
+          <div class="px-4 py-4">
+            <div class="text-center">
+              <span class="relative inline-block">
+                <span class="inline-block rounded-lg bg-blue-900 text-white text-sm font-bold px-6 py-2.5">
+                  <%= EmailVerificationMailer.magic_link_button_label(relying_party_name: mockup_client) %>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="absolute -bottom-3.5 -right-2 w-6 h-6 drop-shadow" fill="black" stroke="white" stroke-width="1.5">
+                  <path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87c.45 0 .67-.54.35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z" />
+                </svg>
+              </span>
+            </div>
+            <p class="mt-4 rounded-lg bg-gray-200 py-1.5 px-4 font-mono text-2xl text-center tracking-widest text-gray-800 select-none">
+              <%= @code.code.first %><span class="text-gray-400"><%= mockup_masked_rest %></span>
+            </p>
+          </div>
+          </div>
+        </div>
       </div>
       <div class="w-full flex flex-col mt-6 pb-4">
         <% show_code_entry = flash[:resent_code] || flash[:error].present? || registration_configuration[:email_verification_code].present? %>
