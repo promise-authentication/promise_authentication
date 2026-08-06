@@ -107,6 +107,19 @@ class MagicLinkFlowTest < ActionDispatch::IntegrationTest
     assert_equal 1 + max, ActionMailer::Base.deliveries.size
   end
 
+  test 'the mockup on verify_email shows the delivered mail, code masked' do
+    send_verification_mail!
+    delivered = ActionMailer::Base.deliveries.last
+    code = EmailVerificationCode.find_by_cleartext(EMAIL).code
+    masked = code[0] + '•' * (code.length - 1)
+
+    get verify_email_registrations_path(email: EMAIL)
+
+    assert_response :success
+    assert_includes response.body, delivered.subject.sub(code, masked)
+    assert_includes response.body, ERB::Util.html_escape(delivered[:from].to_s)
+  end
+
   test 'the change-email flow does not get a magic link' do
     send_verification_mail!(login_configuration: nil)
 
