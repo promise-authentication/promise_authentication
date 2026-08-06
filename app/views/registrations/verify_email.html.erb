@@ -31,6 +31,7 @@
             block overlays a cursor on the mail's real button. %>
         <style>
           .mail-mockup a { pointer-events: none; position: relative; }
+          .code-entry[open] > summary { display: none; }
           .mail-mockup a[href*="/registrations/magic"]::after {
             content: '';
             position: absolute;
@@ -65,20 +66,23 @@
       </div>
       <div class="w-full flex flex-col mt-6 pb-4">
         <% show_code_entry = flash[:resent_code] || flash[:error].present? || registration_configuration[:email_verification_code].present? %>
-        <details class="w-full text-sm" <%= 'open' if show_code_entry %>>
+        <details class="code-entry w-full text-sm" <%= 'open' if show_code_entry %> ontoggle="if (this.open) this.querySelector('input')?.focus()">
           <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
               <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
             </svg>
             <%= t '.code', code_start: @code.code.first %>
           </summary>
-          <label class="block w-full mt-3 pl-7">
-            <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", placeholder: "#{@code.code.first}...", pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'login-input', autofocus: show_code_entry, required: true, tabindex: 1 %>
-            <p class="text-secondary text-xs mt-1">
+          <label class="block w-full mt-2">
+            <p class="input-label">
+              <%= t '.code_label', code_start: @code.code.first %>
+            </p>
+            <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", placeholder: "#{@code.code.first}...", maxlength: @code.code.length, pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'w-full rounded-lg border border-gray-300 bg-gray-100 py-2 px-4 font-mono text-2xl text-center tracking-widest focus:bg-white', autofocus: show_code_entry, required: true, tabindex: 1 %>
+            <p class="text-secondary text-xs mt-1 text-center">
               <%= t '.caps_or_not' %>
             </p>
           </label>
-          <div class="flex justify-end mt-3 pl-7">
+          <div class="flex justify-end mt-3">
             <%= button_tag type: 'submit', class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
               <%= t('.go_on') %><%= arrow_right %>
             <% end %>
