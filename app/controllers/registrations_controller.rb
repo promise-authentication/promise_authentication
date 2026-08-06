@@ -1,6 +1,8 @@
 class RegistrationsController < ApplicationController
   layout 'authentication'
 
+  helper_method :mockup_mail
+
   def new
     do_logout! if logged_in? && (login_configuration[:prompt] == 'login')
 
@@ -158,6 +160,20 @@ class RegistrationsController < ApplicationController
       relying_party: relying_party,
       login_configuration: login_configuration.to_h
     )
+  end
+
+  # The verify_email page shows the mail it is waiting for — this builds
+  # the ACTUAL mail (same templates, subject and sender as the delivered
+  # one), just with the code masked to its first character and a dummy
+  # link token. Never delivered, only rendered.
+  def mockup_mail
+    code = email_verifier.verifier.code
+    EmailVerificationMailer.with(
+      email: registration_configuration[:email],
+      code: code.first + '•' * (code.length - 1),
+      relying_party_name: relying_party&.name,
+      magic_link_token: 'mockup'
+    ).verify_email
   end
 
   # The code in the params no longer matches — most likely a stale magic

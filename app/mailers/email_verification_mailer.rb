@@ -31,10 +31,6 @@ class EmailVerificationMailer < ApplicationMailer
                       magic_registration_url(token: params[:magic_link_token])
     @magic_link_label = self.class.magic_link_button_label(relying_party_name: @relying_party_name)
 
-    # Mails rarely arrive from dev machines — log the link so the flow
-    # can be exercised locally by pasting it into the browser.
-    Rails.logger.info "[magic-link] #{@email}: #{@magic_link_url}" if Rails.env.development? && @magic_link_url
-
     mail(
       to: @email,
       from: "#{self.class.from_name_for(relying_party_name: @relying_party_name)} <#{FROM_ADDRESS}>",

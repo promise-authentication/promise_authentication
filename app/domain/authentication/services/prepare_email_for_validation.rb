@@ -63,6 +63,16 @@ class Authentication::Services::PrepareEmailForValidation
       end
     end
 
+    # Mails rarely arrive from dev machines — log the link so the flow
+    # can be exercised locally by pasting it into the browser.
+    if Rails.env.development? && magic_link_token
+      url = Rails.application.routes.url_helpers.magic_registration_url(
+        token: magic_link_token,
+        **Rails.application.config.action_mailer.default_url_options
+      )
+      Rails.logger.info "[magic-link] #{email}: #{url}"
+    end
+
     retries = 0
     max_retries = 3
 
