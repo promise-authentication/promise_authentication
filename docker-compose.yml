@@ -9,6 +9,7 @@ services:
     stdin_open: true
     environment:
       PROMISE_KEY_REGISTRY_API_ROOT: http://promise_kms:3000/api/secret
+      PROMISE_ISSUER: http://web:3000
       RAILS_ENV: development
       NODE_ENV: development
       RAILS_BIND: 0.0.0.0
