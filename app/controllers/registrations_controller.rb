@@ -167,8 +167,10 @@ class RegistrationsController < ApplicationController
   # one), just with the code masked to its first character and a dummy
   # link token. Never delivered, only rendered.
   def mockup_mail
+    return @mockup_mail if @mockup_mail
+
     code = email_verifier.verifier.code
-    EmailVerificationMailer.with(
+    @mockup_mail = EmailVerificationMailer.with(
       email: registration_configuration[:email],
       code: code.first + '•' * (code.length - 1),
       relying_party_name: relying_party&.name,

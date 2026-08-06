@@ -76,13 +76,17 @@ en:
     verify_email:
       title: Check your inbox
       we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong> with a link — press it to continue.
-      press_link_html: 'The e-mail looks like this:'
+      method_link: Press the link in the e-mail
       mockup_from: 'From:'
       mockup_subject: 'Subject:'
-      mockup_badge: Example
+      mockup_inbox: Inbox
       we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new link and a new code. Press the link in the newest e-mail, or provide its code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
-      code: Press here to type the code from the e-mail yourself
-      code_label: The code from the e-mail — it starts with "%{code_start}"
+      code: Type the code from the e-mail yourself
+      code_label: The code from the e-mail
+      code_starts_with: It starts with "%{code_start}".
+      how_to_find_code: 'How to find the code:'
+      how_to_find_link: 'How to find the link:'
+      replay: Watch again
       help: The code you need to provide starts with "%{code_start}" and consists of a total of %{code_length} letters or numbers.
       caps_or_not: We do not care about upper or lower case letters.
       send_new_code: Send new code
@@ -181,7 +185,7 @@ en:
       go_on: Go on
   email_verification_mailer:
     verify_email:
-      subject: "%{relying_party} - Your code: %{code}"
+      subject: "Confirm your e-mail"
       explain_with_relying_party: "You are signing in to %{client}, which uses Promise. To continue, you need to verify your e-mail."
       explain_without_relying_party: To create your account on Promise, you need to verify your e-mail.
       code: "Your code:"

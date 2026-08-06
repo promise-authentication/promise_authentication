@@ -21,64 +21,181 @@
           <div class="block text-primary">
             <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
           </div>
-          <p class="text-primary font-semibold mt-3">
-            <%= t '.press_link_html' %>
-          </p>
         <% end %>
+        <% show_code_entry = flash[:resent_code] || flash[:error].present? || registration_configuration[:email_verification_code].present? %>
         <%# The ACTUAL mail (same templates, subject and sender as the
             delivered one, via mockup_mail) rendered as an obvious preview —
-            code masked, dummy link token, nothing pressable. The style
-            block overlays a cursor on the mail's real button. %>
+            code masked, dummy link token, nothing pressable. A pure-CSS
+            timeline plays: the mail lands in an inbox, a cursor clicks it,
+            it opens to the full mail, and the cursor presses its button.
+            With reduced motion, only the opened mail with the cursor on
+            the button is shown. %>
         <style>
           .mail-mockup a { pointer-events: none; position: relative; }
-          .code-entry[open] > summary { display: none; }
-          .mail-mockup a[href*="/registrations/magic"]::after {
-            content: '';
-            position: absolute;
-            right: -14px;
-            bottom: -14px;
-            width: 24px;
-            height: 24px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" stroke="white" stroke-width="1.5"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87c.45 0 .67-.54.35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z"/></svg>') no-repeat;
+          .method[open] > summary .chev { transform: rotate(180deg); }
+          .anim-inbox { opacity: 0; }
+          .anim-replay { opacity: 0; visibility: hidden; }
+          .anim-progress-track { opacity: 0; }
+          .anim-cursor { left: var(--btn-x, 48%); top: var(--btn-y, 49%); }
+          .stage-code .anim-cursor { left: var(--code-x, 48%); top: var(--code-y, 68%); }
+          @media (prefers-reduced-motion: no-preference) {
+            /* Scoped to [open] so every accordion switch restarts the show:
+               closing removes the animation, reopening reapplies it fresh. */
+            .method[open] .anim-inbox  { animation: mockup-inbox 7s ease-in-out both; }
+            .method[open] .anim-row    { animation: mockup-row 7s ease-in-out both; }
+            .method[open] .anim-mail   { animation: mockup-mail 7s ease-in-out both; transform-origin: 50% 25%; }
+            .method[open] .anim-cursor { animation: mockup-cursor 7s ease-in-out both; }
+            .method[open] .stage-link .mail-mockup a[href*="/registrations/magic"] { animation: mockup-button 7s ease-in-out both; }
+            /* The code variant shares the inbox intro, then scrolls to the
+               code and highlights it instead of pressing the button. */
+            .method[open] .stage-code .mail-body-inner { animation: mockup-scroll 7s ease-in-out both; }
+            .method[open] .stage-code .mail-mockup p[style*="user-select"] { animation: mockup-code-highlight 7s ease-in-out both; }
+            .method[open] .stage-code .anim-cursor { animation-name: mockup-cursor-code; }
+            @keyframes mockup-inbox {
+              0%, 40% { opacity: 1; transform: scale(1); }
+              46%, 100% { opacity: 0; transform: scale(1.06); }
+            }
+            @keyframes mockup-row {
+              0%, 8% { opacity: 0; transform: translateY(-6px); }
+              13%, 29% { opacity: 1; transform: translateY(0) scale(1); }
+              31% { transform: scale(0.96); }
+              33%, 100% { opacity: 1; transform: scale(1); }
+            }
+            @keyframes mockup-mail {
+              0%, 41% { opacity: 0; transform: scale(0.7); }
+              49%, 100% { opacity: 1; transform: scale(1); }
+            }
+            @keyframes mockup-cursor {
+              0%, 6% { opacity: 0; left: 85%; top: 92%; transform: scale(1); }
+              12% { opacity: 1; }
+              24%, 44% { opacity: 1; left: var(--row-x, 48%); top: var(--row-y, 21%); transform: scale(1); }
+              28% { transform: scale(0.8); }
+              31% { transform: scale(1); }
+              62%, 66% { opacity: 1; left: var(--btn-x, 48%); top: var(--btn-y, 49%); transform: scale(1); }
+              69% { left: var(--btn-x, 48%); top: var(--btn-y, 49%); transform: scale(0.8); }
+              72%, 100% { opacity: 1; left: var(--btn-x, 48%); top: var(--btn-y, 49%); transform: scale(1); }
+            }
+            @keyframes mockup-button {
+              0%, 66% { transform: scale(1); }
+              70% { transform: scale(0.94); }
+              74%, 100% { transform: scale(1); }
+            }
+            .method[open] .anim-code-input { animation: code-input 7s ease-in-out both; }
+            .method[open] .anim-progress { animation: mockup-progress 7s linear both; }
+            .method[open] .anim-progress-track { opacity: 1; }
+            .method[open] .anim-replay { animation: mockup-replay 7s both; }
+            @keyframes mockup-progress {
+              0% { width: 0%; }
+              100% { width: 100%; }
+            }
+            @keyframes mockup-replay {
+              0%, 96% { opacity: 0; visibility: hidden; }
+              100% { opacity: 1; visibility: visible; }
+            }
+            @keyframes mockup-scroll {
+              0%, 55% { transform: translateY(0); }
+              68%, 100% { transform: translateY(-6rem); }
+            }
+            @keyframes mockup-cursor-code {
+              0%, 6% { opacity: 0; left: 85%; top: 92%; transform: scale(1); }
+              12% { opacity: 1; }
+              24%, 44% { opacity: 1; left: var(--row-x, 48%); top: var(--row-y, 25%); transform: scale(1); }
+              28% { transform: scale(0.8); }
+              31% { transform: scale(1); }
+              72%, 100% { opacity: 1; left: var(--code-x, 48%); top: var(--code-y, 68%); transform: scale(1); }
+            }
+            @keyframes mockup-code-highlight {
+              0%, 72% { box-shadow: 0 0 0 0 rgba(30, 58, 138, 0); background-color: #EEEEEE; }
+              79% { box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.35); background-color: #dbeafe; }
+              84% { box-shadow: 0 0 0 1px rgba(30, 58, 138, 0.2); }
+              88%, 100% { box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.35); background-color: #dbeafe; }
+            }
+            @keyframes code-input {
+              0%, 88% { border-color: rgb(209 213 219); box-shadow: none; }
+              93% { border-color: rgb(30 58 138); box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2); }
+              100% { border-color: rgb(209 213 219); box-shadow: none; }
+            }
           }
         </style>
-        <div class="relative mt-4 w-full rounded-xl border border-dashed border-gray-400 bg-gray-100 p-3 pt-4 pointer-events-none select-none" aria-hidden="true">
-          <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gray-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
-            <%= t '.mockup_badge' %>
-          </span>
-          <div class="w-full rounded-lg border border-gray-300 shadow-sm overflow-hidden bg-white">
-            <div class="bg-gray-50 border-b border-gray-200 px-4 py-2">
-              <p class="text-xs text-gray-500 truncate">
-                <%= t '.mockup_from' %>
-                <span class="text-gray-700"><%= mockup_mail[:from].to_s %></span>
+        <script>
+          // The cursor keyframes read --row/--btn/--code CSS variables so
+          // the stops track the real elements at any width. Measured from
+          // layout offsets (transform-free), remeasured on open and resize.
+          function positionMockupCursor(details) {
+            details.querySelectorAll('[class*="stage-"]').forEach(function (stage) {
+              var container = stage.querySelector(':scope > .relative');
+              if (!container) return;
+              var offsetTo = function (el) {
+                var x = 0, y = 0;
+                while (el && el !== container) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+                return { x: x, y: y };
+              };
+              var setVar = function (name, el, extraY) {
+                if (!el) return;
+                var o = offsetTo(el);
+                stage.style.setProperty(name + '-x', (o.x + el.offsetWidth / 2 - 5) + 'px');
+                stage.style.setProperty(name + '-y', (o.y + el.offsetHeight / 2 - 3 + (extraY || 0)) + 'px');
+              };
+              var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+              setVar('--row', stage.querySelector('.anim-row'));
+              setVar('--btn', stage.querySelector('.mail-mockup a'));
+              setVar('--code', stage.querySelector('.mail-mockup p[style*="user-select"]'), -6 * rem);
+            });
+          }
+          // Restarts the timelines; a no-op on browsers without the Web
+          // Animations API, where the show simply plays once per page load.
+          function restartMockupAnimations(details) {
+            if (!details.getAnimations) return;
+            details.getAnimations({ subtree: true }).forEach(function (a) { a.cancel(); a.play(); });
+          }
+          function positionOpenMockupCursors() {
+            document.querySelectorAll('details.method[open]').forEach(positionMockupCursor);
+          }
+          window.addEventListener('resize', positionOpenMockupCursors);
+          document.addEventListener('DOMContentLoaded', positionOpenMockupCursors);
+          document.addEventListener('turbolinks:load', positionOpenMockupCursors);
+        </script>
+        <div class="mt-4 w-full rounded-xl border border-gray-200 divide-y divide-gray-200">
+          <details name="verify-method" class="method p-3" <%= 'open' unless show_code_entry %> ontoggle="if (this.open) { positionMockupCursor(this); restartMockupAnimations(this); }">
+            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
+              </svg>
+              <%= t '.method_link' %>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              </svg>
+            </summary>
+            <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
+              <p class="text-sm font-semibold text-primary">
+                <%= t '.how_to_find_link' %>
               </p>
-              <p class="text-sm font-semibold text-gray-800 truncate">
-                <%= t '.mockup_subject' %>
-                <%= mockup_mail.subject %>
-              </p>
+              <%= render 'mail_mockup_stage', variant: 'link' %>
             </div>
-            <div class="mail-mockup relative max-h-56 overflow-hidden px-4 py-3 text-[10px] leading-snug text-gray-800">
-              <%= mockup_mail.html_part.body.decoded.html_safe %>
-              <div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white to-transparent"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="w-full flex flex-col mt-6 pb-4">
-        <% show_code_entry = flash[:resent_code] || flash[:error].present? || registration_configuration[:email_verification_code].present? %>
-        <details class="code-entry w-full text-sm" <%= 'open' if show_code_entry %> ontoggle="if (this.open) this.querySelector('input')?.focus()">
-          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-            </svg>
-            <%= t '.code', code_start: @code.code.first %>
-          </summary>
-          <label class="block w-full mt-2">
-            <p class="input-label">
-              <%= t '.code_label', code_start: @code.code.first %>
+          </details>
+          <details name="verify-method" class="method code-entry p-3 text-sm" <%= 'open' if show_code_entry %> ontoggle="if (this.open) { positionMockupCursor(this); restartMockupAnimations(this); var i = this.querySelector('input'); if (i) i.focus(); }">
+            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+              </svg>
+              <%= t '.code' %>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              </svg>
+            </summary>
+          <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
+            <p class="text-sm font-semibold text-primary">
+              <%= t '.how_to_find_code' %>
             </p>
-            <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", placeholder: "#{@code.code.first}...", maxlength: @code.code.length, pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'w-full rounded-lg border border-gray-300 bg-gray-100 py-2 px-4 font-mono text-2xl text-center tracking-widest focus:bg-white', autofocus: show_code_entry, required: true, tabindex: 1 %>
+            <%= render 'mail_mockup_stage', variant: 'code' %>
+          </div>
+          <label class="block w-full mt-4">
+            <p class="input-label">
+              <%= t '.code_label' %>
+            </p>
+            <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", maxlength: @code.code.length, pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'anim-code-input w-full rounded-lg border border-gray-300 bg-gray-100 py-2 px-4 font-mono text-2xl text-center tracking-widest focus:bg-white', autofocus: show_code_entry, required: true, tabindex: 1 %>
             <p class="text-secondary text-xs mt-1 text-center">
+              <%= t '.code_starts_with', code_start: @code.code.first %>
               <%= t '.caps_or_not' %>
             </p>
           </label>
@@ -87,8 +204,11 @@
               <%= t('.go_on') %><%= arrow_right %>
             <% end %>
           </div>
-        </details>
-        <div class="flex w-full justify-between items-center mt-6">
+          </details>
+        </div>
+      </div>
+      <div class="w-full flex flex-col mt-6 pb-4">
+        <div class="flex w-full justify-between items-center">
           <%= back_to(registration_configuration(:email_verification_code), data: {turbolinks: false}, text: t(".send_new_code"), class: "text-gray-500") do |args| verify_human_registrations_path(args) end %>
           <%= back_to(registration_configuration(), data: {turbolinks: false}) do |args| new_registration_path(args) end %>
         </div>
