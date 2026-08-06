@@ -81,7 +81,7 @@ da:
       mockup_subject: 'Emne:'
       mockup_badge: Eksempel
       we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med et nyt link og en ny kode. Tryk på linket i den nyeste e-mail, eller indtast den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
-      code: Eller tryk her for at indtaste koden fra e-mailen (den starter med "%{code_start}")
+      code: Tryk her, for at indtaste koden fra mailen selv
       help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.
       caps_or_not: Vi gør ikke forskel på store og små bogtaver.
       send_new_code: Send ny kode
