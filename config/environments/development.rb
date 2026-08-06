@@ -48,7 +48,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   config.action_mailer.default_url_options = {
-    host: 'localhost:3000',
+    host: ENV.fetch('PROMISE_DEV_HOST', 'localhost:3000'),
     protocol: 'http'
   }
 
