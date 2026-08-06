@@ -76,7 +76,7 @@ en:
     verify_email:
       title: Check your inbox
       we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong>.
-      press_link_html: Press the link in the e-mail — the one with the code that starts with "%{code_start}".
+      press_link_html: 'Press the link in the e-mail — the one with this code:'
       we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new link and a new code. Press the link in the newest e-mail, or provide its code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
       code: Or enter the code from the e-mail (starting with "%{code_start}")
       help: The code you need to provide starts with "%{code_start}" and consists of a total of %{code_length} letters or numbers.

@@ -76,7 +76,7 @@ da:
     verify_email:
       title: Check din indbakke
       we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong>.
-      press_link_html: Tryk på linket i e-mailen — den med koden, der starter med "%{code_start}".
+      press_link_html: 'Tryk på linket i e-mailen — den med denne kode:'
       we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med et nyt link og en ny kode. Tryk på linket i den nyeste e-mail, eller indtast den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
       code: Eller indtast koden fra e-mailen (starter med "%{code_start}")
       help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.

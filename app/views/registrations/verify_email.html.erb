@@ -22,9 +22,14 @@
             <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
           </div>
           <p class="text-primary font-semibold mt-3">
-            <%= t '.press_link_html', code_start: @code.code.first %>
+            <%= t '.press_link_html' %>
           </p>
         <% end %>
+        <%# Mirrors the code box in the e-mail (first character only) so the
+            right mail is recognizable at a glance. %>
+        <p class="mt-3 rounded-lg bg-gray-200 py-2 px-4 font-mono text-3xl text-center tracking-widest text-gray-800 select-none" aria-hidden="true">
+          <%= @code.code.first %><span class="text-gray-400"><%= '•' * (@code.code.length - 1) %></span>
+        </p>
       </div>
       <div class="w-full flex flex-col mt-6 pb-4">
         <% show_code_entry = flash[:resent_code] || flash[:error].present? || registration_configuration[:email_verification_code].present? %>
