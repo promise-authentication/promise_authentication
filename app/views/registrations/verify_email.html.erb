@@ -56,8 +56,9 @@
                 <%= mockup_mail.subject %>
               </p>
             </div>
-            <div class="mail-mockup px-4 py-3 text-[10px] leading-snug text-gray-800">
+            <div class="mail-mockup relative max-h-48 overflow-hidden px-4 py-3 text-[10px] leading-snug text-gray-800">
               <%= mockup_mail.html_part.body.decoded.html_safe %>
+              <div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white to-transparent"></div>
             </div>
           </div>
         </div>
