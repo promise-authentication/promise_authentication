@@ -181,13 +181,13 @@ da:
   email_verification_mailer:
     verify_email:
       subject: "%{relying_party} - Din kode: %{code}"
-      explain_with_relying_party: "Du er igang med at logge ind på %{client}, som bruger Promise til at logge ind. Du skal bruge koden herunder til at bekræfte din e-mail overfor Promise."
-      explain_without_relying_party: For at kunne oprette din konto på Promise, skal du bekræfte din e-mail. Du skal bruge koden til at bekræfte din e-mail.
+      explain_with_relying_party: "Du er ved at logge ind på %{client}, som bruger Promise. For at fortsætte skal du bekræfte din e-mail."
+      explain_without_relying_party: For at oprette din konto på Promise skal du bekræfte din e-mail.
       code: "Din kode:"
-      magic_link_button: "Bekræft min e-mail"
-      magic_link_button_with_client: "Fortsæt til %{client}"
-      magic_link_intro: "Klik på linket herunder for at bekræfte din e-mail og fortsætte:"
-      magic_link_or_code: "Er du ved at oprette dig på en anden enhed? Så indtast denne kode dér i stedet:"
+      magic_link_button: "Bekræft e-mail og fortsæt"
+      magic_link_button_with_client: "Bekræft e-mail og fortsæt til %{client}"
+      magic_link_intro: "Bekræft din e-mail og fortsæt ved at klikke på linket herunder:"
+      magic_link_or_code: "Vil du fortsætte, der hvor du slap? Så indtast denne kode dér i stedet:"
       what_is_promise:
         title: Hvad er Promise?
         body: "Promise er en login-løsning, som gør det muligt at logge ind på forskellige applikationer uden at skulle oprette en konto hos hver enkelt. Du kan på sigt bruge din Promise-konto til at logge ind på mange forskellige tjenester."

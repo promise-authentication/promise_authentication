@@ -116,7 +116,7 @@ class MagicLinkFlowTest < ActionDispatch::IntegrationTest
     get verify_email_registrations_path(email: EMAIL)
 
     assert_response :success
-    assert_includes response.body, delivered.subject.sub(code, masked)
+    assert_includes response.body, delivered.subject.sub(/#{Regexp.escape(code)}\z/, masked)
     assert_includes response.body, ERB::Util.html_escape(delivered[:from].to_s)
   end
 

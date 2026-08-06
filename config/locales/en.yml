@@ -181,13 +181,13 @@ en:
   email_verification_mailer:
     verify_email:
       subject: "%{relying_party} - Your code: %{code}"
-      explain_with_relying_party: "You are trying to login to %{client}, which uses Promise for signing in. You need the code below to verify your e-mail with Promise."
-      explain_without_relying_party: To create your account on Promise, you need to verify your e-mail. You will need the code to verify your e-mail.
+      explain_with_relying_party: "You are signing in to %{client}, which uses Promise. To continue, you need to verify your e-mail."
+      explain_without_relying_party: To create your account on Promise, you need to verify your e-mail.
       code: "Your code:"
-      magic_link_button: "Confirm my e-mail"
-      magic_link_button_with_client: "Continue to %{client}"
-      magic_link_intro: "Click the link below to confirm your e-mail and continue:"
-      magic_link_or_code: "Signing up on another device? Enter this code there instead:"
+      magic_link_button: "Confirm e-mail and continue"
+      magic_link_button_with_client: "Confirm e-mail and continue to %{client}"
+      magic_link_intro: "Confirm your e-mail and continue by clicking the link below:"
+      magic_link_or_code: "Want to continue where you left off? Enter this code there instead:"
       what_is_promise:
         title: What is Promise?
         body: "Promise is a single-sign-on identity provider. This means you can potentially use Promise to sign in to any of your connected applications. Promise will not store your personal information anywhere. Not even your e-mail."
