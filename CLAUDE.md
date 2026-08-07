@@ -23,3 +23,24 @@
   `PROMISE_DEV_HOST` (set in docker-compose.yml) makes the URL point at :3003.
 - `rails db:prepare` only runs at container **start** (it's in the compose `command:`) —
   after db changes you must `docker compose restart web`, not just wait.
+- The registration flow's verify_human step shows a Cloudflare Turnstile check (test
+  mode) — automation can't complete registrations end-to-end; hand that step to a
+  human, or preview flash-gated states via dev params (e.g. the confirm page's
+  account-created celebration replays with `/confirm?client_id=...&celebrate=1`).
+
+## Verifying the CSS page animations
+
+Several pages (verify_email, create_password, confirm) play multi-second pure-CSS
+"two-screen" shows. When checking them via browser automation:
+
+- Screenshot round-trips are slower than the shows, so you always catch the end
+  state. Scrub instead: `document.getAnimations().forEach(a => {a.pause();
+  a.currentTime = <ms>})`, screenshot, then `.forEach(a => a.play())`.
+- Backgrounded automation tabs defer rendering — animation clocks are set at load,
+  so a hidden tab shows stale computed styles and then jumps straight to the final
+  frame when woken. Probe computed styles/scrollLeft via JS rather than trusting
+  what "plays".
+- The two-screen containers must use `overflow: clip`, never `hidden`: a hidden box
+  is still programmatically scrollable, and autofocusing the still-offscreen screen
+  makes the browser scroll the whole show out of view (symptom: blank card for the
+  animation's duration, then the content pops in).
