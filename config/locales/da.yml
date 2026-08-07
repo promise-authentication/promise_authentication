@@ -75,17 +75,20 @@ da:
       cancel: Tilbage
     verify_email:
       title: Check din indbakke
-      we_sent_you_an_email_html: Vi har <em>%{at}</em> sendt dig en e-mail på <strong>%{email}</strong> med et link — tryk på det for at komme videre.
-      method_link: Tryk på linket i mailen
+      we_sent_you_an_email_html: Vi har sendt dig en e-mail på <strong>%{email}</strong>.
+      method_link: Tryk på knappen i mailen
+      or: eller
+      cant_find: Jeg kan ikke finde mailen
+      sent_at_html: Mailen blev sendt <em>%{at}</em>.
+      check_spam: Husk også at kigge i din spam-mappe.
       mockup_from: 'Fra:'
       mockup_subject: 'Emne:'
       mockup_inbox: Indbakke
       we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med et nyt link og en ny kode. Tryk på linket i den nyeste e-mail, eller indtast den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
-      code: Indtast koden fra mailen selv
-      code_label: Koden fra mailen
+      code: Indtast koden fra mailen
       code_starts_with: Den starter med "%{code_start}".
-      how_to_find_code: 'Sådan finder du koden:'
-      how_to_find_link: 'Sådan finder du linket:'
+      how_to_find_code: Sådan finder du koden
+      how_to_find_link: Sådan finder du knappen
       replay: Se igen
       help: Koden du skal taste starter med "%{code_start}" og består af i alt %{code_length} bogstaver eller tal.
       caps_or_not: Vi gør ikke forskel på store og små bogtaver.
@@ -95,7 +98,9 @@ da:
       cancel: Tilbage
     create_password:
       title: Vælg password
-      create_account_html: Opret det password du vil bruge til at logge ind med <span class="font-bold">%{email}</span> fremover.
+      email_verified: Din e-mail er bekræftet!
+      email_verified_email_html: Du har bekræftet, at <strong>%{email}</strong> er din.
+      create_account_html: Vælg nu det password, du fremover vil logge ind med.
       new_password: Password
       confirm_password: Gentag password
       password_error:

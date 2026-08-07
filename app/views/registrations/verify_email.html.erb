@@ -19,7 +19,7 @@
           </div>
         <% else %>
           <div class="block text-primary">
-            <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+            <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email] %>
           </div>
         <% end %>
         <% show_code_entry = flash[:resent_code] || flash[:error].present? || registration_configuration[:email_verification_code].present? %>
@@ -32,7 +32,8 @@
             the button is shown. %>
         <style>
           .mail-mockup a { pointer-events: none; position: relative; }
-          .method[open] > summary .chev { transform: rotate(180deg); }
+          .method[open] > summary .chev,
+          .cant-find[open] > summary .chev { transform: rotate(180deg); }
           .anim-inbox { opacity: 0; }
           .anim-replay { opacity: 0; visibility: hidden; }
           .anim-progress-track { opacity: 0; }
@@ -80,7 +81,6 @@
               70% { transform: scale(0.94); }
               74%, 100% { transform: scale(1); }
             }
-            .method[open] .anim-code-input { animation: code-input 7s ease-in-out both; }
             .method[open] .anim-progress { animation: mockup-progress 7s linear both; }
             .method[open] .anim-progress-track { opacity: 1; }
             .method[open] .anim-replay { animation: mockup-replay 7s both; }
@@ -109,11 +109,6 @@
               79% { box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.35); background-color: #dbeafe; }
               84% { box-shadow: 0 0 0 1px rgba(30, 58, 138, 0.2); }
               88%, 100% { box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.35); background-color: #dbeafe; }
-            }
-            @keyframes code-input {
-              0%, 88% { border-color: rgb(209 213 219); box-shadow: none; }
-              93% { border-color: rgb(30 58 138); box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.2); }
-              100% { border-color: rgb(209 213 219); box-shadow: none; }
             }
           }
         </style>
@@ -155,57 +150,85 @@
           document.addEventListener('DOMContentLoaded', positionOpenMockupCursors);
           document.addEventListener('turbolinks:load', positionOpenMockupCursors);
         </script>
-        <div class="mt-4 w-full rounded-xl border border-gray-200 divide-y divide-gray-200">
-          <details name="verify-method" class="method p-3" <%= 'open' unless show_code_entry %> ontoggle="if (this.open) { positionMockupCursor(this); restartMockupAnimations(this); }">
-            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
-              </svg>
-              <%= t '.method_link' %>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-              </svg>
-            </summary>
-            <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
-              <p class="text-sm font-semibold text-primary">
-                <%= t '.how_to_find_link' %>
+        <div class="mt-6 w-full">
+          <div class="flex items-center justify-center gap-2 text-primary font-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-blue-900">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
+            </svg>
+            <%= t '.method_link' %>
+          </div>
+          <div class="my-4 flex items-center gap-3 px-6" aria-hidden="true">
+            <div class="h-px flex-1 bg-gray-200"></div>
+            <span class="text-sm italic text-gray-500"><%= t '.or' %></span>
+            <div class="h-px flex-1 bg-gray-200"></div>
+          </div>
+          <div class="text-sm">
+            <label class="block w-full">
+              <span class="flex items-center justify-center gap-2 text-primary font-semibold text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-blue-900">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+                <%= t '.code' %>
+              </span>
+              <% code_value = flash[:resent_code] ? nil : registration_configuration[:email_verification_code] %>
+              <%= text_field_tag :email_verification_code, code_value, autocomplete: "off", placeholder: @code.code.first + '•' * (@code.code.length - 1), maxlength: @code.code.length, pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, oninput: "document.getElementById('go_on_button').disabled = this.value.trim() === '';", class: 'mt-3 w-full rounded-lg border border-gray-300 bg-gray-100 py-2 px-4 font-mono text-2xl text-center tracking-widest focus:bg-white', autofocus: show_code_entry, required: true, tabindex: 1 %>
+              <p class="text-secondary text-xs mt-1 text-center">
+                <%= t '.code_starts_with', code_start: @code.code.first %>
+                <%= t '.caps_or_not' %>
               </p>
-              <%= render 'mail_mockup_stage', variant: 'link' %>
+            </label>
+            <div class="flex justify-end mt-3">
+              <%= button_tag type: 'submit', id: 'go_on_button', disabled: code_value.blank?, class: 'button primary transition-opacity disabled:opacity-0 disabled:cursor-not-allowed', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
+                <%= t('.go_on') %><%= arrow_right %>
+              <% end %>
             </div>
-          </details>
-          <details name="verify-method" class="method code-entry p-3 text-sm" <%= 'open' if show_code_entry %> ontoggle="if (this.open) { positionMockupCursor(this); restartMockupAnimations(this); var i = this.querySelector('input'); if (i) i.focus(); }">
-            <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-              </svg>
-              <%= t '.code' %>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-              </svg>
-            </summary>
-          <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
-            <p class="text-sm font-semibold text-primary">
-              <%= t '.how_to_find_code' %>
-            </p>
-            <%= render 'mail_mockup_stage', variant: 'code' %>
           </div>
-          <label class="block w-full mt-4">
-            <p class="input-label">
-              <%= t '.code_label' %>
-            </p>
-            <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", maxlength: @code.code.length, pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'anim-code-input w-full rounded-lg border border-gray-300 bg-gray-100 py-2 px-4 font-mono text-2xl text-center tracking-widest focus:bg-white', autofocus: show_code_entry, required: true, tabindex: 1 %>
-            <p class="text-secondary text-xs mt-1 text-center">
-              <%= t '.code_starts_with', code_start: @code.code.first %>
-              <%= t '.caps_or_not' %>
-            </p>
-          </label>
-          <div class="flex justify-end mt-3">
-            <%= button_tag type: 'submit', class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
-              <%= t('.go_on') %><%= arrow_right %>
-            <% end %>
-          </div>
-          </details>
         </div>
+        <details class="cant-find mt-6 w-full rounded-xl border border-gray-200 p-3">
+          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+            </svg>
+            <%= t '.cant_find' %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </summary>
+          <p class="mt-3 text-sm text-primary">
+            <%= t '.sent_at_html', at: local_time(@code.created_at, format: :long) %>
+            <%= t '.check_spam' %>
+          </p>
+          <div class="mt-3 w-full rounded-xl border border-gray-200 divide-y divide-gray-200 text-sm">
+            <details name="verify-method" class="method p-3" ontoggle="if (this.open) { positionMockupCursor(this); restartMockupAnimations(this); }">
+              <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
+                </svg>
+                <%= t '.how_to_find_link' %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </summary>
+              <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                <%= render 'mail_mockup_stage', variant: 'link' %>
+              </div>
+            </details>
+            <details name="verify-method" class="method p-3" ontoggle="if (this.open) { positionMockupCursor(this); restartMockupAnimations(this); }">
+              <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+                <%= t '.how_to_find_code' %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </summary>
+              <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                <%= render 'mail_mockup_stage', variant: 'code' %>
+              </div>
+            </details>
+          </div>
+        </details>
       </div>
       <div class="w-full flex flex-col mt-6 pb-4">
         <div class="flex w-full justify-between items-center">
@@ -216,4 +239,3 @@
     </div>
   <% end %>
 <% end %>
-

@@ -75,17 +75,20 @@ en:
       cancel: Back
     verify_email:
       title: Check your inbox
-      we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong> with a link — press it to continue.
-      method_link: Press the link in the e-mail
+      we_sent_you_an_email_html: We sent you an e-mail to <strong>%{email}</strong>.
+      method_link: Press the button in the e-mail
+      or: or
+      cant_find: I can't find the e-mail
+      sent_at_html: The e-mail was sent <em>%{at}</em>.
+      check_spam: Remember to also look in your spam folder.
       mockup_from: 'From:'
       mockup_subject: 'Subject:'
       mockup_inbox: Inbox
       we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new link and a new code. Press the link in the newest e-mail, or provide its code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
-      code: Type the code from the e-mail yourself
-      code_label: The code from the e-mail
+      code: Type the code from the e-mail
       code_starts_with: It starts with "%{code_start}".
-      how_to_find_code: 'How to find the code:'
-      how_to_find_link: 'How to find the link:'
+      how_to_find_code: How to find the code
+      how_to_find_link: How to find the button
       replay: Watch again
       help: The code you need to provide starts with "%{code_start}" and consists of a total of %{code_length} letters or numbers.
       caps_or_not: We do not care about upper or lower case letters.
@@ -95,7 +98,9 @@ en:
       cancel: Back
     create_password:
       title: Create password
-      create_account_html: Create the password you want to use with <span class="font-bold">%{email}</span>.
+      email_verified: Your e-mail is verified!
+      email_verified_email_html: You have confirmed that <strong>%{email}</strong> is yours.
+      create_account_html: Now create the password you want to sign in with from now on.
       new_password: New password
       confirm_password: Confirm password
       password_error:
