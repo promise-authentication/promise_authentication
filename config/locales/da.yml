@@ -108,8 +108,8 @@ da:
       password_error:
         blank: Udfyld venligst password.
         not_matching: Password matcher ikke.
-      go_on: Log ind
-      going_html: 'Logger ind&hellip;'
+      go_on: Gem password
+      going_html: 'Gemmer&hellip;'
       we_save_no_data_html: Dit password bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
       remember_me: Husk mig
       cancel: Tilbage
@@ -136,7 +136,7 @@ da:
       go_on: Videre
       confirming_html: 'Bekræfter e-mail&hellip;'
     confirm:
-      account_created: Din konto er oprettet!
+      account_created: Du er færdig med oprettelsen!
       sign_in_on_html: "Gå til <strong>%{relying_party_name}</strong>"
       you_are_html: Du er logget ind som <strong>%{email}</strong>.
       go_to_html: "Videre til <strong>%{relying_party_name}</strong>"

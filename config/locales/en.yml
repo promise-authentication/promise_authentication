@@ -110,8 +110,8 @@ en:
         not_matching: Password not matching.
       remember_me: Remember me
       we_save_no_data_html: Your password will <em class="whitespace-nowrap">not be saved</em> in a readable format.
-      go_on: Sign in
-      going_html: 'Signing in&hellip;'
+      go_on: Save password
+      going_html: 'Saving&hellip;'
       cancel: Back
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
   authentication:
@@ -136,7 +136,7 @@ en:
       go_on: Confirm e-mail
       confirming_html: 'Confirming e-mail&hellip;'
     confirm:
-      account_created: Your account has been created!
+      account_created: You're all set!
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
       you_are_html: You are signed in as <strong>%{email}</strong>.
       go_to_html: "Go to <strong>%{relying_party_name}</strong>"
