@@ -13,7 +13,7 @@
       .verified-badge { animation: verified-pop .5s cubic-bezier(.22, 1.61, .36, 1) both, verified-ring .9s ease-out .45s both; }
       .verified-check path { stroke-dasharray: 24; stroke-dashoffset: 24; animation: verified-check .45s ease-out .3s forwards; }
       .verified-confetti { animation: verified-burst .8s ease-out .45s both; }
-      .screens.play { display: grid; overflow: clip; }
+      .screens.play { display: grid; overflow: hidden; overflow: clip; }
       .screens.play > * { grid-area: 1 / 1; }
       .screens.play .screen-celebrate { align-self: center; animation: screen-out .45s ease-in 2.2s both; }
       .screens.play .screen-content { animation: screen-in .5s ease-out 2.35s both; }
@@ -43,6 +43,16 @@
       }
     }
   </style>
+  <script>
+    // Focus arrives only once the content has slid in — autofocusing the
+    // still-offscreen button would scroll the show away on browsers that
+    // fall back to overflow: hidden.
+    document.addEventListener('animationend', function (e) {
+      if (e.animationName !== 'screen-in') return;
+      var button = document.querySelector('.screen-content form button');
+      if (button) button.focus({ preventScroll: true });
+    });
+  </script>
   <div class="w-full flex items-center flex-col pt-8">
     <div class="screens <%= 'play' if celebrate %> w-full">
       <% if celebrate %>
@@ -67,7 +77,7 @@
         <p class="text-secondary text-sm max-w-xs text-center mt-3">
           <%= t '.you_are_html', email: current_user.email, name: name %>
         </p>
-        <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center appearance-none", autofocus: true do %>
+        <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center appearance-none", autofocus: !celebrate do %>
           <span class="text-center">
             <% if relying_party.supports_legacy_accounts? && current_user.data.id_for(relying_party.id).blank? %>
               <%= t('.create_account_html', relying_party_name: relying_party.name) %>

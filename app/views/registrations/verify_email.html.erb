@@ -110,7 +110,7 @@
                right. Same mechanics as create_password: one shared grid
                cell for stable height, overflow clip (not hidden) so
                nothing can ever scroll the show out of view. */
-            .screens.play { display: grid; overflow: clip; }
+            .screens.play { display: grid; overflow: hidden; overflow: clip; }
             .screens.play > * { grid-area: 1 / 1; }
             .screens.play .screen-intro { align-self: center; animation: screen-out .45s ease-in 2.3s both; }
             .screens.play .screen-content { animation: screen-in .5s ease-out 2.45s both; }
