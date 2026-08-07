@@ -76,16 +76,18 @@ en:
     verify_email:
       title: Check your inbox
       we_sent_you_an_email_html: We sent you an e-mail to <strong>%{email}</strong>.
+      sent_html: Confirmation e-mail sent to <strong>%{email}</strong>.
+      to_continue: "We've sent you an e-mail. To continue:"
       method_link: Press the button in the e-mail
       or: or
       cant_find: I can't find the e-mail
-      sent_at_html: The e-mail was sent <em>%{at}</em>.
+      mail_sent_to: 'The e-mail was sent to:'
       check_spam: Remember to also look in your spam folder.
       mockup_from: 'From:'
       mockup_subject: 'Subject:'
       mockup_inbox: Inbox
       we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new link and a new code. Press the link in the newest e-mail, or provide its code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
-      code: Type the code from the e-mail
+      code: Type the code from the e-mail here
       code_starts_with: It starts with "%{code_start}".
       how_to_find_code: How to find the code
       how_to_find_link: How to find the button
@@ -134,6 +136,7 @@ en:
       go_on: Confirm e-mail
       confirming_html: 'Confirming e-mail&hellip;'
     confirm:
+      account_created: Your account has been created!
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
       you_are_html: You are signed in as <strong>%{email}</strong>.
       go_to_html: "Go to <strong>%{relying_party_name}</strong>"

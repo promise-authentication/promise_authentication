@@ -13,16 +13,11 @@
         </a>
       </div>
       <div class="w-full">
-        <% if flash[:resent_code] %>
-          <div class="bg-red-500 text-white p-3 rounded">
-            <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
-          </div>
-        <% else %>
-          <div class="block text-primary">
-            <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email] %>
-          </div>
-        <% end %>
         <% show_code_entry = flash[:resent_code] || flash[:error].present? || registration_configuration[:email_verification_code].present? %>
+        <%# The sent-intro plays only on a clean landing — anyone arriving
+            with a code, an error or a resent mail skips straight to the
+            content screen. %>
+        <% play_intro = !show_code_entry %>
         <%# The ACTUAL mail (same templates, subject and sender as the
             delivered one, via mockup_mail) rendered as an obvious preview —
             code masked, dummy link token, nothing pressable. A pure-CSS
@@ -110,6 +105,38 @@
               84% { box-shadow: 0 0 0 1px rgba(30, 58, 138, 0.2); }
               88%, 100% { box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.35); background-color: #dbeafe; }
             }
+            /* Sent-intro: the plane launches out of the badge, then the
+               intro slides out left and the content slides in from the
+               right. Same mechanics as create_password: one shared grid
+               cell for stable height, overflow clip (not hidden) so
+               nothing can ever scroll the show out of view. */
+            .screens.play { display: grid; overflow: clip; }
+            .screens.play > * { grid-area: 1 / 1; }
+            .screens.play .screen-intro { align-self: center; animation: screen-out .45s ease-in 2.3s both; }
+            .screens.play .screen-content { animation: screen-in .5s ease-out 2.45s both; }
+            .send-badge { animation: send-pop .45s cubic-bezier(.22, 1.61, .36, 1) both, send-ring .8s ease-out .55s both; }
+            .send-plane { animation: send-fly 1.2s ease-in .7s both; }
+            @keyframes send-pop {
+              0% { transform: scale(0); }
+              100% { transform: scale(1); }
+            }
+            @keyframes send-ring {
+              0% { box-shadow: 0 0 0 0 rgba(30, 64, 175, .3); }
+              100% { box-shadow: 0 0 0 1.5rem rgba(30, 64, 175, 0); }
+            }
+            @keyframes send-fly {
+              0%, 20% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+              45% { transform: translate(-0.35rem, 0.25rem) rotate(-8deg); opacity: 1; }
+              100% { transform: translate(7.5rem, -3rem) rotate(-16deg); opacity: 0; }
+            }
+            @keyframes screen-out {
+              from { transform: translateX(0); opacity: 1; }
+              to { transform: translateX(-110%); opacity: 0; visibility: hidden; }
+            }
+            @keyframes screen-in {
+              from { transform: translateX(110%); opacity: 0; }
+              to { transform: translateX(0); opacity: 1; }
+            }
           }
         </style>
         <script>
@@ -150,6 +177,33 @@
           document.addEventListener('DOMContentLoaded', positionOpenMockupCursors);
           document.addEventListener('turbolinks:load', positionOpenMockupCursors);
         </script>
+        <div class="screens <%= 'play' if play_intro %> w-full">
+          <% if play_intro %>
+            <div class="screen-intro w-full flex flex-col items-center pt-2 text-center">
+              <span class="send-badge relative flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="send-plane h-7 w-7 text-blue-700">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                </svg>
+              </span>
+              <p class="mt-3 text-primary">
+                <%= t '.sent_html', email: registration_configuration[:email] %>
+              </p>
+            </div>
+          <% end %>
+          <div class="screen-content w-full">
+            <% if flash[:resent_code] %>
+              <div class="bg-red-500 text-white p-3 rounded">
+                <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+              </div>
+            <% elsif play_intro %>
+              <div class="block text-primary">
+                <%= t '.to_continue' %>
+              </div>
+            <% else %>
+              <div class="block text-primary">
+                <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email] %>
+              </div>
+            <% end %>
         <div class="mt-6 w-full">
           <div class="flex items-center justify-center gap-2 text-primary font-semibold">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-blue-900">
@@ -195,7 +249,23 @@
             </svg>
           </summary>
           <p class="mt-3 text-sm text-primary">
-            <%= t '.sent_at_html', at: local_time(@code.created_at, format: :long) %>
+            <%= t '.mail_sent_to' %>
+          </p>
+          <ul class="mt-2 space-y-2 text-sm text-primary">
+            <li class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-gray-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+              </svg>
+              <strong><%= registration_configuration[:email] %></strong>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-gray-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              <em><%= local_time(@code.created_at, format: :long) %></em>
+            </li>
+          </ul>
+          <p class="mt-3 text-sm text-primary">
             <%= t '.check_spam' %>
           </p>
           <div class="mt-3 w-full rounded-xl border border-gray-200 divide-y divide-gray-200 text-sm">
@@ -229,6 +299,8 @@
             </details>
           </div>
         </details>
+          </div>
+        </div>
       </div>
       <div class="w-full flex flex-col mt-6 pb-4">
         <div class="flex w-full justify-between items-center">

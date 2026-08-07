@@ -67,8 +67,8 @@ da:
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
     verify_human:
       title: Er du et menneske?
-      description: Inden vi går videre, skal vi lige have bekræftet at du er et menneske.
-      description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet at du er et menneske.
+      description: Inden vi går videre, skal vi lige have bekræftet, at du er et menneske.
+      description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet, at du er et menneske.
       confirm_email_html: Vi sender en kode til <strong>%{email}</strong>.
       go_on: Jeg er et menneske
       going_html: 'Sender&hellip;'
@@ -76,16 +76,18 @@ da:
     verify_email:
       title: Check din indbakke
       we_sent_you_an_email_html: Vi har sendt dig en e-mail på <strong>%{email}</strong>.
+      sent_html: Bekræftelsesmail sendt til <strong>%{email}</strong>.
+      to_continue: 'Vi har sendt dig en mail. For at komme videre:'
       method_link: Tryk på knappen i mailen
       or: eller
       cant_find: Jeg kan ikke finde mailen
-      sent_at_html: Mailen blev sendt <em>%{at}</em>.
+      mail_sent_to: 'Mailen er sendt til:'
       check_spam: Husk også at kigge i din spam-mappe.
       mockup_from: 'Fra:'
       mockup_subject: 'Emne:'
       mockup_inbox: Indbakke
       we_resent_you_an_email_html: Koden du skrev, var desværre forkert. Vi har <em>%{at}</em> sendt en ny mail til <strong>%{email}</strong> med et nyt link og en ny kode. Tryk på linket i den nyeste e-mail, eller indtast den nye kode herunder. Skriv gerne til <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> hvis du ikke har modtaget mailen.
-      code: Indtast koden fra mailen
+      code: Indtast koden fra mailen her
       code_starts_with: Den starter med "%{code_start}".
       how_to_find_code: Sådan finder du koden
       how_to_find_link: Sådan finder du knappen
@@ -134,6 +136,7 @@ da:
       go_on: Videre
       confirming_html: 'Bekræfter e-mail&hellip;'
     confirm:
+      account_created: Din konto er oprettet!
       sign_in_on_html: "Gå til <strong>%{relying_party_name}</strong>"
       you_are_html: Du er logget ind som <strong>%{email}</strong>.
       go_to_html: "Videre til <strong>%{relying_party_name}</strong>"

@@ -146,6 +146,8 @@ class RegistrationsController < ApplicationController
       do_sign_in(@auth_request)
 
       flash[:slide_class] = 'a-slide-in-from-right'
+      # Lets the confirm page play its account-created celebration once.
+      flash[:registered] = true
       redirect_to confirm_path(login_configuration)
     end
   end
