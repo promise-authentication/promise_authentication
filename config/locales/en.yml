@@ -67,8 +67,10 @@ en:
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
     verify_human:
       title: Are you a human?
-      description: Before we go on, we need to verify that you are a human being.
-      description_html: Before we send you on to <span class="whitespace-nowrap">%{name}</span>, we need to verify that you are a human being.
+      new_here: You're new here
+      new_here_email_html: Let's get <strong>%{email}</strong> set up
+      description: To create your account, we need to verify that you are a human being.
+      description_html: To create your account, and then send you back to <span class="whitespace-nowrap">%{name}</span>, we need to verify that you are a human being.
       confirm_email_html: We will send a code to <strong>%{email}</strong>.
       go_on: I'm a human
       going_html: 'Sending&hellip;'
@@ -118,6 +120,8 @@ en:
     verify_password:
       login: Sign in
       login_at_html: Sign in to <span class="whitespace-nowrap">%{name}</span>
+      welcome_back: Welcome back
+      welcome_back_email_html: <strong>%{email}</strong> is already registered.
       enter_credentials_html: Enter your password you created for <strong>%{email}</strong> on Promise.
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Sign in

@@ -67,8 +67,10 @@ da:
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
     verify_human:
       title: Er du et menneske?
-      description: Inden vi går videre, skal vi lige have bekræftet, at du er et menneske.
-      description_html: Før vi sender dig videre til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet, at du er et menneske.
+      new_here: Du er ny her
+      new_here_email_html: Lad os få oprettet <strong>%{email}</strong>
+      description: For at kunne oprette dig, skal vi lige have bekræftet, at du er et menneske.
+      description_html: For at kunne oprette dig, og derefter sende dig tilbage til <span class="whitespace-nowrap">%{name}</span>, skal vi lige have bekræftet, at du er et menneske.
       confirm_email_html: Vi sender en kode til <strong>%{email}</strong>.
       go_on: Jeg er et menneske
       going_html: 'Sender&hellip;'
@@ -118,6 +120,8 @@ da:
     verify_password:
       login: Log ind
       login_at_html: Log ind på <span class="whitespace-nowrap">%{name}</span>
+      welcome_back: Velkommen tilbage
+      welcome_back_email_html: <strong>%{email}</strong> er allerede oprettet.
       enter_credentials_html: Angiv det password du oprettede til <strong>%{email}</strong> på Promise.
       redirect_to_dashboard: Du vil blive sendt videre til dit overblik.
       we_save_no_data_html: Dit e-mail bliver <em class="whitespace-nowrap">ikke gemt</em> i et læsbart format.
