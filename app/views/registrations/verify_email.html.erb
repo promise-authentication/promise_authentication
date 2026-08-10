@@ -111,7 +111,10 @@
                cell for stable height, overflow clip (not hidden) so
                nothing can ever scroll the show out of view. */
             .screens.play { display: grid; overflow: hidden; overflow: clip; }
-            .screens.play > * { grid-area: 1 / 1; }
+            /* min-width: 0 — a grid item's automatic minimum is min-content,
+               so without it nowrap content (e.g. the mockup's truncate
+               lines) widens the track beyond the card and gets clipped. */
+            .screens.play > * { grid-area: 1 / 1; min-width: 0; }
             .screens.play .screen-intro { align-self: center; animation: screen-out .45s ease-in 2.3s both; }
             .screens.play .screen-content { animation: screen-in .5s ease-out 2.45s both; }
             .send-badge { animation: send-pop .45s cubic-bezier(.22, 1.61, .36, 1) both, send-ring .8s ease-out .55s both; }
