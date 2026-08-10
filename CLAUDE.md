@@ -6,6 +6,9 @@
   `promise_kms` service from the sibling repo `../promise_key_registry` (start its
   `docker compose up -d` too) — both join the external `promise-network`. If kms is
   down, requests 500 with `SocketError (getaddrinfo: Name or service not known)`.
+  Both services use `restart: unless-stopped`, so they come back after a
+  reboot/Docker restart — if kms is still down, someone `docker compose stop`ped it;
+  restart it with `docker compose up -d` in `../promise_key_registry`.
 - The dev database is SQLite at `db/development.sqlite3`, a plain file in the repo dir
   mounted into the container. **It is shared across branch checkouts** — switching
   branches does not switch databases, so a branch with different migrations (or renamed

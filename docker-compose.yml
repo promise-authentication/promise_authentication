@@ -5,6 +5,7 @@ networks:
 services:
   web:
     build: .
+    restart: unless-stopped
     command: bash -c "bundle exec rails db:prepare; rm -f tmp/pids/server.pid && bin/dev"
     stdin_open: true
     environment:
