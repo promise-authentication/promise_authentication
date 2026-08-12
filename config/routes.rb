@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   namespace 'root' do
     get '/', to: 'relying_parties#index'
+    get 'funnel', to: 'funnel#show'
     resources :relying_parties, constraints: { id: %r{[^/]+} }, only: [:index]
   end
 

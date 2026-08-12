@@ -3,9 +3,12 @@
   <h1 class="text-xl font-black text-center mt-12">
     Relying parties
   </h1>
-  <% Statistics::SignInEvent.pluck(:relying_party_id).uniq.each do |rp_id| %>
+  <% Statistics::SignInEvent.group(:relying_party_id).count.sort_by { |_, count| -count }.each do |rp_id, count| %>
     <h2 class="">
-      Tokens generated for <strong><%= rp_id %></strong>:
+      Tokens generated for <strong><%= rp_id %></strong>: <%= count %>
     </h2>
   <% end %>
+  <p class="text-center">
+    <%= link_to 'Registration funnel &rarr;'.html_safe, root_funnel_path %>
+  </p>
 </div>
