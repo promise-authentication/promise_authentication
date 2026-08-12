@@ -1,38 +1,108 @@
 <%= content_for :body do %>
+  <%# ?celebrate=1 previews the show in development without registering. %>
+  <% celebrate = flash[:registered].present? || (Rails.env.development? && params[:celebrate].present?) %>
+  <%# Account-created celebration, same mechanics as create_password:
+      the badge pops, the check draws itself, a ring pulses, confetti
+      bursts — then the celebration slides out left and the regular
+      confirm content slides in from the right. Plays only on the
+      redirect right after registration (flash), never on plain
+      sign-ins or reloads. Reduced motion: static stack. %>
+  <style>
+    .verified-confetti { opacity: 0; margin: -3px 0 0 -3px; }
+    @media (prefers-reduced-motion: no-preference) {
+      .verified-badge { animation: verified-pop .5s cubic-bezier(.22, 1.61, .36, 1) both, verified-ring .9s ease-out .45s both; }
+      .verified-check path { stroke-dasharray: 24; stroke-dashoffset: 24; animation: verified-check .45s ease-out .3s forwards; }
+      .verified-confetti { animation: verified-burst .8s ease-out .45s both; }
+      .screens.play { display: grid; overflow: hidden; overflow: clip; }
+      .screens.play > * { grid-area: 1 / 1; }
+      .screens.play .screen-celebrate { align-self: center; animation: screen-out .45s ease-in 2.2s both; }
+      .screens.play .screen-content { animation: screen-in .5s ease-out 2.35s both; }
+      @keyframes verified-pop {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+      }
+      @keyframes verified-check {
+        to { stroke-dashoffset: 0; }
+      }
+      @keyframes verified-ring {
+        0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, .35); }
+        100% { box-shadow: 0 0 0 1.5rem rgba(22, 163, 74, 0); }
+      }
+      @keyframes verified-burst {
+        0% { opacity: 0; transform: rotate(var(--a)) translateY(0) scale(.5); }
+        35% { opacity: 1; }
+        100% { opacity: 0; transform: rotate(var(--a)) translateY(-2.75rem) scale(1); }
+      }
+      @keyframes screen-out {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(-110%); opacity: 0; visibility: hidden; }
+      }
+      @keyframes screen-in {
+        from { transform: translateX(110%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+    }
+  </style>
+  <script>
+    // Focus arrives only once the content has slid in — autofocusing the
+    // still-offscreen button would scroll the show away on browsers that
+    // fall back to overflow: hidden.
+    document.addEventListener('animationend', function (e) {
+      if (e.animationName !== 'screen-in') return;
+      var button = document.querySelector('.screen-content form button');
+      if (button) button.focus({ preventScroll: true });
+    });
+  </script>
   <div class="w-full flex items-center flex-col pt-8">
-    <h2 class="text-2xl pt-4 text-center leading-tight">
-      <%= t '.sign_in_on_html', relying_party_name: relying_party.name %>
-    </h2>
-    <p class="text-secondary text-sm max-w-xs text-center mt-3">
-      <%= t '.you_are_html', email: current_user.email, name: name %>
-    </p>
-    <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center appearance-none", autofocus: true do %>
-      <span class="text-center">
-        <% if relying_party.supports_legacy_accounts? && current_user.data.id_for(relying_party.id).blank? %>
-          <%= t('.create_account_html', relying_party_name: relying_party.name) %>
-        <% else %>
-          <%= t('.go_to_html', relying_party_name: relying_party.name) %>
+    <div class="screens <%= 'play' if celebrate %> w-full">
+      <% if celebrate %>
+        <div class="screen-celebrate w-full flex flex-col items-center pt-2 text-center">
+          <span class="verified-badge relative flex h-14 w-14 items-center justify-center rounded-full bg-green-100">
+            <% { '-150deg' => '#f59e0b', '-90deg' => '#3b82f6', '-30deg' => '#ec4899', '30deg' => '#22c55e', '90deg' => '#8b5cf6', '150deg' => '#f43f5e' }.each do |angle, color| %>
+              <span class="verified-confetti absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full" style="--a: <%= angle %>; background: <%= color %>"></span>
+            <% end %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="verified-check h-8 w-8 text-green-600">
+              <path pathLength="24" stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+          </span>
+          <p class="mt-3 text-primary">
+            <%= t '.account_created' %>
+          </p>
+        </div>
+      <% end %>
+      <div class="screen-content w-full flex items-center flex-col">
+        <h2 class="text-2xl pt-4 text-center leading-tight">
+          <%= t '.sign_in_on_html', relying_party_name: relying_party.name %>
+        </h2>
+        <p class="text-secondary text-sm max-w-xs text-center mt-3">
+          <%= t '.you_are_html', email: current_user.email, name: name %>
+        </p>
+        <%= button_to go_to_path(login_configuration), class: "button primary my-10 flex items-center justify-center appearance-none", autofocus: !celebrate do %>
+          <span class="text-center">
+            <% if relying_party.supports_legacy_accounts? && current_user.data.id_for(relying_party.id).blank? %>
+              <%= t('.create_account_html', relying_party_name: relying_party.name) %>
+            <% else %>
+              <%= t('.go_to_html', relying_party_name: relying_party.name) %>
+            <% end %>
+          </span>
+          <span class="ml-3">
+            &rarr;
+          </span>
         <% end %>
-      </span>
-      <span class="ml-3">
-        &rarr;
-      </span>
-    <% end %>
 
-    <% if relying_party.supports_legacy_accounts? && current_user.data.id_for(relying_party.id).blank? %>
-    <% end %>
+        <div class="flex flex-col items-center">
+          <span class="text-secondary">
+            <%= t '.not_you_html', email: current_user.email %>
+          </span>
+          <%= button_to t('.logout'), relogin_path(login_configuration), method: :delete, class: "button transparent small mt-2" %>
+        </div>
 
-    <div class="flex flex-col items-center">
-      <span class="text-secondary">
-        <%= t '.not_you_html', email: current_user.email %>
-      </span>
-      <%= button_to t('.logout'), relogin_path(login_configuration), method: :delete, class: "button transparent small mt-2" %>
+
+        <% id = current_user.data.id_for(relying_party.id) %>
+        <p class="mt-8 text-secondary text-sm" style="cursor:help;" title="<%= id.present? ? t('.your_id', id: id, relying_party_name: relying_party.name) : t('.no_id_yet', relying_party_name: relying_party.name) %>">
+          <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
+        </p>
+      </div>
     </div>
-
-
-    <% id = current_user.data.id_for(relying_party.id) %>
-    <p class="mt-8 text-secondary text-sm" style="cursor:help;" title="<%= id.present? ? t('.your_id', id: id, relying_party_name: relying_party.name) : t('.no_id_yet', relying_party_name: relying_party.name) %>">
-      <%= t '.no_sharing_html', relying_party_name: relying_party.name %>
-    </p>
   </div>
 <% end %>

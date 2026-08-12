@@ -1,0 +1,66 @@
+<%# The animated mail mockup: an inbox where the mail arrives, gets
+    clicked open, and then — depending on variant — the cursor presses
+    the button (:link) or the mail scrolls to the code and highlights
+    it (:code). Timelines live in the verify_email style block. A
+    video-style progress bar runs beneath, and a replay button appears
+    when the show is over. %>
+<div class="mt-3 w-full">
+  <div class="relative">
+  <div class="stage-<%= variant %> relative w-full pointer-events-none select-none" aria-hidden="true">
+    <div class="relative">
+      <div class="anim-mail w-full rounded-lg border border-gray-300 shadow-sm overflow-hidden bg-white">
+        <div class="bg-gray-50 border-b border-gray-200 px-4 py-2">
+          <p class="text-base font-semibold text-gray-900 truncate">
+            <%= mockup_mail.subject %>
+          </p>
+          <p class="text-xs text-gray-500 truncate">
+            <%= t 'registrations.verify_email.mockup_from' %>
+            <span class="text-gray-700"><%= mockup_mail[:from].to_s %></span>
+          </p>
+        </div>
+        <div class="mail-mockup relative max-h-40 overflow-hidden px-4 py-3 text-[10px] leading-snug text-gray-800">
+          <div class="mail-body-inner">
+            <%= mockup_mail.html_part.body.decoded.html_safe %>
+          </div>
+          <div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white to-transparent"></div>
+        </div>
+      </div>
+      <div class="anim-inbox absolute inset-0 z-10 rounded-lg border border-gray-300 shadow-sm overflow-hidden bg-white">
+        <div class="bg-gray-50 border-b border-gray-200 px-4 py-2 text-xs font-semibold text-gray-500">
+          <%= t 'registrations.verify_email.mockup_inbox' %>
+        </div>
+        <div class="anim-row flex items-center gap-2 border-b border-gray-100 bg-blue-50 px-4 py-2.5">
+          <span class="h-2 w-2 shrink-0 rounded-full bg-blue-600"></span>
+          <div class="min-w-0">
+            <p class="truncate text-xs font-bold text-gray-900"><%= mockup_mail[:from].to_s %></p>
+            <p class="truncate text-xs font-semibold text-gray-800"><%= mockup_mail.subject %></p>
+          </div>
+        </div>
+        <% 3.times do %>
+          <div class="flex items-center gap-2 border-b border-gray-100 px-4 py-3">
+            <span class="h-2 w-2 shrink-0"></span>
+            <div class="space-y-1.5">
+              <div class="h-2 w-20 rounded-full bg-gray-200"></div>
+              <div class="h-2 w-36 rounded-full bg-gray-100"></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="anim-cursor absolute z-20 h-6 w-6 drop-shadow" fill="black" stroke="white" stroke-width="1.5">
+        <path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87c.45 0 .67-.54.35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z" />
+      </svg>
+    </div>
+  </div>
+    <button type="button" class="anim-replay absolute inset-0 z-30 flex items-center justify-center rounded-lg bg-gray-900/20" onclick="var d = this.closest('details'); positionMockupCursor(d); restartMockupAnimations(d);">
+      <span class="flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-semibold text-blue-900 shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+        <%= t 'registrations.verify_email.replay' %>
+      </span>
+    </button>
+  </div>
+  <div class="anim-progress-track mt-2 h-1 overflow-hidden rounded-full bg-gray-200">
+    <div class="anim-progress h-full w-0 rounded-full bg-blue-800"></div>
+  </div>
+</div>

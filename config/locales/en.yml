@@ -6,6 +6,9 @@ en:
   email_already_claimed: This e-mail is already in use. Please provide another e-mail.
   email_changed: E-mail changed successfully.
   invalid_email_verification_code: The e-mail verification code is invalid. Please try again.
+  magic_link_invalid: That link is no longer valid. Continue below to get a new code.
+  magic_link_superseded: That link is from an older e-mail. Use the code from the newest e-mail we sent you.
+  too_many_codes_sent: Too many codes have been sent to this e-mail. Use “Send new code” to request a fresh one.
   error_changing_email: There was an error changing your e-mail. Please try again.
   activemodel:
     attributes:
@@ -64,17 +67,33 @@ en:
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
     verify_human:
       title: Are you a human?
-      description: Before we go on, we need to verify that you are a human being.
-      description_html: Before we send you on to <span class="whitespace-nowrap">%{name}</span>, we need to verify that you are a human being.
+      new_here: You're new here
+      new_here_email_html: Let's get <strong>%{email}</strong> set up
+      description: To create your account, we need to verify that you are a human being.
+      description_html: To create your account, and then send you back to <span class="whitespace-nowrap">%{name}</span>, we need to verify that you are a human being.
       confirm_email_html: We will send a code to <strong>%{email}</strong>.
       go_on: I'm a human
       going_html: 'Sending&hellip;'
       cancel: Back
     verify_email:
       title: Check your inbox
-      we_sent_you_an_email_html: We sent you an e-mail at <em>%{at}</em> to <strong>%{email}</strong> with a code. Please provide the code below.
-      we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new code. Please provide the code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
-      code: Code from e-mail (starting with "%{code_start}")
+      we_sent_you_an_email_html: We sent you an e-mail to <strong>%{email}</strong>.
+      sent_html: Confirmation e-mail sent to <strong>%{email}</strong>.
+      to_continue: "We've sent you an e-mail. To continue:"
+      method_link: Press the button in the e-mail
+      or: or
+      cant_find: I can't find the e-mail
+      mail_sent_to: 'The e-mail was sent to:'
+      check_spam: Remember to also look in your spam folder.
+      mockup_from: 'From:'
+      mockup_subject: 'Subject:'
+      mockup_inbox: Inbox
+      we_resent_you_an_email_html: The code you provided was incorrect. We have sent a new e-mail to <em>%{email}</em> at <strong>%{at}</strong> with a new link and a new code. Press the link in the newest e-mail, or provide its code below. Please reach out on <a href="mailto:support@promiseauthentication.org">support@promiseauthentication.org</a> if you have not received the e-mail.
+      code: Type the code from the e-mail here
+      code_starts_with: It starts with "%{code_start}".
+      how_to_find_code: How to find the code
+      how_to_find_link: How to find the button
+      replay: Watch again
       help: The code you need to provide starts with "%{code_start}" and consists of a total of %{code_length} letters or numbers.
       caps_or_not: We do not care about upper or lower case letters.
       send_new_code: Send new code
@@ -83,7 +102,9 @@ en:
       cancel: Back
     create_password:
       title: Create password
-      create_account_html: Create the password you want to use with <span class="font-bold">%{email}</span>.
+      email_verified: Your e-mail is verified!
+      email_verified_email_html: You have confirmed that <strong>%{email}</strong> is yours.
+      create_account_html: Now create the password you want to sign in with from now on.
       new_password: New password
       confirm_password: Confirm password
       password_error:
@@ -91,14 +112,16 @@ en:
         not_matching: Password not matching.
       remember_me: Remember me
       we_save_no_data_html: Your password will <em class="whitespace-nowrap">not be saved</em> in a readable format.
-      go_on: Sign in
-      going_html: 'Signing in&hellip;'
+      go_on: Save password
+      going_html: 'Saving&hellip;'
       cancel: Back
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
   authentication:
     verify_password:
       login: Sign in
       login_at_html: Sign in to <span class="whitespace-nowrap">%{name}</span>
+      welcome_back: Welcome back
+      welcome_back_email_html: <strong>%{email}</strong> is already registered.
       enter_credentials_html: Enter your password you created for <strong>%{email}</strong> on Promise.
       redirect_to_dashboard: You will be redirected to your dashboard.
       go_on: Sign in
@@ -117,6 +140,7 @@ en:
       go_on: Confirm e-mail
       confirming_html: 'Confirming e-mail&hellip;'
     confirm:
+      account_created: You're all set!
       sign_in_on_html: "Sign in on <strong>%{relying_party_name}</strong>"
       you_are_html: You are signed in as <strong>%{email}</strong>.
       go_to_html: "Go to <strong>%{relying_party_name}</strong>"
@@ -173,10 +197,14 @@ en:
       go_on: Go on
   email_verification_mailer:
     verify_email:
-      subject: "%{relying_party} - Your code: %{code}"
-      explain_with_relying_party: "You are trying to login to %{client}, which uses Promise for signing in. You need the code below to verify your e-mail with Promise."
-      explain_without_relying_party: To create your account on Promise, you need to verify your e-mail. You will need the code to verify your e-mail.
+      subject: "Confirm your e-mail"
+      explain_with_relying_party: "You are signing in to %{client}, which uses Promise. To continue, you need to verify your e-mail."
+      explain_without_relying_party: To create your account on Promise, you need to verify your e-mail.
       code: "Your code:"
+      magic_link_button: "Confirm e-mail and continue"
+      magic_link_button_with_client: "Confirm e-mail and continue to %{client}"
+      magic_link_intro: "Confirm your e-mail and continue by clicking the link below:"
+      magic_link_or_code: "Want to continue where you left off? Enter this code there instead:"
       what_is_promise:
         title: What is Promise?
         body: "Promise is a single-sign-on identity provider. This means you can potentially use Promise to sign in to any of your connected applications. Promise will not store your personal information anywhere. Not even your e-mail."

@@ -34,7 +34,7 @@ class Authentication::Services::PrepareEmailForValidationTest < ActiveSupport::T
     email = ActionMailer::Base.deliveries.last
     assert_not_nil email
     assert_includes email.body.encoded, code.code
-    assert_equal email.subject, "RelyingPartyZ - Your code: #{code.code}"
+    assert_equal email.subject, EmailVerificationMailer.subject_for(code: code.code, relying_party_name: 'RelyingPartyZ')
     assert_equal email.header['From'].value, 'RelyingPartyZ via Promise <hello@promiseauthentication.org>'
 
     # When I call it again, it should reset and send new mail

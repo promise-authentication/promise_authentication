@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_16_072534) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_05_000001) do
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
     t.integer "user_id"
@@ -113,6 +113,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_16_072534) do
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "resend_count", default: 0, null: false
   end
 
   create_table "event_store_events", id: { type: :string, limit: 36 }, force: :cascade do |t|
@@ -132,6 +133,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_16_072534) do
     t.index ["created_at"], name: "index_event_store_events_in_streams_on_created_at"
     t.index ["stream", "event_id"], name: "index_event_store_events_in_streams_on_stream_and_event_id", unique: true
     t.index ["stream", "position"], name: "index_event_store_events_in_streams_on_stream_and_position", unique: true
+  end
+
+  create_table "magic_links", id: :string, force: :cascade do |t|
+    t.string "hashed_email", null: false
+    t.text "ciphertext", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hashed_email"], name: "index_magic_links_on_hashed_email"
   end
 
   create_table "statistics_sign_in_events", force: :cascade do |t|

@@ -5,6 +5,7 @@ networks:
 services:
   web:
     build: .
+    restart: unless-stopped
     command: bash -c "bundle exec rails db:prepare; rm -f tmp/pids/server.pid && bin/dev"
     stdin_open: true
     environment:
@@ -12,6 +13,8 @@ services:
       RAILS_ENV: development
       NODE_ENV: development
       RAILS_BIND: 0.0.0.0
+      # Host as seen from the developer's browser (container port 3000 is published as 3003)
+      PROMISE_DEV_HOST: localhost:3003
     volumes:
       - .:/app
       - bundle_cache:/usr/local/bundle

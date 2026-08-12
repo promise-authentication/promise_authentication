@@ -1,4 +1,8 @@
 class EmailVerificationCode < ApplicationRecord
+  # Codes and magic links share this lifetime, so the whole verification
+  # mail expires at once — never a dead link next to a working code.
+  TTL = 1.hour
+
   module HumanReadableCode
     ALPHABET = 'abcdefghkmnpqrstuvwxyz23456789'.freeze
     def self.generate(range)
@@ -16,5 +20,23 @@ class EmailVerificationCode < ApplicationRecord
     find(hashed)
   rescue ActiveRecord::RecordNotFound
     return nil
+  end
+
+  # Like find_by_cleartext, but treats expired codes as absent.
+  # Use this everywhere a code is checked or displayed; the raw
+  # find_by_cleartext remains for cleanup.
+  def self.active_for_cleartext(email)
+    code = find_by_cleartext(email)
+    return nil if code.nil? || code.expired?
+
+    code
+  end
+
+  def self.sweep_expired!
+    where('created_at < ?', TTL.ago).delete_all
+  end
+
+  def expired?
+    created_at < TTL.ago
   end
 end

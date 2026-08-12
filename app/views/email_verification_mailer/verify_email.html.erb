@@ -6,8 +6,16 @@
   <% end %>
 </p>
 
+<% if @magic_link_url %>
+  <p style="margin:30px 0;text-align:center;">
+    <a href="<%= @magic_link_url %>" style="display:inline-block;padding:12px 24px;border-radius:10px;background-color:#1e3a8a;color:#FFFFFF;font-family:sans-serif;font-weight:bold;text-decoration:none;">
+      <%= @magic_link_label %>
+    </a>
+  </p>
+<% end %>
+
 <p style="margin: 0;padding:0;font-family:sans-serif;font-weight:bold;">
-  <%= t('.code') %>
+  <%= @magic_link_url ? t('.magic_link_or_code') : t('.code') %>
 </p>
 
 <p style="border-radius:10px;margin:0;margin-top:3px;padding:10px;font-size:2em;font-family:monospace;background-color:#EEE;text-align:center;user-select: all;letter-spacing:0.1em;">

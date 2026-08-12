@@ -13,37 +13,304 @@
         </a>
       </div>
       <div class="w-full">
-        <% if flash[:resent_code] %>
-          <div class="bg-red-500 text-white p-3 rounded">
-            <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+        <% show_code_entry = flash[:resent_code] || flash[:error].present? || registration_configuration[:email_verification_code].present? %>
+        <%# The sent-intro plays only on a clean landing — anyone arriving
+            with a code, an error or a resent mail skips straight to the
+            content screen. %>
+        <% play_intro = !show_code_entry %>
+        <%# The ACTUAL mail (same templates, subject and sender as the
+            delivered one, via mockup_mail) rendered as an obvious preview —
+            code masked, dummy link token, nothing pressable. A pure-CSS
+            timeline plays: the mail lands in an inbox, a cursor clicks it,
+            it opens to the full mail, and the cursor presses its button.
+            With reduced motion, only the opened mail with the cursor on
+            the button is shown. %>
+        <style>
+          .mail-mockup a { pointer-events: none; position: relative; }
+          .method[open] > summary .chev,
+          .cant-find[open] > summary .chev { transform: rotate(180deg); }
+          .anim-inbox { opacity: 0; }
+          .anim-replay { opacity: 0; visibility: hidden; }
+          .anim-progress-track { opacity: 0; }
+          .anim-cursor { left: var(--btn-x, 48%); top: var(--btn-y, 49%); }
+          .stage-code .anim-cursor { left: var(--code-x, 48%); top: var(--code-y, 68%); }
+          @media (prefers-reduced-motion: no-preference) {
+            /* Scoped to [open] so every accordion switch restarts the show:
+               closing removes the animation, reopening reapplies it fresh. */
+            .method[open] .anim-inbox  { animation: mockup-inbox 7s ease-in-out both; }
+            .method[open] .anim-row    { animation: mockup-row 7s ease-in-out both; }
+            .method[open] .anim-mail   { animation: mockup-mail 7s ease-in-out both; transform-origin: 50% 25%; }
+            .method[open] .anim-cursor { animation: mockup-cursor 7s ease-in-out both; }
+            .method[open] .stage-link .mail-mockup a[href*="/registrations/magic"] { animation: mockup-button 7s ease-in-out both; }
+            /* The code variant shares the inbox intro, then scrolls to the
+               code and highlights it instead of pressing the button. */
+            .method[open] .stage-code .mail-body-inner { animation: mockup-scroll 7s ease-in-out both; }
+            .method[open] .stage-code .mail-mockup p[style*="user-select"] { animation: mockup-code-highlight 7s ease-in-out both; }
+            .method[open] .stage-code .anim-cursor { animation-name: mockup-cursor-code; }
+            @keyframes mockup-inbox {
+              0%, 40% { opacity: 1; transform: scale(1); }
+              46%, 100% { opacity: 0; transform: scale(1.06); }
+            }
+            @keyframes mockup-row {
+              0%, 8% { opacity: 0; transform: translateY(-6px); }
+              13%, 29% { opacity: 1; transform: translateY(0) scale(1); }
+              31% { transform: scale(0.96); }
+              33%, 100% { opacity: 1; transform: scale(1); }
+            }
+            @keyframes mockup-mail {
+              0%, 41% { opacity: 0; transform: scale(0.7); }
+              49%, 100% { opacity: 1; transform: scale(1); }
+            }
+            @keyframes mockup-cursor {
+              0%, 6% { opacity: 0; left: 85%; top: 92%; transform: scale(1); }
+              12% { opacity: 1; }
+              24%, 44% { opacity: 1; left: var(--row-x, 48%); top: var(--row-y, 21%); transform: scale(1); }
+              28% { transform: scale(0.8); }
+              31% { transform: scale(1); }
+              62%, 66% { opacity: 1; left: var(--btn-x, 48%); top: var(--btn-y, 49%); transform: scale(1); }
+              69% { left: var(--btn-x, 48%); top: var(--btn-y, 49%); transform: scale(0.8); }
+              72%, 100% { opacity: 1; left: var(--btn-x, 48%); top: var(--btn-y, 49%); transform: scale(1); }
+            }
+            @keyframes mockup-button {
+              0%, 66% { transform: scale(1); }
+              70% { transform: scale(0.94); }
+              74%, 100% { transform: scale(1); }
+            }
+            .method[open] .anim-progress { animation: mockup-progress 7s linear both; }
+            .method[open] .anim-progress-track { opacity: 1; }
+            .method[open] .anim-replay { animation: mockup-replay 7s both; }
+            @keyframes mockup-progress {
+              0% { width: 0%; }
+              100% { width: 100%; }
+            }
+            @keyframes mockup-replay {
+              0%, 96% { opacity: 0; visibility: hidden; }
+              100% { opacity: 1; visibility: visible; }
+            }
+            @keyframes mockup-scroll {
+              0%, 55% { transform: translateY(0); }
+              68%, 100% { transform: translateY(-6rem); }
+            }
+            @keyframes mockup-cursor-code {
+              0%, 6% { opacity: 0; left: 85%; top: 92%; transform: scale(1); }
+              12% { opacity: 1; }
+              24%, 44% { opacity: 1; left: var(--row-x, 48%); top: var(--row-y, 25%); transform: scale(1); }
+              28% { transform: scale(0.8); }
+              31% { transform: scale(1); }
+              72%, 100% { opacity: 1; left: var(--code-x, 48%); top: var(--code-y, 68%); transform: scale(1); }
+            }
+            @keyframes mockup-code-highlight {
+              0%, 72% { box-shadow: 0 0 0 0 rgba(30, 58, 138, 0); background-color: #EEEEEE; }
+              79% { box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.35); background-color: #dbeafe; }
+              84% { box-shadow: 0 0 0 1px rgba(30, 58, 138, 0.2); }
+              88%, 100% { box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.35); background-color: #dbeafe; }
+            }
+            /* Sent-intro: the plane launches out of the badge, then the
+               intro slides out left and the content slides in from the
+               right. Same mechanics as create_password: one shared grid
+               cell for stable height, overflow clip (not hidden) so
+               nothing can ever scroll the show out of view. */
+            .screens.play { display: grid; overflow: hidden; overflow: clip; }
+            /* min-width: 0 — a grid item's automatic minimum is min-content,
+               so without it nowrap content (e.g. the mockup's truncate
+               lines) widens the track beyond the card and gets clipped. */
+            .screens.play > * { grid-area: 1 / 1; min-width: 0; }
+            .screens.play .screen-intro { align-self: center; animation: screen-out .45s ease-in 2.3s both; }
+            .screens.play .screen-content { animation: screen-in .5s ease-out 2.45s both; }
+            .send-badge { animation: send-pop .45s cubic-bezier(.22, 1.61, .36, 1) both, send-ring .8s ease-out .55s both; }
+            .send-plane { animation: send-fly 1.2s ease-in .7s both; }
+            @keyframes send-pop {
+              0% { transform: scale(0); }
+              100% { transform: scale(1); }
+            }
+            @keyframes send-ring {
+              0% { box-shadow: 0 0 0 0 rgba(30, 64, 175, .3); }
+              100% { box-shadow: 0 0 0 1.5rem rgba(30, 64, 175, 0); }
+            }
+            @keyframes send-fly {
+              0%, 20% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+              45% { transform: translate(-0.35rem, 0.25rem) rotate(-8deg); opacity: 1; }
+              100% { transform: translate(7.5rem, -3rem) rotate(-16deg); opacity: 0; }
+            }
+            @keyframes screen-out {
+              from { transform: translateX(0); opacity: 1; }
+              to { transform: translateX(-110%); opacity: 0; visibility: hidden; }
+            }
+            @keyframes screen-in {
+              from { transform: translateX(110%); opacity: 0; }
+              to { transform: translateX(0); opacity: 1; }
+            }
+          }
+        </style>
+        <script>
+          // The cursor keyframes read --row/--btn/--code CSS variables so
+          // the stops track the real elements at any width. Measured from
+          // layout offsets (transform-free), remeasured on open and resize.
+          function positionMockupCursor(details) {
+            details.querySelectorAll('[class*="stage-"]').forEach(function (stage) {
+              var container = stage.querySelector(':scope > .relative');
+              if (!container) return;
+              var offsetTo = function (el) {
+                var x = 0, y = 0;
+                while (el && el !== container) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+                return { x: x, y: y };
+              };
+              var setVar = function (name, el, extraY) {
+                if (!el) return;
+                var o = offsetTo(el);
+                stage.style.setProperty(name + '-x', (o.x + el.offsetWidth / 2 - 5) + 'px');
+                stage.style.setProperty(name + '-y', (o.y + el.offsetHeight / 2 - 3 + (extraY || 0)) + 'px');
+              };
+              var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+              setVar('--row', stage.querySelector('.anim-row'));
+              setVar('--btn', stage.querySelector('.mail-mockup a'));
+              setVar('--code', stage.querySelector('.mail-mockup p[style*="user-select"]'), -6 * rem);
+            });
+          }
+          // Restarts the timelines; a no-op on browsers without the Web
+          // Animations API, where the show simply plays once per page load.
+          function restartMockupAnimations(details) {
+            if (!details.getAnimations) return;
+            details.getAnimations({ subtree: true }).forEach(function (a) { a.cancel(); a.play(); });
+          }
+          function positionOpenMockupCursors() {
+            document.querySelectorAll('details.method[open]').forEach(positionMockupCursor);
+          }
+          window.addEventListener('resize', positionOpenMockupCursors);
+          document.addEventListener('DOMContentLoaded', positionOpenMockupCursors);
+          document.addEventListener('turbolinks:load', positionOpenMockupCursors);
+        </script>
+        <div class="screens <%= 'play' if play_intro %> w-full">
+          <% if play_intro %>
+            <div class="screen-intro w-full flex flex-col items-center pt-2 text-center">
+              <span class="send-badge relative flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="send-plane h-7 w-7 text-blue-700">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                </svg>
+              </span>
+              <p class="mt-3 text-primary">
+                <%= t '.sent_html', email: registration_configuration[:email] %>
+              </p>
+            </div>
+          <% end %>
+          <div class="screen-content w-full">
+            <% if flash[:resent_code] %>
+              <div class="bg-red-500 text-white p-3 rounded">
+                <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+              </div>
+            <% elsif play_intro %>
+              <div class="block text-primary">
+                <%= t '.to_continue' %>
+              </div>
+            <% else %>
+              <div class="block text-primary">
+                <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email] %>
+              </div>
+            <% end %>
+        <div class="mt-6 w-full">
+          <div class="flex items-center justify-center gap-2 text-primary font-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-blue-900">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
+            </svg>
+            <%= t '.method_link' %>
           </div>
-        <% else %>
-          <div class="block text-primary">
-            <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
+          <div class="my-4 flex items-center gap-3 px-6" aria-hidden="true">
+            <div class="h-px flex-1 bg-gray-200"></div>
+            <span class="text-sm italic text-gray-500"><%= t '.or' %></span>
+            <div class="h-px flex-1 bg-gray-200"></div>
           </div>
-        <% end %>
+          <div class="text-sm">
+            <label class="block w-full">
+              <span class="flex items-center justify-center gap-2 text-primary font-semibold text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-blue-900">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+                <%= t '.code' %>
+              </span>
+              <% code_value = flash[:resent_code] ? nil : registration_configuration[:email_verification_code] %>
+              <%= text_field_tag :email_verification_code, code_value, autocomplete: "off", placeholder: @code.code.first + '•' * (@code.code.length - 1), maxlength: @code.code.length, pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, oninput: "document.getElementById('go_on_button').disabled = this.value.trim() === '';", class: 'mt-3 w-full rounded-lg border border-gray-300 bg-gray-100 py-2 px-4 font-mono text-2xl text-center tracking-widest focus:bg-white', autofocus: show_code_entry, required: true, tabindex: 1 %>
+              <p class="text-secondary text-xs mt-1 text-center">
+                <%= t '.code_starts_with', code_start: @code.code.first %>
+                <%= t '.caps_or_not' %>
+              </p>
+            </label>
+            <div class="flex justify-end mt-3">
+              <%= button_tag type: 'submit', id: 'go_on_button', disabled: code_value.blank?, class: 'button primary transition-opacity disabled:opacity-0 disabled:cursor-not-allowed', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
+                <%= t('.go_on') %><%= arrow_right %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <details class="cant-find mt-6 w-full rounded-xl border border-gray-200 p-3">
+          <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+            </svg>
+            <%= t '.cant_find' %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </summary>
+          <p class="mt-3 text-sm text-primary">
+            <%= t '.mail_sent_to' %>
+          </p>
+          <ul class="mt-2 space-y-2 text-sm text-primary">
+            <li class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-gray-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+              </svg>
+              <strong><%= registration_configuration[:email] %></strong>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-gray-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              <em><%= local_time(@code.created_at, format: :long) %></em>
+            </li>
+          </ul>
+          <p class="mt-3 text-sm text-primary">
+            <%= t '.check_spam' %>
+          </p>
+          <div class="mt-3 w-full rounded-xl border border-gray-200 divide-y divide-gray-200 text-sm">
+            <details name="verify-method" class="method p-3" ontoggle="if (this.open) { positionMockupCursor(this); restartMockupAnimations(this); }">
+              <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
+                </svg>
+                <%= t '.how_to_find_link' %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </summary>
+              <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                <%= render 'mail_mockup_stage', variant: 'link' %>
+              </div>
+            </details>
+            <details name="verify-method" class="method p-3" ontoggle="if (this.open) { positionMockupCursor(this); restartMockupAnimations(this); }">
+              <summary class="cursor-pointer text-blue-900 hover:text-blue-950 list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+                <%= t '.how_to_find_code' %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="chev ml-auto h-4 w-4 shrink-0 transition-transform">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </summary>
+              <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                <%= render 'mail_mockup_stage', variant: 'code' %>
+              </div>
+            </details>
+          </div>
+        </details>
+          </div>
+        </div>
       </div>
       <div class="w-full flex flex-col mt-6 pb-4">
-        <label class="w-full">
-          <p class="input-label">
-            <%= t '.code', code_start: @code.code.first %>
-          </p>
-          <%= text_field_tag :email_verification_code, flash[:resent_code] ? nil : registration_configuration[:email_verification_code], autocomplete: "off", placeholder: "#{@code.code.first}...", pattern: "[#{@code.code.first.downcase}#{@code.code.first.upcase}].{#{@code.code.length-1}}", title: t(".help", code_start: @code.code.first, code_length: @code.code.length), data: {"1p-ignore": true, bwignore: true, lpignore: true, "form-type": "other"}, class: 'login-input', autofocus: true, required: true, tabindex: 1 %>
-          <p class="text-secondary text-xs mt-1">
-            <%= t '.caps_or_not' %>
-          </p>
-        </label>
-        <div class="flex w-full justify-between items-center mt-6">
+        <div class="flex w-full justify-between items-center">
           <%= back_to(registration_configuration(:email_verification_code), data: {turbolinks: false}, text: t(".send_new_code"), class: "text-gray-500") do |args| verify_human_registrations_path(args) end %>
-          <div class="flex flex-row justify-end items-center">
-            <%= back_to(registration_configuration(), data: {turbolinks: false}) do |args| new_registration_path(args) end %>
-            <%= button_tag type: 'submit', class: 'button primary', tabindex: 1, data: { 'disable-with' => t('.going_html') } do %>
-              <%= t('.go_on') %><%= arrow_right %>
-            <% end %>
-          </div>
+          <%= back_to(registration_configuration(), data: {turbolinks: false}) do |args| new_registration_path(args) end %>
         </div>
       </div>
     </div>
   <% end %>
 <% end %>
-

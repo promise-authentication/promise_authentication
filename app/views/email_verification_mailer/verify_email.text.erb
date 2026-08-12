@@ -4,7 +4,14 @@
 <%=- t('.explain_without_relying_party', client: @relying_party_name) %>
 <% end %>
 
+<% if @magic_link_url %>
+<%= t('.magic_link_intro') %>
+<%= @magic_link_url %>
+
+<%= t('.magic_link_or_code') %> <%= @code %>
+<% else %>
 <%= t('.code') %> <%= @code %>
+<% end %>
 
 <%= t('.what_is_promise.title') %>
 <%= t('.what_is_promise.body') %>

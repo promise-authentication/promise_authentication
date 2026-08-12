@@ -1,6 +1,16 @@
-# Preview all emails at http://localhost:3000/rails/mailers/password_mailer
+# Preview all emails at http://localhost:3000/rails/mailers/email_verification_mailer
 class EmailVerificationMailerPreview < ActionMailer::Preview
   def verify_email
+    code = "KSD"
+    EmailVerificationMailer.with(
+      email: "hello@world.com",
+      code: code,
+      relying_party_name: "Oase",
+      magic_link_token: "#{SecureRandom.hex(16)}.#{SecureRandom.urlsafe_base64(32)}"
+    ).verify_email
+  end
+
+  def verify_email_without_magic_link
     code = "KSD"
     EmailVerificationMailer.with(
       email: "hello@world.com",

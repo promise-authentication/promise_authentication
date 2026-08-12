@@ -17,12 +17,15 @@ class EmailsController < ApplicationController
       # If the code is valid, redirect to the passwords page
       flash[:slide_class] = 'a-slide-in-from-right'
       redirect_to create_password_registrations_path(registration_configuration)
-    else
+    elsif email_verifier.can_resend?
       # If the code is invalid, we send the mail, with a new code
       email_verifier.generate_and_send_verification_code!(old_code: @code.code)
       @code = email_verifier.verifier
       flash.now[:resent_code] = true
-      render action: :verify_email
+      render action: :verify
+    else
+      flash.now[:error] = I18n.t('too_many_codes_sent')
+      render action: :verify
     end
   end
 
