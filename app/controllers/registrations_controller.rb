@@ -28,6 +28,7 @@ class RegistrationsController < ApplicationController
       if ::Authentication::Services::Authenticate::Existing.known?(email)
         redirect_to verify_password_path(registration_configuration)
       else
+        track_registration_step 'started'
         code = EmailVerificationCode.active_for_cleartext(email)
         if code
           redirect_to verify_email_registrations_path(registration_configuration)
@@ -45,9 +46,11 @@ class RegistrationsController < ApplicationController
     return unless request.post?
 
     pass_turnstile!
+    track_registration_step 'human_verified'
 
     # Prepare the email for verification
     email_verifier.generate_and_send_verification_code!
+    track_registration_step 'mail_sent'
 
     # Redirect to email verification
     flash[:slide_class] = 'a-slide-in-from-right'
@@ -80,11 +83,13 @@ class RegistrationsController < ApplicationController
 
     if verify_email_verification_code!
       # If the code is valid, redirect to the passwords page
+      track_registration_step 'confirmed_code'
       flash[:slide_class] = 'a-slide-in-from-right'
       redirect_to create_password_registrations_path(registration_configuration)
     elsif email_verifier.can_resend?
       # If the code is invalid, we send the mail, with a new code
       email_verifier.generate_and_send_verification_code!(old_code: @code.code)
+      track_registration_step 'mail_sent', resend: true
       @code = email_verifier.verifier
       flash.now[:resent_code] = true
       render action: :verify_email
@@ -120,6 +125,7 @@ class RegistrationsController < ApplicationController
       return redirect_to verify_email_registrations_path(configuration)
     end
 
+    track_registration_step 'confirmed_magic_link'
     flash[:slide_class] = 'a-slide-in-from-right'
     redirect_to create_password_registrations_path(configuration.merge('email_verification_code' => code.code))
   end
@@ -142,6 +148,7 @@ class RegistrationsController < ApplicationController
       return unless @auth_request.valid?
 
       @auth_request.register!
+      track_registration_step 'password_created'
 
       do_sign_in(@auth_request)
 
@@ -150,6 +157,12 @@ class RegistrationsController < ApplicationController
       flash[:registered] = true
       redirect_to confirm_path(login_configuration)
     end
+  end
+
+  # Funnel event, name + relying party only — never the email or any
+  # other PII, in keeping with the product's no-personal-data stance.
+  def track_registration_step(step, **properties)
+    ahoy.track 'registration_step', { step: step, relying_party_id: relying_party&.id }.merge(properties)
   end
 
   def verify_email_verification_code!
@@ -189,6 +202,7 @@ class RegistrationsController < ApplicationController
       # nothing to resend against — verify_email will route onwards
     elsif email_verifier.can_resend?
       email_verifier.generate_and_send_verification_code!(old_code: current_code.code)
+      track_registration_step 'mail_sent', resend: true
       flash[:resent_code] = true
     else
       flash[:error] = I18n.t('too_many_codes_sent')
