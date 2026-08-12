@@ -7,10 +7,14 @@ module TurnstileConcern
     helper_method :turnstile_tag_html
   end
 
-  def turnstile_tag_html
-    "<div class=\"cf-turnstile\" data-callback=\"onSuccess\" data-theme=\"light\" data-sitekey=\"#{ENV.fetch(
-      'PROMISE_CLOUDFLARE_TURNSTILE_SITE_KEY', '3x00000000000000000000FF'
-    )}\"></div>".html_safe
+  def turnstile_tag_html(appearance: nil, before_interactive: nil)
+    attrs = { class: 'cf-turnstile',
+              'data-callback': 'onSuccess',
+              'data-theme': 'light',
+              'data-sitekey': ENV.fetch('PROMISE_CLOUDFLARE_TURNSTILE_SITE_KEY', '3x00000000000000000000FF'),
+              'data-appearance': appearance,
+              'data-before-interactive-callback': before_interactive }.compact
+    helpers.tag.div(**attrs)
   end
 
   def pre_validated?
