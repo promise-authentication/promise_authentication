@@ -1,8 +1,12 @@
 <%= content_for :body do %>
+  <%# No greeting when navigating backwards (e.g. "Send ny kode" on
+      verify_email) — back_to links land here with the slide-from-left
+      flash set by move_back. %>
+  <% celebrate = request.get? && flash[:slide_class] != 'a-slide-in-from-left' %>
   <%= form_tag verify_human_registrations_path(registration_configuration), class: 'w-full flex-1' do %>
-    <div class="w-full flex items-center flex-col">
+    <div class="humanflow <%= 'play' if celebrate %> w-full flex items-center flex-col">
       <div class="flex flex-1 flex-row justify-between border-b pb-3 mb-5 w-full pt-8 items-center">
-        <h2 class="text-lg text-primary font-bold leading-none">
+        <h2 class="check-title text-lg text-primary font-bold leading-none">
           <%= t('.title', email: registration_configuration[:email]) %>
         </h2>
         <a href="javascript:void(toggleDescription());" class="flex flex-row items-center space-x-1">
@@ -13,12 +17,15 @@
         </a>
       </div>
 
-      <%# Two-screen flow: the "you're new here" greeting (badge pops in,
-          sparkles twinkle, ring pulses) shows alone, then slides out left
-          while the human-check slides in from the right. Both screens
-          share one grid cell so the card keeps its height. The show is
-          skipped on re-render after a failed Turnstile check, and with
-          reduced motion the two screens simply stack, static. %>
+      <%# Event-driven two-screen flow: the "you're new here" greeting
+          (badge pops in, sparkles twinkle, ring pulses) shows while
+          Turnstile decides. If it auto-passes, the form submits straight
+          from the greeting and the human-check text is never shown
+          (appearance=interaction-only keeps the widget invisible too).
+          Only when Turnstile asks for interaction — or on the fallback
+          timeout — does the check screen slide in. The greeting is
+          skipped on re-render after a failed check, and with reduced
+          motion the two screens simply stack, static. %>
       <style>
         @media (prefers-reduced-motion: no-preference) {
           .newbie-badge { animation: newbie-pop .5s cubic-bezier(.22, 1.61, .36, 1) both, newbie-ring .9s ease-out .45s both; }
@@ -26,10 +33,14 @@
           /* clip, not hidden: a hidden box is still programmatically
              scrollable, so focus landing in the (offscreen) second screen
              would scroll the whole show out of sight. */
-          .screens.play { display: grid; overflow: hidden; overflow: clip; }
-          .screens.play > * { grid-area: 1 / 1; min-width: 0; }
-          .screens.play .screen-celebrate { align-self: center; animation: screen-out .45s ease-in 2.2s both; }
-          .screens.play .screen-check { animation: screen-in .5s ease-out 2.35s both; }
+          .humanflow.play .screens { display: grid; overflow: hidden; overflow: clip; }
+          .humanflow.play .screens > * { grid-area: 1 / 1; min-width: 0; }
+          .humanflow.play .screen-celebrate { align-self: center; }
+          .humanflow.play:not(.advance) .screen-check { opacity: 0; visibility: hidden; }
+          .humanflow.play:not(.advance) .check-title { opacity: 0; }
+          .humanflow.play.advance .screen-celebrate { animation: screen-out .45s ease-in both; }
+          .humanflow.play.advance .screen-check { animation: screen-in .5s ease-out .15s both; }
+          .humanflow.play.advance .check-title { animation: title-in .4s ease-out .3s both; }
           @keyframes newbie-pop {
             0% { transform: scale(0); }
             100% { transform: scale(1); }
@@ -43,6 +54,10 @@
             30% { transform: scale(1.25) rotate(-8deg); }
             60% { transform: scale(.95) rotate(6deg); }
           }
+          @keyframes title-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
           @keyframes screen-out {
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(-110%); opacity: 0; visibility: hidden; }
@@ -53,23 +68,47 @@
           }
         }
       </style>
-      <%# No greeting when navigating backwards (e.g. "Send ny kode" on
-          verify_email) — back_to links land here with the slide-from-left
-          flash set by move_back. %>
-      <% celebrate = request.get? && flash[:slide_class] != 'a-slide-in-from-left' %>
       <script>
-        // Turnstile (test mode) can succeed before the greeting has
-        // finished — hold the auto-submit until the check has slid in,
-        // so the show isn't cut short by a mid-animation navigation.
-        var showDone = !(<%= celebrate %> && matchMedia('(prefers-reduced-motion: no-preference)').matches);
+        // Turnstile decides how this page plays out. During the greeting
+        // we hold both outcomes: auto-pass submits as soon as the greeting
+        // has had its moment; a challenge reveals the check screen. The
+        // fallback advance covers Turnstile staying silent (script blocked,
+        // network trouble), so the user is never stuck on the greeting.
+        var playing = <%= celebrate %> && matchMedia('(prefers-reduced-motion: no-preference)').matches;
+        var greetingDone = !playing;
         var pendingSubmit = false;
-        document.addEventListener('animationend', function (e) {
-          if (e.animationName !== 'screen-in') return;
-          showDone = true;
-          if (pendingSubmit) document.getElementById('submit_button').click();
-        });
+        var pendingAdvance = false;
+        var submitted = false;
+
+        function submitHuman() {
+          submitted = true;
+          document.getElementById('submit_button').click();
+        }
+        function advanceToCheck() {
+          var flow = document.querySelector('.humanflow');
+          if (flow) flow.classList.add('advance');
+        }
+        if (playing) {
+          setTimeout(function () {
+            greetingDone = true;
+            if (pendingSubmit) { submitHuman(); } else if (pendingAdvance) { advanceToCheck(); }
+          }, 2200);
+          setTimeout(function () {
+            if (!submitted && !pendingSubmit) advanceToCheck();
+          }, 6000);
+        }
+        function onTurnstileInteractive() {
+          if (greetingDone) { advanceToCheck(); } else { pendingAdvance = true; }
+        }
+        function onSuccess(token) {
+          document.getElementById('submit_button').disabled = false;
+          // Remove class that makes it look disabled
+          document.getElementById('submit_button').classList.remove('opacity-50');
+          document.getElementById('submit_button').classList.remove('scale-0');
+          if (greetingDone) { submitHuman(); } else { pendingSubmit = true; }
+        }
       </script>
-      <div class="screens <%= 'play' if celebrate %> w-full">
+      <div class="screens w-full">
         <% if celebrate %>
           <div class="screen-celebrate w-full flex flex-col items-center pt-2 text-center">
             <span class="newbie-badge relative flex h-14 w-14 items-center justify-center rounded-full bg-amber-100">
@@ -96,20 +135,7 @@
           </p>
           <div class="w-full flex flex-col mt-6 pb-4">
             <div class="w-full h-24 flex items-center justify-end">
-                <script>
-                  function onSuccess(token) {
-                    document.getElementById('submit_button').disabled = false;
-                    // Remove class that makes it look disabled
-                    document.getElementById('submit_button').classList.remove('opacity-50');
-                    document.getElementById('submit_button').classList.remove('scale-0');
-                    if (showDone) {
-                      document.getElementById('submit_button').click();
-                    } else {
-                      pendingSubmit = true;
-                    }
-                  }
-                </script>
-              <%= turnstile_tag_html %>
+              <%= turnstile_tag_html(appearance: 'interaction-only', before_interactive: 'onTurnstileInteractive') %>
             </div>
             <div class="flex w-full justify-end items-center mt-0">
               <%= back_to(registration_configuration) do |args| new_registration_path(args) end %>

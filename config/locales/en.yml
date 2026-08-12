@@ -204,6 +204,7 @@ en:
       magic_link_button: "Confirm e-mail and continue"
       magic_link_button_with_client: "Confirm e-mail and continue to %{client}"
       magic_link_intro: "Confirm your e-mail and continue by clicking the link below:"
+      or: or
       magic_link_or_code: "Want to continue where you left off? Enter this code there instead:"
       what_is_promise:
         title: What is Promise?

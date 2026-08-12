@@ -204,6 +204,7 @@ da:
       magic_link_button: "Bekræft e-mail og fortsæt"
       magic_link_button_with_client: "Bekræft e-mail og fortsæt til %{client}"
       magic_link_intro: "Bekræft din e-mail og fortsæt ved at klikke på linket herunder:"
+      or: eller
       magic_link_or_code: "Vil du fortsætte, der hvor du slap? Så indtast denne kode dér i stedet:"
       what_is_promise:
         title: Hvad er Promise?
