@@ -184,6 +184,103 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'go_to with a custom-scheme redirect keeps the session for a retry' do
+    Trust::Certificate.generate_key_pair!
+
+    relying_party = Authentication::RelyingParty.new(
+      id: 'example.com', name: 'Example', allowed_redirect_uris: ['example-app://authenticate']
+    )
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
+
+    iphone = { 'HTTP_USER_AGENT' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15' }
+    Authentication::RelyingParty.stub :find, relying_party do
+      post go_to_url, params: { client_id: 'example.com', redirect_uri: 'example-app://authenticate' }, headers: iphone
+      assert_match %r{\Aexample-app://authenticate\?id_token=}, response.redirect_url
+
+      # The custom-scheme handoff may have gone nowhere (app hiccup,
+      # dismissed prompt) — a second press must re-issue instead of
+      # bouncing to login.
+      post go_to_url, params: { client_id: 'example.com', redirect_uri: 'example-app://authenticate' }, headers: iphone
+      assert_match %r{\Aexample-app://authenticate\?id_token=}, response.redirect_url
+    end
+  end
+
+  test 'go_to on desktop with a custom-scheme redirect lands on confirm' do
+    Trust::Certificate.generate_key_pair!
+
+    relying_party = Authentication::RelyingParty.new(
+      id: 'example.com', name: 'Example', allowed_redirect_uris: ['example-app://authenticate']
+    )
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
+
+    Authentication::RelyingParty.stub :find, relying_party do
+      post go_to_url, params: { client_id: 'example.com', redirect_uri: 'example-app://authenticate' }
+      assert_redirected_to confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate')
+
+      # No token was burned and the session survives — confirm renders.
+      get confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate')
+      assert_response :success
+    end
+  end
+
+  test 'go_to with a web redirect still forgets the session' do
+    Trust::Certificate.generate_key_pair!
+
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
+
+    Authentication::RelyingParty.stub :fetch, nil do
+      post go_to_url, params: { client_id: 'example.com', redirect_uri: 'https://example.com/hello' }
+      assert_match %r{\Ahttps://example.com/hello\?id_token=}, response.redirect_url
+
+      post go_to_url, params: { client_id: 'example.com', redirect_uri: 'https://example.com/hello' }
+      assert_match %r{/login}, response.redirect_url
+    end
+  end
+
+  test 'confirm shows app guidance on desktop when the handoff is a custom scheme' do
+    relying_party = Authentication::RelyingParty.new(
+      id: 'example.com', name: 'Example', allowed_redirect_uris: ['example-app://authenticate']
+    )
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
+
+    Authentication::RelyingParty.stub :find, relying_party do
+      get confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate')
+      assert_response :success
+      assert_select 'form[action*="go_to"]', count: 0
+      assert_select 'p', /on your phone/
+    end
+  end
+
+  test 'confirm keeps the go-to button on a phone for a custom-scheme handoff' do
+    relying_party = Authentication::RelyingParty.new(
+      id: 'example.com', name: 'Example', allowed_redirect_uris: ['example-app://authenticate']
+    )
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
+
+    Authentication::RelyingParty.stub :find, relying_party do
+      get confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate'),
+          headers: { 'HTTP_USER_AGENT' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15' }
+      assert_response :success
+      assert_select 'form[action*="go_to"]'
+    end
+  end
+
+  test 'confirm keeps the go-to button for web handoffs on desktop' do
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
+
+    Authentication::RelyingParty.stub :fetch, nil do
+      get confirm_path(client_id: 'example.com', redirect_uri: 'https://example.com/hello')
+      assert_response :success
+      assert_select 'form[action*="go_to"]'
+    end
+  end
+
   test 'go_to relying party' do
     Trust::Certificate.generate_key_pair!
 
