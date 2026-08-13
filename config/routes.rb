@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       post :verify_human
       get :verify_email
       post :verify_email
+      get :status
       get :create_password
       post :create_password
     end

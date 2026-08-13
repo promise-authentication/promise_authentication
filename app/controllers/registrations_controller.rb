@@ -74,11 +74,7 @@ class RegistrationsController < ApplicationController
   def verify_email
     @code = email_verifier.verifier
 
-    if @code.nil?
-      return redirect_to(confirm_path(login_configuration)) if logged_in?
-
-      return redirect_to login_path(registration_configuration)
-    end
+    return redirect_to stale_flow_destination if @code.nil?
     return unless request.post?
 
     if verify_email_verification_code!
@@ -96,6 +92,18 @@ class RegistrationsController < ApplicationController
     else
       flash.now[:error] = I18n.t('too_many_codes_sent')
       render action: :verify_email
+    end
+  end
+
+  # Polled by the verify_email page so a tab parked there follows the
+  # flow when it completes elsewhere (e.g. the mail link opened in
+  # another browser). Reveals nothing the create action doesn't already:
+  # posting an email there also branches on whether the account exists.
+  def status
+    if email_verifier.verifier
+      head :no_content
+    else
+      render json: { redirect_to: stale_flow_destination(celebrate: '0') }
     end
   end
 
@@ -156,6 +164,21 @@ class RegistrationsController < ApplicationController
       # Lets the confirm page play its account-created celebration once.
       flash[:registered] = true
       redirect_to confirm_path(login_configuration)
+    end
+  end
+
+  # Where a session parked on verify_email should go once its code is
+  # gone: the flow finished (possibly in another browser, via the mail
+  # link) or the code expired. If the account now exists, land on the
+  # password prompt instead of the start of the flow.
+  def stale_flow_destination(extra = {})
+    return confirm_path(login_configuration) if logged_in?
+
+    configuration = registration_configuration(:email_verification_code)
+    if ::Authentication::Services::Authenticate::Existing.known?(configuration[:email])
+      verify_password_path(configuration.to_h.merge(extra))
+    else
+      login_path(configuration)
     end
   end
 
