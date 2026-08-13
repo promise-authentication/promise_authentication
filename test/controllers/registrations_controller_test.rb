@@ -67,6 +67,44 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   #                                                          email_verification_code: code.code)
   # end
 
+  test 'status while the code is pending' do
+    Authentication::RelyingParty.stub :fetch, nil do
+      post verify_human_registrations_url, params: { email: 'hello@world.com' }
+      get status_registrations_url(email: 'hello@world.com', client_id: 'oase.app')
+      assert_response :no_content
+    end
+  end
+
+  test 'status once the flow finished elsewhere' do
+    Authentication::RelyingParty.stub :fetch, nil do
+      post verify_human_registrations_url, params: { email: 'hello@world.com' }
+      Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+      EmailVerificationCode.find_by_cleartext('hello@world.com')&.destroy
+
+      get status_registrations_url(email: 'hello@world.com', client_id: 'oase.app')
+      assert_response :success
+      assert_equal verify_password_path(celebrate: '0', client_id: 'oase.app', email: 'hello@world.com'),
+                   response.parsed_body['redirect_to']
+    end
+  end
+
+  test 'status once the code expired without an account' do
+    Authentication::RelyingParty.stub :fetch, nil do
+      get status_registrations_url(email: 'hello@world.com', client_id: 'oase.app')
+      assert_response :success
+      assert_equal login_path(client_id: 'oase.app', email: 'hello@world.com'),
+                   response.parsed_body['redirect_to']
+    end
+  end
+
+  test 'stale verify_email redirects to password once the account exists' do
+    Authentication::RelyingParty.stub :fetch, nil do
+      Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+      get verify_email_registrations_url(email: 'hello@world.com', client_id: 'oase.app')
+      assert_redirected_to verify_password_url(client_id: 'oase.app', email: 'hello@world.com')
+    end
+  end
+
   test 'handle wrong email' do
     email = 'hello@gmail.dk'
     # Let's mock the email sending:

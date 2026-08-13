@@ -179,6 +179,31 @@
           window.addEventListener('resize', positionOpenMockupCursors);
           document.addEventListener('DOMContentLoaded', positionOpenMockupCursors);
           document.addEventListener('turbolinks:load', positionOpenMockupCursors);
+
+          // A tab parked here goes stale when the flow completes elsewhere
+          // (e.g. the mail link opened in another browser) or the code
+          // expires. Poll for that and move the tab along; celebrate=0 makes
+          // verify_password skip its welcome-back show on this quiet arrival.
+          window.verifyEmailStatusCheck = function () {
+            if (!document.getElementById('email_verification_code')) {
+              clearInterval(window.verifyEmailStatusPoller);
+              return;
+            }
+            fetch('<%== j status_registrations_path(registration_configuration(:email_verification_code)) %>', { headers: { Accept: 'application/json' } })
+              .then(function (response) { return response.status === 200 ? response.json() : null; })
+              .then(function (data) {
+                if (data && data.redirect_to) window.location.replace(data.redirect_to);
+              })
+              .catch(function () {});
+          };
+          if (window.verifyEmailStatusPoller) clearInterval(window.verifyEmailStatusPoller);
+          window.verifyEmailStatusPoller = setInterval(function () { window.verifyEmailStatusCheck(); }, 5000);
+          if (!window.verifyEmailStatusVisibilityHook) {
+            window.verifyEmailStatusVisibilityHook = true;
+            document.addEventListener('visibilitychange', function () {
+              if (!document.hidden) window.verifyEmailStatusCheck();
+            });
+          }
         </script>
         <div class="screens <%= 'play' if play_intro %> w-full">
           <% if play_intro %>
