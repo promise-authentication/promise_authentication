@@ -145,8 +145,8 @@ en:
       you_are_html: You are signed in as <strong>%{email}</strong>.
       go_to_html: "Go to <strong>%{relying_party_name}</strong>"
       create_account_html: Create new identity for <strong>%{relying_party_name}</strong>
-      continue_in_app_html: Continue in the <strong>%{relying_party_name}</strong> app on your phone
-      continue_in_app_help_html: "The link back to the app doesn't work on a computer. Open the %{relying_party_name} app on your phone and sign in with your e-mail and password."
+      app_did_not_open_html: Didn't the <strong>%{relying_party_name}</strong> app open?
+      app_did_not_open_help_html: "Press the button to try again. If the app lives on another device, open the %{relying_party_name} app there and sign in with your e-mail and password."
       not_you_html: Not <strong>%{email}</strong>?
       logout: Logout
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
