@@ -4,7 +4,6 @@ module RelyingPartyConcern
   included do
     helper_method :relying_party
     helper_method :custom_scheme_handoff?
-    helper_method :mobile_device?
   end
 
   def relying_party
@@ -25,12 +24,5 @@ module RelyingPartyConcern
     scheme.present? && !%w[http https].include?(scheme)
   rescue URI::InvalidURIError
     false
-  end
-
-  # Coarse on purpose: only used to pick copy/affordances for handoffs the
-  # current device plainly cannot perform. iPads in desktop mode report a
-  # Mac user agent and get the desktop treatment — acceptable.
-  def mobile_device?
-    request.user_agent.to_s.match?(/iPhone|iPad|iPod|Android/i)
   end
 end

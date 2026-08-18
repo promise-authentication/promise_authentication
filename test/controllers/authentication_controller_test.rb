@@ -206,7 +206,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'go_to on desktop with a custom-scheme redirect lands on confirm' do
+  test 'go_to attempts a custom-scheme handoff regardless of user agent' do
     Trust::Certificate.generate_key_pair!
 
     relying_party = Authentication::RelyingParty.new(
@@ -215,12 +215,16 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
     post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
 
+    # A desktop user agent is no proof the app is absent: tablets in
+    # desktop-site mode report one (Samsung tablets do by default). The
+    # confirm page handles a dead redirect reactively instead.
+    desktop = { 'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36' }
     Authentication::RelyingParty.stub :find, relying_party do
-      post go_to_url, params: { client_id: 'example.com', redirect_uri: 'example-app://authenticate' }
-      assert_redirected_to confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate')
+      post go_to_url, params: { client_id: 'example.com', redirect_uri: 'example-app://authenticate' }, headers: desktop
+      assert_match %r{\Aexample-app://authenticate\?id_token=}, response.redirect_url
 
-      # No token was burned and the session survives — confirm renders.
-      get confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate')
+      # The session survives the attempt — confirm still renders for a retry.
+      get confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate'), headers: desktop
       assert_response :success
     end
   end
@@ -240,7 +244,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'confirm shows app guidance on desktop when the handoff is a custom scheme' do
+  test 'confirm shows the go-to button and a hidden fallback for a custom-scheme handoff' do
     relying_party = Authentication::RelyingParty.new(
       id: 'example.com', name: 'Example', allowed_redirect_uris: ['example-app://authenticate']
     )
@@ -248,29 +252,17 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
 
     Authentication::RelyingParty.stub :find, relying_party do
-      get confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate')
-      assert_response :success
-      assert_select 'form[action*="go_to"]', count: 0
-      assert_select 'p', /on your phone/
-    end
-  end
-
-  test 'confirm keeps the go-to button on a phone for a custom-scheme handoff' do
-    relying_party = Authentication::RelyingParty.new(
-      id: 'example.com', name: 'Example', allowed_redirect_uris: ['example-app://authenticate']
-    )
-    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
-    post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
-
-    Authentication::RelyingParty.stub :find, relying_party do
+      # Desktop user agent on purpose: the button must never be hidden by
+      # UA sniffing — tablets in desktop-site mode report desktop UAs.
       get confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate'),
-          headers: { 'HTTP_USER_AGENT' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15' }
+          headers: { 'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36' }
       assert_response :success
       assert_select 'form[action*="go_to"]'
+      assert_select '#app-handoff-fallback[hidden]'
     end
   end
 
-  test 'confirm keeps the go-to button for web handoffs on desktop' do
+  test 'confirm keeps the go-to button and skips the fallback for web handoffs' do
     Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
     post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
 
@@ -278,6 +270,7 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
       get confirm_path(client_id: 'example.com', redirect_uri: 'https://example.com/hello')
       assert_response :success
       assert_select 'form[action*="go_to"]'
+      assert_select '#app-handoff-fallback', count: 0
     end
   end
 

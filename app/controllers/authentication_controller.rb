@@ -25,13 +25,6 @@ class AuthenticationController < ApplicationController
 
   def go_to
     if relying_party.present?
-      # A custom-scheme handoff on a device without the app dies silently
-      # (desktop browsers refuse the navigation), so don't burn a token on
-      # it — land on confirm, which explains how to continue in the app.
-      # authenticate funnels through here too, so this also covers an
-      # existing user signing in with the app's redirect_uri on desktop.
-      return redirect_to confirm_path(login_configuration) if custom_scheme_handoff? && !mobile_device?
-
       id_token = Authentication::Services::GetIdToken.new(
         user_id: current_user.id,
         relying_party_id: relying_party.id,

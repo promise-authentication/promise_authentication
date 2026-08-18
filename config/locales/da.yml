@@ -145,8 +145,8 @@ da:
       you_are_html: Du er logget ind som <strong>%{email}</strong>.
       go_to_html: "Videre til <strong>%{relying_party_name}</strong>"
       create_account_html: "Opret ny identitet på <strong>%{relying_party_name}</strong>"
-      continue_in_app_html: Fortsæt i <strong>%{relying_party_name}</strong>-appen på din telefon
-      continue_in_app_help_html: "Linket tilbage til appen virker ikke på en computer. Åbn %{relying_party_name}-appen på din telefon og log ind med din e-mail og dit password."
+      app_did_not_open_html: Åbnede <strong>%{relying_party_name}</strong>-appen ikke?
+      app_did_not_open_help_html: "Tryk på knappen igen for at prøve igen. Ligger appen på en anden enhed, så åbn %{relying_party_name}-appen dér og log ind med din e-mail og dit password."
       not_you_html: Er <strong>%{email}</strong> ikke dig?
       logout: Log ud
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
