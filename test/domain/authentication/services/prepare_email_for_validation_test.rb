@@ -3,6 +3,9 @@ require 'test_helper'
 class Authentication::Services::PrepareEmailForValidationTest < ActiveSupport::TestCase
   setup do
     @described_class = Authentication::Services::PrepareEmailForValidation
+    # Deliveries accumulate across the tests sharing this process — the
+    # absolute size assertion below is only meaningful from a clean slate.
+    ActionMailer::Base.deliveries.clear
   end
 
   test 'it should be valid' do
