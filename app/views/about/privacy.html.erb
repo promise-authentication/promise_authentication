@@ -18,9 +18,9 @@
   else about you.
 </p>
 <p>
-  The service is operated by
-  <strong>[⚠️ legal entity name, CVR number and address — to be confirmed before publication]</strong>,
-  a non-profit association under Danish law. We are the independent data
+  The service is operated by <strong>Foreningen Promise</strong>
+  (CVR&nbsp;45656438), Præstegårds Allé 50, 2700 Brønshøj, Denmark — a
+  non-profit association under Danish law. We are the independent data
   controller for the personal data described on this page — the data processed
   to make the login service itself work.
 </p>
@@ -32,7 +32,7 @@
 </p>
 <p>
   Questions or requests about your data:
-  <strong>[⚠️ contact e-mail for privacy enquiries — to be confirmed]</strong>.
+  <a href="mailto:privacy@promiseauthentication.org">privacy@promiseauthentication.org</a>.
 </p>
 
 <h2>
@@ -126,6 +126,7 @@
     Your IP address is masked (the last part removed) before anything is
     stored; alongside it we record browser and operating system type,
     referring page, and an approximate location derived from the masked IP.
+    Statistics are deleted after 6 months.
     Sign-in statistics use the random per-service ID, not your e-mail.
     Registration-flow events record only which step was reached and for which
     service — never your e-mail or other personal details.
@@ -166,10 +167,10 @@
     history): for as long as your account exists. Write to us to have your
     account deleted.
   </li>
+  <li>Usage statistics: <strong>6 months</strong>.</li>
   <li>
-    Usage statistics and error reports:
-    <strong>[⚠️ retention period to be confirmed — no automatic deletion is
-    currently in place]</strong>.
+    Error reports: held by our error-tracking provider, not stored on our own
+    systems.
   </li>
 </ul>
 
@@ -182,38 +183,40 @@
 </p>
 <ul>
   <li>
-    <strong>Hosting:</strong>
-    [⚠️ hosting provider(s) and region — to be confirmed]
+    <strong>Hosting:</strong> Heroku (Salesforce, Inc.) — the service and its
+    database run in Heroku's EU region
   </li>
   <li>
-    <strong>E-mail delivery:</strong>
-    [⚠️ SMTP provider — to be confirmed] (delivers verification and recovery
-    e-mails, and therefore processes your e-mail address)
+    <strong>E-mail delivery:</strong> Scaleway (France) — delivers
+    verification and recovery e-mails, and therefore processes your e-mail
+    address
   </li>
   <li>
-    <strong>Error tracking:</strong> Airbrake
-    [⚠️ location/transfer basis — to be confirmed] (receives filtered
-    technical error reports)
+    <strong>Error tracking:</strong> Airbrake (US) — receives technical error
+    reports with e-mail addresses, passwords and tokens filtered out
   </li>
   <li>
     <strong>Bot protection:</strong> Cloudflare (the Turnstile check described
     above; the Turnstile script is loaded from Cloudflare when our pages load)
   </li>
   <li>
-    <strong>Location lookup:</strong>
-    [⚠️ IP geolocation provider — to be confirmed] (resolves masked IP
-    addresses to an approximate location for our statistics)
+    <strong>Location lookup:</strong> IPinfo (ipinfo.io, US) — receives only
+    masked IP addresses, to resolve an approximate location for our statistics
   </li>
 </ul>
 <p>
-  Our own key service, which holds the recovery keys described above, runs at
-  a separate physical location and stores no personal data — only key pairs.
+  Our own key service, which holds the recovery keys described above, runs on
+  separate infrastructure at a different location and stores no personal data
+  — only key pairs.
 </p>
 <p>
-  <strong>[⚠️ International transfers — to be completed once the suppliers
-  above are confirmed. Any supplier outside the EU/EEA will be listed here
-  together with the transfer basis, e.g. EU Standard Contractual Clauses or an
-  adequacy decision.]</strong>
+  Our servers and database are in the EU, and e-mails are sent from the EU.
+  Where a supplier processes data in the United States — Heroku's parent
+  company Salesforce for support and operations, Airbrake (filtered error
+  reports) and IPinfo (masked IP addresses only) — the transfer is covered by
+  EU Standard Contractual Clauses in our agreement with the supplier
+  <strong>[⚠️ verify DPA/SCC status for Airbrake and IPinfo before
+  publication]</strong>.
 </p>
 
 <h2>
