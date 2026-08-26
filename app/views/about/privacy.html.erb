@@ -124,9 +124,8 @@
     understanding and improving the service, art. 6(1)(f)). We count visits
     and sign-ins without cookies and without linking them to your account.
     Your IP address is masked (the last part removed) before anything is
-    stored; alongside it we record browser and operating system type,
-    referring page, and an approximate location derived from the masked IP.
-    Statistics are deleted after 6 months.
+    stored; alongside it we record browser and operating system type and the
+    referring page. Statistics are deleted after 6 months.
     Sign-in statistics use the random per-service ID, not your e-mail.
     Registration-flow events record only which step was reached and for which
     service — never your e-mail or other personal details.
@@ -199,10 +198,6 @@
     <strong>Bot protection:</strong> Cloudflare (the Turnstile check described
     above; the Turnstile script is loaded from Cloudflare when our pages load)
   </li>
-  <li>
-    <strong>Location lookup:</strong> IPinfo (ipinfo.io, US) — receives only
-    masked IP addresses, to resolve an approximate location for our statistics
-  </li>
 </ul>
 <p>
   Our own key service, which holds the recovery keys described above, runs on
@@ -211,12 +206,12 @@
 </p>
 <p>
   Our servers and database are in the EU, and e-mails are sent from the EU.
-  Where a supplier processes data in the United States — Heroku's parent
-  company Salesforce for support and operations, Airbrake (filtered error
-  reports) and IPinfo (masked IP addresses only) — the transfer is covered by
-  EU Standard Contractual Clauses in our agreement with the supplier
-  <strong>[⚠️ verify DPA/SCC status for Airbrake and IPinfo before
-  publication]</strong>.
+  Two suppliers involve transfers to the United States: Heroku's US
+  operations, covered by Heroku's certification under the EU-U.S. Data
+  Privacy Framework and Salesforce's Binding Corporate Rules for processors,
+  and Airbrake's filtered error reports, covered by the EU Standard
+  Contractual Clauses (2021/914) incorporated in our data-processing
+  agreement with Airbrake.
 </p>
 
 <h2>
