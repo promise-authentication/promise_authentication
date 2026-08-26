@@ -27,6 +27,7 @@
 <footer class="text-center text-xs text-secondary mt-3 mb-6">
   <span class="tracking-wide">
     <%= link_to name, root_path %> - <%= Time.current.year %>
+    - <%= link_to t('.privacy'), privacy_path, class: 'underline' %>
     <% if logged_in? && !relying_party %>
       - <%= link_to t('.change_password'), edit_password_path, class: 'underline' %>
       - <%= link_to t('.change_email'), edit_email_path, class: 'underline' %>

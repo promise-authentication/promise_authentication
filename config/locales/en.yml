@@ -29,6 +29,7 @@ en:
       login: Sign in
       change_password: Change password
       change_email: Change e-mail
+      privacy: Privacy
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on identity provider."

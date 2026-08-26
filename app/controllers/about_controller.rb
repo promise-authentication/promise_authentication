@@ -2,6 +2,9 @@ class AboutController < ApplicationController
   def welcome
   end
 
+  def privacy
+  end
+
   def open
   end
 

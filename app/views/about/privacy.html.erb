@@ -1,0 +1,276 @@
+<h1>
+  Privacy Policy
+</h1>
+
+<p class="bg-blue-200 rounded -ml-3 -mr-3 p-3">
+  The short version: we run a login service designed so that we store as little
+  about you as possible — and most of what we do store, we cannot read ourselves.
+  We don't sell data, we don't show ads, and we don't track you across the web.
+</p>
+
+<h2>
+  Who we are
+</h2>
+<p>
+  <%= name %> (promiseauthentication.org) is a login service: instead of creating
+  a separate account for every app or website, you sign in once with
+  <%= name %> and we confirm to the app who you are — without telling it anything
+  else about you.
+</p>
+<p>
+  The service is operated by
+  <strong>[⚠️ legal entity name, CVR number and address — to be confirmed before publication]</strong>,
+  a non-profit association under Danish law. We are the independent data
+  controller for the personal data described on this page — the data processed
+  to make the login service itself work.
+</p>
+<p>
+  The apps and websites you sign in to (we call them <em>relying parties</em>)
+  are separate, independent data controllers for whatever data you share with
+  them. This policy covers <%= name %> only; each relying party has its own
+  privacy policy.
+</p>
+<p>
+  Questions or requests about your data:
+  <strong>[⚠️ contact e-mail for privacy enquiries — to be confirmed]</strong>.
+</p>
+
+<h2>
+  Designed so we can't read your data
+</h2>
+<p>
+  Three design choices carry most of this policy:
+</p>
+<ul>
+  <li>
+    <strong>Your e-mail address is stored only as a fingerprint.</strong>
+    When you sign up, we compute a one-way cryptographic hash of your e-mail
+    address (two independent algorithms, SHA-256 and BLAKE2b, combined) and
+    store only that. The fingerprint lets us recognise you when you type your
+    e-mail at login, but it cannot be turned back into your address. Our
+    database does not contain a readable list of e-mail addresses.
+  </li>
+  <li>
+    <strong>Your password is never stored.</strong> We keep only an Argon2
+    hash of it, which lets us check the password you type without knowing it.
+  </li>
+  <li>
+    <strong>Your identifiers live in a vault only you can open.</strong>
+    The list of IDs connecting you to the services you use is encrypted with a
+    key derived from your password. That key is held in an encrypted cookie in
+    your own browser — it is not stored on our servers. Without your password,
+    we cannot open your vault.
+  </li>
+</ul>
+<p>
+  You can see all of this demonstrated with real production data on our
+  <%= link_to 'security page', about_data_path %>.
+</p>
+
+<h2>
+  What the services you sign in to receive
+</h2>
+<p>
+  When you log in to a relying party, it receives a signed token containing a
+  <strong>random ID created just for that service</strong>, the service's own
+  name, and the time of issue. Every service gets a different random ID for
+  you, so two services cannot compare notes to work out that you are the same
+  person. The token does not contain your e-mail address or anything else
+  about you.
+</p>
+<p>
+  A relying party that already knows your e-mail address (because you gave it
+  to them directly) can register it with us so we can recognise their existing
+  users. We store what they send only as a hashed fingerprint, tied to that
+  one service.
+</p>
+
+<h2>
+  The data we process
+</h2>
+<p>
+  We process the following, all to provide the login service (legal basis:
+  performance of our agreement with you, GDPR art. 6(1)(b)) unless noted
+  otherwise:
+</p>
+<ul>
+  <li>
+    <strong>E-mail address.</strong> Stored only as the hashed fingerprint
+    described above, together with the time it was verified. We use the
+    readable address transiently — while you type it during login and to send
+    you the e-mails below — but do not keep it in readable form.
+  </li>
+  <li>
+    <strong>Verification codes and magic links.</strong> When you sign up or
+    change your e-mail, we send a short code and a one-click link. Both expire
+    after <strong>1 hour</strong> and expired ones are deleted. The magic
+    link's content is encrypted with a secret that exists only inside the
+    e-mailed link itself — the copy in our database is unreadable on its own.
+  </li>
+  <li>
+    <strong>Password recovery.</strong> If you ask to reset your password, we
+    e-mail you a single-use recovery link, which is deleted once used. To make
+    recovery possible at all, we keep an encrypted spare copy of your vault
+    key. Opening it requires a private key held by our separate key service at
+    a different physical location — so no single system holds everything
+    needed to read your vault.
+  </li>
+  <li>
+    <strong>Login session.</strong> Kept in encrypted cookies in your browser
+    — see Cookies below.
+  </li>
+  <li>
+    <strong>Usage statistics</strong> (legal basis: our legitimate interest in
+    understanding and improving the service, art. 6(1)(f)). We count visits
+    and sign-ins without cookies and without linking them to your account.
+    Your IP address is masked (the last part removed) before anything is
+    stored; alongside it we record browser and operating system type,
+    referring page, and an approximate location derived from the masked IP.
+    Sign-in statistics use the random per-service ID, not your e-mail.
+    Registration-flow events record only which step was reached and for which
+    service — never your e-mail or other personal details.
+  </li>
+  <li>
+    <strong>Error reports</strong> (art. 6(1)(f)). When something breaks, a
+    technical error report is sent to our error-tracking tool. E-mail
+    addresses, passwords, codes and tokens are filtered out before the report
+    is sent.
+  </li>
+  <li>
+    <strong>Abuse prevention</strong> (art. 6(1)(f)). Registration includes a
+    Cloudflare Turnstile check to keep bots from abusing the e-mail
+    verification flow. Cloudflare processes technical signals from your
+    browser (including your IP address) to tell humans from bots.
+  </li>
+  <li>
+    <strong>Account history.</strong> We keep an append-only log of account
+    events (e-mail claimed, password set, and so on) for integrity and
+    troubleshooting. It contains the same hashed and encrypted forms described
+    above — never your readable e-mail or password.
+  </li>
+</ul>
+
+<h2>
+  How long we keep data
+</h2>
+<ul>
+  <li>Verification codes and magic links: <strong>1 hour</strong>.</li>
+  <li>Recovery links: single-use, deleted when used.</li>
+  <li>
+    Login session: until you log out or close your browser. If you chose
+    "Remember me", the encrypted cookies in your browser persist until you log
+    out.
+  </li>
+  <li>
+    Account records (hashed e-mail, password hash, encrypted vault, account
+    history): for as long as your account exists. Write to us to have your
+    account deleted.
+  </li>
+  <li>
+    Usage statistics and error reports:
+    <strong>[⚠️ retention period to be confirmed — no automatic deletion is
+    currently in place]</strong>.
+  </li>
+</ul>
+
+<h2>
+  Who we share data with
+</h2>
+<p>
+  We never sell personal data and never share it for advertising. We use a
+  small number of suppliers (data processors) to run the service:
+</p>
+<ul>
+  <li>
+    <strong>Hosting:</strong>
+    [⚠️ hosting provider(s) and region — to be confirmed]
+  </li>
+  <li>
+    <strong>E-mail delivery:</strong>
+    [⚠️ SMTP provider — to be confirmed] (delivers verification and recovery
+    e-mails, and therefore processes your e-mail address)
+  </li>
+  <li>
+    <strong>Error tracking:</strong> Airbrake
+    [⚠️ location/transfer basis — to be confirmed] (receives filtered
+    technical error reports)
+  </li>
+  <li>
+    <strong>Bot protection:</strong> Cloudflare (the Turnstile check described
+    above; the Turnstile script is loaded from Cloudflare when our pages load)
+  </li>
+  <li>
+    <strong>Location lookup:</strong>
+    [⚠️ IP geolocation provider — to be confirmed] (resolves masked IP
+    addresses to an approximate location for our statistics)
+  </li>
+</ul>
+<p>
+  Our own key service, which holds the recovery keys described above, runs at
+  a separate physical location and stores no personal data — only key pairs.
+</p>
+<p>
+  <strong>[⚠️ International transfers — to be completed once the suppliers
+  above are confirmed. Any supplier outside the EU/EEA will be listed here
+  together with the transfer basis, e.g. EU Standard Contractual Clauses or an
+  adequacy decision.]</strong>
+</p>
+
+<h2>
+  Cookies
+</h2>
+<p>
+  We use only cookies that are necessary for the service to work — no
+  analytics cookies and no third-party tracking cookies:
+</p>
+<ul>
+  <li>
+    <strong>Session cookie</strong> (encrypted): keeps you logged in during a
+    visit. It expires when you close your browser, and we clear the session
+    when we hand you back to a website you signed in to.
+  </li>
+  <li>
+    <strong>"Remember me" cookies</strong> (encrypted): set only if you tick
+    "Remember me", so you stay signed in across visits. Removed when you log
+    out. These hold your e-mail, user ID and vault key — which is also why
+    your vault key never needs to be stored on our servers.
+  </li>
+  <li>
+    <strong>Language cookie:</strong> set only if you switch language,
+    remembering your choice.
+  </li>
+</ul>
+
+<h2>
+  Your rights
+</h2>
+<p>
+  Under the GDPR you can ask us for access to, correction of, deletion of, or
+  a copy of your personal data; ask us to restrict processing; and object to
+  processing based on legitimate interest. Write to
+  <strong>[⚠️ contact e-mail — to be confirmed]</strong> and we will respond
+  within a month.
+</p>
+<p>
+  One practical note: because we store your e-mail address only as a
+  fingerprint, we cannot browse our records for it. Please include the e-mail
+  address you use with <%= name %> in your request, so we can compute the
+  fingerprint and locate your data.
+</p>
+<p>
+  If you are unhappy with how we handle your data, you can complain to the
+  Danish Data Protection Agency (Datatilsynet),
+  <a href="https://www.datatilsynet.dk">datatilsynet.dk</a>.
+</p>
+
+<h2>
+  Changes to this policy
+</h2>
+<p>
+  When we change this policy, we update this page and the date below. If a
+  change meaningfully affects how your data is handled, we will make that
+  clear on the site before it takes effect.
+</p>
+<p>
+  <em>Last updated: [⚠️ set on publication]</em>
+</p>
