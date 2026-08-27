@@ -29,6 +29,7 @@ da:
       login: Log ind
       change_password: Skift password
       change_email: Skift e-mail
+      privacy: Privatliv
   layouts:
     application:
       meta_description: "%{name} is a single-sign-on pure identity provider."
