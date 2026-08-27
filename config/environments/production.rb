@@ -73,6 +73,10 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # Delivery log lines contain the recipient's e-mail address, and
+  # production logs drain to Papertrail — so don't write them at all.
+  config.action_mailer.logger = nil
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
