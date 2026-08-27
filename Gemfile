@@ -22,9 +22,6 @@ gem 'color-generator'
 
 gem 'airbrake'
 
-# For background processing powered by RabbitMQ
-gem 'sneakers', '2.12.0'
-
 # To be able to .to_jwk on key
 gem 'json-jwt'
 

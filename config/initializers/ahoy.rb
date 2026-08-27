@@ -10,7 +10,5 @@ Ahoy.mask_ips = true
 Ahoy.cookies = false
 # No geocoding: nothing reads the geo columns, and the lookups would send
 # masked visitor IPs to ipinfo.io — over plain HTTP, keyless — making it a
-# data processor for data we never use. Disabling it also keeps test visits
-# from 500ing (the geocode job would enqueue to RabbitMQ, which the test
-# env doesn't run).
+# data processor for data we never use.
 Ahoy.geocode = false
