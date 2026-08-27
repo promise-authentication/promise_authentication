@@ -177,7 +177,11 @@
     Error reports: held by our error-tracking provider, not stored on our own
     systems.
   </li>
-  <li>Server logs: about one week, held by our log-management provider.</li>
+  <li>
+    Server logs: not stored beyond our hosting platform's short rolling
+    buffer. Our own log lines mask IP addresses and never contain your
+    e-mail address.
+  </li>
 </ul>
 
 <h2>
@@ -205,13 +209,6 @@
     <strong>Bot protection:</strong> Cloudflare (the Turnstile check described
     above; the Turnstile script is loaded from Cloudflare when our pages load)
   </li>
-  <li>
-    <strong>Log management:</strong> Papertrail (SolarWinds, US) — receives
-    our servers' technical logs, which are deleted after about a week. We
-    filter e-mail addresses, passwords and codes out of our logs and mask IP
-    addresses in our request logs the same way we do for statistics; the
-    hosting platform's own routing logs do contain full IP addresses.
-  </li>
 </ul>
 <p>
   Our own key service, which holds the recovery keys described above, runs on
@@ -220,14 +217,12 @@
 </p>
 <p>
   Our servers and database are in the EU, and e-mails are sent from the EU.
-  Three suppliers involve transfers to the United States: Heroku's US
+  Two suppliers involve transfers to the United States: Heroku's US
   operations, covered by Heroku's certification under the EU-U.S. Data
-  Privacy Framework and Salesforce's Binding Corporate Rules for processors;
-  Airbrake's filtered error reports, covered by the EU Standard Contractual
-  Clauses (2021/914) incorporated in our data-processing agreement with
-  Airbrake; and Papertrail's short-lived logs, covered by the EU Standard
-  Contractual Clauses pre-signed in SolarWinds' Customer Data Processing
-  Addendum.
+  Privacy Framework and Salesforce's Binding Corporate Rules for processors,
+  and Airbrake's filtered error reports, covered by the EU Standard
+  Contractual Clauses (2021/914) incorporated in our data-processing
+  agreement with Airbrake.
 </p>
 
 <h2>
@@ -286,5 +281,5 @@
   clear on the site before it takes effect.
 </p>
 <p>
-  <em>Last updated: 27 August 2026</em>
+  <em>Last updated: 27 August 2026 (removed our log-management provider)</em>
 </p>
