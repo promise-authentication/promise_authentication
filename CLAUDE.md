@@ -1,5 +1,17 @@
 # promise_authentication
 
+## Deploying
+
+- Production is Heroku (`promise-auth-production`, EU region). There is **no
+  auto-deploy from GitHub** — merging to main does not ship. Deploy manually with
+  `git push p main` (`p` = `https://git.heroku.com/promise-auth-production.git`);
+  the release phase runs `rails db:migrate`. Verify with
+  `heroku releases -a promise-auth-production`, roll back with `heroku rollback`.
+- Recurring jobs run via the Heroku Scheduler add-on (no CLI/API for its job list —
+  manage via `heroku addons:open scheduler -a promise-auth-production`). Expected
+  entries: `rake trust:roll_certificates` and daily `rake statistics:sweep`
+  (6-month visit-statistics retention promised by /privacy).
+
 ## Dev environment
 
 - `docker compose up -d` runs the Rails app on http://localhost:3003. It requires the
