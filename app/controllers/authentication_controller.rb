@@ -2,6 +2,8 @@ class AuthenticationController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:authenticate]
   before_action :require_signed_id, except: %i[verify_password authenticate logout]
 
+  rescue_from Authentication::RelyingParty::WellKnownUnavailable, with: :relying_party_unreachable
+
   def password
     @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
   end
@@ -80,5 +82,18 @@ class AuthenticationController < ApplicationController
   rescue Authentication::Password::NotMatching
     flash[:password_message] = t('.password_not_correct')
     redirect_to verify_password_path(registration_configuration)
+  end
+
+  private
+
+  # The party's site couldn't be reached to verify the redirect_uri — even
+  # after HTTP retries and the last-good-config fallback. The user is
+  # already signed in when this raises, so land them on the confirm page:
+  # its go-to button is the retry.
+  def relying_party_unreachable(exception)
+    Airbrake.notify(exception) if defined?(Airbrake)
+    flash[:error] = t('authentication.confirm.relying_party_unreachable',
+                      relying_party_name: relying_party.name)
+    redirect_to confirm_path(login_configuration)
   end
 end

@@ -274,6 +274,26 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'go_to with an unreachable party lands on confirm with a retry message' do
+    Trust::Certificate.generate_key_pair!
+
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secr2t').register!
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secr2t' }
+
+    # fetch fails and (null cache store) no last-good copy exists — the
+    # custom-scheme uri can't be verified, but that's no reason to 500 a
+    # signed-in user: confirm's go-to button is the retry.
+    Authentication::RelyingParty.stub :fetch, nil do
+      post go_to_url, params: { client_id: 'example.com', redirect_uri: 'example-app://authenticate' }
+      assert_redirected_to confirm_path(client_id: 'example.com', redirect_uri: 'example-app://authenticate')
+
+      follow_redirect!
+      assert_response :success
+      assert_select 'form[action*="go_to"]'
+      assert_select '[role="alert"]'
+    end
+  end
+
   test 'go_to relying party' do
     Trust::Certificate.generate_key_pair!
 

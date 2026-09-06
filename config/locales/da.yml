@@ -153,6 +153,7 @@ da:
       no_sharing_html: <strong>Ingen personlig data vil blive delt med %{relying_party_name}</strong>. Heller ikke din e-mail. De vil udelukkende få et unikt ID som identificerer dig.
       no_id_yet: Dit unikke ID til %{relying_party_name} er ikke genereret endnu
       your_id: Dit unikke ID hos %{relying_party_name} er %{id}
+      relying_party_unreachable: Vi kunne ikke få kontakt til %{relying_party_name}. Prøv igen om et øjeblik.
     authenticate:
       password_not_correct: 'Forkert password. Prøv igen'
       confirmation_not_matching: "Du har ikke skrevet den samme mail to gange. Prøv igen."

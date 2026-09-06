@@ -1,10 +1,16 @@
 class Authentication::RelyingParty
   class InvalidRedirectUri < Exception; end
+  # The party's well-known config couldn't be fetched (site down, network
+  # blip) and no last-good copy was cached — the redirect_uri may well be
+  # legitimate, we just can't verify it right now. Distinct from
+  # InvalidRedirectUri, which means the uri was checked and rejected.
+  class WellKnownUnavailable < StandardError; end
 
   include ActiveModel::Model
 
   attr_accessor :id, :name, :logo_url, :locale, :allowed_redirect_domain_names, :allowed_redirect_uris,
-                :admin_user_ids, :legacy_account_authentication_url, :legacy_account_forgot_password_url
+                :admin_user_ids, :legacy_account_authentication_url, :legacy_account_forgot_password_url,
+                :well_known_unavailable
 
   validates :legacy_account_authentication_url, format: { with: /\Ahttps/ }, allow_nil: true
 
@@ -18,12 +24,32 @@ class Authentication::RelyingParty
     "https://#{id}/.well-known/promise.json"
   end
 
+  # Every sign-in depends on this fetch (it carries the redirect_uri
+  # whitelist), so a transient outage at the party's site must not become a
+  # hard login failure: fall back to the last successfully fetched config,
+  # and only when there is none flag the party as unavailable so
+  # redirect_uri can raise WellKnownUnavailable instead of the misleading
+  # InvalidRedirectUri.
   def self.well_knowns(url)
     response = fetch(url)
-    body = response&.body || ''
-    JSON.parse(body)
+    status = response&.status
+
+    if status.nil? || status >= 500
+      stale = Rails.cache.read(last_good_well_knowns_key(url))
+      return stale unless stale.nil?
+
+      return { well_known_unavailable: true }
+    end
+
+    parsed = JSON.parse(response.body || '')
+    Rails.cache.write(last_good_well_knowns_key(url), parsed, expires_in: 3.days) if status == 200 && parsed.is_a?(Hash)
+    parsed
   rescue JSON::ParserError
     {}
+  end
+
+  def self.last_good_well_knowns_key(url)
+    "relying_party/last_good_well_knowns/#{url}"
   end
 
   def well_knowns
@@ -51,6 +77,13 @@ class Authentication::RelyingParty
     Faraday.new do |builder|
       builder.use :http_cache, store: Rails.cache, logger: Rails.logger, serializer: Marshal
       builder.use FaradayMiddleware::FollowRedirects
+      # A single dropped connection mid-login must not fail the sign-in —
+      # retry twice (0.2s, 0.4s) before giving up.
+      builder.request :retry, max: 2, interval: 0.2, backoff_factor: 2,
+                              methods: %i[get head],
+                              retry_statuses: [500, 502, 503, 504],
+                              exceptions: [Faraday::ConnectionFailed, Faraday::SSLError, Faraday::TimeoutError,
+                                           Errno::ETIMEDOUT, Net::ReadTimeout, 'Timeout::Error']
       builder.adapter Faraday.default_adapter
     end
   end
@@ -165,7 +198,11 @@ class Authentication::RelyingParty
     url = login_configuration[:redirect_uri] || default_redirect_uri
     uri = URI.parse(url)
 
-    raise InvalidRedirectUri.new(url) unless allowed_uri?(uri) || (allowed_scheme?(uri) && allowed_redirect_host?(uri))
+    unless allowed_uri?(uri) || (allowed_scheme?(uri) && allowed_redirect_host?(uri))
+      raise WellKnownUnavailable.new(url) if well_known_unavailable
+
+      raise InvalidRedirectUri.new(url)
+    end
 
     new_query_ar = URI.decode_www_form(uri.query || '') << ['id_token', id_token]
     uri.query = URI.encode_www_form(new_query_ar)

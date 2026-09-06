@@ -153,6 +153,7 @@ en:
       no_sharing_html: <strong>No personal information will be shared with %{relying_party_name}</strong>. Not even your e-mail. All they will get is a unique string identifying you.
       no_id_yet: Your unique ID for %{relying_party_name} is not generated yet
       your_id: Your unique ID for %{relying_party_name} is %{id}
+      relying_party_unreachable: We couldn't reach %{relying_party_name}. Please try again in a moment.
     authenticate:
       password_not_correct: Password not matching. Try again
       confirmation_not_matching: "You have not provided the same e-mail twice. Please try again."
