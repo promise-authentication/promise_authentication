@@ -22,6 +22,7 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
 
   test 'it will call the well knowns' do
     response = Minitest::Mock.new
+    response.expect :status, 200
     response.expect :body, {
       legacy_account_authentication_url: 'https://url',
       legacy_account_forgot_password_url: 'https://forgot'
@@ -35,6 +36,7 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
 
   test 'allowing only redirect urls specified' do
     response = Minitest::Mock.new
+    response.expect :status, 200
     response.expect :body, {
       allowed_redirect_domain_names: [
         'sub.example.com',
@@ -81,6 +83,45 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
                                       })
         end
       end
+    end
+  end
+
+  test 'well knowns falls back to the last good copy when the fetch fails' do
+    Rails.stub :cache, ActiveSupport::Cache::MemoryStore.new do
+      response = Minitest::Mock.new
+      response.expect :status, 200
+      response.expect :body, { allowed_redirect_uris: ['app://authenticate'] }.to_json
+      @described_class.stub :fetch, response do
+        @described_class.find('example.com')
+      end
+
+      # The party's site goes down — the cached whitelist keeps logins working.
+      @described_class.stub :fetch, nil do
+        relying_party = @described_class.find('example.com')
+        result = relying_party.redirect_uri(id_token: 'a', login_configuration: {
+                                              redirect_uri: 'app://authenticate'
+                                            })
+        assert_match %r{\Aapp://authenticate\?id_token=}, result
+      end
+    end
+  end
+
+  test 'an unreachable party without a cached copy raises WellKnownUnavailable' do
+    @described_class.stub :fetch, nil do
+      relying_party = @described_class.find('example.com')
+
+      # This uri might be whitelisted — we just can't know right now.
+      assert_raise @described_class::WellKnownUnavailable do
+        relying_party.redirect_uri(id_token: 'a', login_configuration: {
+                                     redirect_uri: 'app://authenticate'
+                                   })
+      end
+
+      # Host-based validation needs no well-known and still works.
+      result = relying_party.redirect_uri(id_token: 'a', login_configuration: {
+                                            redirect_uri: 'https://example.com/cb'
+                                          })
+      assert_match %r{\Ahttps://example.com/cb\?id_token=}, result
     end
   end
 
