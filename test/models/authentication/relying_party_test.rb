@@ -125,6 +125,19 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
     end
   end
 
+  test 'a party whose well-known 5xxes after all retries degrades instead of crashing' do
+    final = Struct.new(:status, :body).new(503, 'Service Unavailable')
+    client = Object.new
+    client.define_singleton_method(:get) { |_url| raise Faraday::RetriableResponse.new(nil, final) }
+
+    @described_class.stub :http_client, client do
+      assert_equal final, @described_class.fetch('https://party.dead/promise.json')
+
+      relying_party = @described_class.find('party.dead')
+      assert relying_party.well_known_unavailable
+    end
+  end
+
   test 'it will require legacy url to have https' do
     assert @relying_party.valid?
     @relying_party.legacy_account_authentication_url = 'http://hello.world'

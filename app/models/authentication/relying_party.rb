@@ -90,13 +90,20 @@ class Authentication::RelyingParty
 
   def self.fetch(url)
     http_client.get(url)
-  rescue Faraday::SSLError, Faraday::ConnectionFailed, Net::ReadTimeout
+  rescue Faraday::RetriableResponse => e
+    # The retry middleware exhausted its attempts on a retry_statuses code
+    # (5xx). Hand back the final response so callers see the status instead
+    # of an exception — a party whose site 5xxes must degrade, not crash.
+    e.response
+  rescue Faraday::SSLError, Faraday::ConnectionFailed, Faraday::TimeoutError, Net::ReadTimeout
     nil
   end
 
   def self.head(url)
     http_client.head(url)
-  rescue Faraday::SSLError, Faraday::ConnectionFailed
+  rescue Faraday::RetriableResponse => e
+    e.response
+  rescue Faraday::SSLError, Faraday::ConnectionFailed, Faraday::TimeoutError, Net::ReadTimeout
     nil
   end
 
