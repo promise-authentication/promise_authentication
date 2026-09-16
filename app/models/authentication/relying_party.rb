@@ -75,7 +75,7 @@ class Authentication::RelyingParty
 
   def self.http_client
     Faraday.new do |builder|
-      builder.use :http_cache, store: Rails.cache, logger: Rails.logger, serializer: Marshal
+      builder.use :http_cache, store: Rails.cache, logger: Rails.logger, serializer: JSON
       builder.use FaradayMiddleware::FollowRedirects
       # A single dropped connection mid-login must not fail the sign-in —
       # retry twice (0.2s, 0.4s) before giving up.
