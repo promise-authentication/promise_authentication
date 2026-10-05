@@ -76,6 +76,12 @@ en:
       go_on: I'm a human
       going_html: 'Sending&hellip;'
       cancel: Back
+      turnstile_unsupported: "Unfortunately our human check doesn't support your browser. Open this page in an up-to-date browser such as Chrome, Safari or Firefox (not inside another app) and try again."
+      turnstile_error: "The human check failed (code %{code}). Try reloading the page. If that does not help, open the page in another browser."
+      turnstile_blocked: The human check could not load. This usually happens when an ad blocker or the browser blocks challenges.cloudflare.com. Turn that off, or open the page in another browser, and try again.
+      turnstile_silent: The human check is not responding. Try reloading the page, or open it in another browser.
+      turnstile_rejected: The human check was not accepted. Please try again.
+      try_again: Try again
     verify_email:
       title: Check your inbox
       we_sent_you_an_email_html: We sent you an e-mail to <strong>%{email}</strong>.

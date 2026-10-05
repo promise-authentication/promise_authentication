@@ -97,16 +97,60 @@
             if (!submitted && !pendingSubmit) advanceToCheck();
           }, 6000);
         }
-        function onTurnstileInteractive() {
+        function revealCheck() {
           if (greetingDone) { advanceToCheck(); } else { pendingAdvance = true; }
         }
+        function onTurnstileInteractive() {
+          heard = true;
+          revealCheck();
+        }
         function onSuccess(token) {
+          heard = true;
+          hideTurnstileError();
           document.getElementById('submit_button').disabled = false;
           // Remove class that makes it look disabled
           document.getElementById('submit_button').classList.remove('opacity-50');
           document.getElementById('submit_button').classList.remove('scale-0');
           if (greetingDone) { submitHuman(); } else { pendingSubmit = true; }
         }
+
+        // Failure paths. Without these the page would just sit there with
+        // the button hidden — seen in the wild on an old phone's in-app
+        // browser, where Turnstile reports itself unsupported. Every path
+        // reveals the check screen and puts a message plus "try again"
+        // where the button would have been.
+        var heard = false;
+        <%# to_json escapes <, > and & so the text is safe inside a script. %>
+        var messages = <%= raw({ unsupported: t('.turnstile_unsupported'),
+                                 error: t('.turnstile_error'),
+                                 blocked: t('.turnstile_blocked'),
+                                 silent: t('.turnstile_silent') }.to_json) %>;
+        function showTurnstileError(kind, code) {
+          if (submitted) return;
+          var box = document.getElementById('turnstile_error');
+          document.getElementById('turnstile_error_text').textContent =
+            messages[kind].replace('%{code}', code || '');
+          box.classList.remove('hidden');
+          revealCheck();
+        }
+        function hideTurnstileError() {
+          document.getElementById('turnstile_error').classList.add('hidden');
+        }
+        function onTurnstileUnsupported() {
+          heard = true;
+          showTurnstileError('unsupported');
+        }
+        function onTurnstileError(code) {
+          heard = true;
+          showTurnstileError('error', code);
+          return true; // handled; stop Turnstile's console logging
+        }
+        // Watchdog: api.js never loaded (blocked by an extension or a
+        // network filter), or it loaded but never called back at all.
+        setTimeout(function () {
+          if (heard || submitted || pendingSubmit) return;
+          showTurnstileError(window.turnstile ? 'silent' : 'blocked');
+        }, 15000);
       </script>
       <div class="screens w-full">
         <% if celebrate %>
@@ -135,7 +179,16 @@
           </p>
           <div class="w-full flex flex-col mt-6 pb-4">
             <div class="w-full h-24 flex items-center justify-end">
-              <%= turnstile_tag_html(appearance: 'interaction-only', before_interactive: 'onTurnstileInteractive') %>
+              <%= turnstile_tag_html(appearance: 'interaction-only',
+                                     before_interactive: 'onTurnstileInteractive',
+                                     error: 'onTurnstileError',
+                                     unsupported: 'onTurnstileUnsupported') %>
+            </div>
+            <div id="turnstile_error" class="<%= 'hidden' unless @turnstile_rejected %> w-full bg-red-500 text-white text-sm p-3 rounded mb-4 flex flex-col items-start space-y-2">
+              <span id="turnstile_error_text"><%= t('.turnstile_rejected') if @turnstile_rejected %></span>
+              <button type="button" onclick="location.reload()" class="underline font-bold">
+                <%= t('.try_again') %>
+              </button>
             </div>
             <div class="flex w-full justify-end items-center mt-0">
               <%= back_to(registration_configuration) do |args| new_registration_path(args) end %>
