@@ -56,6 +56,8 @@ class RegistrationsController < ApplicationController
     flash[:slide_class] = 'a-slide-in-from-right'
     redirect_to verify_email_registrations_path(registration_configuration)
   rescue TurnstileConcern::NotPassedError
+    Rails.logger.warn 'Turnstile token rejected on verify_human'
+    @turnstile_rejected = true
     render action: :verify_human
   rescue Net::SMTPFatalError => e
     @smtp_error = e

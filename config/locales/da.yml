@@ -76,6 +76,12 @@ da:
       go_on: Jeg er et menneske
       going_html: 'Sender&hellip;'
       cancel: Tilbage
+      turnstile_unsupported: Din browser understøttes desværre ikke af vores menneske-tjek. Åbn siden i en opdateret browser som Chrome, Safari eller Firefox (ikke inde i en anden app), og prøv igen.
+      turnstile_error: "Menneske-tjekket fejlede (kode %{code}). Prøv at genindlæse siden. Hjælper det ikke, så åbn siden i en anden browser."
+      turnstile_blocked: Menneske-tjekket kunne ikke indlæses. Det sker typisk, hvis en adblocker eller browseren blokerer challenges.cloudflare.com. Slå blokeringen fra, eller åbn siden i en anden browser, og prøv igen.
+      turnstile_silent: Menneske-tjekket svarer ikke. Prøv at genindlæse siden, eller åbn den i en anden browser.
+      turnstile_rejected: Menneske-tjekket blev ikke godkendt. Prøv igen.
+      try_again: Prøv igen
     verify_email:
       title: Check din indbakke
       we_sent_you_an_email_html: Vi har sendt dig en e-mail på <strong>%{email}</strong>.

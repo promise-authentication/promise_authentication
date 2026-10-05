@@ -118,6 +118,23 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'rejected turnstile token re-renders the human check with a message' do
+    rejected = Struct.new(:body).new('{"success":false}')
+    Faraday.stub :post, rejected do
+      post verify_human_registrations_url, params: { email: 'hello@world.com', 'cf-turnstile-response': 'nope' }
+    end
+    assert_response :success
+    assert_select '#turnstile_error:not(.hidden)', text: /not accepted/
+    assert_empty ActionMailer::Base.deliveries
+  end
+
+  test 'the human check wires up the turnstile failure callbacks' do
+    get verify_human_registrations_url(email: 'hello@world.com')
+    assert_response :success
+    assert_select '.cf-turnstile[data-error-callback="onTurnstileError"][data-unsupported-callback="onTurnstileUnsupported"]'
+    assert_select '#turnstile_error.hidden'
+  end
+
   test 'the flow from human verification' do
     # If no code given
     post verify_human_registrations_url, params: { email: 'hello@world.com' }
