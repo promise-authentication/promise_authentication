@@ -80,4 +80,9 @@ Rails.application.routes.draw do
   scope path: '.well-known' do
     get 'jwks', to: 'well_knowns#jwks'
   end
+
+  namespace 'oauth2' do
+    post 'token', to: 'token#exchange'
+    match 'token', to: 'token#preflight', via: [:options]
+  end
 end

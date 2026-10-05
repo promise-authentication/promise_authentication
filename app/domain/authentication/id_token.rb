@@ -24,7 +24,7 @@ class Authentication::IdToken
       jti: jti,
       sub: sub,
       aud: aud,
-      iss: 'https://promiseauthentication.org',
+      iss: ENV.fetch('PROMISE_ISSUER', 'https://promiseauthentication.org'),
       iat: (iat || Time.now).to_i,
       nonce: nonce
     }.compact
