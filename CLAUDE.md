@@ -59,3 +59,9 @@ Several pages (verify_email, create_password, confirm) play multi-second pure-CS
   is still programmatically scrollable, and autofocusing the still-offscreen screen
   makes the browser scroll the whole show out of view (symptom: blank card for the
   animation's duration, then the content pops in).
+
+## Worktrees
+
+- Two remotes (`origin` and `p`, Heroku) both map `main`, so `git worktree add -b x ../dir origin/main`
+  fails with "not tracking: ambiguous information". Create the branch first (`git branch x origin/main`)
+  and then `git worktree add ../dir x`, or pass `--no-track`.
