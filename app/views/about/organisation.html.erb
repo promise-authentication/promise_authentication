@@ -24,3 +24,49 @@
 <ul class="list-disc list-inside">
   <li>Anders Lemke-Holstein - Chairman</li>
 </ul>
+
+<h2>
+  Open source
+</h2>
+
+<p>
+  The source code of <%= name %> is published on
+  <%= link_to "GitHub", "https://github.com/promise-authentication", target: "_blank" %>
+  under the
+  <%= link_to "GNU Affero General Public License v3.0", "https://github.com/promise-authentication/promise_authentication/blob/main/LICENSE", target: "_blank" %>
+  (AGPL-3.0). The copyright belongs to the association, not to any person or company.
+</p>
+<p>
+  Anyone may read the code, run their own instance and change it. Whoever lets other people use a changed instance must offer them the source code under the same license. The software can therefore never be closed again, not even by the association.
+</p>
+<p>
+  Client libraries that relying parties embed in their own applications, such as
+  <%= link_to "omniauth-promise", "https://github.com/promise-authentication/omniauth-promise", target: "_blank" %>,
+  are MIT-licensed, so the AGPL never reaches your application.
+</p>
+
+<h2>
+  Name and logo
+</h2>
+
+<p>
+  "Promise", "Promise Authentication" and the Promise logo identify the service run by the association at promiseauthentication.org. You may run your own instance of the software and call it a Promise instance. You may not present it as the association or as the official service, and you may not use the name or logo in a way that suggests endorsement by the association without its written consent.
+</p>
+
+<h2>
+  Terms for instances in the Promise network
+</h2>
+
+<p>
+  promiseauthentication.org can send a user to the user's own instance of Promise. An instance that receives users this way takes part in the Promise network, and the association keeps the list of instances a user can choose. To be on that list, an instance must:
+</p>
+
+<ul class="list-disc list-inside">
+  <li>stay compatible with the protocol as implemented in the main repository, so relying parties need not know which instance a user has chosen;</li>
+  <li>publish the source code it runs under AGPL-3.0, and offer every change it makes to the main repository as a pull request. The association may decline a change, in which case the instance may keep running it on its own;</li>
+  <li>not present itself as the association or as the official service.</li>
+</ul>
+
+<p>
+  The association may remove an instance that breaks these terms from the list. Running an instance outside the network, for yourself or your own organisation, requires nothing beyond the license.
+</p>
