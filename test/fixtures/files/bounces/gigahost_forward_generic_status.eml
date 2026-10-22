@@ -1,0 +1,83 @@
+Return-Path: <MAILER-DAEMON>
+Received: from cph8.mailout.gigahost.example (cph8.mailout.gigahost.example [192.0.2.178])
+    by mx1.gigahost.example (Postfix) with ESMTPS id 4FC073E56F
+    for <SRS0=cjsT=IM=promiseauthentication.org=bounces@gigahost.example>; Thu, 22 Oct 2026 15:36:00 +0000 (UTC)
+From: Mail Delivery Subsystem <mailer-daemon@cph4.mailout.gigahost.example>
+To: SRS0=cjsT=IM=promiseauthentication.org=bounces@gigahost.example
+X-Failed-Recipients: findes-ikke@gmail.example
+Auto-Submitted: auto-replied
+Subject: Delivery Status Notification (Failure)
+In-Reply-To:
+ <6ada2d50db979_21068774c7@45b2249b-f8c4-4cfb-9a15-6f2af8cd5bcd.mail>
+Date: Thu, 22 Oct 2026 15:35:59 +0000
+Message-ID: <42248d9b-c9f9-e09c-c838-daab829415e1@cph4.mailout.gigahost.example>
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+ boundary="--_NmP-956da6ad16c6dcdd-Part_1"
+
+----_NmP-956da6ad16c6dcdd-Part_1
+Content-Type: text/plain
+Content-Description: Notification
+Content-Transfer-Encoding: quoted-printable
+
+Delivery to the following recipient failed permanently:
+    findes-ikke@gmail.example
+
+Technical details of permanent failure:
+
+550-5.1.1 The email account that =
+you tried to reach does not exist. Please try double-checking the =
+recipient's email address for typos or unnecessary spaces. For more =
+information, go to https://support.google.com/mail/?p=3DNoSuchUser =
+4fb4d7f45d1cf-6b4030c0c24si5777060a12.263 - gsmtp
+
+
+----_NmP-956da6ad16c6dcdd-Part_1
+Content-Type: message/delivery-status
+Content-Description: Delivery report
+
+Reporting-MTA: dns; cph4.mailout.gigahost.example
+X-ZoneMTA-Queue-ID: 1a16441271b000c103
+X-ZoneMTA-Sender: rfc822; SRS0=cjsT=IM=promiseauthentication.org=bounces@gigahost.example
+Arrival-Date: Thu, 22 Oct 2026 15:35:53 +0000
+
+Final-Recipient: rfc822; findes-ikke@gmail.example
+Action: failed
+Status: 5.0.0
+Diagnostic-Code: smtp; 550-5.1.1 The email account that you tried to reach does not exist. Please try double-checking the recipient's email address for typos or unnecessary spaces. For more information, go to https://support.google.com/mail/?p=NoSuchUser 4fb4d7f45d1cf-6b4030c0c24si5777060a12.263 - gsmtp
+
+
+----_NmP-956da6ad16c6dcdd-Part_1
+Content-Type: text/rfc822-headers
+Content-Description: Undelivered Message Headers
+Content-Transfer-Encoding: quoted-printable
+
+Received: from mailout.gigahost.example [10.103.105.10]
+ by cph4.mailout.gigahost.example (ZoneMTA) with ESMTP id 1a16441271b000c103.=
+001
+ for <findes-ikke@gmail.example>;
+ Thu, 22 Oct 2026 15:35:53 +0000
+Received: from mx2.gigahost.example (mx2.gigahost.example [192.0.2.12])
+    by mailstore8.gigahost.example (Postfix) with ESMTPS id 9ED4274E0095
+    for <alias@forwarder.example>; Thu, 22 Oct 2026 15:35:53 +0000 (UTC)
+Received: from phan-van4.scw-tem.cloud (phan-van4.scw-tem.cloud [51.159.124=
+.109])
+    by mx2.gigahost.example (Postfix) with ESMTPS id 70EE71F7DD
+    for <alias@forwarder.example>; Thu, 22 Oct 2026 15:35:49 +0000 (UTC)
+Date: Thu, 22 Oct 2026 15:35:44 +0000
+From: Test via Promise <hello@promiseauthentication.org>
+To: alias@forwarder.example
+Message-ID: <6ada2d50db979_21068774c7@45b2249b-f8c4-4cfb-9a15-6f2af8cd5bcd.=
+mail>
+Subject: Confirm your e-mail
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary=3D"--=3D=3D_mimepart_6ada2d50db073_2106877379";
+ charset=3DUTF-8
+Content-Transfer-Encoding: 7bit
+X-Promise-Verification: tok_gigahost_abcdefghijklmnopqrstuv
+X-Scw-Domain: promiseauthentication.org
+X-Scw-Tem-Message-Id: ba961bb8-e97b-4a05-8335-14e3cd2ee5c0
+
+
+----_NmP-956da6ad16c6dcdd-Part_1--

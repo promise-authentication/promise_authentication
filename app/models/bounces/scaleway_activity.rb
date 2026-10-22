@@ -9,6 +9,17 @@ module Bounces
     CHECK_INTERVAL = 10.seconds
     BASE_URL = 'https://api.scaleway.com'.freeze
 
+    # A non-2xx answer. Carries the status only: the request URL holds
+    # the recipient's address, and the message must stay loggable.
+    class ResponseError < StandardError
+      attr_reader :status
+
+      def initialize(status)
+        @status = status
+        super("Scaleway responded #{status}")
+      end
+    end
+
     def self.configured?
       ENV['SCALEWAY_TEM_SECRET_KEY'].present? && ENV['SCALEWAY_TEM_PROJECT_ID'].present?
     end
@@ -23,6 +34,10 @@ module Bounces
       return unless activity && activity['status'] == 'failed'
 
       code.mark_bounced!(Reason.from_scaleway(activity) || Reason::OTHER)
+    rescue ResponseError => e
+      Rails.logger.warn "Scaleway activity check failed: #{e.message}"
+      Airbrake.notify(e) if defined?(Airbrake)
+      nil
     rescue StandardError => e
       Rails.logger.warn "Scaleway activity check failed: #{e.class}"
       Airbrake.notify(e) if defined?(Airbrake)
@@ -37,7 +52,7 @@ module Bounces
                                   order_by: 'created_at_desc',
                                   page_size: 1
                                 })
-      raise "Scaleway responded #{response.status}" unless response.success?
+      raise ResponseError, response.status unless response.success?
 
       JSON.parse(response.body).fetch('emails', []).first
     end
