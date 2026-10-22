@@ -30,6 +30,26 @@ class Bounces::ReportTest < ActiveSupport::TestCase
     assert_equal [Authentication::HashedEmail.from_cleartext('nobody@typo.example')], report.recipient_hashes
   end
 
+  test 'a generic Status: field yields to the real code in Diagnostic-Code (gigahost ZoneMTA)' do
+    report = Bounces::Report.parse(fixture('gigahost_forward_generic_status'))
+
+    assert report
+    assert_equal 'tok_gigahost_abcdefghijklmnopqrstuv', report.token
+    assert_equal '5.1.1', report.enhanced_status
+    assert_equal Bounces::Reason::MAILBOX_NOT_FOUND, report.reason
+    assert_includes report.recipient_hashes, Authentication::HashedEmail.from_cleartext('alias@forwarder.example')
+    # The SRS-rewritten bounce address is ours in disguise, never a recipient.
+    assert_not_includes report.recipient_hashes,
+                        Authentication::HashedEmail.from_cleartext('srs0=cjst=im=promiseauthentication.org=bounces@gigahost.example')
+  end
+
+  test 'a generic status stands when nothing more specific exists' do
+    raw = fixture('mailbox_not_found_no_token').gsub('5.1.1', '5.0.0')
+    report = Bounces::Report.parse(raw)
+    assert_equal '5.0.0', report.enhanced_status
+    assert_equal Bounces::Reason::OTHER, report.reason
+  end
+
   test 'a base64-attached original still yields the token' do
     report = Bounces::Report.parse(fixture('base64_attached_original'))
 

@@ -33,6 +33,11 @@ module Bounces
     TOKEN_LINE = /^#{Regexp.escape(Bounces::TOKEN_HEADER)}:[ \t]*([A-Za-z0-9_-]{16,})/i
     ADDRESS = /[A-Za-z0-9._%+'-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/
     DSN_STATUS_LINE = /^Status:[ \t]*([245]\.\d{1,3}\.\d{1,3})/i
+    DIAGNOSTIC_LINE = /^Diagnostic-Code:.*?\b([245]\.\d{1,3}\.\d{1,3})\b/i
+    # "5.0.0" and friends say nothing beyond the class; some MTAs (gigahost's
+    # ZoneMTA, for one) put that in Status: and the real code in
+    # Diagnostic-Code: ("550-5.1.1 ... does not exist").
+    GENERIC_STATUS = /\A[245]\.0\.0\z/
 
     # Scans the raw text as received (re-encoding would invent headers)
     # plus every part decoded, so a base64-attached original is read too.
@@ -43,12 +48,21 @@ module Bounces
                                .map(&:downcase).uniq
                                .reject { |address| ours?(address) }
                                .map { |address| Authentication::HashedEmail.from_cleartext(address) }
-      @enhanced_status = texts.filter_map { |text| text[DSN_STATUS_LINE, 1] }.first ||
-                         texts.filter_map { |text| Reason.enhanced_status_in(text) }.first
+      @enhanced_status = pick_enhanced_status(texts)
       @reason = Reason.from_enhanced_status(@enhanced_status)
     end
 
     private
+
+    # The most specific RFC 3463 code on offer: DSN Status: field, then
+    # Diagnostic-Code:, then anything in the text — skipping generic x.0.0
+    # codes unless nothing better exists.
+    def pick_enhanced_status(texts)
+      candidates = texts.flat_map { |text| text.scan(DSN_STATUS_LINE).flatten } +
+                   texts.flat_map { |text| text.scan(DIAGNOSTIC_LINE).flatten } +
+                   texts.filter_map { |text| Reason.enhanced_status_in(text) }
+      candidates.find { |status| status !~ GENERIC_STATUS } || candidates.first
+    end
 
     def safely_decoded(part)
       part.decoded.to_s
