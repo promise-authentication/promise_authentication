@@ -1,0 +1,23 @@
+<%# Shown on verify_email once Bounces found that the mail never got
+    through. The reason category decides the explanation; the primary
+    action is to try another address, since the one given cannot be
+    reached right now. %>
+<div class="rounded-xl border border-red-200 bg-red-50 p-4 text-primary">
+  <div class="flex items-start gap-3">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0 text-red-600">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+    </svg>
+    <div>
+      <p class="font-semibold">
+        <%= t 'registrations.verify_email.bounce.title_html', email: registration_configuration[:email] %>
+      </p>
+      <p class="mt-1 text-sm">
+        <%= t "registrations.verify_email.bounce.#{code.bounce_reason}" %>
+      </p>
+    </div>
+  </div>
+  <%# "Send ny kode" in the page footer covers retrying the same address. %>
+  <div class="mt-4">
+    <%= link_to t('registrations.verify_email.bounce.use_another'), new_registration_path(registration_configuration(:email_verification_code)), class: 'button primary inline-block', data: { turbolinks: false } %>
+  </div>
+</div>

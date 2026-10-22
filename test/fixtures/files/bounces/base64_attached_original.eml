@@ -1,0 +1,23 @@
+From: postmaster@relay.example
+To: bounces@promiseauthentication.org
+Subject: Mail delivery failed: returning message to sender
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="mixed-boundary"
+
+--mixed-boundary
+Content-Type: text/plain; charset="utf-8"
+
+This message was created automatically by mail delivery software.
+A message that you sent could not be delivered. The mailbox is full.
+  someone@full.example
+    552 5.2.2 Quota exceeded
+
+--mixed-boundary
+Content-Type: message/rfc822; name="original.eml"
+Content-Transfer-Encoding: base64
+
+RnJvbTogUHJvbWlzZSA8aGVsbG9AcHJvbWlzZWF1dGhlbnRpY2F0aW9uLm9yZz4KVG86IHNvbWVv
+bmVAZnVsbC5leGFtcGxlClN1YmplY3Q6IENvbmZpcm0geW91ciBlLW1haWwKWC1Qcm9taXNlLVZl
+cmlmaWNhdGlvbjogdG9rX2Jhc2U2NF9hYmNkZWZnaGlqa2xtbm9wcXJzdHV2CgpZb3VyIGNvZGU6
+IGFiN2sK
+--mixed-boundary--

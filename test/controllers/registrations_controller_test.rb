@@ -75,6 +75,73 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'status reports a bounce by sending the page back to itself' do
+    Authentication::RelyingParty.stub :fetch, nil do
+      post verify_human_registrations_url, params: { email: 'hello@world.com' }
+      EmailVerificationCode.find_by_cleartext('hello@world.com').mark_bounced!('mailbox_not_found')
+
+      get status_registrations_url(email: 'hello@world.com', client_id: 'oase.app')
+      assert_response :success
+      assert_equal verify_email_registrations_path(client_id: 'oase.app', email: 'hello@world.com'),
+                   response.parsed_body['redirect_to']
+    end
+  end
+
+  test 'status asks the bounce sources about the pending code' do
+    Authentication::RelyingParty.stub :fetch, nil do
+      post verify_human_registrations_url, params: { email: 'hello@world.com' }
+      code = EmailVerificationCode.find_by_cleartext('hello@world.com')
+
+      asked = nil
+      Bounces.stub :detect!, ->(c, email:) { asked = [c, email]; c } do
+        get status_registrations_url(email: 'hello@world.com', client_id: 'oase.app')
+      end
+      assert_response :no_content
+      assert_equal [code, 'hello@world.com'], asked
+    end
+  end
+
+  test 'verify_email explains a bounce and drops the code entry when the mail provably never landed' do
+    Authentication::RelyingParty.stub :fetch, nil do
+      post verify_human_registrations_url, params: { email: 'hello@world.com' }
+      EmailVerificationCode.find_by_cleartext('hello@world.com').mark_bounced!('mailbox_not_found')
+
+      # Ahoy skips requests it takes for bots, and a bare test request looks like one.
+      get verify_email_registrations_url(email: 'hello@world.com', client_id: 'oase.app'),
+          headers: { 'User-Agent' => 'Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/130.0 Safari/537.36' }
+      assert_response :success
+      assert_select 'strong', text: 'hello@world.com'
+      assert_select 'p', text: /does not exist/
+      assert_select 'a.button.primary[href=?]', new_registration_path(client_id: 'oase.app', email: 'hello@world.com')
+      assert_select 'input#email_verification_code', count: 0
+      assert_no_match 'verifyEmailStatusPoller', response.body
+      event = Ahoy::Event.order(:id).last
+      assert_equal 'registration_step', event.name
+      assert_equal({ 'step' => 'mail_bounced', 'reason' => 'mailbox_not_found' }, event.properties.slice('step', 'reason'))
+    end
+  end
+
+  test 'verify_email keeps the code entry for a rejection that may have been a failed forward' do
+    Authentication::RelyingParty.stub :fetch, nil do
+      post verify_human_registrations_url, params: { email: 'hello@world.com' }
+      EmailVerificationCode.find_by_cleartext('hello@world.com').mark_bounced!('rejected')
+
+      get verify_email_registrations_url(email: 'hello@world.com', client_id: 'oase.app')
+      assert_response :success
+      assert_select 'p', text: /forwarding may be what failed/
+      assert_select 'input#email_verification_code'
+    end
+  end
+
+  test 'the verification mail is sent with a delivery token that matches the stored code' do
+    post verify_human_registrations_url, params: { email: 'hello@world.com' }
+    code = EmailVerificationCode.find_by_cleartext('hello@world.com')
+    mail = ActionMailer::Base.deliveries.last
+
+    assert code.delivery_token.present?
+    assert_equal code.delivery_token, mail[Bounces::TOKEN_HEADER].to_s
+  end
+
   test 'status once the flow finished elsewhere' do
     Authentication::RelyingParty.stub :fetch, nil do
       post verify_human_registrations_url, params: { email: 'hello@world.com' }

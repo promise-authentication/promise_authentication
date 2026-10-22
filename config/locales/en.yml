@@ -107,6 +107,13 @@ en:
       go_on: Go
       going_html: 'Verifying&hellip;'
       cancel: Back
+      bounce:
+        title_html: The e-mail to <strong>%{email}</strong> did not get through.
+        mailbox_not_found: The recipient's mail server says the address does not exist. Check that it is spelled correctly.
+        mailbox_full: The mailbox is full, so the mail server rejected the e-mail. Free up some space and send again, or use another address.
+        rejected: The recipient's mail server rejected the e-mail. If the address forwards to another mailbox, the forwarding may be what failed, and the e-mail may still be in the first mailbox.
+        other: The recipient's mail server reported an error, so the e-mail was not delivered.
+        use_another: Use another e-mail
     create_password:
       title: Create password
       email_verified: Your e-mail is verified!
