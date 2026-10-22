@@ -34,9 +34,12 @@ The verify_email page tells the user when "Bekræft din e-mail" bounced (see
 - Reports are matched by the `X-Promise-Verification` token header the mail went out
   with; reports without it fall back to the hashed recipient. Only a reason category
   (`mailbox_not_found`, `mailbox_full`, `rejected`, `other`) is stored on the code.
-- Scaleway SMTP must accept a `MAIL FROM` that differs from the `From` header within
-  the verified domain — verify on first deploy by sending to a known-bad address and
-  checking that the report arrives in the bounce mailbox.
+- Verified 2026-10-22 (one-off `heroku run` sending to a real inbox): Scaleway SMTP
+  accepts `MAIL FROM bounces@` with `From: hello@`; the received mail shows
+  `Return-Path: <bounces@…>`, `spf=pass` for bounces@, `dmarc=pass` and the
+  `X-Promise-Verification` header. Note Scaleway adds `X-Scw-Tem-Message-Id` to the
+  outgoing mail — that is the id of the email in its activity API, but it is only
+  visible to the recipient, not returned to the SMTP sender.
 - To preview the page states locally, create a code and mark it:
   `EmailVerificationCode.create!(id: Authentication::HashedEmail.from_cleartext(email), code: 'ab7k').mark_bounced!('rejected')`,
   then open `/registrations/verify_email?email=<email>`.
