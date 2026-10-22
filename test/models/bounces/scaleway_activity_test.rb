@@ -49,10 +49,14 @@ class Bounces::ScalewayActivityTest < ActiveSupport::TestCase
     assert_requested stub, times: 1
   end
 
-  test 'a provider error is swallowed' do
-    stub_request(:get, EMAILS_URL).with(query: hash_including({})).to_return(status: 500, body: 'nope')
-    assert_nothing_raised { Bounces::ScalewayActivity.check!(@code, email: 'hello@world.com') }
+  test 'a provider error is swallowed and logged with its status code' do
+    stub_request(:get, EMAILS_URL).with(query: hash_including({})).to_return(status: 403, body: 'nope')
+    logged = []
+    Rails.logger.stub :warn, ->(line) { logged << line } do
+      assert_nothing_raised { Bounces::ScalewayActivity.check!(@code, email: 'hello@world.com') }
+    end
     assert_not @code.reload.bounced?
+    assert_includes logged, 'Scaleway activity check failed: Scaleway responded 403'
   end
 
   test 'nothing happens without credentials' do
