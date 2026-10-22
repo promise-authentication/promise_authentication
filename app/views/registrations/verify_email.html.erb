@@ -17,7 +17,7 @@
         <%# The sent-intro plays only on a clean landing — anyone arriving
             with a code, an error or a resent mail skips straight to the
             content screen. %>
-        <% play_intro = !show_code_entry %>
+        <% play_intro = !show_code_entry && !@code.bounced? %>
         <%# The ACTUAL mail (same templates, subject and sender as the
             delivered one, via mockup_mail) rendered as an obvious preview —
             code masked, dummy link token, nothing pressable. A pure-CSS
@@ -180,10 +180,14 @@
           document.addEventListener('DOMContentLoaded', positionOpenMockupCursors);
           document.addEventListener('turbolinks:load', positionOpenMockupCursors);
 
+        </script>
+        <% unless @code.bounced? %>
+        <script>
           // A tab parked here goes stale when the flow completes elsewhere
           // (e.g. the mail link opened in another browser) or the code
-          // expires. Poll for that and move the tab along; celebrate=0 makes
-          // verify_password skip its welcome-back show on this quiet arrival.
+          // expires, and it learns here that the mail bounced. Poll for that
+          // and move the tab along; celebrate=0 makes verify_password skip its
+          // welcome-back show on this quiet arrival.
           window.verifyEmailStatusCheck = function () {
             if (!document.getElementById('email_verification_code')) {
               clearInterval(window.verifyEmailStatusPoller);
@@ -205,6 +209,7 @@
             });
           }
         </script>
+        <% end %>
         <div class="screens <%= 'play' if play_intro %> w-full">
           <% if play_intro %>
             <div class="screen-intro w-full flex flex-col items-center pt-2 text-center">
@@ -219,7 +224,9 @@
             </div>
           <% end %>
           <div class="screen-content w-full">
-            <% if flash[:resent_code] %>
+            <% if @code.bounced? %>
+              <%= render 'bounce_notice', code: @code %>
+            <% elsif flash[:resent_code] %>
               <div class="bg-red-500 text-white p-3 rounded">
                 <%= t '.we_resent_you_an_email_html', email: registration_configuration[:email], at: local_time(@code.created_at, format: :long) %>
               </div>
@@ -232,6 +239,10 @@
                 <%= t '.we_sent_you_an_email_html', email: registration_configuration[:email] %>
               </div>
             <% end %>
+        <%# No point in the link/code instructions for a mail that
+            provably never landed; a rejection further down a forwarding
+            chain may still have left it in the first mailbox. %>
+        <% unless @code.mail_certainly_undelivered? %>
         <div class="mt-6 w-full">
           <div class="flex items-center justify-center gap-2 text-primary font-semibold">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0 text-blue-900">
@@ -327,6 +338,7 @@
             </details>
           </div>
         </details>
+        <% end %>
           </div>
         </div>
       </div>

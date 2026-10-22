@@ -31,10 +31,18 @@ class EmailVerificationMailer < ApplicationMailer
                       magic_registration_url(token: params[:magic_link_token])
     @magic_link_label = self.class.magic_link_button_label(relying_party_name: @relying_party_name)
 
+    # Bounce handling (see Bounces): the token lets a delivery report be
+    # matched to the code, and the envelope sender (Return-Path) steers
+    # such reports to the mailbox we read instead of a human's inbox.
+    headers[Bounces::TOKEN_HEADER] = params[:delivery_token] if params[:delivery_token].present?
+
     mail(
-      to: @email,
-      from: "#{self.class.from_name_for(relying_party_name: @relying_party_name)} <#{FROM_ADDRESS}>",
-      subject: self.class.subject_for(code: @code, relying_party_name: @relying_party_name)
+      {
+        to: @email,
+        from: "#{self.class.from_name_for(relying_party_name: @relying_party_name)} <#{FROM_ADDRESS}>",
+        subject: self.class.subject_for(code: @code, relying_party_name: @relying_party_name),
+        return_path: Bounces.return_path
+      }.compact
     )
   end
 end

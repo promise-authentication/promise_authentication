@@ -44,12 +44,16 @@ class Authentication::Services::PrepareEmailForValidation
     code = EmailVerificationCode::HumanReadableCode.generate(4..4) while code[0] == old_code[0] if old_code
 
     magic_link_token = nil
+    # Travels in the mail's headers so a bounce report can be matched
+    # back to this code without us keeping the address (see Bounces).
+    delivery_token = SecureRandom.urlsafe_base64(24)
 
     ActiveRecord::Base.transaction do
       EmailVerificationCode.create!(
         id: hashed_email,
         code: code,
-        resend_count: resend_count
+        resend_count: resend_count,
+        delivery_token: delivery_token
       )
 
       # Only the registration flow gets a magic link — the change-email
@@ -81,7 +85,8 @@ class Authentication::Services::PrepareEmailForValidation
         email: email,
         code: code,
         relying_party_name: relying_party&.name,
-        magic_link_token: magic_link_token
+        magic_link_token: magic_link_token,
+        delivery_token: delivery_token
       ).verify_email.deliver_now
     rescue Net::OpenTimeout, Net::ReadTimeout => e
       retries += 1

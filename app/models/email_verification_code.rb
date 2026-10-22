@@ -39,4 +39,42 @@ class EmailVerificationCode < ApplicationRecord
   def expired?
     created_at < TTL.ago
   end
+
+  # --- bounce tracking (see Bounces) ---------------------------------
+
+  BOUNCE_REASONS = Bounces::Reason::ALL
+
+  def bounced?
+    bounced_at.present?
+  end
+
+  # The mail provably never landed, as opposed to a rejection somewhere
+  # down a forwarding chain where the first mailbox may well hold it.
+  def mail_certainly_undelivered?
+    bounced? && [Bounces::Reason::MAILBOX_NOT_FOUND, Bounces::Reason::MAILBOX_FULL].include?(bounce_reason)
+  end
+
+  def mark_bounced!(reason)
+    return if bounced?
+
+    reason = Bounces::Reason::OTHER unless BOUNCE_REASONS.include?(reason)
+    update!(bounced_at: Time.current, bounce_reason: reason)
+    Rails.logger.info "Verification mail bounced (#{reason})"
+  end
+
+  # Matches a parsed delivery report to a pending code. The token in the
+  # mail's own headers is authoritative: when the report carries one that
+  # no longer matches, the code it was about is gone and the report is
+  # moot. Only reports without a token fall back to the hashed recipient.
+  def self.record_bounce!(report)
+    code = if report.token
+             find_by(delivery_token: report.token)
+           elsif report.recipient_hashes.any?
+             where(id: report.recipient_hashes).order(created_at: :desc).first
+           end
+    return nil if code.nil? || code.expired?
+
+    code.mark_bounced!(report.reason)
+    code
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_08_05_000001) do
+ActiveRecord::Schema[8.0].define(version: 2026_10_22_120000) do
   create_table "ahoy_events", force: :cascade do |t|
     t.integer "visit_id"
     t.integer "user_id"
@@ -114,6 +114,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_05_000001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "resend_count", default: 0, null: false
+    t.string "delivery_token"
+    t.datetime "delivery_checked_at"
+    t.datetime "bounced_at"
+    t.string "bounce_reason"
+    t.index ["delivery_token"], name: "index_email_verification_codes_on_delivery_token", unique: true
   end
 
   create_table "event_store_events", id: { type: :string, limit: 36 }, force: :cascade do |t|

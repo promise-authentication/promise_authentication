@@ -12,6 +12,35 @@
   entries: `rake trust:roll_certificates` and daily `rake statistics:sweep`
   (6-month visit-statistics retention promised by /privacy).
 
+## Bounce detection for the verification mail
+
+The verify_email page tells the user when "Bekræft din e-mail" bounced (see
+`app/models/bounces.rb`). Two sources, each a no-op until its config vars are set:
+
+- **Scaleway activity** (rejections our SMTP provider saw itself: unknown mailbox,
+  full, blocklisted): `SCALEWAY_TEM_SECRET_KEY` + `SCALEWAY_TEM_PROJECT_ID`
+  (optional `SCALEWAY_TEM_REGION`, default `fr-par`). The page's status poll looks
+  the mail up by recipient, throttled to every 10 s per code.
+- **Bounce mailbox** (asynchronous non-delivery reports, e.g. a forwarding mailbox
+  that accepted the mail and then failed to pass it on — Scaleway never sees those):
+  `PROMISE_BOUNCE_ADDRESS` (e.g. `bounces@promiseauthentication.org`) becomes the
+  envelope sender / Return-Path of the verification mail, and
+  `PROMISE_BOUNCE_IMAP_HOST`/`_USERNAME`/`_PASSWORD` (`_PORT`, default 993) is the
+  IMAP mailbox that address lands in. The status poll reads it at most every 30 s
+  across all users; `rake bounces:poll` does the same from the shell / Heroku
+  Scheduler. **The mailbox must be dedicated to bounces:** every delivery report is
+  deleted after reading (it holds an address we promised not to keep), other mail is
+  marked seen and left alone.
+- Reports are matched by the `X-Promise-Verification` token header the mail went out
+  with; reports without it fall back to the hashed recipient. Only a reason category
+  (`mailbox_not_found`, `mailbox_full`, `rejected`, `other`) is stored on the code.
+- Scaleway SMTP must accept a `MAIL FROM` that differs from the `From` header within
+  the verified domain — verify on first deploy by sending to a known-bad address and
+  checking that the report arrives in the bounce mailbox.
+- To preview the page states locally, create a code and mark it:
+  `EmailVerificationCode.create!(id: Authentication::HashedEmail.from_cleartext(email), code: 'ab7k').mark_bounced!('rejected')`,
+  then open `/registrations/verify_email?email=<email>`.
+
 ## Dev environment
 
 - `docker compose up -d` runs the Rails app on http://localhost:3003. It requires the

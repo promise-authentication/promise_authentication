@@ -75,6 +75,8 @@ class RegistrationsController < ApplicationController
     @code = email_verifier.verifier
 
     return redirect_to stale_flow_destination if @code.nil?
+
+    track_registration_step 'mail_bounced', reason: @code.bounce_reason if @code.bounced? && request.get?
     return unless request.post?
 
     if verify_email_verification_code!
@@ -99,11 +101,16 @@ class RegistrationsController < ApplicationController
   # flow when it completes elsewhere (e.g. the mail link opened in
   # another browser). Reveals nothing the create action doesn't already:
   # posting an email there also branches on whether the account exists.
+  # Also the moment to find out whether the mail bounced: the page then
+  # reloads itself and renders the bounce notice instead of the wait.
   def status
-    if email_verifier.verifier
-      head :no_content
+    code = email_verifier.verifier
+    return render json: { redirect_to: stale_flow_destination(celebrate: '0') } if code.nil?
+
+    if Bounces.detect!(code, email: registration_configuration[:email]).bounced?
+      render json: { redirect_to: verify_email_registrations_path(registration_configuration(:email_verification_code)) }
     else
-      render json: { redirect_to: stale_flow_destination(celebrate: '0') }
+      head :no_content
     end
   end
 

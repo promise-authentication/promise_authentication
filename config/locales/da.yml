@@ -101,6 +101,13 @@ da:
       go_on: Videre
       going_html: 'Verificerer&hellip;'
       cancel: Tilbage
+      bounce:
+        title_html: Mailen til <strong>%{email}</strong> kom ikke frem.
+        mailbox_not_found: Modtagerens mailserver melder, at adressen ikke findes. Tjek om den er stavet rigtigt.
+        mailbox_full: Postkassen er fuld, så mailserveren afviste mailen. Ryd op i postkassen og send igen, eller brug en anden adresse.
+        rejected: Modtagerens mailserver afviste mailen. Hvis adressen videresender til en anden postkasse, kan det være videresendelsen, der fejlede. Så ligger mailen muligvis stadig i den første postkasse.
+        other: Modtagerens mailserver meldte en fejl tilbage, så mailen blev ikke leveret.
+        use_another: Brug en anden e-mail
     create_password:
       title: Vælg password
       email_verified: Din e-mail er bekræftet!
