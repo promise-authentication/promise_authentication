@@ -34,6 +34,26 @@
           <td class="py-2 px-2 text-right tabular-nums"><%= @resends[label] %></td>
         <% end %>
       </tr>
+      <tr class="text-secondary">
+        <td class="py-2 pr-2 font-mono">↳ bounced (notice shown)</td>
+        <% @windows.each_key do |label| %>
+          <% bounced = @bounces[label].values.sum %>
+          <% sent = @counts[label]['mail_sent'] || 0 %>
+          <td class="py-2 px-2 text-right tabular-nums align-top">
+            <%= bounced %>
+            <% if sent.positive? && bounced.positive? %>
+              <span class="text-xs">(<%= (100.0 * bounced / sent).round %>% of sent)</span>
+            <% end %>
+            <% if bounced.positive? %>
+              <div class="text-xs">
+                <% @bounces[label].sort_by { |reason, n| [-n, reason] }.each do |reason, n| %>
+                  <div><span class="font-mono"><%= reason %></span> <%= n %></div>
+                <% end %>
+              </div>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
     </tbody>
   </table>
 
@@ -42,7 +62,8 @@
     data is recorded. Percentages are relative to <span class="font-mono">started</span>
     in the same window. Steps can exceed <span class="font-mono">started</span>
     when a flow resumes across windows or a mail is resent.
-    Tracking live since 2026-08-12.
+    Tracking live since 2026-08-12; bounce notices since 2026-10-22, counted once
+    per bounced mail a person is shown (reloads don't count).
   </p>
 
   <p class="text-center">

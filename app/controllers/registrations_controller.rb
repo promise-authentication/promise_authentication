@@ -78,7 +78,7 @@ class RegistrationsController < ApplicationController
 
     return redirect_to stale_flow_destination if @code.nil?
 
-    track_registration_step 'mail_bounced', reason: @code.bounce_reason if @code.bounced? && request.get?
+    track_bounce_shown if @code.bounced? && request.get?
     return unless request.post?
 
     if verify_email_verification_code!
@@ -195,6 +195,16 @@ class RegistrationsController < ApplicationController
   # other PII, in keeping with the product's no-personal-data stance.
   def track_registration_step(step, **properties)
     ahoy.track 'registration_step', { step: step, relying_party_id: relying_party&.id }.merge(properties)
+  end
+
+  # One 'mail_bounced' event per bounced mail a person is shown, not per
+  # render: a reload of the bounce notice must not count twice. The
+  # delivery token is unique per sent mail, so it is the natural key.
+  def track_bounce_shown
+    return if session[:bounce_shown_for] == @code.delivery_token
+
+    session[:bounce_shown_for] = @code.delivery_token
+    track_registration_step 'mail_bounced', reason: @code.bounce_reason
   end
 
   def verify_email_verification_code!

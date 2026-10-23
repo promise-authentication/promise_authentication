@@ -118,6 +118,12 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
       event = Ahoy::Event.order(:id).last
       assert_equal 'registration_step', event.name
       assert_equal({ 'step' => 'mail_bounced', 'reason' => 'mailbox_not_found' }, event.properties.slice('step', 'reason'))
+
+      # A reload of the notice is not a second bounce.
+      assert_no_difference -> { Ahoy::Event.count } do
+        get verify_email_registrations_url(email: 'hello@world.com', client_id: 'oase.app'),
+            headers: { 'User-Agent' => 'Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/130.0 Safari/537.36' }
+      end
     end
   end
 

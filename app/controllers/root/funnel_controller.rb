@@ -26,5 +26,13 @@ class Root::FunnelController < RootController
       rows = since ? events.select { |time, _| time >= since } : events
       rows.count { |_, properties| properties['resend'].to_s == 'true' }
     end
+
+    # Bounce notices shown (see Bounces), by reason category.
+    @bounces = @windows.transform_values do |since|
+      rows = since ? events.select { |time, _| time >= since } : events
+      rows.select { |_, properties| properties['step'] == 'mail_bounced' }
+          .map { |_, properties| properties['reason'].presence || 'other' }
+          .tally
+    end
   end
 end
