@@ -57,6 +57,41 @@
     </tbody>
   </table>
 
+  <h2 class="font-bold pt-4">By week</h2>
+
+  <table class="w-full text-sm" id="weekly">
+    <thead>
+      <tr class="border-b text-left">
+        <th class="py-2 pr-2">Week of</th>
+        <th class="py-2 px-2 text-right">started</th>
+        <th class="py-2 px-2 text-right">mail_sent</th>
+        <th class="py-2 px-2 text-right">confirmed</th>
+        <th class="py-2 px-2 text-right">password_created</th>
+        <th class="py-2 pl-2 text-right">completion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @weekly.each do |week, counts| %>
+        <% started = counts['started'] || 0 %>
+        <% created = counts['password_created'] || 0 %>
+        <tr class="border-b border-gray-100">
+          <td class="py-2 pr-2 font-mono"><%= week.strftime('%Y-%m-%d') %><%= ' *' if week == Date.current.beginning_of_week %></td>
+          <td class="py-2 px-2 text-right tabular-nums"><%= started %></td>
+          <td class="py-2 px-2 text-right tabular-nums"><%= counts['mail_sent'] || 0 %></td>
+          <td class="py-2 px-2 text-right tabular-nums"><%= (counts['confirmed_code'] || 0) + (counts['confirmed_magic_link'] || 0) %></td>
+          <td class="py-2 px-2 text-right tabular-nums"><%= created %></td>
+          <td class="py-2 pl-2 text-right tabular-nums font-bold"><%= started.positive? ? "#{(100.0 * created / started).round}%" : '–' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p class="text-secondary text-sm">
+    Weeks start on Monday; * marks the current, partial week. Completion is
+    password_created / started within the same week, so a flow finished after
+    a week boundary counts toward the later week.
+  </p>
+
   <p class="text-secondary text-sm">
     Server-side Ahoy events, one per step — no e-mail or other personal
     data is recorded. Percentages are relative to <span class="font-mono">started</span>
@@ -64,6 +99,91 @@
     when a flow resumes across windows or a mail is resent.
     Tracking live since 2026-08-12; bounce notices since 2026-10-22, counted once
     per bounced mail a person is shown (reloads don't count).
+  </p>
+
+  <h1 class="text-xl font-black text-center pt-12">
+    Sign-in funnel
+  </h1>
+
+  <table class="w-full text-sm" id="sign_in">
+    <thead>
+      <tr class="border-b text-left">
+        <th class="py-2 pr-2">Step</th>
+        <% @windows.each_key do |label| %>
+          <th class="py-2 px-2 text-right"><%= label %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% Root::FunnelController::SIGN_IN_STEPS.each do |step| %>
+        <tr class="border-b border-gray-100 <%= 'font-bold' if step == 'signed_in' %>">
+          <td class="py-2 pr-2 font-mono"><%= step %></td>
+          <% @windows.each_key do |label| %>
+            <% count = @sign_in_counts[label][step] || 0 %>
+            <% started = @sign_in_counts[label]['started'] || 0 %>
+            <td class="py-2 px-2 text-right tabular-nums">
+              <%= count %>
+              <% if step != 'started' && started.positive? %>
+                <span class="text-secondary text-xs">(<%= (100.0 * count / started).round %>%)</span>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+      <tr class="text-secondary">
+        <td class="py-2 pr-2 font-mono">↳ handed_off by route</td>
+        <% @windows.each_key do |label| %>
+          <td class="py-2 px-2 text-right tabular-nums align-top text-xs">
+            <% @handoffs[label].sort_by { |route, n| [-n, route] }.each do |route, n| %>
+              <div><span class="font-mono"><%= route %></span> <%= n %></div>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="font-bold pt-4">By week</h2>
+
+  <table class="w-full text-sm" id="sign_in_weekly">
+    <thead>
+      <tr class="border-b text-left">
+        <th class="py-2 pr-2">Week of</th>
+        <% Root::FunnelController::SIGN_IN_STEPS.each do |step| %>
+          <th class="py-2 px-2 text-right"><%= step %></th>
+        <% end %>
+        <th class="py-2 pl-2 text-right">completion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sign_in_weekly.each do |week, counts| %>
+        <% started = counts['started'] || 0 %>
+        <% signed_in = counts['signed_in'] || 0 %>
+        <tr class="border-b border-gray-100">
+          <td class="py-2 pr-2 font-mono"><%= week.strftime('%Y-%m-%d') %><%= ' *' if week == Date.current.beginning_of_week %></td>
+          <% Root::FunnelController::SIGN_IN_STEPS.each do |step| %>
+            <td class="py-2 px-2 text-right tabular-nums"><%= counts[step] || 0 %></td>
+          <% end %>
+          <td class="py-2 pl-2 text-right tabular-nums font-bold"><%= started.positive? ? "#{(100.0 * signed_in / started).round}%" : '–' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p class="text-secondary text-sm">
+    <span class="font-mono">started</span>: a known e-mail was entered on the
+    login page. <span class="font-mono">password_failed</span> counts every
+    wrong attempt, so one person can add several.
+    <span class="font-mono">signed_in</span>: the password was accepted;
+    completion is signed_in / started. <span class="font-mono">handed_off</span>:
+    an ID token went to a service — this includes the confirm page's button for
+    people already signed in, so it can exceed signed_in. Its route is
+    <span class="font-mono">password</span> (straight from the password form)
+    or <span class="font-mono">confirm</span> (the confirm page's button), to an
+    <span class="font-mono">app</span> (custom scheme) or the
+    <span class="font-mono">web</span>; many confirm → app per person suggests
+    an app that didn't open.
+    Tracking live since this page's sign-in section was deployed.
   </p>
 
   <p class="text-center">

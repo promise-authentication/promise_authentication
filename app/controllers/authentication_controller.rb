@@ -34,6 +34,13 @@ class AuthenticationController < ApplicationController
         nonce: login_configuration[:nonce]
       ).id_token
 
+      # via: 'password' when handed off straight from the password form,
+      # 'confirm' when the confirm page's button was pressed (already
+      # signed in, just registered, or retrying a handoff). Repeated
+      # 'confirm' + 'app' handoffs point at an app that didn't open.
+      track_sign_in_step 'handed_off',
+                         via: action_name == 'authenticate' ? 'password' : 'confirm',
+                         handoff: custom_scheme_handoff? ? 'app' : 'web'
       Statistics::SignInEvent.create(
         token_id: id_token.jti,
         user_id: id_token.sub,
@@ -65,6 +72,7 @@ class AuthenticationController < ApplicationController
     if @auth_request.valid?
       if @auth_request.existing!
         do_sign_in(@auth_request)
+        track_sign_in_step 'signed_in'
 
         go_to
       else
@@ -75,11 +83,13 @@ class AuthenticationController < ApplicationController
       if @auth_request.errors.include?(:email)
         flash[:email_message] = @auth_request.errors.full_messages_for(:email).first
       else
+        track_sign_in_step 'password_failed'
         flash[:password_message] = @auth_request.errors.full_messages_for(:password).first
       end
       redirect_to verify_password_path(registration_configuration)
     end
   rescue Authentication::Password::NotMatching
+    track_sign_in_step 'password_failed'
     flash[:password_message] = t('.password_not_correct')
     redirect_to verify_password_path(registration_configuration)
   end

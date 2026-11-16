@@ -26,6 +26,7 @@ class RegistrationsController < ApplicationController
 
     if @email_validator.valid? || bypass_email_check
       if ::Authentication::Services::Authenticate::Existing.known?(email)
+        track_sign_in_step 'started'
         redirect_to verify_password_path(registration_configuration)
       else
         track_registration_step 'started'

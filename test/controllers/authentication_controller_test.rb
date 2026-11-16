@@ -116,6 +116,9 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :legacy_account_user_id_for, 'leguid', [email, password]
     relying_party.expect :present?, true
     relying_party.expect :id, relying_party_id
+    # sign_in_step events for signed_in and handed_off
+    relying_party.expect :id, relying_party_id
+    relying_party.expect :id, relying_party_id
     relying_party.expect :redirect_uri, 'https://example.com/hello' do |kwargs|
       kwargs[:id_token].is_a?(Authentication::IdToken) && 
       kwargs[:login_configuration].is_a?(ActionController::Parameters)
@@ -159,6 +162,9 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     relying_party.expect :locale, nil
     relying_party.expect :id, relying_party_id
     relying_party.expect :present?, true
+    relying_party.expect :id, relying_party_id
+    # sign_in_step events for signed_in and handed_off
+    relying_party.expect :id, relying_party_id
     relying_party.expect :id, relying_party_id
     relying_party.expect :redirect_uri, 'https://example.com/hello' do |kwargs|
       kwargs[:id_token].is_a?(Authentication::IdToken) && 
@@ -334,5 +340,29 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_equal stats.user_id, decoded_token['sub']
     assert_equal stats.relying_party_id, decoded_token['aud']
     assert_equal stats.token_id, decoded_token['jti']
+  end
+
+  # Ahoy skips requests it takes for bots, and a bare test request looks like one.
+  BROWSER = { 'User-Agent' => 'Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/130.0 Safari/537.36' }.freeze
+
+  test 'tracks sign-in steps without personal data' do
+    Trust::Certificate.generate_key_pair!
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+
+    Authentication::RelyingParty.stub :fetch, nil do
+      post registrations_url, params: { email: 'hello@world.com', client_id: 'party.com' }, headers: BROWSER
+      assert_redirected_to %r{/verify_password}
+
+      post authenticate_url, params: { email: 'hello@world.com', password: 'wrong', client_id: 'party.com' },
+                             headers: BROWSER
+      post authenticate_url, params: { email: 'hello@world.com', password: 'secret', client_id: 'party.com' },
+                             headers: BROWSER
+    end
+
+    events = Ahoy::Event.where(name: 'sign_in_step').order(:id)
+    assert_equal %w[started password_failed signed_in handed_off], events.map { |e| e.properties['step'] }
+    assert_equal ['party.com'], events.map { |e| e.properties['relying_party_id'] }.uniq
+    assert_equal({ 'via' => 'password', 'handoff' => 'web' }, events.last.properties.slice('via', 'handoff'))
+    assert_no_match 'hello@world.com', events.map { |e| e.properties.to_json }.join
   end
 end
