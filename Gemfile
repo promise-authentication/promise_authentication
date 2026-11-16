@@ -31,9 +31,9 @@ gem 'chartkick'
 gem 'groupdate'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 8'
+gem 'rails', '~> 8.0.5', '>= 8.0.5.2'
 # Use Puma as the app server
-gem 'puma' # , '~> 5.2'
+gem 'puma', '~> 7.2', '>= 7.2.2'
 # Use SCSS for stylesheets
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 # gem 'webpacker', '~> 5.2'
@@ -79,11 +79,6 @@ group :development do
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
-  gem 'selenium-webdriver'
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
   gem 'simplecov', require: false
 end
 
