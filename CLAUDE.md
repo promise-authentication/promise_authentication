@@ -59,6 +59,28 @@ The verify_email page tells the user when "Bekræft din e-mail" bounced (see
 - Partial runs merge into the previous result set for 10 min. `rm -rf coverage`
   before trusting a number.
 
+## Visual regression check
+
+For dependency updates and other changes that should not change any page:
+run the base and the branch side by side and compare screenshots pixel by pixel.
+
+1. `git worktree add --detach ../promise_authentication-baseline origin/main`;
+   in each checkout: `yarn install && yarn build && RAILS_ENV=development bin/rails tailwindcss:build db:prepare`
+   and `bin/rails runner "Trust::Certificate.rotate!"`.
+2. Seed identical data in both (fixed unique colour, a pending code with a shared
+   timestamp): `SEED_AT=$(date -u +%Y-%m-%dT%H:%M:00Z)` then
+   `SEED_AT=$SEED_AT PROMISE_KEY_REGISTRY_API_ROOT=http://localhost:3004/api/secret bin/rails runner script/visual/seed.rb`.
+3. Start each with `PROMISE_KEY_REGISTRY_API_ROOT=http://localhost:3004/api/secret bin/rails server -p 4001`
+   (resp. 4002). kms from `../promise_key_registry` is reachable on localhost:3004.
+4. `node script/visual/shoot.mjs http://localhost:4001 /tmp/before` (and 4002 →
+   after). Headless Chrome over CDP with Node's built-in WebSocket, no npm deps.
+   Desktop + mobile, public and signed-in pages, animations finished.
+5. `compare -metric AE before/x.png after/x.png diff.png` (ImageMagick) per file.
+
+Known noise: `/about/open` prints the port (`localhost:4001` vs `4002`), and
+`verify_human` differs run to run even against the same server (Turnstile loads
+async). Shoot the same server twice to tell noise from change.
+
 ## Dev environment
 
 - `docker compose up -d` runs the Rails app on http://localhost:3003. It requires the
