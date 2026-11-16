@@ -28,6 +28,22 @@ class Root::FunnelControllerTest < ActionDispatch::IntegrationTest
     assert_equal '2 (100% of sent) mailbox_not_found 1 rejected 1', cells[4] # all time
   end
 
+  test 'shows mail send failures next to the funnel' do
+    visit = Ahoy::Visit.create!(started_at: Time.current)
+    2.times do
+      Ahoy::Event.create!(visit: visit, name: 'registration_step', time: Time.current,
+                          properties: { step: 'mail_failed', error: 'SMTPServerBusy', smtp_code: '421' })
+    end
+    Ahoy::Event.create!(visit: visit, name: 'registration_step', time: Time.current,
+                        properties: { step: 'mail_failed', error: 'ReadTimeout' })
+
+    sign_in_as_root
+    get '/root/funnel'
+
+    cells = css_select('#mail_failed td').map { |td| td.text.squish }
+    assert_equal '3 SMTPServerBusy 421 2 ReadTimeout 1', cells[1] # today
+  end
+
   test 'shows completion per week' do
     visit = Ahoy::Visit.create!(started_at: Time.current)
     this_week = Time.current.beginning_of_week + 1.hour
@@ -45,8 +61,8 @@ class Root::FunnelControllerTest < ActionDispatch::IntegrationTest
 
     rows = css_select('#weekly tbody tr').map { |tr| tr.css('td').map { |td| td.text.squish } }
     assert_equal Root::FunnelController::WEEKS, rows.size
-    assert_equal ["#{this_week.to_date.strftime('%Y-%m-%d')} *", '2', '2', '1', '1', '50%'], rows[0]
-    assert_equal [last_week.to_date.strftime('%Y-%m-%d'), '4', '0', '3', '3', '75%'], rows[1]
+    assert_equal ["#{this_week.to_date.strftime('%Y-%m-%d')} *", '2', '2', '0', '1', '1', '50%'], rows[0]
+    assert_equal [last_week.to_date.strftime('%Y-%m-%d'), '4', '0', '0', '3', '3', '75%'], rows[1]
     assert_equal '–', rows[2].last
   end
 
