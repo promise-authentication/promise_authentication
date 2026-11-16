@@ -19,6 +19,7 @@ class PasswordsController < ApplicationController
                                   else
                                     I18n.t('fill_both')
                                   end
+      render action: 'edit'
     end
   rescue Authentication::Password::NotMatching
     @current_password_message = I18n.t('password_not_matching')
