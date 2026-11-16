@@ -82,10 +82,10 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_select '.bg-red-500', /Try again later/
 
     event = Ahoy::Event.where(name: 'registration_step').order(:id).last
-    assert_equal({ 'step' => 'mail_failed', 'error' => 'SMTPServerBusy', 'smtp_code' => '421', 'recipient' => 'microsoft' },
-                 event.properties.slice('step', 'error', 'smtp_code', 'recipient'))
+    assert_equal({ 'step' => 'mail_failed', 'error' => 'SMTPServerBusy', 'smtp_code' => '421' },
+                 event.properties.except('relying_party_id'))
     assert_equal 1, notified.size
-    assert_equal 'Verification mail not sent: SMTPServerBusy 421 microsoft', notified.first.first
+    assert_equal 'Verification mail not sent: SMTPServerBusy 421', notified.first.first
     assert_no_match 'hello@', (event.properties.to_json + notified.inspect)
   end
 

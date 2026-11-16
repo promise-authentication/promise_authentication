@@ -200,18 +200,14 @@ class RegistrationsController < ApplicationController
     track_registration_step 'mail_bounced', reason: @code.bounce_reason
   end
 
-  MICROSOFT_CONSUMER_DOMAINS = /@(hotmail|outlook|live|msn)\.[a-z.]+\z/i
-
   # The mail never left: our SMTP provider refused it or could not be
   # reached. The user sees the error, but without this nobody else does —
-  # on 2026-11-13 a day of refused Microsoft-bound mail went unnoticed.
-  # Records the error class, the SMTP reply code and a coarse recipient
-  # category; never the address, and never the SMTP message (which
-  # usually quotes it).
+  # on 2026-11-13 a day of refused mail went unnoticed. Records the
+  # error class and the SMTP reply code only; never the address, and
+  # never the SMTP message (which usually quotes it).
   def report_mail_failure(error)
     smtp_code = error.message[/\A\d{3}/] if error.message
-    recipient = registration_configuration[:email].to_s.match?(MICROSOFT_CONSUMER_DOMAINS) ? 'microsoft' : 'other'
-    details = { error: error.class.name.demodulize, smtp_code: smtp_code, recipient: recipient }.compact
+    details = { error: error.class.name.demodulize, smtp_code: smtp_code }.compact
 
     track_registration_step 'mail_failed', **details
     Rails.logger.warn "Verification mail not sent: #{details.map { |k, v| "#{k}=#{v}" }.join(' ')}"

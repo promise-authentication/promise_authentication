@@ -32,16 +32,16 @@ class Root::FunnelControllerTest < ActionDispatch::IntegrationTest
     visit = Ahoy::Visit.create!(started_at: Time.current)
     2.times do
       Ahoy::Event.create!(visit: visit, name: 'registration_step', time: Time.current,
-                          properties: { step: 'mail_failed', error: 'SMTPServerBusy', smtp_code: '421', recipient: 'microsoft' })
+                          properties: { step: 'mail_failed', error: 'SMTPServerBusy', smtp_code: '421' })
     end
     Ahoy::Event.create!(visit: visit, name: 'registration_step', time: Time.current,
-                        properties: { step: 'mail_failed', error: 'ReadTimeout', recipient: 'other' })
+                        properties: { step: 'mail_failed', error: 'ReadTimeout' })
 
     sign_in_as_root
     get '/root/funnel'
 
     cells = css_select('#mail_failed td').map { |td| td.text.squish }
-    assert_equal '3 SMTPServerBusy 421 microsoft 2 ReadTimeout other 1', cells[1] # today
+    assert_equal '3 SMTPServerBusy 421 2 ReadTimeout 1', cells[1] # today
   end
 
   test 'shows completion per week' do

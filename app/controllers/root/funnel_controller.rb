@@ -31,11 +31,11 @@ class Root::FunnelController < RootController
     end
 
     # Verification mails that never left (see RegistrationsController#
-    # report_mail_failure), by error, SMTP reply code and recipient kind.
+    # report_mail_failure), by error and SMTP reply code.
     @mail_failures = @windows.transform_values do |since|
       rows = since ? events.select { |time, _| time >= since } : events
       rows.select { |_, properties| properties['step'] == 'mail_failed' }
-          .map { |_, properties| properties.values_at('error', 'smtp_code', 'recipient').compact.join(' ') }
+          .map { |_, properties| properties.values_at('error', 'smtp_code').compact.join(' ') }
           .tally
     end
 
