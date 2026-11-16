@@ -40,6 +40,7 @@ class PasswordsController < ApplicationController
                                        })
 
     ::Authentication::Services::SendRecoveryMail.new(args).call
+    track_sign_in_step 'recovery_requested'
 
     redirect_to wait_password_path(login_configuration)
   rescue TurnstileConcern::NotPassedError
