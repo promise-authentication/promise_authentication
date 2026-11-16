@@ -2,8 +2,10 @@ require 'test_helper'
 require 'rake'
 
 class TasksTest < ActiveSupport::TestCase
+  # Only our own task files: Rails.application.load_tasks would also reload
+  # Rails' tasks, which `rails test` already loaded (constant redefinition warnings).
   setup do
-    Rails.application.load_tasks unless Rake::Task.task_defined?('bounces:poll')
+    Dir[Rails.root.join('lib/tasks/*.rake')].each { |file| load file } unless Rake::Task.task_defined?('bounces:poll')
   end
 
   # execute, not invoke: runs the task body without its :environment
