@@ -28,6 +28,28 @@ class Root::FunnelControllerTest < ActionDispatch::IntegrationTest
     assert_equal '2 (100% of sent) mailbox_not_found 1 rejected 1', cells[4] # all time
   end
 
+  test 'shows completion per week' do
+    visit = Ahoy::Visit.create!(started_at: Time.current)
+    this_week = Time.current.beginning_of_week + 1.hour
+    last_week = this_week - 1.week
+    { 'started' => 2, 'mail_sent' => 2, 'confirmed_code' => 1, 'password_created' => 1 }.each do |step, n|
+      n.times { Ahoy::Event.create!(visit: visit, name: 'registration_step', time: this_week, properties: { step: step }) }
+    end
+    { 'started' => 4, 'confirmed_magic_link' => 3, 'password_created' => 3 }.each do |step, n|
+      n.times { Ahoy::Event.create!(visit: visit, name: 'registration_step', time: last_week, properties: { step: step }) }
+    end
+
+    sign_in_as_root
+    get '/root/funnel'
+    assert_response :success
+
+    rows = css_select('#weekly tbody tr').map { |tr| tr.css('td').map { |td| td.text.squish } }
+    assert_equal Root::FunnelController::WEEKS, rows.size
+    assert_equal ["#{this_week.to_date.strftime('%Y-%m-%d')} *", '2', '2', '1', '1', '50%'], rows[0]
+    assert_equal [last_week.to_date.strftime('%Y-%m-%d'), '4', '0', '3', '3', '75%'], rows[1]
+    assert_equal '–', rows[2].last
+  end
+
   private
 
   def sign_in_as_root

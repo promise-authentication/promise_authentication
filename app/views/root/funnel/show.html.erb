@@ -57,6 +57,41 @@
     </tbody>
   </table>
 
+  <h2 class="font-bold pt-4">By week</h2>
+
+  <table class="w-full text-sm" id="weekly">
+    <thead>
+      <tr class="border-b text-left">
+        <th class="py-2 pr-2">Week of</th>
+        <th class="py-2 px-2 text-right">started</th>
+        <th class="py-2 px-2 text-right">mail_sent</th>
+        <th class="py-2 px-2 text-right">confirmed</th>
+        <th class="py-2 px-2 text-right">password_created</th>
+        <th class="py-2 pl-2 text-right">completion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @weekly.each do |week, counts| %>
+        <% started = counts['started'] || 0 %>
+        <% created = counts['password_created'] || 0 %>
+        <tr class="border-b border-gray-100">
+          <td class="py-2 pr-2 font-mono"><%= week.strftime('%Y-%m-%d') %><%= ' *' if week == Date.current.beginning_of_week %></td>
+          <td class="py-2 px-2 text-right tabular-nums"><%= started %></td>
+          <td class="py-2 px-2 text-right tabular-nums"><%= counts['mail_sent'] || 0 %></td>
+          <td class="py-2 px-2 text-right tabular-nums"><%= (counts['confirmed_code'] || 0) + (counts['confirmed_magic_link'] || 0) %></td>
+          <td class="py-2 px-2 text-right tabular-nums"><%= created %></td>
+          <td class="py-2 pl-2 text-right tabular-nums font-bold"><%= started.positive? ? "#{(100.0 * created / started).round}%" : '–' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p class="text-secondary text-sm">
+    Weeks start on Monday; * marks the current, partial week. Completion is
+    password_created / started within the same week, so a flow finished after
+    a week boundary counts toward the later week.
+  </p>
+
   <p class="text-secondary text-sm">
     Server-side Ahoy events, one per step — no e-mail or other personal
     data is recorded. Percentages are relative to <span class="font-mono">started</span>
