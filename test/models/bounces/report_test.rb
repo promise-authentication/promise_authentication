@@ -66,4 +66,21 @@ class Bounces::ReportTest < ActiveSupport::TestCase
     assert_nil Bounces::Report.parse('')
     assert_nil Bounces::Report.parse("Subject: hi\n\nhello")
   end
+
+  test 'mail that cannot be parsed is not a report' do
+    logged = []
+    Mail.stub :new, ->(_raw) { raise ArgumentError } do
+      Rails.logger.stub :warn, ->(line) { logged << line } do
+        assert_nil Bounces::Report.parse('anything')
+      end
+    end
+    assert_equal ['Bounce report could not be parsed: ArgumentError'], logged
+  end
+
+  test 'a part that cannot be decoded is skipped' do
+    part = Object.new
+    def part.decoded = raise(Mail::UnknownEncodingType)
+
+    assert_nil Bounces::Report.allocate.send(:safely_decoded, part)
+  end
 end

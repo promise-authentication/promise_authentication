@@ -162,4 +162,89 @@ class Authentication::RelyingPartyTest < ActiveSupport::TestCase
       ), 'uid'
     end
   end
+
+  test 'a well-known that is not JSON counts as an empty config' do
+    stub_request(:get, 'https://garbled.example/.well-known/promise.json')
+      .to_return(status: 200, body: '<html>not json</html>')
+
+    relying_party = @described_class.find('garbled.example')
+
+    assert_equal 'garbled.example', relying_party.id
+    assert_nil relying_party.well_known_unavailable
+  end
+
+  test 'fetch goes over the real http client and follows redirects' do
+    stub_request(:get, 'https://moved.example/.well-known/promise.json')
+      .to_return(status: 301, headers: { 'Location' => 'https://new.example/promise.json' })
+    stub_request(:get, 'https://new.example/promise.json')
+      .to_return(status: 200, body: { name: 'Moved' }.to_json)
+
+    assert_equal 'Moved', @described_class.find('moved.example').name
+  end
+
+  test 'fetch and head give nil when the party cannot be reached' do
+    stub_request(:any, 'https://down.example/logo.png').to_timeout
+
+    assert_nil @described_class.fetch('https://down.example/logo.png')
+    assert_nil @described_class.head('https://down.example/logo.png')
+  end
+
+  test 'head hands back the final response when it keeps 5xxing' do
+    final = Struct.new(:status).new(503)
+    client = Object.new
+    client.define_singleton_method(:head) { |_url| raise Faraday::RetriableResponse.new(nil, final) }
+
+    @described_class.stub :http_client, client do
+      assert_equal final, @described_class.head('https://party.dead/logo.png')
+    end
+  end
+
+  test 'logo data is inlined when the logo is a small image' do
+    png = 'PNGDATA'
+    headers = { 'Content-Type' => 'image/png', 'Content-Length' => png.bytesize.to_s }
+    stub_request(:head, 'https://hello.world/logo.png').to_return(status: 200, headers: headers)
+    stub_request(:get, 'https://hello.world/logo.png').to_return(status: 200, body: png, headers: headers)
+    @relying_party.logo_url = 'https://hello.world/logo.png'
+
+    assert_equal "data:image/png;base64,#{Base64.strict_encode64(png)}", @relying_party.logo_data
+  end
+
+  test 'logo data is nil without a logo url' do
+    assert_nil @relying_party.logo_data
+  end
+
+  test 'logo data is nil for empty, huge or non-image logos' do
+    @relying_party.logo_url = 'https://hello.world/logo.png'
+
+    [
+      { 'Content-Type' => 'image/png', 'Content-Length' => '0' },
+      { 'Content-Type' => 'image/png', 'Content-Length' => 1_048_576.to_s },
+      { 'Content-Type' => 'text/html', 'Content-Length' => '10' }
+    ].each do |headers|
+      stub_request(:head, 'https://hello.world/logo.png').to_return(status: 200, headers: headers)
+      assert_nil @relying_party.logo_data, headers.inspect
+    end
+  end
+
+  test 'logo data is nil when the download does not match the head request' do
+    @relying_party.logo_url = 'https://hello.world/logo.png'
+    head = { 'Content-Type' => 'image/png', 'Content-Length' => '7' }
+    stub_request(:head, 'https://hello.world/logo.png').to_return(status: 200, headers: head)
+
+    [
+      { status: 404, body: 'PNGDATA', headers: head },
+      { status: 200, body: 'PNGDATA', headers: head.merge('Content-Type' => 'image/gif') },
+      { status: 200, body: 'PNGDATA', headers: head.merge('Content-Length' => '8') },
+      { status: 200, body: 'PNG', headers: head }
+    ].each do |response|
+      stub_request(:get, 'https://hello.world/logo.png').to_return(response)
+      assert_nil @relying_party.logo_data, response.inspect
+    end
+  end
+
+  test 'name html keeps the name on one line' do
+    @relying_party.name = 'Hello World'
+    assert_equal 'Hello&nbspWorld', @relying_party.name_html
+    assert @relying_party.name_html.html_safe?
+  end
 end

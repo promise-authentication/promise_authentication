@@ -52,14 +52,9 @@ class ActiveSupport::TestCase
         to_return(status: 200, body: "{\"private_key\": \"#{Base64.strict_encode64(key)}\"}", headers: {})
 
 
+      # Not pinned to headers: the Faraday User-Agent changes with every upgrade.
       stub_request(:get, "https://example.com/.well-known/promise.json").
-        with(
-          headers: {
-            'Accept'=>'*/*',
-            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'User-Agent'=>'Faraday v1.0.1'
-          }).
-          to_return(status: 200, body: "", headers: {})
+        to_return(status: 200, body: "", headers: {})
   end
 
   teardown do

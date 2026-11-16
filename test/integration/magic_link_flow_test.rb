@@ -127,4 +127,58 @@ class MagicLinkFlowTest < ActionDispatch::IntegrationTest
     assert_no_match %r{/registrations/magic}, mail.text_part.body.to_s
     assert_no_match %r{/registrations/magic}, mail.html_part.body.to_s
   end
+
+  test 'the login page shows why an invalid link sent the user there' do
+    get magic_registration_path(token: 'nope')
+    follow_redirect!
+
+    assert_response :success
+    assert_includes response.body, I18n.t('magic_link_invalid')
+  end
+
+  test 'a link whose code was replaced since sends the user to the code entry' do
+    send_verification_mail!
+    path = magic_path_from_mail
+    EmailVerificationCode.find_by_cleartext(EMAIL).update!(code: 'ZZZZ')
+
+    get path
+
+    assert_redirected_to verify_email_registrations_path(LOGIN_CONFIGURATION.merge('email' => EMAIL))
+    assert_equal I18n.t('magic_link_superseded'), flash[:error]
+  end
+
+  def post_create_password_with_stale_code
+    post create_password_registrations_path(email: EMAIL, email_verification_code: '????'),
+         params: { password: 'secret', password_confirmation: 'secret' }
+  end
+
+  test 'creating a password with a stale code sends a fresh code' do
+    send_verification_mail!
+
+    post_create_password_with_stale_code
+
+    assert_redirected_to verify_email_registrations_path(email: EMAIL)
+    assert flash[:resent_code]
+    assert_equal 2, ActionMailer::Base.deliveries.size
+  end
+
+  test 'creating a password with a stale code stops resending after too many codes' do
+    send_verification_mail!
+    EmailVerificationCode.find_by_cleartext(EMAIL)
+                         .update!(resend_count: Authentication::Services::PrepareEmailForValidation::MAX_RESENDS)
+
+    post_create_password_with_stale_code
+
+    assert_redirected_to verify_email_registrations_path(email: EMAIL)
+    assert_equal I18n.t('too_many_codes_sent'), flash[:error]
+    assert_equal 1, ActionMailer::Base.deliveries.size
+  end
+
+  test 'creating a password without any pending code goes back to verify_email' do
+    post_create_password_with_stale_code
+
+    assert_redirected_to verify_email_registrations_path(email: EMAIL)
+    assert_nil flash[:error]
+    assert_empty ActionMailer::Base.deliveries
+  end
 end

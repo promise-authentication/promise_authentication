@@ -33,4 +33,8 @@ class Authentication::VaultTest < ActiveSupport::TestCase
     right = @described_class.new key: @key
     assert_equal right.decrypt(enctrypted_content), { 'hello' => 'world' }
   end
+
+  test 'personal data is nil for an unknown user' do
+    assert_nil Authentication::Vault.personal_data('nobody', RbNaCl::Random.random_bytes(32))
+  end
 end
