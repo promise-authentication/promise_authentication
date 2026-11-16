@@ -4,10 +4,6 @@ class AuthenticationController < ApplicationController
 
   rescue_from Authentication::RelyingParty::WellKnownUnavailable, with: :relying_party_unreachable
 
-  def password
-    @auth_request = ::Authentication::Services::Authenticate.new email: flash[:email]
-  end
-
   def confirm
     return unless relying_party.blank?
 

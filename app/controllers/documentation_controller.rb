@@ -1,2 +1,0 @@
-class DocumentationController < ApplicationController
-end
