@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # ubuntu-latest (26.04) has no prebuilt Ruby 3.2.8 for setup-ruby
 
     steps:
       - uses: actions/checkout@v4
