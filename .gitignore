@@ -44,3 +44,4 @@ yarn-debug.log*
 # Environment variables
 .env
 /db/*.sqlite3.*
+coverage/

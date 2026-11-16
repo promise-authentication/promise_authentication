@@ -365,4 +365,34 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert_equal({ 'via' => 'password', 'handoff' => 'web' }, events.last.properties.slice('via', 'handoff'))
     assert_no_match 'hello@world.com', events.map { |e| e.properties.to_json }.join
   end
+
+  test 'confirm without a relying party goes to redirect_to or the dashboard' do
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret' }
+
+    get confirm_path
+    assert_redirected_to dashboard_path
+
+    get confirm_path(redirect_to: '/password/edit')
+    assert_redirected_to '/password/edit'
+  end
+
+  test 'relogin signs out and returns to login with the same configuration' do
+    Authentication::Services::Authenticate.new(email: 'hello@world.com', password: 'secret').register!
+    post authenticate_url, params: { email: 'hello@world.com', password: 'secret', remember_me: 1 }
+
+    delete relogin_path(client_id: 'example.com')
+
+    assert_redirected_to login_path(client_id: 'example.com')
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    assert_nil jar.encrypted[:user_id]
+  end
+
+  test 'authenticating with a blank password asks for the password' do
+    post authenticate_url, params: { email: 'hello@world.com', password: '' }
+
+    assert_redirected_to verify_password_path(email: 'hello@world.com')
+    assert flash[:password_message].present?
+    assert_nil flash[:email_message]
+  end
 end

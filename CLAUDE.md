@@ -44,6 +44,21 @@ The verify_email page tells the user when "Bekræft din e-mail" bounced (see
   `EmailVerificationCode.create!(id: Authentication::HashedEmail.from_cleartext(email), code: 'ab7k').mark_bounced!('rejected')`,
   then open `/registrations/verify_email?email=<email>`.
 
+## Tests and coverage
+
+- `bin/rails test` measures coverage (SimpleCov, report in `coverage/index.html`).
+  CI fails below **100% line coverage** (only when `CI` is set, so a single test
+  file locally still passes). New code needs tests; unreachable code gets
+  removed rather than excluded.
+- Coverage starts in `config/boot.rb` (for `rails test`) via
+  `test/start_coverage.rb`, not just in `test_helper`: `test:prepare` runs
+  `tailwindcss:build`, which depends on `:environment`, so the app is booted
+  before `test_helper` loads. SimpleCov's fork handling is off for the same
+  reason: it would restart Coverage in each parallel worker and drop every
+  file loaded at boot.
+- Partial runs merge into the previous result set for 10 min. `rm -rf coverage`
+  before trusting a number.
+
 ## Dev environment
 
 - `docker compose up -d` runs the Rails app on http://localhost:3003. It requires the

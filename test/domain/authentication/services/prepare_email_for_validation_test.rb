@@ -55,4 +55,59 @@ class Authentication::Services::PrepareEmailForValidationTest < ActiveSupport::T
 
     assert_equal ActionMailer::Base.deliveries.size, 2
   end
+
+  test 'in development the magic link is logged so the flow works without mail' do
+    logged = []
+    Rails.stub :env, ActiveSupport::EnvironmentInquirer.new('development') do
+      Rails.logger.stub :info, ->(line) { logged << line } do
+        @described_class.new(email: 'dev@example.com', login_configuration: {})
+                        .generate_and_send_verification_code!
+      end
+    end
+
+    logged = logged.grep(/magic-link/)
+    assert_equal 1, logged.size
+    assert_match %r{\A\[magic-link\] dev@example.com: http\S+/registrations/magic\?token=\S+\z}, logged.first
+  end
+
+  # Delivers on the given attempt; times out on the ones before it.
+  def mailer_timing_out_until(succeeding_attempt)
+    attempts = 0
+    mail = Object.new
+    mail.define_singleton_method(:deliver_now) do
+      attempts += 1
+      raise Net::OpenTimeout if attempts < succeeding_attempt
+    end
+    mailer = Object.new
+    mailer.define_singleton_method(:verify_email) { mail }
+    [->(**) { mailer }, -> { attempts }]
+  end
+
+  test 'a mail server timeout is retried with growing pauses' do
+    with, attempts = mailer_timing_out_until(3)
+    service = @described_class.new(email: 'slow@example.com')
+    pauses = []
+
+    EmailVerificationMailer.stub :with, with do
+      service.stub :sleep, ->(seconds) { pauses << seconds } do
+        assert service.generate_and_send_verification_code!
+      end
+    end
+
+    assert_equal 3, attempts.call
+    assert_equal [2, 4], pauses
+  end
+
+  test 'a mail server that keeps timing out gives up after three retries' do
+    with, attempts = mailer_timing_out_until(100)
+    service = @described_class.new(email: 'slow@example.com')
+
+    EmailVerificationMailer.stub :with, with do
+      service.stub :sleep, nil do
+        assert_raises(Net::OpenTimeout) { service.generate_and_send_verification_code! }
+      end
+    end
+
+    assert_equal 4, attempts.call
+  end
 end

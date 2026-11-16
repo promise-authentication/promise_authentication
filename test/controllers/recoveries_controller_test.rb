@@ -39,4 +39,36 @@ class RecoveriesControllerTest < ActionDispatch::IntegrationTest
     vault_key = Base64.strict_decode64(jar.encrypted[:vault_key_base64])
     assert Authentication::Vault.personal_data(user_id, vault_key)
   end
+
+  def recovery_token_for(email)
+    Authentication::Services::Authenticate.new(email: email, password: 'secret').register!
+    Authentication::Services::SendRecoveryMail.new(email: email).call
+    Authentication::RecoveryToken.last.token
+  end
+
+  test 'an unknown token goes to the front page' do
+    get token_recoveries_path(token_id: 'nope')
+    assert_redirected_to root_path
+  end
+
+  test 'a blank new password shows the form again' do
+    token = recovery_token_for('hello@world.dk')
+
+    post token_recoveries_path(token_id: token, new_password: '')
+
+    assert_response :success
+    assert Authentication::RecoveryToken.find_by_token(token), 'the token is still usable'
+  end
+
+  test 'a recovery that cannot be decrypted sends the user to login' do
+    token = recovery_token_for('hello@world.dk')
+    failing = Object.new
+    def failing.call! = raise(RbNaCl::CryptoError)
+
+    Authentication::Services::RecoverySetPassword.stub :new, ->(*) { failing } do
+      post token_recoveries_path(token_id: token, new_password: 'hello')
+    end
+
+    assert_redirected_to login_path
+  end
 end

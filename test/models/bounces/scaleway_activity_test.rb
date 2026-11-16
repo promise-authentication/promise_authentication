@@ -64,4 +64,15 @@ class Bounces::ScalewayActivityTest < ActiveSupport::TestCase
     Bounces::ScalewayActivity.check!(@code, email: 'hello@world.com')
     assert_nil @code.reload.delivery_checked_at
   end
+
+  test 'a network failure is swallowed and logged with its class' do
+    stub_request(:get, EMAILS_URL).with(query: hash_including({})).to_timeout
+    logged = []
+    Rails.logger.stub :warn, ->(line) { logged << line } do
+      assert_nil Bounces::ScalewayActivity.check!(@code, email: 'hello@world.com')
+    end
+    assert_not @code.reload.bounced?
+    assert_equal 1, logged.size
+    assert_match(/\AScaleway activity check failed: Faraday::/, logged.first)
+  end
 end

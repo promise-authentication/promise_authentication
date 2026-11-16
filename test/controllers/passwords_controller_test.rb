@@ -85,4 +85,53 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
       assert_redirected_to wait_password_path(client_id: relying_party_id)
     end
   end
+
+  def sign_in
+    Authentication::Services::Authenticate.new(email: 'hello@example.com', password: 'old').register!
+    post '/authenticate', params: { email: 'hello@example.com', password: 'old', remember_me: 1 }
+  end
+
+  test 'changing password with a missing field asks for both' do
+    sign_in
+    post '/password', params: { current_password: 'old', new_password: '' }
+
+    assert_response :success
+    assert_includes response.body, I18n.t('fill_both')
+  end
+
+  test 'changing password with a blank current password says what is wrong' do
+    sign_in
+    post '/password', params: { current_password: '', new_password: 'new' }
+
+    assert_response :success
+    assert_select 'p.input-label.font-bold', text: /Current password/
+    assert_not_includes response.body, I18n.t('fill_both')
+  end
+
+  test 'changing password with the wrong current password says so' do
+    sign_in
+    post '/password', params: { current_password: 'wrong', new_password: 'new' }
+
+    assert_response :success
+    assert_includes response.body, I18n.t('password_not_matching')
+  end
+
+  test 'recovering password without an email asks for one' do
+    post '/password/recover', params: { email: '' }
+
+    assert_response :success
+    assert_equal I18n.t('fill_email'), flash[:error]
+    assert_no_emails
+  end
+
+  test 'recovering password with a rejected human check sends nothing' do
+    rejected = Struct.new(:body).new('{"success":false}')
+    Faraday.stub :post, rejected do
+      post '/password/recover', params: { email: 'hello@example.com', 'cf-turnstile-response': 'nope' }
+    end
+
+    assert_response :success
+    assert_equal I18n.t('fill_email'), flash[:error]
+    assert_no_emails
+  end
 end

@@ -26,7 +26,5 @@ class RecoveriesController < ApplicationController
     unless recovery.present?
       redirect_to root_path
     end
-  rescue ActiveRecord::RecordNotFound
-    redirect_to root_path
   end
 end
