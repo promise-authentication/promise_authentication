@@ -60,16 +60,8 @@ class RegistrationsController < ApplicationController
     Rails.logger.warn 'Turnstile token rejected on verify_human'
     @turnstile_rejected = true
     render action: :verify_human
-  rescue Net::SMTPFatalError => e
-    @smtp_error = e
-    render action: :new
-  rescue Net::SMTPSyntaxError => e
-    @smtp_error = e
-    render action: :new
-  rescue Net::SMTPServerBusy => e
-    @smtp_error = e
-    render action: :new
-  rescue Net::OpenTimeout, Net::ReadTimeout => e
+  rescue Net::SMTPFatalError, Net::SMTPSyntaxError, Net::SMTPServerBusy, Net::OpenTimeout, Net::ReadTimeout => e
+    report_mail_failure(e)
     @smtp_error = e
     render action: :new
   end
@@ -206,6 +198,24 @@ class RegistrationsController < ApplicationController
 
     session[:bounce_shown_for] = @code.delivery_token
     track_registration_step 'mail_bounced', reason: @code.bounce_reason
+  end
+
+  MICROSOFT_CONSUMER_DOMAINS = /@(hotmail|outlook|live|msn)\.[a-z.]+\z/i
+
+  # The mail never left: our SMTP provider refused it or could not be
+  # reached. The user sees the error, but without this nobody else does —
+  # on 2026-11-13 a day of refused Microsoft-bound mail went unnoticed.
+  # Records the error class, the SMTP reply code and a coarse recipient
+  # category; never the address, and never the SMTP message (which
+  # usually quotes it).
+  def report_mail_failure(error)
+    smtp_code = error.message[/\A\d{3}/] if error.message
+    recipient = registration_configuration[:email].to_s.match?(MICROSOFT_CONSUMER_DOMAINS) ? 'microsoft' : 'other'
+    details = { error: error.class.name.demodulize, smtp_code: smtp_code, recipient: recipient }.compact
+
+    track_registration_step 'mail_failed', **details
+    Rails.logger.warn "Verification mail not sent: #{details.map { |k, v| "#{k}=#{v}" }.join(' ')}"
+    Airbrake.notify("Verification mail not sent: #{details.values.join(' ')}", details) if defined?(Airbrake)
   end
 
   def verify_email_verification_code!

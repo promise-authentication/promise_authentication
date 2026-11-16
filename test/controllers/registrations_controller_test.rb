@@ -67,6 +67,28 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   #                                                          email_verification_code: code.code)
   # end
 
+  test 'a refused verification mail is recorded and reported without the address' do
+    refusal = Net::SMTPServerBusy.new('421 4.7.0 Try again later, closing connection for <hello@hotmail.com>')
+    notified = []
+    EmailVerificationMailer.stub :with, ->(**) { raise refusal } do
+      Airbrake.stub :notify, ->(*args) { notified << args } do
+        # Ahoy skips requests it takes for bots, and a bare test request looks like one.
+        post verify_human_registrations_url, params: { email: 'hello@hotmail.com' },
+                                             headers: { 'User-Agent' => 'Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/130.0 Safari/537.36' }
+      end
+    end
+
+    assert_response :success
+    assert_select '.bg-red-500', /Try again later/
+
+    event = Ahoy::Event.where(name: 'registration_step').order(:id).last
+    assert_equal({ 'step' => 'mail_failed', 'error' => 'SMTPServerBusy', 'smtp_code' => '421', 'recipient' => 'microsoft' },
+                 event.properties.slice('step', 'error', 'smtp_code', 'recipient'))
+    assert_equal 1, notified.size
+    assert_equal 'Verification mail not sent: SMTPServerBusy 421 microsoft', notified.first.first
+    assert_no_match 'hello@', (event.properties.to_json + notified.inspect)
+  end
+
   test 'status while the code is pending' do
     Authentication::RelyingParty.stub :fetch, nil do
       post verify_human_registrations_url, params: { email: 'hello@world.com' }

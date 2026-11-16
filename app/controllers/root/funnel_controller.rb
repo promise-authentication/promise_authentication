@@ -30,6 +30,15 @@ class Root::FunnelController < RootController
           .tally
     end
 
+    # Verification mails that never left (see RegistrationsController#
+    # report_mail_failure), by error, SMTP reply code and recipient kind.
+    @mail_failures = @windows.transform_values do |since|
+      rows = since ? events.select { |time, _| time >= since } : events
+      rows.select { |_, properties| properties['step'] == 'mail_failed' }
+          .map { |_, properties| properties.values_at('error', 'smtp_code', 'recipient').compact.join(' ') }
+          .tally
+    end
+
     # How tokens were handed off: straight from the password form or via
     # the confirm page's button, to an app (custom scheme) or the web.
     @handoffs = @windows.transform_values do |since|

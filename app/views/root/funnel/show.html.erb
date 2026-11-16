@@ -54,6 +54,20 @@
           </td>
         <% end %>
       </tr>
+      <tr class="text-secondary" id="mail_failed">
+        <td class="py-2 pr-2 font-mono">↳ mail failed (not sent)</td>
+        <% @windows.each_key do |label| %>
+          <% failed = @mail_failures[label].values.sum %>
+          <td class="py-2 px-2 text-right tabular-nums align-top <%= 'text-red-600' if failed.positive? %>">
+            <%= failed %>
+            <div class="text-xs">
+              <% @mail_failures[label].sort_by { |kind, n| [-n, kind] }.each do |kind, n| %>
+                <div><span class="font-mono"><%= kind %></span> <%= n %></div>
+              <% end %>
+            </div>
+          </td>
+        <% end %>
+      </tr>
     </tbody>
   </table>
 
@@ -65,6 +79,7 @@
         <th class="py-2 pr-2">Week of</th>
         <th class="py-2 px-2 text-right">started</th>
         <th class="py-2 px-2 text-right">mail_sent</th>
+        <th class="py-2 px-2 text-right">mail_failed</th>
         <th class="py-2 px-2 text-right">confirmed</th>
         <th class="py-2 px-2 text-right">password_created</th>
         <th class="py-2 pl-2 text-right">completion</th>
@@ -78,6 +93,7 @@
           <td class="py-2 pr-2 font-mono"><%= week.strftime('%Y-%m-%d') %><%= ' *' if week == Date.current.beginning_of_week %></td>
           <td class="py-2 px-2 text-right tabular-nums"><%= started %></td>
           <td class="py-2 px-2 text-right tabular-nums"><%= counts['mail_sent'] || 0 %></td>
+          <td class="py-2 px-2 text-right tabular-nums"><%= counts['mail_failed'] || 0 %></td>
           <td class="py-2 px-2 text-right tabular-nums"><%= (counts['confirmed_code'] || 0) + (counts['confirmed_magic_link'] || 0) %></td>
           <td class="py-2 px-2 text-right tabular-nums"><%= created %></td>
           <td class="py-2 pl-2 text-right tabular-nums font-bold"><%= started.positive? ? "#{(100.0 * created / started).round}%" : '–' %></td>
@@ -99,6 +115,9 @@
     when a flow resumes across windows or a mail is resent.
     Tracking live since 2026-08-12; bounce notices since 2026-10-22, counted once
     per bounced mail a person is shown (reloads don't count).
+    <span class="font-mono">mail failed</span>: the mail never left — our SMTP
+    provider refused it or could not be reached — by error, SMTP reply code and
+    recipient kind (<span class="font-mono">microsoft</span> = hotmail/outlook/live/msn).
   </p>
 
   <h1 class="text-xl font-black text-center pt-12">
