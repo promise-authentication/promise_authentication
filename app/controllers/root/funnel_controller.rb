@@ -1,9 +1,11 @@
 class Root::FunnelController < RootController
   STEPS = %w[started human_verified mail_sent confirmed_code confirmed_magic_link password_created].freeze
+  SIGN_IN_STEPS = %w[started password_failed recovery_requested signed_in handed_off].freeze
   WEEKS = 12
 
   def show
-    events = registration_events
+    events = events_named('registration_step')
+    sign_in_events = events_named('sign_in_step')
 
     @windows = {
       'Today' => Time.current.beginning_of_day,
@@ -12,10 +14,8 @@ class Root::FunnelController < RootController
       'All time' => nil
     }
 
-    @counts = @windows.transform_values do |since|
-      rows = since ? events.select { |time, _| time >= since } : events
-      rows.map { |_, properties| properties['step'] }.tally
-    end
+    @counts = window_counts(events)
+    @sign_in_counts = window_counts(sign_in_events)
 
     @resends = @windows.transform_values do |since|
       rows = since ? events.select { |time, _| time >= since } : events
@@ -30,7 +30,17 @@ class Root::FunnelController < RootController
           .tally
     end
 
+    # How tokens were handed off: straight from the password form or via
+    # the confirm page's button, to an app (custom scheme) or the web.
+    @handoffs = @windows.transform_values do |since|
+      rows = since ? sign_in_events.select { |time, _| time >= since } : sign_in_events
+      rows.select { |_, properties| properties['step'] == 'handed_off' }
+          .map { |_, properties| "#{properties['via'] || '?'} → #{properties['handoff'] || '?'}" }
+          .tally
+    end
+
     @weekly = weekly_counts(events)
+    @sign_in_weekly = weekly_counts(sign_in_events)
   end
 
   private
@@ -38,10 +48,17 @@ class Root::FunnelController < RootController
   # Tallied in Ruby, not SQL: ahoy_events.properties is a plain text
   # column in production, so Postgres has no ->> operator for it — and
   # the all-time column needs the full set anyway.
-  def registration_events
-    Ahoy::Event.where(name: 'registration_step').pluck(:time, :properties).map do |time, properties|
+  def events_named(name)
+    Ahoy::Event.where(name: name).pluck(:time, :properties).map do |time, properties|
       properties = JSON.parse(properties) if properties.is_a?(String)
       [time, properties || {}]
+    end
+  end
+
+  def window_counts(events)
+    @windows.transform_values do |since|
+      rows = since ? events.select { |time, _| time >= since } : events
+      rows.map { |_, properties| properties['step'] }.tally
     end
   end
 

@@ -50,6 +50,30 @@ class Root::FunnelControllerTest < ActionDispatch::IntegrationTest
     assert_equal '–', rows[2].last
   end
 
+  test 'shows sign-in completion by window and by week' do
+    visit = Ahoy::Visit.create!(started_at: Time.current)
+    now = Time.current.beginning_of_week + 1.hour
+    { 'started' => 4, 'password_failed' => 3, 'signed_in' => 3 }.each do |step, n|
+      n.times { Ahoy::Event.create!(visit: visit, name: 'sign_in_step', time: now, properties: { step: step }) }
+    end
+    [%w[password web]] * 3 + [%w[confirm app]] * 2 => routes
+    routes.each do |via, handoff|
+      Ahoy::Event.create!(visit: visit, name: 'sign_in_step', time: now,
+                          properties: { step: 'handed_off', via: via, handoff: handoff })
+    end
+
+    sign_in_as_root
+    get '/root/funnel'
+    assert_response :success
+
+    routes_row = css_select('#sign_in tbody tr').find { |tr| tr.text.include?('handed_off by route') }
+    assert_equal 'password → web 3 confirm → app 2', routes_row.css('td').last.text.squish
+    signed_in = css_select('#sign_in tbody tr').find { |tr| tr.text.include?('signed_in') }
+    assert_equal '3 (75%)', signed_in.css('td').last.text.squish # all time
+    week = css_select('#sign_in_weekly tbody tr').first.css('td').map { |td| td.text.squish }
+    assert_equal ["#{now.to_date.strftime('%Y-%m-%d')} *", '4', '3', '0', '3', '5', '75%'], week
+  end
+
   private
 
   def sign_in_as_root
