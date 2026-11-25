@@ -84,4 +84,9 @@ Rails.application.routes.draw do
     # probe (~1700 a day) log a RoutingError.
     get 'passkey-endpoints', to: proc { [404, { 'content-type' => 'text/plain' }, ['Not Found']] }
   end
+
+  namespace 'oauth2' do
+    post 'token', to: 'token#exchange'
+    match 'token', to: 'token#preflight', via: [:options]
+  end
 end
