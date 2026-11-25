@@ -79,5 +79,9 @@ Rails.application.routes.draw do
 
   scope path: '.well-known' do
     get 'jwks', to: 'well_knowns#jwks'
+    # Password managers probe this to ask whether we support passkeys. We
+    # don't, so answer a plain 404 from the router instead of letting each
+    # probe (~1700 a day) log a RoutingError.
+    get 'passkey-endpoints', to: proc { [404, { 'content-type' => 'text/plain' }, ['Not Found']] }
   end
 end
